@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Huquq AI — sayt xaritalari RO'YXATI (sitemap index).
+
+  Nima uchun bo'lindi: qonun moddalari uchun ~7 100 ta manzil bor va
+  ular BAZADAN dinamik yaratiladi (backend `/public/sitemap-qonunlar.xml`,
+  Vercel rewrite orqali shu domenda ko'rinadi). Statik sahifalarni esa
+  qo'lda yuritish qulayroq. Sitemap index ikkalasini birlashtiradi —
+  Google Search Console'ga faqat SHU manzil beriladi.
+-->
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap>
+    <loc>https://huquq-ai-xi.vercel.app/sitemap-sahifalar.xml</loc>
+    <lastmod>2026-08-18</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://huquq-ai-xi.vercel.app/sitemap-qonunlar.xml</loc>
+  </sitemap>
+  <!--
+    Savol-javob markazi (AEO) + Metodologiya sahifasi. Ham bazadan
+    yaratiladi (backend `routes/publicQa.js`), chunki savollar ro'yxati
+    kodda turadi va o'sib boradi — qo'lda yuritilsa yangi savol
+    qo'shilganda xarita unutilib qolardi.
+  -->
+  <sitemap>
+    <loc>https://huquq-ai-xi.vercel.app/sitemap-savollar.xml</loc>
+  </sitemap>
+</sitemapindex>

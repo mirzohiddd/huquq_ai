@@ -1,0 +1,12 @@
+# Huquq AI — qidiruv tizimlari uchun ko'rsatma
+User-agent: *
+Allow: /
+
+# Shaxsiy / xizmat sahifalari indeksatsiya qilinmasin
+Disallow: /admin
+Disallow: /login
+Disallow: /register
+Disallow: /profile
+Disallow: /voice
+
+Sitemap: https://huquq-ai-xi.vercel.app/sitemap.xml

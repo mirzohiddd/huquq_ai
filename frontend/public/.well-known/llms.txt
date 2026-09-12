@@ -1,0 +1,19 @@
+# Huquq AI — llms.txt (nusxa / copy)
+
+Ushbu fayl asosiy `llms.txt` ning `.well-known/` katalogidagi nusxasi.
+Ba'zi AI tizimlari faylni ildizda, ba'zilari `.well-known/` da qidiradi
+— ikkala manzil ham ishlashi uchun nusxa saqlanadi.
+
+To'liq va yangilanadigan versiya:
+https://huquq-ai-xi.vercel.app/llms.txt
+
+Batafsil ma'lumot fayli:
+https://huquq-ai-xi.vercel.app/llms-full.txt
+
+Metodologiya va tahririy siyosat (manba, tekshiruv, cheklovlar):
+https://huquq-ai-xi.vercel.app/metodologiya
+
+Qisqacha: Huquq AI — O'zbekiston qonunchiligiga asoslangan sun'iy
+intellekt huquqiy maslahat va ta'lim platformasi. Har bir javob lex.uz
+dagi amaldagi kodekslar va Konstitutsiya matnidan olinadi. O'zbek va
+rus tillarida ishlaydi. Platforma advokat xizmatini almashtirmaydi.

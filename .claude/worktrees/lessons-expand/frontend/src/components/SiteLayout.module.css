@@ -1,0 +1,854 @@
+.layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--white);
+}
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: var(--navy);
+  border-bottom: 1px solid rgba(201, 149, 58, 0.15);
+  transition: box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.navScrolled {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+  border-bottom-color: rgba(201, 149, 58, 0.28);
+}
+
+.navInner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.logoImg {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  flex-shrink: 0;
+  /* DIQQAT: bu yerda `filter: brightness(0) invert(1)` ISHLATILMAYDI.
+     Logo — oltin rangdagi tafsilotli medalyon (adolat ma'budasi va
+     "HUQUQ TA'LIMI" yozuvi, och krem fonda). O'sha filtr uni butunlay
+     bir tekis OQ DOIRAGA aylantirib, logoni tanib bo'lmas holga
+     keltirgan edi. Medalyonning o'z foni allaqachon och, shuning uchun
+     to'q ko'k navbarda hech qanday filtrsiz ham aniq ko'rinadi. */
+  transition: transform 0.2s;
+}
+
+.logo:hover .logoImg {
+  transform: scale(1.06) rotate(-3deg);
+}
+
+.logoText {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  max-width: 140px;
+}
+
+.navCenter {
+  display: flex;
+  align-items: center;
+  gap: 1.15rem;
+}
+
+.navLink {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 500;
+  transition: color 0.2s;
+  position: relative;
+  /* AI Yordamchi tugmasi qo'shilgach menyu torayadi — havolalar
+     ikki qatorga bo'linib ketmasligi uchun */
+  white-space: nowrap;
+}
+
+.navLink::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transition: transform 0.25s ease;
+}
+
+.navLink:hover,
+.navLinkActive {
+  color: var(--gold-light);
+}
+
+.navLinkActive::after {
+  transform: scaleX(1);
+}
+
+.navRight {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+/* Til almashtirgich o'ramchisi — desktopda ham, telefonda ham
+   yuqorigi panelda turadi (avval `.langDesktop` deb atalardi va
+   telefonda YASHIRILARDI: login qilgan foydalanuvchi tilni faqat
+   burger menyu ichidan o'zgartira olardi). Telefonda o'lchamlar
+   media-qoidalarda kichraytiriladi. */
+.langWrap {
+  display: block;
+  flex-shrink: 0;
+}
+
+/* ═══════════ Yumaloq profil avatari ═══════════
+   Login qilgan foydalanuvchi uchun profilga yagona kirish nuqtasi.
+   Tarif nomi bu yerda MATN bilan yozilmaydi (foydalanuvchi so'rovi) —
+   pullik tarif oltin halqa va burchakdagi yulduzcha bilan belgilanadi,
+   to'liq matn esa `title` tooltip'ida va Profil oynasida ko'rinadi. */
+.avatarBtn {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.18),
+    rgba(255, 255, 255, 0.06)
+  );
+  border: 1.5px solid rgba(255, 255, 255, 0.22);
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.avatarBtn:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.avatarPaid {
+  border-color: rgba(201, 149, 58, 0.75);
+  background: linear-gradient(
+    135deg,
+    rgba(201, 149, 58, 0.45),
+    rgba(201, 149, 58, 0.14)
+  );
+  box-shadow: 0 0 0 3px rgba(201, 149, 58, 0.12);
+}
+
+.avatarPaid:hover {
+  border-color: rgba(201, 149, 58, 1);
+}
+
+.avatarBadge {
+  position: absolute;
+  right: -3px;
+  bottom: -3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gold, #c9953a);
+  color: var(--navy, #0b1322);
+  /* Ramka navbar foni rangida — nishon avatardan "kesib" turgandek
+     ko'rinadi (aks holda ikki dumaloq bir-biriga yopishib ketadi). */
+  border: 2px solid var(--navy, #0b1322);
+}
+
+.menuBtn {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 10px;
+  transition: background 0.2s;
+}
+
+.menuBtn span {
+  display: block;
+  height: 2px;
+  background: #fff;
+  border-radius: 2px;
+  transition: transform 0.25s, opacity 0.25s;
+}
+
+.menuBtnOpen span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.menuBtnOpen span:nth-child(2) {
+  opacity: 0;
+}
+
+.menuBtnOpen span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.menuOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 19, 34, 0.6);
+  backdrop-filter: blur(3px);
+  z-index: 250;
+  animation: fadeIn 0.25s ease;
+}
+
+.mobileMenu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: min(300px, 85vw);
+  background: var(--navy);
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem 1.5rem 2rem;
+  box-shadow: 4px 0 32px rgba(0, 0, 0, 0.3);
+  animation: slideFromLeft 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+
+  /* Menyu ichi SCROLL bo'ladi: bandlar ekranga sig'masa (kichik
+     telefonlar, gorizontal holat) pastdagilar ko'rinmay qolardi.
+     `overscroll-behavior: contain` — menyu oxiriga yetganda scroll
+     orqa fondagi sahifaga o'tib ketmasligi uchun. */
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+}
+
+.mobileMenu::-webkit-scrollbar {
+  width: 5px;
+}
+
+.mobileMenu::-webkit-scrollbar-thumb {
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Menyu ichidagi bandlar siqilib ketmasin (scroll bo'lsin) */
+.mobileMenu > * {
+  flex-shrink: 0;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideFromLeft {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+.mobileMenuHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mobileClose {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobileLink {
+  padding: 14px 0;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  transition: color 0.2s, padding-left 0.2s;
+}
+
+.mobileLink:hover,
+.mobileLinkActive {
+  color: var(--gold-light);
+  padding-left: 6px;
+}
+
+.main {
+  flex: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   FOOTER
+   Minimalist, "premium legal-tech" ko'rinish (Stripe / Linear / Vercel
+   yo'nalishi): gradient yo'q, glassmorphism yo'q, ortiqcha quti va
+   bezak yo'q — faqat toza tipografika, keng bo'sh joy va bitta oltin
+   urg'u rangi.
+
+   Tuzilma: brend bloki + 4 ta havola ustuni → ajratgich → pastki qator
+   (copyright · huquqiy havolalar · nishonlar) → ogohlantirish.
+
+   ⚠️ Bu yerda ATAYLAB YO'Q: obunaga yozilish ("Yangiliklardan xabardor
+   bo'ling") bloki. U olib tashlanganda o'rniga BOSHQA blok qo'yilmadi —
+   footer tabiiy ravishda pasaydi va bo'sh joy ko'paydi. Bu ataylab
+   qilingan: sokinlik minimalist dizaynning asosi.
+   ═══════════════════════════════════════════════════════════════════ */
+.footer {
+  background: var(--navy);
+  padding: 4rem 1.5rem 1.75rem;
+}
+
+/* ── Yuqori qism: brend + 4 ustun ── */
+.footerTop {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  /* Brend ustuni kengroq (havolalar ustunlari teng) */
+  grid-template-columns: 1.6fr repeat(4, 1fr);
+  gap: 3rem 2.5rem;
+  align-items: start;
+}
+
+/* ── Brend ── */
+.footerBrand {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 300px;
+}
+
+.footerLogo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.footerTagline {
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 300;
+}
+
+.footerSocial {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.footerSocial a {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.7);
+  transition:
+    background 0.22s ease,
+    border-color 0.22s ease,
+    color 0.22s ease;
+}
+
+.footerSocial a:hover {
+  background: rgba(201, 149, 58, 0.16);
+  border-color: var(--gold);
+  color: var(--gold-light);
+}
+
+/* ── Havola ustunlari ── */
+.footerCol h3 {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.42);
+  margin-bottom: 1.1rem;
+}
+
+.footerCol ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+/* `a` va `button` bir xil ko'rinsin — "AI Yordamchi" havola emas,
+   chat oynasini ochadigan tugma, lekin vizual farqi bo'lmasligi kerak. */
+.footerCol a,
+.footerCol button {
+  display: inline-block;
+  padding: 0;
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 300;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.68);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.18s ease;
+}
+
+.footerCol a:hover,
+.footerCol button:hover {
+  color: var(--gold-light);
+}
+
+/* Aloqa ustunidagi manzil — havola emas, oddiy matn */
+.footerContact span {
+  display: block;
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ── Pastki qator ── */
+.footerBottom {
+  max-width: 1200px;
+  margin: 3.25rem auto 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+}
+
+.footerCopy {
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.footerLegal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+}
+
+.footerLegal a {
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.5);
+  transition: color 0.15s;
+}
+
+.footerLegal a:hover {
+  color: var(--gold-light);
+}
+
+/* ── Nishonlar (SSL · O'zbekistonda ishlab chiqilgan) ──
+   Ataylab "quti" emas: fon va ramkasiz, faqat ikona + matn — shunda
+   ular e'tiborni tortmaydi va footer sokin qoladi. */
+.footerBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+
+.footerBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.38);
+  white-space: nowrap;
+}
+
+.footerBadge svg {
+  color: var(--gold);
+  opacity: 0.85;
+  flex-shrink: 0;
+}
+
+.footerWarn {
+  max-width: 1200px;
+  margin: 1.25rem auto 0;
+  font-size: 11.5px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.28);
+}
+
+/* ── Footer moslashuvi ──────────────────────────────────────────── */
+
+/* Planshet: brend butun kenglikni egallaydi, ustunlar 2×2 bo'ladi */
+@media (max-width: 1080px) {
+  .footerTop {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem 2rem;
+  }
+  .footerBrand {
+    grid-column: 1 / -1;
+    max-width: 420px;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 3rem 1.25rem 1.5rem;
+  }
+  .footerTop {
+    gap: 2rem 1.5rem;
+  }
+  .footerBottom {
+    margin-top: 2.5rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .footerWarn {
+    margin-top: 1rem;
+  }
+}
+
+/* Telefon: ustunlar bir-birining ostida */
+@media (max-width: 520px) {
+  .footerTop {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .footerBrand {
+    max-width: none;
+  }
+}
+
+/* Oraliq ekranlar (1024–1240px): menyu bir qatorga sig'ishi uchun
+   bo'shliq va o'lchamlar ixchamlashtiriladi */
+@media (max-width: 1240px) {
+  .navCenter {
+    gap: 0.85rem;
+  }
+  .navLink,
+  .dropdownBtn {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .navCenter {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .menuBtn {
+    display: flex;
+  }
+}
+
+@media (max-width: 640px) {
+  .navInner {
+    padding: 0 1rem;
+  }
+
+  .logoText {
+    display: none;
+  }
+}
+
+/* ── Header: "Biz haqimizda" ochiluvchi ro'yxati (login qilganlar uchun) ── */
+.dropdown {
+  position: relative;
+}
+
+.dropdownBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.75);
+  background: transparent;
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+
+.dropdownBtn svg {
+  transition: transform 0.25s ease;
+}
+
+.dropdown:hover .dropdownBtn,
+.dropdown:focus-within .dropdownBtn {
+  color: var(--gold-light);
+}
+
+.dropdown:hover .dropdownBtn svg,
+.dropdown:focus-within .dropdownBtn svg {
+  transform: rotate(180deg);
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  margin-top: 14px;
+  min-width: 190px;
+  padding: 8px;
+  border-radius: 14px;
+  background: var(--navy-mid);
+  border: 1px solid rgba(201, 149, 58, 0.25);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.42);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s;
+  z-index: 260;
+}
+
+/* Tugma bilan ro'yxat orasidagi bo'shliqda sichqoncha "tushib qolmasligi"
+   uchun ko'rinmas ko'prik */
+.dropdownMenu::before {
+  content: "";
+  position: absolute;
+  top: -16px;
+  left: 0;
+  right: 0;
+  height: 16px;
+}
+
+.dropdown:hover .dropdownMenu,
+.dropdown:focus-within .dropdownMenu {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+.dropdownItem {
+  display: block;
+  padding: 10px 13px;
+  border-radius: 9px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+  white-space: nowrap;
+  transition: background 0.18s, color 0.18s;
+}
+
+.dropdownItem:hover {
+  background: rgba(201, 149, 58, 0.16);
+  color: var(--gold-light);
+}
+
+/* Mobil menyudagi guruh sarlavhasi ("Biz haqimizda") */
+.mobileGroupLabel {
+  margin-top: 1.25rem;
+  padding-bottom: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.mobileSubLink {
+  padding-left: 12px;
+  font-size: 15px;
+}
+
+/* Telefonda pastki navigatsiya (BottomNav) kontentni yopib qo'ymasligi
+   uchun sahifa oxiriga joy qoldiramiz.
+
+   ⚠️ 64px YETARLI EMAS edi — foydalanuvchi "matnlar pastki panel
+   ortida yashirinib qolgan" deb xabar berdi. Hisob:
+     panel balandligi ................. 59,6px
+     markazdagi AI doirasi paneldan
+       yuqoriga chiqadi (margin-top:-18px) 6,0px
+     doira atrofidagi oq halqa (shadow) . 4,0px
+     ─────────────────────────────────────────
+     haqiqiy egallangan zona ........... 69,6px
+   Ya'ni 5,6px kontent panel ostida qolardi. Endi 84px — yuqoridagi
+   zona ustiga yana ~14px "nafas" qo'shilgan, shunda oxirgi qator
+   panelga tegib turmaydi.
+
+   `--bottom-nav-space` o'zgaruvchisi sifatida berildi: boshqa
+   sahifalar ham (masalan Konstitutsiyadagi "Yuqoriga" tugmasi) shu
+   qiymatdan foydalanadi va kelajakda bir joydan boshqariladi. */
+@media (max-width: 768px) {
+  :root {
+    --bottom-nav-space: calc(84px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .main {
+    padding-bottom: var(--bottom-nav-space);
+  }
+
+  .footer {
+    padding-bottom: var(--bottom-nav-space);
+  }
+}
+
+/* ═══════════ MEHMON TUGMALARI (Kirish / Ro'yxatdan o'tish) ═══════════
+   Avval bular JSX ichida inline uslub bilan yozilgan edi — shu sabab
+   media-qoidalar ularga ta'sir qilmasdi va telefonda header ekrandan
+   chiqib ketardi. */
+.authBtns {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.authGhost,
+.authGold {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 0.85rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.authGhost {
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  color: #fff;
+  font-weight: 600;
+}
+
+.authGhost:hover {
+  border-color: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.authGold {
+  background: var(--gold, #c9953a);
+  color: var(--navy, #1a1a2e);
+  font-weight: 700;
+}
+
+.authGold:hover {
+  filter: brightness(1.08);
+}
+
+/* ═══════════ MOBIL: header ixchamlashtiriladi ═══════════ */
+@media (max-width: 768px) {
+  .navInner {
+    height: 60px;
+    gap: 0.6rem;
+  }
+
+  /* Hech bir element konteynerdan tashqariga itarmasin */
+  .navInner > * {
+    min-width: 0;
+  }
+
+  .logoImg {
+    width: 30px;
+    height: 30px;
+  }
+
+  .navRight {
+    gap: 0.45rem;
+  }
+
+  .authBtns {
+    gap: 0.35rem;
+  }
+
+  .authGhost,
+  .authGold {
+    padding: 0.35rem 0.7rem;
+    font-size: 0.78rem;
+    border-radius: 16px;
+  }
+
+  .avatarBtn {
+    width: 34px;
+    height: 34px;
+    font-size: 0.88rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .navInner {
+    padding: 0 0.75rem;
+    height: 56px;
+  }
+
+  .logoImg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .authGhost,
+  .authGold {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.72rem;
+  }
+
+  .avatarBtn {
+    width: 32px;
+    height: 32px;
+    font-size: 0.82rem;
+  }
+
+  .avatarBadge {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+/* Juda tor ekran (≤340px): "Kirish" yashiriladi — ro'yxatdan o'tish
+   sahifasida "Hisobingiz bormi? Kirish" havolasi bor, ya'ni kirish
+   yo'li yo'qolmaydi. */
+@media (max-width: 340px) {
+  .authGhost {
+    display: none;
+  }
+}

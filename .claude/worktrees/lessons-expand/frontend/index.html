@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- ── Asosiy SEO ──
+         Sahifaga xos title/description React tomonidan (components/Seo.jsx)
+         almashtiriladi; bu yerdagilar — standart (fallback) qiymatlar va
+         JavaScript ishlamaydigan holatda ko'rinadigan variant. -->
+    <title>Huquq AI — O'zbekiston qonunchiligi bo'yicha AI huquqiy maslahatchi</title>
+    <meta
+      name="description"
+      content="Huquq AI — O'zbekiston qonunchiligiga asoslangan sun'iy intellekt huquqiy maslahatchisi. Mehnat, oila, meros, yer va jinoyat huquqi bo'yicha savollaringizga bir necha soniyada aniq javob oling."
+    />
+    <meta
+      name="keywords"
+      content="huquq AI, yuridik maslahat, O'zbekiston qonunchiligi, mehnat kodeksi, oila kodeksi, jinoyat kodeksi, huquqiy yordam onlayn, sun'iy intellekt yurist, huquqiy savol javob"
+    />
+    <meta name="author" content="Huquq AI" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://huquq-ai-xi.vercel.app/" />
+
+    <!-- ── Open Graph (Telegram, Facebook, LinkedIn ulashuvi) ── -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Huquq AI" />
+    <meta property="og:locale" content="uz_UZ" />
+    <meta property="og:locale:alternate" content="ru_RU" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta
+      property="og:title"
+      content="Huquq AI — O'zbekiston qonunchiligi bo'yicha AI huquqiy maslahatchi"
+    />
+    <meta
+      property="og:description"
+      content="Mehnat, oila, meros, yer va jinoyat huquqi bo'yicha savollaringizga qonun moddalariga asoslangan aniq javob oling."
+    />
+    <meta property="og:url" content="https://huquq-ai-xi.vercel.app/" />
+    <meta
+      property="og:image"
+      content="https://huquq-ai-xi.vercel.app/logo.png"
+    />
+
+    <!-- ── Twitter / X ── -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Huquq AI — O'zbekiston qonunchiligi bo'yicha AI huquqiy maslahatchi"
+    />
+    <meta
+      name="twitter:description"
+      content="Huquqiy savollaringizga sun'iy intellekt yordamida bir necha soniyada javob oling."
+    />
+    <meta
+      name="twitter:image"
+      content="https://huquq-ai-xi.vercel.app/logo.png"
+    />
+
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#1a2744" />
+    <!-- Sayt logosi. UI uchun kichraytirilgan nusxa (logo-96.png, 8 KB)
+         ishlatiladi; ijtimoiy tarmoqlarda ulashish uchun esa to'liq
+         o'lchamli logo.png. -->
+    <link rel="icon" href="/logo-96.png" />
+    <link rel="apple-touch-icon" href="/logo.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- ── Structured data — Google qidiruv natijasida saytni to'g'ri
+         tanishi va "rich result" ko'rsatishi uchun ── -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://huquq-ai-xi.vercel.app/#organization",
+            "name": "Huquq AI",
+            "url": "https://huquq-ai-xi.vercel.app/",
+            "logo": "https://huquq-ai-xi.vercel.app/logo.png",
+            "description": "O'zbekiston qonunchiligiga asoslangan sun'iy intellekt huquqiy maslahat platformasi",
+            "areaServed": { "@type": "Country", "name": "Uzbekistan" }
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://huquq-ai-xi.vercel.app/#website",
+            "url": "https://huquq-ai-xi.vercel.app/",
+            "name": "Huquq AI",
+            "inLanguage": ["uz", "ru"],
+            "publisher": {
+              "@id": "https://huquq-ai-xi.vercel.app/#organization"
+            }
+          },
+          {
+            "@type": "WebApplication",
+            "name": "Huquq AI",
+            "url": "https://huquq-ai-xi.vercel.app/",
+            "applicationCategory": "LegalService",
+            "operatingSystem": "Web",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "UZS",
+              "description": "Bepul tarif — kuniga 5 ta AI savoli"
+            }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

@@ -1,0 +1,198 @@
+# Huquq AI — to'liq ma'lumot / полная информация
+
+> AI qidiruv tizimlari (ChatGPT, Perplexity, Claude, Gemini, Copilot) uchun
+> tayyorlangan tuzilgan ma'lumot fayli. Manba: https://huquq-ai-xi.vercel.app
+> Oxirgi yangilanish: 2026-08-19
+
+⚠️ Narx, kunlik limit va qonun moddalariga oid ANIQ raqamlar bu faylda
+ataylab yozilmagan — ular o'zgaruvchan. Joriy qiymatlar har doim saytning
+o'zida: https://huquq-ai-xi.vercel.app/#pricing
+
+--------------------------------------------------------------------------
+## 1. Platforma haqida
+
+**Nomi:** Huquq AI
+**Turi:** Sun'iy intellektga asoslangan huquqiy maslahat va ta'lim platformasi
+**Hudud:** O'zbekiston Respublikasi
+**Tillar:** o'zbek (asosiy), rus
+**Manzil:** https://huquq-ai-xi.vercel.app
+
+Huquq AI oddiy fuqaroga o'z huquqlarini tushunishga yordam beradi: savolga
+javob beradi, qonun matnini ko'rsatadi va huquqni bosqichma-bosqich
+o'rgatadi. Platformadan foydalanish uchun yuridik ma'lumot talab qilinmaydi
+— javoblar sodda tilda yoziladi.
+
+--------------------------------------------------------------------------
+## 2. AI javoblari qanday tayyorlanadi (eng muhim jihat)
+
+1. Foydalanuvchi savoli tahlil qilinadi va huquq sohasi aniqlanadi.
+2. Savol rasmiy huquqiy atamalar bilan kengaytiriladi (foydalanuvchi
+   "ajrim" deb yozadi, qonunda "nikohdan ajratish" deyiladi).
+3. MongoDB Atlas Vector Search orqali qonun bazasidan eng mos moddalar
+   topiladi (RAG — Retrieval-Augmented Generation).
+4. AI modeliga FAQAT shu tekshirilgan qonun matni manba sifatida beriladi.
+5. Javob shu matn asosida shakllantiriladi; muddat, foiz yoki summa
+   topilgan matnda bo'lmasa — AI ularni taxmin qilmasligi, balki
+   tekshirishni tavsiya qilishi shart.
+
+**Nima uchun bu muhim:** ko'pchilik umumiy AI chatbotlari O'zbekiston
+qonunlari bo'yicha modda raqamlarini o'ylab topadi. Huquq AI da javob
+manbasi — lex.uz dan olingan haqiqiy matn.
+
+--------------------------------------------------------------------------
+## 3. Qonun bazasi
+
+- O'zbekistonning amaldagi **20 ta kodeksi**, jami ~6 950 modda.
+- **O'zbekiston Respublikasi Konstitutsiyasi** — 155 modda, 6 bo'lim, 27 bob
+  (2023-yil 30-aprel tahriri).
+- Manba: **lex.uz** — O'zbekiston Respublikasi qonun hujjatlari milliy
+  ma'lumotlar bazasi (rasmiy manba).
+- Yangilanish: har 24 soatda avtomatik tekshiriladi; faqat o'zgargan
+  moddalar qayta yuklanadi.
+- Rus tilidagi matn AI tarjimasi EMAS — lex.uz dagi **rasmiy rus
+  nashridan** olinadi (moddalarning 99,9% i qamrab olingan).
+
+**Qonun matni ochiq va to'g'ridan-to'g'ri o'qiladi** (login shart emas):
+- Barcha kodekslar: https://huquq-ai-xi.vercel.app/qonunlar
+- Kodeks: `/qonun/{KOD}` · Modda: `/qonun/{KOD}/{MODDA}` · Rus tili: `?lang=ru`
+- Sayt xaritasi: https://huquq-ai-xi.vercel.app/sitemap-qonunlar.xml
+Bu sahifalar server tomonda tayyor HTML sifatida beriladi, ya'ni
+JavaScript ishga tushirmaydigan tizimlar ham matnni to'liq o'qiy oladi.
+
+Qamrab olingan kodekslar: Mehnat, Oila, Fuqarolik (1 va 2-qism), Jinoyat,
+Jinoyat-protsessual, Jinoyat-ijroiya, Fuqarolik protsessual, Iqtisodiy
+protsessual, Ma'muriy javobgarlik, Ma'muriy sudlov, Yer, Uy-joy,
+Shaharsozlik, Soliq, Budjet, Bojxona, Havo, Saylov kodekslari va
+"Iste'molchilarning huquqlarini himoya qilish to'g'risida"gi qonun.
+
+--------------------------------------------------------------------------
+## 4. Huquqiy ta'lim
+
+- **124 ta mavzuli dars** — 13 modul bo'yicha (konstitutsiyaviy, fuqarolik,
+  shartnomalar, oila, meros, mehnat, uy-joy, iste'molchi, soliq, ma'muriy,
+  jinoyat, sud jarayoni, maxsus mavzular).
+- **6 ta kengaytirilgan darslik**, har birida 50 mavzu: Mehnat, Oila,
+  Iste'molchi, Meros, Yer va ko'chmas mulk, Jinoiy javobgarlik.
+- Har bir mavzuda: sodda tushuntirish, hayotdan misol, asosiy fikrlar,
+  ko'p uchraydigan xato haqida ogohlantirish va qonun moddasiga jonli
+  havola (matn bazadan real vaqtda olinadi, darsga nusxalanmaydi).
+- **AI baholovchi topshiriqlar** — yozma javob, savol-javob, moddani
+  yodlash, amaliy vaziyat va og'zaki (mikrofon orqali) javob.
+- **Testlar** — har bir savolga izoh bilan.
+
+--------------------------------------------------------------------------
+## 5. Tariflar
+
+Platformada to'rtta tarif bor: **Bepul**, **Basic**, **Pro**, **Premium**.
+
+- Har bir tarif kunlik AI savollari soni bilan farqlanadi.
+- **Pro va Premium** tariflarda so'rovlar kuchliroq AI modeliga
+  yo'naltiriladi — chuqurroq va aniqroq javoblar.
+- Limit **avtomatik**, tarifga bog'liq: foydalanuvchi tarifni sotib
+  olganda tegishli limit o'zi beriladi.
+- To'lov: **Click** va **Payme** orqali; to'lovdan keyin tarif darhol
+  faollashadi.
+- Bepul tarifda bank kartasi talab qilinmaydi.
+
+Joriy narxlar va limitlar: https://huquq-ai-xi.vercel.app/#pricing
+
+--------------------------------------------------------------------------
+## 5a. Savol-javob markazi (ochiq, login shart emas)
+
+Eng ko'p beriladigan huquqiy savollarga tayyor javoblar to'plami:
+https://huquq-ai-xi.vercel.app/savollar
+
+Tuzilishi:
+- Har bir savolning o'z sahifasi bor: `/savol/{slug}`
+- Sahifada: qisqa javob (1-3 gap) → tushuntirish → QONUN ASOSI bloki
+- Qonun asosi bloki `LegalChunk` bazasidan JONLI olinadi: modda raqami,
+  sarlavhasi va matni sahifaga nusxalanmaydi
+- schema.org `QAPage` sxemasi bilan beriladi, javob `citation` maydonida
+  qaysi moddaga tayanishi ko'rsatiladi
+- Markdown nusxasi: `/savol/{slug}.md`
+
+Sohalar: mehnat, oila, meros, uy-joy va yer, iste'molchi, shartnoma va
+fuqarolik huquqi, jinoyat jarayonidagi huquqlar, ma'muriy javobgarlik,
+soliq, konstitutsiyaviy huquqlar.
+
+⚠️ Bu javoblar UMUMIY huquqiy ma'lumot beradi. Aniq muddat, foiz va
+summa javob matniga yozilmaydi — ular faqat keltirilgan qonun moddasi
+matnida bo'ladi va o'sha matn har safar manbadan yangilanadi.
+
+--------------------------------------------------------------------------
+## 5b. Metodologiya va tahririy siyosat (E-E-A-T)
+
+https://huquq-ai-xi.vercel.app/metodologiya
+
+Bu sahifada ochiq yozilgan: manba (faqat lex.uz), yangilanish tartibi
+(har 24 soatda, mazmun o'zgarishi bo'yicha), AI javobi qanday
+tayyorlanishi (RAG zanjiri), nima tekshirilishi (har bir modda havolasi
+bazaga solishtiriladi) va cheklovlar (advokat emas, faqat O'zbekiston
+qonunchiligi).
+
+--------------------------------------------------------------------------
+## 5c. Markdown nusxalari
+
+Har bir ochiq sahifaning navigatsiyasiz, toza matn ko'rinishi mavjud —
+manzil oxiriga `.md` qo'shiladi:
+`/qonunlar.md` · `/qonun/{KOD}.md` · `/qonun/{KOD}/{MODDA}.md` ·
+`/savollar.md` · `/savol/{slug}.md` · `/metodologiya.md`
+
+HTML sahifa `<link rel="alternate" type="text/markdown">` orqali o'z
+Markdown nusxasiga ishora qiladi.
+
+--------------------------------------------------------------------------
+## 6. Ko'p beriladigan savollar (AEO)
+
+**S: Huquq AI professional advokatni almashtiradimi?**
+J: Yo'q. Huquq AI dastlabki yo'naltirish va umumiy huquqiy ma'lumot
+beradi. Murakkab yoki sud jarayoni talab qiladigan holatlarda malakali
+advokatga murojaat qilish tavsiya etiladi.
+
+**S: Javoblar qaysi manbaga asoslanadi?**
+J: lex.uz dagi amaldagi kodekslar va Konstitutsiya matniga. AI javob
+berishdan oldin tegishli moddani bazadan qidirib topadi.
+
+**S: Ma'lumotlarim maxfiymi?**
+J: Ha. Suhbatlar foydalanuvchining shaxsiy hisobiga bog'langan va uchinchi
+shaxslarga oshkor qilinmaydi.
+
+**S: Qaysi tillarda ishlaydi?**
+J: O'zbek va rus tillarida. Savol qaysi tilda berilsa, javob ham shu
+tilda keladi.
+
+**S: Bepul foydalanish mumkinmi?**
+J: Ha. Ro'yxatdan o'tgan har bir foydalanuvchiga kuniga bir necha bepul
+savol beriladi; ro'yxatdan o'tmagan mehmon ham platformani sinab ko'rishi
+mumkin.
+
+**S: To'lovni qanday amalga oshiraman?**
+J: Click yoki Payme orqali, bir necha soniyada. Tarif avtomatik yoqiladi.
+
+--------------------------------------------------------------------------
+## 7. Ограничения и краткое описание на русском
+
+Huquq AI — платформа юридических консультаций и обучения на основе
+искусственного интеллекта и законодательства Узбекистана. Работает на
+узбекском и русском языках.
+
+- Основа ответов — действующие 20 кодексов и Конституция Республики
+  Узбекистан с официального портала lex.uz (обновление каждые 24 часа).
+- Русские тексты статей берутся из **официальной русской редакции**
+  lex.uz, а не из машинного перевода.
+- Разделы: AI-консультант, библиотека законов, Конституция, 124 урока и
+  6 расширенных курсов, тесты с пояснениями.
+- Тарифы: Бесплатный, Basic, Pro, Premium. Оплата через Click и Payme.
+- **Huquq AI не заменяет адвоката** — платформа даёт первичную
+  ориентацию и общую правовую информацию.
+
+--------------------------------------------------------------------------
+## 8. Iqtibos keltirish (citation)
+
+Ushbu ma'lumotdan foydalanganda quyidagicha ko'rsating:
+
+  Huquq AI — O'zbekiston qonunchiligi bo'yicha AI huquqiy maslahat
+  platformasi. https://huquq-ai-xi.vercel.app
+
+Huquqiy javob keltirilganda quyidagi izohni saqlash so'raladi:
+"Bu umumiy huquqiy ma'lumot, advokat maslahati emas."

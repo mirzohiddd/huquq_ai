@@ -1,0 +1,98 @@
+{
+  "rewrites": [
+    {
+      "source": "/qonunlar.md",
+      "destination": "https://huquq-ai-production.up.railway.app/public/qonunlar.md"
+    },
+    {
+      "source": "/qonunlar",
+      "destination": "https://huquq-ai-production.up.railway.app/public/qonunlar"
+    },
+    {
+      "source": "/qonun/:path*",
+      "destination": "https://huquq-ai-production.up.railway.app/public/qonun/:path*"
+    },
+    {
+      "source": "/sitemap-qonunlar.xml",
+      "destination": "https://huquq-ai-production.up.railway.app/public/sitemap-qonunlar.xml"
+    },
+    {
+      "source": "/savollar",
+      "destination": "https://huquq-ai-production.up.railway.app/public/savollar"
+    },
+    {
+      "source": "/savollar.md",
+      "destination": "https://huquq-ai-production.up.railway.app/public/savollar.md"
+    },
+    {
+      "source": "/savol/:path*",
+      "destination": "https://huquq-ai-production.up.railway.app/public/savol/:path*"
+    },
+    {
+      "source": "/metodologiya",
+      "destination": "https://huquq-ai-production.up.railway.app/public/metodologiya"
+    },
+    {
+      "source": "/metodologiya.md",
+      "destination": "https://huquq-ai-production.up.railway.app/public/metodologiya.md"
+    },
+    {
+      "source": "/sitemap-savollar.xml",
+      "destination": "https://huquq-ai-production.up.railway.app/public/sitemap-savollar.xml"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(robots.txt|sitemap.xml|sitemap-sahifalar.xml|llms.txt|llms-full.txt|ai.txt)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600, must-revalidate"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "index, follow"
+        }
+      ]
+    },
+    {
+      "source": "/(og-image.jpg|og-image-ru.jpg|logo.png|logo-96.png|logo-180.png|logo-192.png|logo-512.png)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800, stale-while-revalidate=86400"
+        }
+      ]
+    },
+    {
+      "source": "/site.webmanifest",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/manifest+json; charset=utf-8"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400"
+        }
+      ]
+    },
+    {
+      "source": "/sw.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        },
+        {
+          "key": "Service-Worker-Allowed",
+          "value": "/"
+        }
+      ]
+    }
+  ]
+}

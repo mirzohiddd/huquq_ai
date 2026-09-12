@@ -1,0 +1,840 @@
+/* ═══════════════════════════════════════════════════════════════════
+   KONSTITUTSIYA SAHIFASI
+
+   Kutubxonadan farqi: bu O'QISH uchun hujjat, ro'yxat emas. Shuning
+   uchun akkordeon ham, sahifalash ham yo'q — barcha 155 modda to'liq
+   matni bilan, boblar bo'yicha ajratilgan holda ko'rinadi.
+
+   Palitra ATAYLAB shu sahifaga lokal (`.hero`, `.article` ichidagi
+   qiymatlar global o'zgaruvchilardan olinadi, lekin yangi global
+   qiymat qo'shilmaydi) — navbar, footer va boshqa sahifalar
+   o'zgarishsiz qoladi.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Hero ── */
+/* ⚠️ TO'LIQ KENGLIK (foydalanuvchi so'rovi, 2026-08-11): hero ekranning
+   BOSHIDAN OXIRIGACHA cho'ziladi. Avval u 1200px konteyner ichida
+   turgan kartochka edi. Shuning uchun bu yerda `max-width` ham,
+   yon bo'shliq ham YO'Q. Matn esa baribir 1200px chizig'ida qoladi —
+   buni `.hero` dagi `padding-inline` hisobi ta'minlaydi. */
+.heroOuter {
+  width: 100%;
+}
+
+/* ⚠️ Hero endi FON RASMI bilan ishlaydi.
+   Avval bu yerda CSS bayroq lentalari, gradient fon va SVG
+   illyustratsiyalar bor edi — ularning hammasi berilgan rasmda
+   chizilgan, shuning uchun olib tashlandi (ustma-ust tushardi).
+
+   ⚠️ RASM UCHGA BO'LINGAN — bu hal qiluvchi qaror.
+   Manba rasm 16:9 (1600×900) va uning MAZMUNI TO'RTALA CHETIDA:
+   chapda bayroq va kitob, o'ngda tarozi/bolg'a/lenta. Butun ekran
+   kengligidagi hero esa ancha yassi (masalan 1440×460 ≈ 3,1:1).
+   Bitta rasm bilan ikkala talabni bajarib bo'lmasdi:
+     · `cover`  → kenglikni to'ldiradi, lekin balandlikning ~43% i
+                  qirqiladi va aynan o'sha chetlardagi bezaklar yo'qoladi
+                  (foydalanuvchi birinchi shikoyati shu edi);
+     · `contain`→ hech nima kesilmaydi, lekin keng ekranda rasm
+                  o'rtada kichkina bo'lib qoladi, chetlar bo'sh turadi.
+
+   Yechim: rasm CHAP, MARKAZ (tarozi medalyoni) va O'NG qismlarga
+   ajratildi (`const-hero-left/mid/right.jpg`). Ular mustaqil qatlam
+   sifatida mos chetga BIRIKTIRILADI va balandlik bo'yicha to'ladi
+   (`auto 100%`). Natijada ISTALGAN ekran kengligida: chap guruh chap
+   chetda, o'ng guruh o'ng chetda, hech nima kesilmaydi, o'rtadagi
+   bo'sh joy esa matn uchun ochiladi. Ekran kengaysa faqat markazdagi
+   krem maydon kengayadi.
+
+   Bo'laklarning ichki chetlari manba rasmda bo'sh krem maydon —
+   `background-color` (#fdfcf8) bilan bir xil, shu sabab ulanish
+   joyi ko'rinmaydi (o'lchandi: farq 0-2/255). */
+.hero {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: var(--hero-h);
+  /* Matn 1200px chizig'ida qoladi, fon esa butun ekranni egallaydi */
+  padding: 2.25rem max(1.5rem, calc((100% - 1200px) / 2));
+  background-color: #fdfcf8;
+  background-image: url("/const-hero-left.jpg"), url("/const-hero-right.jpg"),
+    url("/const-hero-mid.jpg");
+  background-position: left center, right center, center 12%;
+  background-size: auto 100%, auto 100%, auto 26%;
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  border-bottom: 1px solid var(--gray-100);
+}
+
+/* Matn ortidagi yengil oq parda — sarlavha rasmning naqshli
+   joyiga tushib qolsa ham o'qilishi kafolatlanadi. Rasmning
+   chap/o'ng chetidagi kitob va tarozi ochiq qoladi. */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 46% 62% at 50% 52%,
+    rgba(253, 252, 248, 0.92) 0%,
+    rgba(253, 252, 248, 0.72) 55%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+.heroInner {
+  position: relative;
+  z-index: 1;
+  max-width: 620px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.heroTitle {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 4vw, 2.7rem);
+  font-weight: 800;
+  color: var(--navy);
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.7rem;
+}
+
+.heroSub {
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--gray-600);
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.heroMeta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 1.5rem;
+  font-size: 13.5px;
+}
+
+/* Namunadagi uchta "chip" — ikona + raqam + yorliq */
+.metaChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 15px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(201, 149, 58, 0.35);
+  color: var(--gray-600);
+  box-shadow: 0 3px 12px rgba(11, 19, 34, 0.05);
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.metaChip svg {
+  color: var(--gold);
+  flex-shrink: 0;
+}
+
+a.metaChip:hover {
+  border-color: var(--gold);
+  transform: translateY(-2px);
+}
+
+.heroMeta strong {
+  color: var(--navy);
+  font-weight: 800;
+}
+
+.dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Bo'lim bo'shlig'i — umumiy `.pageSection` (80px) o'rniga sahifaga
+   xos qiymat. Konstitutsiya uzun hujjat: telefonda 80px yuqori
+   bo'shliq matnni bekorga pastga surib yuborardi. */
+.section {
+  padding: 3rem 0 4rem;
+}
+
+/* Gorizontal chiqib ketishga qarshi himoya: sahifadagi hech bir
+   element konteynerdan kengroq bo'lmasin. Aniq sababni qidirib
+   yurmaslik uchun umumiy chegara — matn, jadval yoki uzun havola
+   bo'ladimi, hammasi shu doirada qoladi. */
+.section :is(p, h1, h2, h3, li, span, a) {
+  max-width: 100%;
+}
+
+/* ── Qidiruv ── */
+.searchBar {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  max-width: 640px;
+  margin: 0 auto 2.5rem;
+  padding: 0.55rem 0.55rem 0.55rem 1rem;
+  background: var(--white);
+  border: 1px solid var(--gray-100);
+  border-radius: 100px;
+  box-shadow: var(--shadow-sm);
+  color: var(--gray-600);
+}
+
+.searchBar input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: none;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--navy);
+}
+
+.searchBar input::placeholder {
+  color: var(--gray-400, #9e9b91);
+}
+
+.searchBar button[type="submit"] {
+  padding: 0.5rem 1.2rem;
+  border: none;
+  border-radius: 100px;
+  background: var(--navy);
+  color: #fff;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.searchBar button[type="submit"]:hover {
+  background: var(--gold);
+}
+
+
+
+.clearBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--gray-100);
+  color: var(--gray-600);
+  cursor: pointer;
+}
+
+.stateText {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--gray-600);
+  font-size: 14px;
+}
+
+/* ── Tuzilma: mundarija + matn ── */
+
+/* ── Matn ── */
+
+.translating {
+  margin-bottom: 1.5rem;
+  font-size: 13px;
+  color: var(--gold);
+  font-weight: 500;
+}
+
+.article {
+  padding: 1.4rem 0;
+  border-bottom: 1px solid var(--gray-100);
+}
+
+.article:last-child {
+  border-bottom: none;
+}
+
+.articleHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-bottom: 0.7rem;
+}
+
+.articleNum {
+  flex-shrink: 0;
+  padding: 3px 11px;
+  border-radius: 100px;
+  background: var(--navy);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.articleTitle {
+  font-family: var(--font-display);
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--navy);
+  line-height: 1.45;
+}
+
+.articleBody p {
+  font-size: 15px;
+  line-height: 1.85;
+  color: var(--gray-600);
+  font-weight: 300;
+}
+
+.articleBody p + p {
+  margin-top: 0.7rem;
+}
+
+/* ── Moslashuv ────────────────────────────────────────────────────── */
+
+/* Planshet: mundarija tepaga chiqadi va gorizontal ro'yxatga aylanadi */
+/* ═══════════════ PLANSHET / TELEFON ═══════════════
+   Mundarija YON PANELDAN yuqoridagi YOPISHQOQ tanlagichga aylanadi:
+   u navbar ostida qotib turadi, moddalar esa uning ostida scroll
+   bo'laveradi. Ochilganda ro'yxat kontent USTIGA tushadi (uni surib
+   yubormaydi) — shuning uchun `position: absolute`.
+
+   Avval mundarija oddiy blok bo'lib kontentdan oldin turardi va
+   27 ta bob ro'yxatini har safar aylanib o'tishga to'g'ri kelardi. */
+
+@media (max-width: 768px) {
+  .section {
+    padding: 1.75rem 0 2.5rem;
+  }
+  .hero {
+    padding: 2rem 1.1rem 1.75rem;
+  }
+  .heroTitle {
+    font-size: 1.25rem;
+  }
+  .heroSub {
+    font-size: 13px;
+  }
+  .heroMeta {
+    margin-top: 1rem;
+    font-size: 12px;
+  }
+
+  /* Modda matni chetga tegib turmasin */
+  .article {
+    padding: 1.15rem 0;
+  }
+  .articleHead {
+    gap: 0.5rem;
+    margin-bottom: 0.55rem;
+  }
+  .articleNum {
+    font-size: 11.5px;
+    padding: 2px 9px;
+  }
+  .articleTitle {
+    font-size: 13.5px;
+  }
+  /* Telefonda qidiruv ichi ixchamlashadi — aks holda "Qidirish"
+     tugmasi kiritish maydonini juda siqib qo'yardi. */
+  .searchBar {
+    gap: 0.5rem;
+  }
+
+  .searchBar input {
+    font-size: 13.5px;
+  }
+
+  .searchBar button[type="submit"] {
+    font-size: 12.5px;
+  }
+  .articleBody p {
+    font-size: 14.5px;
+    line-height: 1.8;
+  }
+}
+
+/* ⚠️ Navbar ≤420px da 56px ga tushadi (SiteLayout.module.css), ya'ni
+   yopishqoq qiymatlar ham 4px yuqoriga suriladi. Avval bu qiymatlar
+   ≤768px blokida turgan edi — natijada 421-768px oralig'ida (u yerda
+   navbar hali 60px) qidiruv navbar ostida 4px bo'shliq qoldirardi. */
+
+@media (prefers-reduced-motion: reduce) {
+  .secArrow,
+  .indexInner,
+  .indexToggle svg:last-child {
+    transition: none;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   MUNDARIJA + MATN
+
+   Chapda hujjatning BUTUN tuzilishi doim ko'rinib turadi, o'ngda
+   tanlangan bobning moddalari. Foydalanuvchi qayerdaligini bir
+   qarashda tushunadi — bu qomus va hujjatlar uchun tanish, o'rganishni
+   talab qilmaydigan naqsh.
+   ═══════════════════════════════════════════════════════════════════ */
+.layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 2.25rem;
+  align-items: start;
+}
+
+/* ── Mundarija ── */
+.index {
+  position: sticky;
+  top: 88px; /* navbar 68 + 20 */
+  align-self: start;
+}
+
+.indexInner {
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gray-200) transparent;
+}
+
+.indexInner::-webkit-scrollbar {
+  width: 5px;
+}
+.indexInner::-webkit-scrollbar-thumb {
+  border-radius: 100px;
+  background: var(--gray-200);
+}
+
+.indexTitle {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gray-400, #9e9b91);
+  margin-bottom: 0.85rem;
+}
+
+.indexSection + .indexSection {
+  margin-top: 2px;
+}
+
+/* Bo'lim qatori */
+.secBtn {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 9px 10px;
+  border: none;
+  border-radius: 9px;
+  background: none;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.16s ease;
+}
+
+.secBtn:hover {
+  background: var(--gray-50, #faf9f7);
+}
+
+.secNum {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border-radius: 7px;
+  background: var(--gray-100);
+  color: var(--gray-600);
+  font-family: var(--font-display);
+  font-size: 11.5px;
+  font-weight: 700;
+  transition:
+    background 0.16s ease,
+    color 0.16s ease;
+}
+
+.secBtnActive .secNum {
+  background: var(--navy);
+  color: #fff;
+}
+
+.secTitle {
+  flex: 1;
+  min-width: 0;
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--navy);
+}
+
+.secArrow {
+  flex-shrink: 0;
+  color: var(--gray-400, #9e9b91);
+  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.secArrowOpen {
+  transform: rotate(180deg);
+}
+
+/* Boblar */
+.chapList {
+  list-style: none;
+  margin: 2px 0 6px;
+  padding-left: 11px;
+  border-left: 1.5px solid var(--gray-100);
+}
+
+.chapBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 9px;
+  border: none;
+  border-radius: 8px;
+  background: none;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background 0.16s ease,
+    color 0.16s ease;
+}
+
+.chapBtn:hover {
+  background: var(--gray-50, #faf9f7);
+}
+
+/* Joriy bob — oltin fon bilan aniq ajratiladi */
+.chapBtnActive {
+  background: var(--gold-pale) !important;
+}
+
+.chapNum {
+  flex-shrink: 0;
+  width: 18px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gray-400, #9e9b91);
+  font-variant-numeric: tabular-nums;
+}
+
+.chapBtnActive .chapNum {
+  color: var(--gold);
+}
+
+.chapTitle {
+  flex: 1;
+  min-width: 0;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--gray-600);
+}
+
+.chapBtnActive .chapTitle {
+  color: var(--navy);
+  font-weight: 600;
+}
+
+.chapCount {
+  flex-shrink: 0;
+  font-size: 10.5px;
+  color: var(--gray-400, #9e9b91);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Matn tomoni ── */
+.content {
+  min-width: 0;
+}
+
+.contentHead {
+  padding-bottom: 1rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 2px solid var(--gold);
+}
+
+.crumb {
+  font-size: 12px;
+  color: var(--gray-600);
+  margin-bottom: 5px;
+}
+
+.contentTitle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.35;
+}
+
+.contentNum {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 9px;
+  background: var(--navy);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.contentMeta {
+  margin-top: 6px;
+  font-size: 12.5px;
+  color: var(--gray-600);
+}
+
+/* ── Oldingi / keyingi bob ── */
+.pager {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--gray-100);
+}
+
+.pagerBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 14px;
+  border: 1px solid var(--gray-100);
+  border-radius: 100px;
+  background: var(--white);
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--gray-600);
+  cursor: pointer;
+  transition:
+    border-color 0.18s ease,
+    color 0.18s ease;
+}
+
+.pagerBtn:hover:not(:disabled) {
+  border-color: var(--gold);
+  color: var(--navy);
+}
+
+.pagerBtn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* ── Qidiruv natijalari ── */
+.searchWrap {
+  max-width: 820px;
+}
+
+.searchHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  font-size: 13px;
+  color: var(--gray-600);
+}
+
+.textBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: none;
+  background: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: 12.5px;
+  color: var(--gold);
+  cursor: pointer;
+}
+
+.articleWhere {
+  font-size: 12px;
+  color: var(--gray-400, #9e9b91);
+  font-weight: 300;
+}
+
+/* Telefondagi mundarija tugmasi — desktopda kerak emas */
+.indexToggle {
+  display: none;
+}
+
+/* ═══════════════ MOSLASHUV ═══════════════ */
+@media (max-width: 1024px) {
+  .layout {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  /* Mundarija yuqoridagi ochiladigan panelga aylanadi va unda JORIY
+     joylashuv yozib turadi ("2-bo'lim · 7-bob") — foydalanuvchi
+     qayerdaligini yopiq holatda ham biladi. */
+  .index {
+    position: static;
+  }
+
+  .indexToggle {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+    padding: 0.75rem 0.9rem;
+    border: 1px solid var(--gray-100);
+    border-radius: 12px;
+    background: var(--white);
+    box-shadow: var(--shadow-sm);
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+    cursor: pointer;
+  }
+
+  .indexToggleText {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: left;
+  }
+
+  .indexToggle svg:last-child {
+    flex-shrink: 0;
+    transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .indexToggleOpen svg:last-child {
+    transform: rotate(180deg);
+  }
+
+  .indexInner {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    padding: 0;
+    transition:
+      max-height 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 0.18s ease,
+      margin-top 0.28s ease;
+  }
+
+  .indexOpen {
+    max-height: min(65vh, 460px);
+    overflow-y: auto;
+    opacity: 1;
+    margin-top: 0.6rem;
+    padding: 0.6rem;
+    border: 1px solid var(--gray-100);
+    border-radius: 12px;
+    background: var(--white);
+  }
+
+  .indexTitle {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 1rem 1.1rem;
+  }
+  .heroInner {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .heroTitle {
+    font-size: 14.5px;
+  }
+  .heroMeta {
+    font-size: 11.5px;
+  }
+  /* Qidiruv butun kenglikda, ikkinchi qatorga tushadi */
+  .searchBar {
+    width: 100%;
+    order: 3;
+  }
+  .section {
+    padding: 1.1rem 0 2.5rem;
+  }
+  .contentTitle {
+    font-size: 16px;
+  }
+  .contentNum {
+    width: 26px;
+    height: 26px;
+    font-size: 13px;
+  }
+  .articleBody p {
+    font-size: 14.5px;
+    line-height: 1.8;
+  }
+  .pager {
+    margin-top: 1.25rem;
+  }
+  .pagerBtn {
+    font-size: 12px;
+    padding: 7px 11px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .secArrow,
+  .indexInner,
+  .indexToggle svg:last-child {
+    transition: none;
+  }
+}
+
+/* ═══════ Hero moslashuvi ═══════ */
+@media (max-width: 720px) {
+  /* Tor ekranda bezaklar matnni siqib, o'qishni qiyinlashtirardi */
+  .hero {
+    padding: 2rem 1.15rem;
+    border-radius: 22px;
+    /* Tor ekranda rasm juda kesiladi — o'rniga sokin gradient fon
+       qoladi va matn markazda to'liq o'qiladi. */
+    background-image: none;
+    background: linear-gradient(160deg, #fdfbf6 0%, #f7f2e8 100%);
+  }
+  .hero::before {
+    display: none;
+  }
+  .heroOuter {
+    padding: 1.25rem 1rem 0.25rem;
+  }
+  .heroMeta {
+    gap: 0.5rem;
+  }
+  .metaChip {
+    padding: 7px 12px;
+    font-size: 12.5px;
+  }
+}

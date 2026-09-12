@@ -1,0 +1,366 @@
+/* ══════════════════════════════════════════════════════════════
+   "Biz haqimizda" kengaytmasi.
+
+   Sarlavha uslublari (.head/.title/.subtitle) ataylab
+   PlatformFeatures.module.css bilan BIR XIL qiymatlarda — ikkalasi
+   ham xuddi shu bo'lim ichida, ketma-ket ko'rsatiladi va ular
+   o'rtasida hatto kichik farq ham "yamoq" bo'lib ko'rinardi.
+   ══════════════════════════════════════════════════════════════ */
+
+.wrap {
+  margin-top: 4rem;
+}
+
+.head {
+  text-align: center;
+  max-width: 620px;
+  margin: 0 auto 2.5rem;
+}
+
+/* Birinchi sarlavhadan tashqari har biriga tepadan bo'shliq — bloklar
+   bir-biriga yopishib qolmasin */
+.head:not(:first-child) {
+  margin-top: 4rem;
+}
+
+.title {
+  font-size: clamp(22px, 2.8vw, 30px);
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: var(--gray-600);
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+/* ══════════ 1. Muammo → Yechim ══════════ */
+.psGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.psCol {
+  border-radius: 16px;
+  padding: 1.6rem 1.5rem;
+  border: 1px solid var(--gray-100);
+  background: var(--white);
+}
+
+/* Muammo — sokin, kulrang; Yechim — oltin urg'u bilan ajratilgan.
+   Ikkalasi bir xil ko'rinsa, qaysi ustun "yaxshi tomon" ekani darrov
+   o'qilmasdi. */
+.psProblem {
+  background: var(--gray-50);
+}
+
+.psSolution {
+  border-color: rgba(201, 149, 58, 0.32);
+  box-shadow: 0 8px 26px rgba(201, 149, 58, 0.1);
+}
+
+.psLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin: 0 0 1.1rem;
+  color: var(--gray-600);
+}
+
+.psProblem .psLabel svg {
+  color: #b45309;
+  flex-shrink: 0;
+}
+
+.psSolution .psLabel {
+  color: var(--navy);
+}
+
+.psSolution .psLabel svg {
+  color: #16a34a;
+  flex-shrink: 0;
+}
+
+.psList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.psList li {
+  position: relative;
+  padding-left: 1.1rem;
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--gray-600);
+  font-weight: 300;
+}
+
+.psList li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--gray-200);
+}
+
+.psSolution .psList li::before {
+  background: var(--gold);
+}
+
+/* ══════════ 2. Raqamlarda platforma ══════════ */
+.numGrid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1rem;
+}
+
+.numCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 6px;
+  padding: 1.5rem 0.75rem;
+  border-radius: 14px;
+  background: var(--white);
+  border: 1px solid var(--gray-100);
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform 0.26s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.26s ease,
+    border-color 0.26s ease;
+}
+
+.numCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(201, 149, 58, 0.35);
+}
+
+.numCard strong {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 2.4vw, 28px);
+  font-weight: 700;
+  line-height: 1.05;
+  color: var(--gold);
+}
+
+.numCard span {
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--gray-600);
+  font-weight: 500;
+}
+
+/* ══════════ 3. Qadriyatlar ══════════ */
+.valueGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.valueCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.6rem 1.5rem;
+  border-radius: 16px;
+  background: var(--white);
+  border: 1px solid var(--gray-100);
+  cursor: pointer;
+  transition: all 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Matn ustuni.
+   `flex: 1` + `align-self: stretch` — ustun kartaning TO'LIQ balandligini
+   egallaydi. Bu shart: aks holda u faqat matn balandligicha qisqarardi va
+   "Batafsil" belgisi kartaning pastida emas, matnning tagida — har
+   kartada boshqa balandlikda — turib qolardi (o'lchangan: 27/48/48/27px). */
+.valueBody {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  align-self: stretch;
+  min-width: 0;
+}
+
+/* Karta bosilishi mumkinligini bildiruvchi belgi — Xizmatlar va
+   Platforma imkoniyatlari bo'limlaridagi bilan bir xil ko'rinishda */
+.valueMore {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 0.75rem;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--navy);
+  transition: gap 0.2s, color 0.2s;
+}
+
+.valueMore svg {
+  flex-shrink: 0;
+}
+
+.valueCard:hover .valueMore {
+  gap: 8px;
+  color: var(--gold);
+}
+
+.valueCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(201, 149, 58, 0.35);
+}
+
+.valueIcon {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--gold-pale) 0%, var(--white) 100%);
+  border: 1px solid rgba(201, 149, 58, 0.25);
+  color: var(--gold);
+  transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.valueCard:hover .valueIcon {
+  background: linear-gradient(135deg, var(--gold) 0%, #b8770a 100%);
+  color: var(--white);
+  transform: scale(1.06) rotate(-4deg);
+}
+
+.valueCard h3 {
+  font-family: var(--font-display);
+  font-size: 15.5px;
+  font-weight: 600;
+  color: var(--navy);
+  margin: 0 0 0.4rem;
+}
+
+.valueCard p {
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--gray-600);
+  font-weight: 300;
+  margin: 0;
+  /* Bo'sh joyni tavsif egallaydi — "Batafsil" pastga suriladi
+     (Xizmatlar va Platforma imkoniyatlari kartalaridagi kabi) */
+  flex: 1;
+}
+
+/* ══════════ 4. Kimlar uchun ══════════ */
+.whoGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+
+.whoCard {
+  padding: 1.6rem 1.4rem;
+  border-radius: 16px;
+  background: var(--white);
+  border: 1px solid var(--gray-100);
+  transition: all 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.whoCard:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(201, 149, 58, 0.35);
+}
+
+.whoIcon {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--gold) 0%, #b8770a 100%);
+  color: var(--white);
+  box-shadow: 0 6px 16px rgba(201, 149, 58, 0.28);
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.whoCard:hover .whoIcon {
+  transform: scale(1.08) rotate(-4deg);
+}
+
+.whoCard h3 {
+  font-family: var(--font-display);
+  font-size: 15.5px;
+  font-weight: 600;
+  color: var(--navy);
+  margin: 0 0 0.4rem;
+}
+
+.whoCard p {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--gray-600);
+  font-weight: 300;
+  margin: 0;
+}
+
+/* ══════════ Moslashuv ══════════ */
+@media (max-width: 1024px) {
+  .numGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .whoGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .psGrid,
+  .valueGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .wrap {
+    margin-top: 3rem;
+  }
+  .head:not(:first-child) {
+    margin-top: 3rem;
+  }
+  .numGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+  .numCard {
+    padding: 1.2rem 0.6rem;
+  }
+  .whoGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .psCol,
+  .valueCard,
+  .whoCard {
+    padding: 1.35rem 1.25rem;
+  }
+}

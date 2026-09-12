@@ -1,0 +1,2320 @@
+/* ═══════════════════════════════════════════════════════════════
+   DARSLAR — premium huquqiy ta'lim sahifasi
+   Palitra shu sahifaga LOKAL (global mavzu, navbar va footer
+   o'zgarmaydi).
+   ═══════════════════════════════════════════════════════════════ */
+.page {
+  --bg: #fafaf9;
+  --primary: #c58b1c;
+  --primary-soft: #f7edd8;
+  --primary-deep: #a06f0f;
+  --dark: #0f172a;
+  --gray: #64748b;
+  --line: #ececea;
+  --card: #ffffff;
+
+  --r-sm: 12px;
+  --r-md: 18px;
+  --r-lg: 24px;
+  --sh-sm: 0 1px 2px rgba(15, 23, 42, 0.04), 0 2px 8px rgba(15, 23, 42, 0.04);
+  --sh-md: 0 4px 12px rgba(15, 23, 42, 0.05), 0 12px 32px rgba(15, 23, 42, 0.06);
+  --sh-lg: 0 8px 24px rgba(15, 23, 42, 0.07), 0 24px 64px rgba(15, 23, 42, 0.09);
+
+  background: var(--bg);
+  min-height: 100vh;
+  padding-bottom: 5rem;
+  color: var(--dark);
+}
+
+.wrap {
+  width: 100%;
+  max-width: 1180px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 1.5rem;
+}
+
+.stateText {
+  text-align: center;
+  padding: 4rem 1rem;
+  color: var(--gray);
+  font-size: 15px;
+}
+
+/* ─────────────── RO'YXAT: hero ─────────────── */
+.listHero {
+  padding: 4.5rem 0 3rem;
+  text-align: center;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 14px;
+  border-radius: 100px;
+  background: var(--primary-soft);
+  color: var(--primary-deep);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin-bottom: 1.25rem;
+}
+
+.listTitle {
+  font-size: clamp(32px, 5vw, 52px);
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 1rem;
+}
+
+.listSub {
+  max-width: 620px;
+  margin: 0 auto;
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--gray);
+  font-weight: 300;
+}
+
+/* ─────────────── RO'YXAT: kartalar ─────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 1.75rem;
+  cursor: pointer;
+  box-shadow: var(--sh-sm);
+  transition:
+    transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.32s ease;
+}
+
+.card:hover,
+.card:focus-visible {
+  transform: translateY(-6px);
+  box-shadow: var(--sh-lg);
+  border-color: rgba(197, 139, 28, 0.32);
+  outline: none;
+}
+
+.cardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.15rem;
+}
+
+.cardEmoji {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
+  background: linear-gradient(145deg, var(--primary-soft), #fffdf8);
+  border: 1px solid rgba(197, 139, 28, 0.18);
+  font-size: 24px;
+  line-height: 1;
+}
+
+.badge {
+  padding: 5px 11px;
+  border-radius: 100px;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.badge_basic {
+  background: #ecfdf5;
+  color: #047857;
+}
+.badge_mid {
+  background: var(--primary-soft);
+  color: var(--primary-deep);
+}
+.badge_deep {
+  background: #eef2ff;
+  color: #4338ca;
+}
+
+.cardTitle {
+  font-size: 19px;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  color: var(--dark);
+  margin-bottom: 0.5rem;
+  line-height: 1.35;
+}
+
+.cardDesc {
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--gray);
+  font-weight: 300;
+  flex: 1;
+  margin-bottom: 1.35rem;
+}
+
+.cardMeta {
+  display: flex;
+  gap: 1.15rem;
+  font-size: 12.5px;
+  color: var(--gray);
+  padding-bottom: 1.1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.cardMeta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.cardProgress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 1.1rem;
+}
+
+.cardProgressBar {
+  flex: 1;
+  height: 5px;
+  border-radius: 100px;
+  background: #f1f0ee;
+  overflow: hidden;
+}
+
+.cardProgressBar span {
+  display: block;
+  height: 100%;
+  border-radius: 100px;
+  background: linear-gradient(90deg, var(--primary), var(--primary-deep));
+  transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cardProgress em {
+  font-style: normal;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--primary-deep);
+}
+
+.cardCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 1.1rem;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--primary-deep);
+  transition: gap 0.25s ease;
+}
+
+.card:hover .cardCta {
+  gap: 12px;
+}
+
+/* ─────────────── DARS: hero ─────────────── */
+.hero {
+  padding: 2.5rem 0 3rem;
+  background: linear-gradient(180deg, #ffffff 0%, var(--bg) 100%);
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 3rem;
+}
+
+.heroGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+/* Chap ustun — uzun sarlavha grid katakchasidan toshib ketmasligi uchun */
+.heroMain {
+  min-width: 0;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 15px;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  background: var(--card);
+  color: var(--gray);
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.24s ease;
+}
+
+.backBtn:hover {
+  color: var(--dark);
+  border-color: var(--gray);
+  transform: translateX(-3px);
+}
+
+.heroTitle {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: clamp(28px, 4.2vw, 44px);
+  line-height: 1.14;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 0.85rem;
+}
+
+.heroEmoji {
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  background: linear-gradient(145deg, var(--primary-soft), #fffdf8);
+  border: 1px solid rgba(197, 139, 28, 0.2);
+  font-size: 28px;
+  line-height: 1;
+}
+
+.heroSub {
+  max-width: 620px;
+  font-size: 16.5px;
+  line-height: 1.7;
+  color: var(--gray);
+  font-weight: 300;
+  margin-bottom: 1.5rem;
+}
+
+.heroMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.metaPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 13px;
+  border-radius: 100px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--gray);
+}
+
+/* ─────────────── Progress card ─────────────── */
+.progressCard {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 1.6rem;
+  box-shadow: var(--sh-md);
+}
+
+.progressLabel {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 0.5rem;
+}
+
+.progressPct {
+  display: block;
+  font-size: 40px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--dark);
+  margin-bottom: 1rem;
+}
+
+.progressTrack {
+  height: 8px;
+  border-radius: 100px;
+  background: #f1f0ee;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+}
+
+.progressFill {
+  display: block;
+  height: 100%;
+  border-radius: 100px;
+  background: linear-gradient(90deg, var(--primary), var(--primary-deep));
+  transition: width 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.primaryBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-deep));
+  color: #fff;
+  font-size: 14.5px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(197, 139, 28, 0.28);
+  transition: all 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.primaryBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(197, 139, 28, 0.34);
+}
+
+.primaryBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* ─────────────── Ikki ustunli tuzilma ─────────────── */
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 2.5rem;
+  /* DIQQAT: bu yerda `align-items: start` BO'LMASLIGI kerak.
+     U qo'yilganda o'ng ustun (.sidebar) faqat o'z kontenti balandligicha
+     qisqarib qolardi va ichidagi `position: sticky` elementga "sayohat
+     qilish" uchun joy qolmasdi — panel chap ustun bilan birga scroll
+     bo'lib ketardi. Standart `stretch` bilan .sidebar butun qator
+     balandligini egallaydi va panel haqiqatan yopishib turadi. */
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  min-width: 0;
+}
+
+/* ─────────────── Video ─────────────── */
+.videoCard {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: var(--dark);
+  box-shadow: var(--sh-md);
+}
+
+.videoCard iframe,
+.videoCard video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* ─────────────── Bo'lim kartasi ─────────────── */
+.sectionCard {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 2rem;
+  box-shadow: var(--sh-sm);
+  scroll-margin-top: 100px;
+  transition:
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
+}
+
+.sectionCard:hover {
+  box-shadow: var(--sh-md);
+  border-color: #e2e0dc;
+}
+
+.sectionHead {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.sectionNum {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  background: linear-gradient(145deg, var(--primary), var(--primary-deep));
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  box-shadow: 0 3px 10px rgba(197, 139, 28, 0.26);
+}
+
+.sectionHeadText h2 {
+  font-size: 22px;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  font-weight: 650;
+  color: var(--dark);
+  margin-bottom: 0.45rem;
+}
+
+.sectionMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  font-size: 12px;
+  color: var(--gray);
+}
+
+.sectionMeta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.lawChip {
+  padding: 3px 10px;
+  border-radius: 100px;
+  background: var(--primary-soft);
+  color: var(--primary-deep);
+  font-weight: 600;
+}
+
+.divider {
+  height: 1px;
+  margin: 1.5rem 0;
+  background: linear-gradient(90deg, var(--line), transparent);
+}
+
+.body {
+  font-size: 16px;
+  line-height: 1.85;
+  color: #334155;
+  font-weight: 300;
+  max-width: 68ch;
+}
+
+.body p + p {
+  margin-top: 1rem;
+}
+
+.body strong {
+  font-weight: 600;
+  color: var(--dark);
+}
+
+.body ul,
+.body ol {
+  margin: 1rem 0 1rem 1.25rem;
+}
+
+.body li {
+  margin-bottom: 0.45rem;
+}
+
+.body img {
+  display: block;
+  max-width: 100%;
+  margin: 1.25rem auto;
+  border-radius: var(--r-md);
+  box-shadow: var(--sh-sm);
+}
+
+/* ─────────────── Info / ogohlantirish oynalari ─────────────── */
+.infoBox,
+.warnBox {
+  display: flex;
+  gap: 13px;
+  margin-top: 1.5rem;
+  padding: 1.15rem 1.25rem;
+  border-radius: var(--r-md);
+  font-size: 14.5px;
+  line-height: 1.7;
+}
+
+.infoBox {
+  background: #eff6ff;
+  border: 1px solid #dbeafe;
+  color: #1e3a5f;
+}
+
+.warnBox {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #78350f;
+}
+
+.boxIcon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.infoBox strong,
+.warnBox strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin-bottom: 3px;
+}
+
+.infoBox p,
+.warnBox p {
+  font-weight: 300;
+}
+
+/* ─────────────── Asosiy fikrlar ─────────────── */
+.keyPoints {
+  margin-top: 1.5rem;
+  padding: 1.25rem 1.35rem;
+  border-radius: var(--r-md);
+  background: #fafaf9;
+  border: 1px solid var(--line);
+}
+
+.keyTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--dark);
+  margin-bottom: 0.85rem;
+}
+
+.keyPoints ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.keyPoints li {
+  display: flex;
+  gap: 10px;
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: #334155;
+  font-weight: 300;
+}
+
+.keyPoints li svg {
+  flex-shrink: 0;
+  margin-top: 4px;
+  color: var(--primary);
+}
+
+/* ─────────────── "Bilasizmi?" ─────────────── */
+.factBox {
+  position: relative;
+  margin-top: 1.5rem;
+  padding: 1.5rem 1.6rem;
+  border-radius: var(--r-md);
+  background: linear-gradient(135deg, var(--dark) 0%, #1e293b 100%);
+  color: #e2e8f0;
+  overflow: hidden;
+}
+
+.factBox::after {
+  content: "";
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(197, 139, 28, 0.28), transparent 70%);
+}
+
+.factLabel {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 100px;
+  background: rgba(197, 139, 28, 0.2);
+  color: #f0c674;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.75rem;
+}
+
+.factBox p {
+  position: relative;
+  font-size: 15px;
+  line-height: 1.75;
+  font-weight: 300;
+}
+
+.quizIcon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: var(--primary-soft);
+  color: var(--primary-deep);
+}
+
+.quizHead h2 {
+  font-size: 20px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  color: var(--dark);
+}
+
+.quizHead p {
+  font-size: 14px;
+  color: var(--gray);
+  font-weight: 300;
+  margin-top: 2px;
+}
+
+.question + .question {
+  margin-top: 1.75rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--line);
+}
+
+.questionText {
+  display: flex;
+  gap: 10px;
+  font-size: 16px;
+  line-height: 1.6;
+  font-weight: 500;
+  color: var(--dark);
+  margin-bottom: 1rem;
+}
+
+.questionText span {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: #f1f0ee;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--gray);
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 12px 15px;
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.22s ease;
+}
+
+.option:hover {
+  border-color: rgba(197, 139, 28, 0.4);
+  background: #fffdf8;
+}
+
+.option input {
+  flex-shrink: 0;
+  width: 17px;
+  height: 17px;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+.explain {
+  display: flex;
+  gap: 7px;
+  margin-top: 0.85rem;
+  padding: 10px 13px;
+  border-radius: 12px;
+  background: #fafaf9;
+  border: 1px solid var(--line);
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--gray);
+}
+
+.explain svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: var(--primary);
+}
+
+.quizResult strong {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--primary-deep);
+  letter-spacing: -0.02em;
+}
+
+.quizResult span {
+  flex: 1;
+  font-size: 14.5px;
+  color: var(--gray);
+}
+
+.ghostBtn {
+  padding: 9px 17px;
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  background: var(--card);
+  color: var(--dark);
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.22s ease;
+}
+
+.ghostBtn:hover {
+  border-color: var(--primary);
+  color: var(--primary-deep);
+}
+
+/* ─────────────── Xulosa ─────────────── */
+.summaryCard {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 2rem;
+  box-shadow: var(--sh-sm);
+}
+
+.summaryIcon {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 15px;
+  background: linear-gradient(145deg, var(--primary-soft), #fffdf8);
+  border: 1px solid rgba(197, 139, 28, 0.2);
+  color: var(--primary-deep);
+  margin-bottom: 1.1rem;
+}
+
+.summaryCard h2 {
+  font-size: 21px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  color: var(--dark);
+  margin-bottom: 0.35rem;
+}
+
+.summarySub {
+  font-size: 14.5px;
+  color: var(--gray);
+  font-weight: 300;
+  margin-bottom: 1.35rem;
+}
+
+.summaryCard ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.summaryCard li {
+  display: flex;
+  gap: 11px;
+  align-items: flex-start;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #334155;
+}
+
+.summaryCard li svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: #16a34a;
+}
+
+/* ─────────────── Pastki CTA ─────────────── */
+.ctaCard {
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  padding: 3rem 2rem;
+  border-radius: var(--r-lg);
+  background: linear-gradient(135deg, var(--dark) 0%, #1e293b 55%, #24344f 100%);
+  color: #fff;
+  box-shadow: var(--sh-lg);
+}
+
+.ctaCard::before {
+  content: "";
+  position: absolute;
+  top: -120px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 420px;
+  height: 300px;
+  background: radial-gradient(ellipse, rgba(197, 139, 28, 0.3), transparent 70%);
+  pointer-events: none;
+}
+
+.ctaCard h2 {
+  position: relative;
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  margin-bottom: 0.65rem;
+}
+
+.ctaCard p {
+  position: relative;
+  max-width: 460px;
+  margin: 0 auto 1.75rem;
+  font-size: 15.5px;
+  line-height: 1.7;
+  color: #cbd5e1;
+  font-weight: 300;
+}
+
+.ctaBtn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 15px 32px;
+  border: none;
+  border-radius: 100px;
+  background: linear-gradient(135deg, #e0a92c, var(--primary-deep));
+  color: #fff;
+  font-size: 15.5px;
+  font-weight: 650;
+  cursor: pointer;
+  box-shadow: 0 8px 26px rgba(197, 139, 28, 0.4);
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ctaBtn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 14px 36px rgba(197, 139, 28, 0.5);
+}
+
+/* ─────────────── Yopishqoq panel ─────────────── */
+.sidebar {
+  min-width: 0;
+  /* Butun qator balandligini egallaydi — ichidagi sticky panel shu
+     oraliqda "sayohat" qiladi (yuqoridagi .layout izohiga qarang). */
+  align-self: stretch;
+}
+
+.sideInner {
+  position: sticky;
+  /* 68px — navbar balandligi (SiteLayout), + 20px nafas joyi */
+  top: 88px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  /* O'ng panel ALOHIDA scroll bo'ladi: ekranga sig'masa o'zining
+     ichki scrolli paydo bo'ladi, sahifa scrolliga aralashmaydi. */
+  /* Panel har doim O'Z scroll konteyneri: balandligi ekranga qat'iy
+     bog'langan, shuning uchun uzun ro'yxatda ichida scroll paydo
+     bo'ladi, qisqa bo'lsa ham sahifa scrolliga aralashmaydi.
+     `contain` — panel oxiriga yetganda scroll sahifaga o'tib
+     ketmasligi uchun (scroll chaining'ni to'xtatadi). */
+  max-height: calc(100vh - 108px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: #d8d6d2 transparent;
+}
+
+/* Nozik scrollbar (WebKit) — panel ichida */
+.sideInner::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sideInner::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sideInner::-webkit-scrollbar-thumb {
+  border-radius: 100px;
+  background: #d8d6d2;
+}
+
+.sideInner::-webkit-scrollbar-thumb:hover {
+  background: #bfbdb8;
+}
+
+.sideCard {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 1.35rem;
+  box-shadow: var(--sh-sm);
+}
+
+.sideTitle {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 1rem;
+}
+
+.navList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.navList a {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: 11px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--gray);
+  text-decoration: none;
+  transition: all 0.22s ease;
+}
+
+.navList a:hover {
+  background: #fafaf9;
+  color: var(--dark);
+}
+
+.navList a svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: #cbd5e1;
+  transition: color 0.22s ease;
+}
+
+.navDone {
+  color: var(--dark) !important;
+  font-weight: 500;
+}
+
+.navDone svg {
+  color: #16a34a !important;
+}
+
+/* ── Tezkor amallar ── */
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.actions button,
+.actions a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 11px 13px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--dark);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.22s ease;
+}
+
+.actions button:hover,
+.actions a:hover {
+  border-color: rgba(197, 139, 28, 0.45);
+  background: #fffdf8;
+  transform: translateX(3px);
+}
+
+.actions svg {
+  flex-shrink: 0;
+  color: var(--primary);
+}
+
+.actionActive {
+  border-color: rgba(197, 139, 28, 0.5) !important;
+  background: var(--primary-soft) !important;
+  color: var(--primary-deep) !important;
+}
+
+/* ── Aloqador darslar ── */
+.relatedList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.relatedList button {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.22s ease;
+}
+
+.relatedList button:hover {
+  border-color: var(--line);
+  background: #fafaf9;
+}
+
+.relEmoji {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: var(--primary-soft);
+  font-size: 17px;
+  line-height: 1;
+}
+
+.relText {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.relText strong {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--dark);
+  line-height: 1.35;
+}
+
+.relText em {
+  font-style: normal;
+  font-size: 11.5px;
+  color: var(--gray);
+  margin-top: 2px;
+}
+
+.relatedList button svg {
+  flex-shrink: 0;
+  color: #cbd5e1;
+  transition: transform 0.22s ease;
+}
+
+.relatedList button:hover svg {
+  transform: translateX(3px);
+  color: var(--primary);
+}
+
+/* ═══════════════════ RESPONSIVE ═══════════════════ */
+@media (max-width: 1080px) {
+  .layout,
+  .heroGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .sideInner {
+    position: static;
+    max-height: none;
+    overflow: visible;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .sideCard {
+    flex: 1 1 260px;
+  }
+
+  .progressCard {
+    max-width: 420px;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 680px) {
+  .wrap {
+    padding: 0 1.15rem;
+  }
+
+  .listHero {
+    padding: 3rem 0 2rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 1.15rem;
+  }
+
+  .hero {
+    padding: 1.75rem 0 2.25rem;
+    margin-bottom: 2rem;
+  }
+
+  .heroTitle {
+    gap: 11px;
+  }
+
+  .heroEmoji {
+    width: 48px;
+    height: 48px;
+    font-size: 23px;
+    border-radius: 15px;
+  }
+
+  .sectionCard,
+  .quizCard,
+  .summaryCard {
+    padding: 1.4rem;
+  }
+
+  .sectionHeadText h2 {
+    font-size: 19px;
+  }
+
+  .body {
+    font-size: 15.5px;
+  }
+
+  .ctaCard {
+    padding: 2.25rem 1.4rem;
+  }
+
+  .sideInner {
+    flex-direction: column;
+  }
+}
+
+/* ═══════════════ TUGALLANISH TIZIMI (gamified) ═══════════════ */
+
+/* ── XP va statistika ── */
+.statsRow {
+  display: flex;
+  justify-content: center;
+  gap: 0.65rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.xpPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 15px;
+  border-radius: 100px;
+  background: linear-gradient(135deg, #fff4d6, #ffe9b8);
+  border: 1px solid rgba(197, 139, 28, 0.3);
+  color: var(--primary-deep);
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.statPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 15px;
+  border-radius: 100px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  color: var(--gray);
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+/* ── Qulflangan / tugallangan kartalar ── */
+.cardDone {
+  border-color: rgba(22, 163, 74, 0.3);
+}
+
+.doneBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px;
+  border-radius: 100px;
+  background: #ecfdf5;
+  color: #047857;
+  font-size: 11.5px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* ── Bosqichlar: 📖 → 📝 → ✅ ── */
+.stepper {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin: 1.15rem 0 1.25rem;
+  padding-top: 1.15rem;
+  border-top: 1px solid var(--line);
+}
+
+.stepper li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  color: #a3a3a0;
+  transition: color 0.3s ease;
+}
+
+.stepIcon {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  background: #f4f4f2;
+  font-size: 14px;
+  line-height: 1;
+  filter: grayscale(1);
+  opacity: 0.65;
+  transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.stepLabel {
+  flex: 1;
+  min-width: 0;
+}
+
+.stepActive {
+  color: var(--dark);
+  font-weight: 600;
+}
+
+.stepActive .stepIcon {
+  background: var(--primary-soft);
+  filter: none;
+  opacity: 1;
+  transform: scale(1.08);
+  box-shadow: 0 0 0 4px rgba(197, 139, 28, 0.12);
+}
+
+.stepDone {
+  color: #047857;
+  font-weight: 500;
+}
+
+.stepDone .stepIcon {
+  background: #ecfdf5;
+  filter: none;
+  opacity: 1;
+}
+
+/* ── "Darsni tugatish" kartasi ── */
+.finishCard {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 2.25rem 2rem;
+  box-shadow: var(--sh-md);
+  scroll-margin-top: 100px;
+}
+
+.finishIntro {
+  text-align: center;
+  animation: finishIn 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.finishIcon {
+  width: 60px;
+  height: 60px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 1.1rem;
+  border-radius: 20px;
+  background: linear-gradient(145deg, var(--primary-soft), #fffdf8);
+  border: 1px solid rgba(197, 139, 28, 0.22);
+  color: var(--primary-deep);
+}
+
+.finishIconWarn {
+  background: #fffbeb;
+  border-color: #fde68a;
+  color: #b45309;
+}
+
+.finishIconFail {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #b91c1c;
+}
+
+.finishIntro h2 {
+  font-size: 23px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--dark);
+  margin-bottom: 0.5rem;
+}
+
+.finishIntro p {
+  max-width: 460px;
+  margin: 0 auto 1.5rem;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--gray);
+  font-weight: 300;
+}
+
+.primaryBtnWide {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 14px 30px;
+  border: none;
+  border-radius: 100px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-deep));
+  color: #fff;
+  font-size: 15px;
+  font-weight: 650;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(197, 139, 28, 0.32);
+  transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.primaryBtnWide:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(197, 139, 28, 0.4);
+}
+
+.primaryBtnWide:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.failActions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.failActions .ghostBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+/* ── Test jarayoni ── */
+.quizRun {
+  animation: finishIn 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.quizRunHead {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1.15rem;
+}
+
+.quizRunHead h2 {
+  font-size: 20px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  color: var(--dark);
+}
+
+.quizRunHead p {
+  font-size: 14px;
+  color: var(--gray);
+  font-weight: 300;
+  margin-top: 2px;
+}
+
+.quizWarnStrip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  margin-bottom: 1.5rem;
+  border-radius: 12px;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #92400e;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.quizWarnStrip svg {
+  flex-shrink: 0;
+}
+
+.optSelected {
+  border-color: var(--primary);
+  background: #fffdf8;
+  box-shadow: 0 0 0 3px rgba(197, 139, 28, 0.1);
+}
+
+/* ── G'alaba ── */
+.celebrate {
+  text-align: center;
+  animation: celebrateIn 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.celebrateIcon {
+  width: 72px;
+  height: 72px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 1.15rem;
+  border-radius: 24px;
+  background: linear-gradient(145deg, #fff4d6, #ffe0a3);
+  border: 1px solid rgba(197, 139, 28, 0.3);
+  color: var(--primary-deep);
+  animation: pop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+}
+
+.celebrate h2 {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--dark);
+  margin-bottom: 0.5rem;
+}
+
+.celebrate p {
+  max-width: 440px;
+  margin: 0 auto 1.35rem;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--gray);
+  font-weight: 300;
+}
+
+.rewardRow {
+  display: flex;
+  justify-content: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.xpReward {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 18px;
+  border-radius: 100px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-deep));
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  box-shadow: 0 5px 16px rgba(197, 139, 28, 0.32);
+  animation: pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.28s both;
+}
+
+.badgeReward {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 18px;
+  border-radius: 100px;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #047857;
+  font-size: 14px;
+  font-weight: 650;
+  animation: pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.42s both;
+}
+
+@keyframes finishIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes celebrateIn {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  70% {
+    transform: scale(1.08);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .finishIntro,
+  .quizRun,
+  .celebrate,
+  .celebrateIcon,
+  .xpReward,
+  .badgeReward {
+    animation: none;
+  }
+}
+
+@media (max-width: 680px) {
+  .finishCard {
+    padding: 1.75rem 1.35rem;
+  }
+
+  .failActions {
+    flex-direction: column;
+  }
+
+  .failActions button {
+    width: 100%;
+  }
+}
+
+/* ═══════════════ DARS KIRISH EKRANI ═══════════════ */
+.introCard {
+  background: linear-gradient(150deg, #fffdf8 0%, var(--card) 55%);
+  border: 1px solid rgba(197, 139, 28, 0.22);
+  border-radius: var(--r-lg);
+  padding: 2rem;
+  box-shadow: var(--sh-sm);
+}
+
+.introHead {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1.25rem;
+}
+
+.introIcon {
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 15px;
+  background: linear-gradient(145deg, var(--primary), var(--primary-deep));
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(197, 139, 28, 0.28);
+}
+
+.introLabel {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--primary-deep);
+  margin-bottom: 4px;
+}
+
+.introHead h2 {
+  font-size: 19px;
+  line-height: 1.45;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--dark);
+}
+
+.introFacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding-bottom: 1.35rem;
+  margin-bottom: 1.35rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.introFacts > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 100px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--gray);
+}
+
+.introOutcomeTitle {
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--dark);
+  margin-bottom: 0.9rem;
+}
+
+.introOutcomes {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.introOutcomes li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #334155;
+  font-weight: 300;
+}
+
+.introOutcomes li svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: #16a34a;
+}
+
+/* ═══════════════ AI: "Bu joyni tushuntirib ber" ═══════════════ */
+.explainBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 1.35rem;
+  padding: 10px 18px;
+  border: 1px solid rgba(197, 139, 28, 0.35);
+  border-radius: 100px;
+  background: linear-gradient(135deg, #fffdf8, var(--primary-soft));
+  color: var(--primary-deep);
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.explainBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(197, 139, 28, 0.22);
+  border-color: var(--primary);
+}
+
+@media (max-width: 680px) {
+  .introCard {
+    padding: 1.4rem;
+  }
+
+  .explainBtn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ═══════════════ AI AMALIYOT ═══════════════ */
+.practiceCard {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 2rem;
+  box-shadow: var(--sh-sm);
+  scroll-margin-top: 100px;
+}
+
+.practiceHead {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.practiceIcon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: linear-gradient(145deg, var(--primary), var(--primary-deep));
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(197, 139, 28, 0.28);
+}
+
+.practiceHead h2 {
+  font-size: 20px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  color: var(--dark);
+}
+
+.practiceHead p {
+  font-size: 14px;
+  color: var(--gray);
+  font-weight: 300;
+  margin-top: 2px;
+}
+
+.practiceTabs {
+  display: flex;
+  gap: 0.4rem;
+  padding: 5px;
+  margin-bottom: 1.5rem;
+  border-radius: 14px;
+  background: #fafaf9;
+  border: 1px solid var(--line);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.practiceTabs::-webkit-scrollbar {
+  display: none;
+}
+
+.practiceTab {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 9px 12px;
+  border: none;
+  border-radius: 10px;
+  background: none;
+  color: var(--gray);
+  font-size: 13.5px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.22s ease;
+}
+
+.practiceTab:hover {
+  color: var(--dark);
+}
+
+.practiceTabActive {
+  background: var(--card);
+  color: var(--primary-deep);
+  font-weight: 650;
+  box-shadow: var(--sh-sm);
+}
+
+.practiceIdle {
+  text-align: center;
+  padding: 0.5rem 0;
+}
+
+.practiceIdle p {
+  max-width: 480px;
+  margin: 0 auto 1.35rem;
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: var(--gray);
+  font-weight: 300;
+}
+
+.practiceBody {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.taskBox {
+  padding: 1.25rem 1.35rem;
+  border-radius: var(--r-md);
+  background: linear-gradient(145deg, #fffdf8, var(--primary-soft));
+  border: 1px solid rgba(197, 139, 28, 0.25);
+}
+
+.taskLabel {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--primary-deep);
+  margin-bottom: 0.5rem;
+}
+
+.taskBox p {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--dark);
+  font-weight: 500;
+}
+
+.answerArea {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--card);
+  color: var(--dark);
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 1.7;
+  resize: vertical;
+  transition: border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+.answerArea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(197, 139, 28, 0.1);
+}
+
+.answerArea:disabled {
+  background: #fafaf9;
+  color: var(--gray);
+}
+
+.practiceActions {
+  display: flex;
+  gap: 0.65rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.practiceActions .ghostBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.practiceError {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 14px;
+  margin-bottom: 1.15rem;
+  border-radius: 12px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+  font-size: 13.5px;
+}
+
+/* ── Baho natijasi ── */
+.verdictBox {
+  padding: 1.25rem 1.35rem;
+  border-radius: var(--r-md);
+  border: 1px solid;
+  animation: finishIn 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.verdictHead {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 0.6rem;
+}
+
+.verdictXp {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  padding: 4px 11px;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.7);
+  font-style: normal;
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+.verdictBox p {
+  font-size: 14.5px;
+  line-height: 1.75;
+  font-weight: 300;
+}
+
+.verdictCorrect {
+  background: #f0fdf4;
+  border-color: #86efac;
+  color: #166534;
+}
+
+.verdictPartial {
+  background: #fffbeb;
+  border-color: #fde68a;
+  color: #92400e;
+}
+
+.verdictWrong {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #991b1b;
+}
+
+@media (max-width: 680px) {
+  .practiceCard {
+    padding: 1.4rem;
+  }
+
+  .practiceTab span,
+  .practiceTab {
+    font-size: 12.5px;
+  }
+
+  .practiceActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .practiceActions .ghostBtn {
+    justify-content: center;
+  }
+}
+
+/* XP allaqachon olingan (takroriy topshiriq) */
+.verdictXpDone {
+  margin-left: auto;
+  padding: 4px 11px;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.55);
+  font-style: normal;
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0.75;
+}
+
+/* Bajarilgan topshiriq turi belgisi (tab ichida) */
+.tabDone {
+  color: #16a34a;
+  flex-shrink: 0;
+}
+
+/* ═══════════════ OG'ZAKI JAVOB (mikrofon) ═══════════════ */
+.micRow {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+  padding: 1.1rem 1.25rem;
+  border-radius: var(--r-md);
+  background: #fafaf9;
+  border: 1px dashed var(--line);
+}
+
+.micBtn,
+.micBtnRec {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 100px;
+  font-size: 14.5px;
+  font-weight: 650;
+  cursor: pointer;
+  transition: all 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.micBtn {
+  background: linear-gradient(135deg, var(--primary), var(--primary-deep));
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(197, 139, 28, 0.28);
+}
+
+.micBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(197, 139, 28, 0.34);
+}
+
+.micBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.micBtn svg:first-child {
+  animation: none;
+}
+
+.micBtnRec {
+  background: #dc2626;
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(220, 38, 38, 0.3);
+}
+
+.micPulse {
+  position: absolute;
+  inset: -4px;
+  border-radius: 100px;
+  border: 2px solid rgba(220, 38, 38, 0.5);
+  animation: micPulse 1.4s ease-out infinite;
+  pointer-events: none;
+}
+
+@keyframes micPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1.12);
+    opacity: 0;
+  }
+}
+
+.micHint {
+  flex: 1;
+  min-width: 180px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--gray);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .micPulse {
+    animation: none;
+  }
+}
+
+@media (max-width: 680px) {
+  .micBtn,
+  .micBtnRec {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   AMALIY QADAMLAR — darsning "natijaga chiqish" qismi
+   O'qilgan bilimni harakatga aylantiradigan aniq ro'yxat.
+   ═══════════════════════════════════════════════════════════════════ */
+.stepsCard {
+  padding: 1.75rem;
+  border-radius: var(--r-lg);
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--gold, #c58b1c);
+  box-shadow: var(--sh-sm);
+}
+
+.stepsHead {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  margin-bottom: 1.15rem;
+}
+
+.stepsIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: 11px;
+  background: rgba(197, 139, 28, 0.12);
+  color: var(--gold, #c58b1c);
+}
+
+.stepsHead h2 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--dark, #0f172a);
+  line-height: 1.3;
+}
+
+.stepsHead p {
+  margin-top: 2px;
+  font-size: 13px;
+  color: var(--muted, #64748b);
+}
+
+.stepsList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.stepsList li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--dark, #0f172a);
+}
+
+.stepNum {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  border-radius: 50%;
+  background: var(--dark, #0f172a);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* Haqiqiy misol bloki — oddiy "maslahat"dan ajratiladi */
+.exampleBox {
+  background: rgba(59, 130, 246, 0.06) !important;
+  border-color: rgba(59, 130, 246, 0.22) !important;
+}
+
+.exampleBox .boxIcon {
+  background: rgba(59, 130, 246, 0.14) !important;
+  color: #2563eb !important;
+}
+
+@media (max-width: 768px) {
+  .stepsCard {
+    padding: 1.25rem 1.1rem;
+  }
+  .stepsList li {
+    font-size: 14px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   "QONUN NIMA DEYDI" — bo'limni haqiqiy modda bilan asoslash
+
+   Matn darsda saqlanmaydi: `lawRefs` faqat {kod, modda} havolasini
+   saqlaydi, matn esa bazadan jonli olinadi. Shunda lex.uz'dan qonun
+   yangilanganda darsdagi iqtibos ham o'z-o'zidan yangilanadi.
+   ═══════════════════════════════════════════════════════════════════ */
+.lawBox {
+  margin-top: 1.15rem;
+  padding: 1.1rem 1.2rem;
+  border-radius: var(--r-md, 12px);
+  background: rgba(15, 23, 42, 0.03);
+  border: 1px solid var(--line);
+}
+
+.lawBoxTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 0.85rem;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted, #64748b);
+}
+
+.lawQuote + .lawQuote {
+  margin-top: 0.9rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--line);
+}
+
+.lawQuoteHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.45rem;
+}
+
+.lawQuoteNum {
+  flex-shrink: 0;
+  padding: 2px 9px;
+  border-radius: 100px;
+  background: var(--dark, #0f172a);
+  color: #fff;
+  font-size: 11.5px;
+  font-weight: 700;
+}
+
+.lawQuoteName {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--dark, #0f172a);
+  line-height: 1.4;
+}
+
+/* Iqtibos — qonun matni ekani darrov ko'rinsin */
+.lawQuoteText {
+  padding-left: 0.85rem;
+  border-left: 3px solid var(--gold, #c58b1c);
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: var(--muted, #64748b);
+  font-style: italic;
+}
+
+.lawQuoteLink {
+  display: inline-block;
+  margin-top: 0.55rem;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--gold, #c58b1c);
+}
+
+@media (max-width: 768px) {
+  .lawBox {
+    padding: 0.9rem 0.95rem;
+  }
+  .lawQuoteText {
+    font-size: 13px;
+  }
+}

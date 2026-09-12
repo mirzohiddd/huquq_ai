@@ -1,0 +1,102 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.pageSection {
+  padding: 80px 0;
+}
+
+.pageSectionAlt {
+  padding: 80px 0;
+  background: var(--gray-50);
+}
+
+/* Ichki sahifalar (Darslar, Testlar, Qonunlar kutubxonasi, huquqiy
+   hujjatlar) sarlavhasi. Avval matn chap chetdan boshlanardi va saytning
+   qolgan qismidagi markazlashtirilgan bo'lim sarlavhalari (.sHead) bilan
+   mos kelmasdi — endi u ham markazda. */
+.pageHero {
+  padding: 48px 0 32px;
+  background: var(--gray-50);
+  border-bottom: 1px solid var(--gray-100);
+  text-align: center;
+}
+
+.pageHeroTitle {
+  font-size: clamp(28px, 4vw, 42px);
+  color: var(--navy);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.pageHeroSub {
+  font-size: 15px;
+  color: var(--gray-600);
+  font-weight: 300;
+  max-width: 560px;
+  line-height: 1.7;
+  /* BUG FIX: max-width bor edi, lekin gorizontal markazlash yo'q edi —
+     shu sabab tavsif matni keng ekranda chap chetga yopishib qolardi. */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.sHead {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.sTitle {
+  font-size: clamp(26px, 3.5vw, 38px);
+  color: var(--navy);
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+}
+
+.sLine {
+  width: 56px;
+  height: 3px;
+  background: var(--gold);
+  margin: 0 auto;
+  border-radius: 2px;
+}
+
+.btnGold {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--gold) 0%, #b8770a 100%);
+  color: var(--navy);
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: transform 0.22s, box-shadow 0.22s;
+}
+
+.btnGold::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 45%;
+  height: 100%;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.45) 50%,
+    transparent 100%
+  );
+  transform: skewX(-20deg);
+  transition: left 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.btnGold:hover::before {
+  left: 130%;
+}
+
+.btnGold:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(201, 149, 58, 0.45);
+}

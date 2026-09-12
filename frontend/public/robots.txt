@@ -1,0 +1,150 @@
+# ─────────────────────────────────────────────────────────────
+#  Huquq AI — robots.txt
+#  Yangilangan: 2026-08-18
+#
+#  Ikki maqsad:
+#   1) SEO  — klassik qidiruv tizimlari (Google, Bing, Yandex) uchun.
+#   2) LLMO/GEO — AI qidiruv tizimlari (ChatGPT, Perplexity, Claude,
+#      Gemini) saytni O'QIB, javoblarida MANBA sifatida ko'rsatishi uchun.
+#
+#  ⚠️ AI botlariga ATAYLAB RUXSAT BERILGAN. Ularni bloklash saytni
+#  "AI javoblari" oqimidan butunlay chiqarib yuboradi — bu bugungi
+#  kunda organik trafikning tez o'sayotgan manbasi. Bloklash kerak
+#  bo'lsa, pastdagi "AI botlari" bo'limida `Allow: /` ni `Disallow: /`
+#  ga o'zgartirish kifoya.
+# ─────────────────────────────────────────────────────────────
+
+User-agent: *
+Allow: /
+
+# Shaxsiy / xizmat sahifalari — indeksatsiya qilinmasin
+Disallow: /admin
+Disallow: /login
+Disallow: /register
+Disallow: /profile
+Disallow: /voice
+
+# Ilova qobig'ining ichki sahifalari (2026-08-19 da qo'shilgan).
+# Ular login qilgan foydalanuvchi uchun; botga bo'sh yoki takroriy
+# kontent ko'rinardi. ⚠️ /pricing — /#pricing bilan BIR XIL tariflarni
+# ko'rsatadi, ya'ni indekslansa takroriy kontent hosil bo'lardi.
+Disallow: /chat
+Disallow: /settings
+Disallow: /pricing
+
+# Ro'yxatdan o'tishni talab qiladigan bo'limlar.
+# Bot bu manzillarda kontentni EMAS, ro'yxatdan o'tish sahifasini
+# ko'radi — indekslansa qidiruv natijasida bo'sh sahifa chiqadi.
+Disallow: /lessons
+Disallow: /tests
+Disallow: /library
+Disallow: /constitution
+
+# ⚠️ /qonunlar va /qonun/... — ATAYLAB OCHIQ va indekslanadi.
+# Bu sahifalar server tomonda tayyor HTML sifatida beriladi (backend
+# `routes/publicSeo.js`), ya'ni JavaScript ishlatmaydigan AI botlari
+# ham to'liq qonun matnini ko'radi. Ular login talab qilmaydi: matn
+# lex.uz dagi rasmiy, ochiq ma'lumot.
+Allow: /qonunlar
+Allow: /qonun/
+
+# ⚠️ Savol-javob markazi (AEO) va Metodologiya (E-E-A-T) — ular ham
+# server tomonda chiziladi va ATAYLAB ochiq. Savol sahifalari odam va
+# AI tizimi HAQIQATDA yozadigan savolga javob beradi; Metodologiya esa
+# javoblar qanday tayyorlanishini ochib beradi (huquq — YMYL sohasi,
+# bunda manba ishonchliligi signali majburiy).
+Allow: /savollar
+Allow: /savol/
+Allow: /metodologiya
+
+# LLM uchun toza matn nusxalari (`.md`). Ular HTML sahifaning AYNAN
+# o'zi, faqat navigatsiya va uslubsiz — takroriy kontent emas, chunki
+# HTML sahifa canonical bo'lib qoladi va `.md` faqat `rel=alternate`
+# orqali ko'rsatiladi.
+Allow: /*.md$
+
+# API javoblari sahifa emas
+Disallow: /api/
+
+# ── Klassik qidiruv tizimlari ──
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+# ── AI botlari (LLMO / GEO) ──
+# OpenAI — ChatGPT va SearchGPT
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# Anthropic — Claude
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+# Perplexity
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+# Google Gemini / AI Overviews
+User-agent: Google-Extended
+Allow: /
+
+# Apple Intelligence
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Meta AI
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: FacebookBot
+Allow: /
+
+# Boshqalar
+User-agent: Amazonbot
+Allow: /
+
+User-agent: YouBot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+# ── Sayt xaritasi va AI uchun qisqacha ma'lumot ──
+# Bu — sayt xaritalari RO'YXATI (index): ichida statik sahifalar va
+# ~7 100 ta qonun moddasi xaritasi bor.
+Sitemap: https://huquq-ai-xi.vercel.app/sitemap.xml
+
+# LLM'lar uchun sayt xulosasi (llmstxt.org standarti):
+# https://huquq-ai-xi.vercel.app/llms.txt

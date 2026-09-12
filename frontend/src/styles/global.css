@@ -1,0 +1,226 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  color-scheme: light;
+
+  --navy: #0b1322;
+  --navy-mid: #162035;
+  --navy-light: #1e2d4a;
+  --ink: var(--navy);
+  --gold: #c9953a;
+  --gold-light: #e0b060;
+  --gold-pale: #fdf5e6;
+  --cream: #f8f6f1;
+  --white: #ffffff;
+  --gray-50: #f5f4f0;
+  --gray-100: #eceae3;
+  --gray-200: #d9d6cc;
+  --gray-400: #9e9b91;
+  --gray-600: #6a6760;
+  --green: #1a5c35;
+  --green-bg: #edf7f2;
+  --red: #8b1a1a;
+  --red-bg: #fdf0f0;
+  --blue-bg: #eff6ff;
+
+  /* ── SAHIFA HERO'LARI: yagona o'lcham ──
+     Testlar · Darslar · Kutubxona · Konstitutsiya hero'lari BIR XIL
+     balandlik va kenglikda bo'lishi kerak. Avval har biri o'z
+     kontentiga qarab o'lchamini olardi va natijada 216px dan 535px
+     gacha farq qilardi — sahifadan sahifaga o'tilganda "sakrab"
+     ketardi.
+
+     ⚠️ Qiymatlar SHU YERDA turadi (sahifa CSS'ida emas): aks holda
+     kelajakda bittasi o'zgartirilib, qolganlari ortda qolib ketardi.
+
+     ⚠️ KENGLIK (2026-08-11): to'rtala hero endi EKRAN BOSHIDAN
+     OXIRIGACHA cho'ziladi (`width: 100%`, konteynersiz). Matn esa
+     baribir 1200px chizig'ida qoladi — buni har bir hero o'zining
+     `padding: … max(1.25rem, calc((100% - 1200px) / 2))` qoidasi
+     bilan ta'minlaydi. Shu sabab eski `--hero-max-w` o'zgaruvchisi
+     olib tashlandi: u endi hech qayerda ishlatilmasdi va kelajakda
+     "kenglik shu yerdan boshqariladi" degan yanglish taassurot
+     berardi. */
+  /* ⚠️ Bu qiymat UCHTA hero'ga tegishli: Konstitutsiya · Darslar ·
+     Testlar. Ular qat'iy 460px balandlikda va bir-biriga teng.
+
+     KUTUBXONA hero'si ATAYLAB bundan foydalanmaydi (foydalanuvchi
+     qarori, 2026-08-11): unga tayyor banner rasmi qo'yilgan va uning
+     balandligi rasm nisbatidan (1280×640) kelib chiqadi. 460px ga
+     qotirilsa banner tepa/pastdan qirqilib, medalyon va to'rtta ikona
+     yo'qolardi. Tafsilot — `pages/Library.module.css` dagi izohda. */
+  --hero-h: 460px;
+  /* Illyustratsiya balandligi — hero balandligini AYNAN shu belgilaydi,
+     shuning uchun cheklanadi (rasm o'z nisbatida kichrayadi).
+     Kartochka kengaygach rasm ham kattaroq bo'lishi mumkin. */
+  --hero-art-h: 340px;
+
+  --radius-sm: 5px;
+  --radius-md: 10px;
+  --radius-lg: 18px;
+  --shadow-sm: 0 1px 4px rgba(11, 19, 34, 0.08);
+  --shadow-md: 0 6px 24px rgba(11, 19, 34, 0.12);
+  --shadow-lg: 0 16px 56px rgba(11, 19, 34, 0.18);
+
+  --font-body: "Poppins", system-ui, sans-serif;
+  --font-display: "Poppins", system-ui, sans-serif;
+}
+
+html {
+  /* DIQQAT: bu yerda `scroll-behavior: smooth` BO'LMASLIGI kerak.
+     Sayt scrolli endi JS bilan chiziladi (utils/smoothScroll.js) —
+     brauzerning o'z silliqlashi yoqilgan bo'lsa, ikkita animatsiya
+     bir-biri bilan "kurashadi" va harakat sekin/uzuq-yuluq bo'lib
+     qoladi. Aniq kerak bo'lgan joyda `behavior: "smooth"` chaqiruv
+     darajasida ishlatiladi (masalan chat oynasi). */
+  scroll-behavior: auto;
+}
+/* Uzun uzilmaydigan matn (havola, murakkab yuridik atama, uzun raqam)
+   telefonda sahifani kengaytirib, gorizontal scroll hosil qilishi
+   mumkin. `break-word` faqat SIG'MAGAN so'zga ta'sir qiladi —
+   oddiy matn qanday bo'lsa shundayligicha qoladi. */
+body {
+  overflow-wrap: break-word;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--cream);
+  color: var(--navy);
+  line-height: 1.6;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  line-height: 1.2;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+button {
+  cursor: pointer;
+  font-family: var(--font-body);
+  border: none;
+  outline: none;
+  background: transparent;
+}
+input,
+textarea {
+  font-family: var(--font-body);
+  outline: none;
+  padding-bottom: 7px;
+}
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--gray-200);
+  border-radius: 2px;
+}
+::selection {
+  background: var(--gold-pale);
+}
+
+/* ── Page animations ── */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ── Scroll-reveal (landing page pastki bo'limlari uchun) ──
+   Premium saytlarga xos "blur-to-focus" effekti: element pastdan
+   ozgina kattalashib, xiralikdan aniqlikka o'tib chiqadi. */
+/* TEZLIK: avval bu yerda `filter: blur(6px)` bor edi. Blur har kadrda
+   GPU'da qayta hisoblanadi va sahifada o'nlab element bir vaqtda
+   animatsiya qilinganda (Bosh sahifadagi kartalar) sezilarli sekinlashuv
+   beradi — ayniqsa kuchsiz telefonlarda. Transform + opacity esa
+   kompozitor darajasida, deyarli tekin ishlaydi. */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  /* Sekinroq va yumshoqroq: scroll paytida kontent shoshilmasdan,
+     "suzib" chiqadi (foydalanuvchi so'roviga ko'ra 0.9s → 1.1s). */
+  transition:
+    opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Hero ambient orbs (sekin suzuvchi fon aksentlari) ── */
+@keyframes floatOrb {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(18px, -26px) scale(1.06);
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+/* ── CTA tugma atrofidagi sekin "nafas olish" nuri ── */
+@keyframes pulseGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(201, 149, 58, 0.45);
+  }
+  50% {
+    box-shadow: 0 0 0 12px rgba(201, 149, 58, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up,
+  html {
+    scroll-behavior: auto;
+    animation: none !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .reveal,
+  [class*="heroOrb"],
+  [class*="heroCtaBtn"] {
+    animation: none !important;
+  }
+
+  [class*="heroOrbs"] {
+    transform: none !important;
+    transition: none !important;
+  }
+}

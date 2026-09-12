@@ -1,0 +1,64 @@
+/* ── "Ilovani yuklash" tugmasi ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+  transition: transform 0.2s, background 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+/* Hero: to'q fonda "glass" tugma, oltin urg'u bilan */
+.hero {
+  padding: 12px 22px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(201, 149, 58, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.hero svg {
+  color: var(--gold, #c9953a);
+}
+
+.hero:hover {
+  transform: translateY(-2px);
+  border-color: var(--gold, #c9953a);
+  background: rgba(201, 149, 58, 0.14);
+  box-shadow: 0 8px 22px rgba(201, 149, 58, 0.22);
+}
+
+/* Footer: ixcham, brend blokidagi ijtimoiy ikonalar ostida */
+.footer {
+  align-self: flex-start; /* ota blok flex-ustun — tugma cho'zilmasin */
+  padding: 9px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(201, 149, 58, 0.4);
+}
+
+.footer svg {
+  color: var(--gold, #c9953a);
+}
+
+.footer:hover {
+  border-color: var(--gold, #c9953a);
+  color: #fff;
+}
+
+/* Home.module.css da hero tugmalari 640px dan ustunga tushadi */
+@media (max-width: 640px) {
+  .hero {
+    width: 100%;
+  }
+}
+

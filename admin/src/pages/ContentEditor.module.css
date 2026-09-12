@@ -1,0 +1,145 @@
+/* Darslar/Testlar tahrirlash oynalarida ishlatiladigan takrorlanuvchi
+   qator (bo'lim / savol) uslublari — Modal.module.css ustiga qo'shimcha. */
+
+.repeaterItem {
+  position: relative;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0.9rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.repeaterHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.repeaterIndex {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent2);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.removeBtn {
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-xs);
+  background: var(--red-bg);
+  border: 1px solid var(--red-border);
+  color: var(--red);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.removeBtn:hover {
+  background: var(--red);
+  color: #fff;
+}
+
+.textarea {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  color: var(--text);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-size: 13.5px;
+  width: 100%;
+  resize: vertical;
+  min-height: 64px;
+  font-family: var(--font);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.textarea::placeholder {
+  color: var(--text3);
+}
+.textarea:focus {
+  border-color: rgba(59, 130, 246, 0.5);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.addBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  background: none;
+  border: 1px dashed var(--border2);
+  color: var(--text2);
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.18s;
+}
+.addBtn:hover {
+  background: var(--bg3);
+  color: var(--text);
+  border-color: var(--accent);
+  border-style: solid;
+}
+
+.optionRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.correctRadio {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--green);
+  cursor: pointer;
+}
+
+.optionInput {
+  flex: 1;
+}
+
+.inlineRow {
+  display: flex;
+  gap: 0.75rem;
+}
+.inlineRow > * {
+  flex: 1;
+}
+
+.checkboxRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text2);
+}
+.checkboxRow input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.publishBadge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: var(--radius-xs);
+}
+.publishOn {
+  background: var(--green-bg);
+  color: var(--green);
+  border: 1px solid var(--green-border);
+}
+.publishOff {
+  background: var(--bg4);
+  color: var(--text3);
+  border: 1px solid var(--border2);
+}

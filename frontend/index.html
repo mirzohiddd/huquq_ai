@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- ── Asosiy SEO ──
+         Sahifaga xos title/description React (components/Seo.jsx) tomonidan
+         almashtiriladi; bu yerdagilar — standart qiymatlar. ⚠️ AI botlari
+         (GPTBot, PerplexityBot, ClaudeBot) JavaScript'ni odatda ishga
+         tushirmaydi — ular AYNAN shu teglarni va <noscript> ni o'qiydi. -->
+    <title>Huquq AI — O'zbekiston qonunchiligi bo'yicha AI huquqiy maslahatchi</title>
+    <meta name="description" content="Huquq AI — O'zbekiston qonunchiligiga asoslangan sun'iy intellekt huquqiy maslahatchisi. Mehnat, oila, meros, yer va jinoyat huquqi bo'yicha savollaringizga amaldagi kodeks moddalariga tayangan aniq javob oling. Bepul boshlang." />
+    <meta name="keywords" content="huquq AI, yuridik maslahat O'zbekiston, onlayn yurist, O'zbekiston qonunchiligi, mehnat kodeksi, oila kodeksi, jinoyat kodeksi, fuqarolik kodeksi, huquqiy yordam onlayn, sun'iy intellekt yurist, lex.uz, huquqiy savol javob, юрист онлайн Узбекистан" />
+    <meta name="author" content="Huquq AI" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <link rel="canonical" href="https://huquq-ai-xi.vercel.app/" />
+
+    <!-- ── hreflang: bir manzil, ikki til (til localStorage da saqlanadi,
+         shuning uchun ruscha variant ?lang=ru bilan ko'rsatiladi) ── -->
+    <link rel="alternate" hreflang="uz-UZ" href="https://huquq-ai-xi.vercel.app/" />
+    <link rel="alternate" hreflang="ru-UZ" href="https://huquq-ai-xi.vercel.app/?lang=ru" />
+    <link rel="alternate" hreflang="x-default" href="https://huquq-ai-xi.vercel.app/" />
+
+    <!-- ── GEO: xizmat qaysi hududga mo'ljallangani ── -->
+    <meta name="geo.region" content="UZ-TK" />
+    <meta name="geo.placename" content="Tashkent" />
+    <meta name="geo.position" content="41.311081;69.240562" />
+    <meta name="ICBM" content="41.311081, 69.240562" />
+
+    <!-- ── SMO: Open Graph (Telegram, Facebook, LinkedIn ulashuvi) ── -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Huquq AI" />
+    <meta property="og:locale" content="uz_UZ" />
+    <meta property="og:locale:alternate" content="ru_RU" />
+    <meta property="og:title" content="Huquq AI — O'zbekiston qonunchiligi bo'yicha AI huquqiy maslahatchi" />
+    <meta property="og:description" content="Mehnat, oila, meros, yer va jinoyat huquqi bo'yicha savollaringizga qonun moddalariga asoslangan aniq javob oling." />
+    <meta property="og:url" content="https://huquq-ai-xi.vercel.app/" />
+    <meta property="og:image" content="https://huquq-ai-xi.vercel.app/og-image.jpg" />
+    <meta property="og:image:secure_url" content="https://huquq-ai-xi.vercel.app/og-image.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Huquq AI — O'zbekiston qonunchiligi bo'yicha AI huquqiy maslahatchi" />
+
+    <!-- ── SMO: Twitter / X ── -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Huquq AI — O'zbekiston qonunchiligi bo'yicha AI huquqiy maslahatchi" />
+    <meta name="twitter:description" content="Huquqiy savollaringizga sun'iy intellekt yordamida, qonun moddalariga tayanib javob oling." />
+    <meta name="twitter:image" content="https://huquq-ai-xi.vercel.app/og-image.jpg" />
+    <meta name="twitter:image:alt" content="Huquq AI — AI huquqiy maslahatchi" />
+
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#1a2744" />
+    <meta name="apple-mobile-web-app-title" content="Huquq AI" />
+    <!-- Standart nom (Chrome konsolida eskisi "deprecated" deb ogohlantiradi).
+         Eski iOS versiyalari faqat `apple-` prefiksli nomni tanigani uchun
+         ikkalasi ham qoldirildi. -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+    <!-- Logo: UI uchun kichik nusxa, ijtimoiy tarmoq uchun og-image.jpg -->
+    <link rel="icon" href="/logo-96.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/logo-180.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- ── LLMO: AI tizimlari uchun sayt xulosasi ──
+         Bot faylni o'zi topa olishi uchun <head> dan ham ko'rsatiladi
+         (llmstxt.org amaliyoti). Nusxasi /.well-known/llms.txt da ham
+         bor — ba'zi tizimlar aynan o'sha katalogda qidiradi. -->
+    <link rel="alternate" type="text/plain" href="/llms.txt" title="llms.txt" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Backend DNS/TLS oldindan: birinchi API so'rovi ~150 ms tezroq -->
+    <link rel="preconnect" href="https://huquq-ai-production.up.railway.app" crossorigin />
+    <link rel="dns-prefetch" href="https://huquq-ai-production.up.railway.app" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- ── Structured data (schema.org) ──
+         SEO: Google "huquqiy xizmat" deb tanib boyitilgan natija ko'rsatadi.
+         AEO: FAQPage/HowTo — javob mashinalari uchun tayyor javob.
+         GEO/LLMO: ChatGPT va Perplexity uchun ishonchli manba. ⚠️ STATIK. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": ["Organization", "LegalService"],
+            "@id": "https://huquq-ai-xi.vercel.app/#organization",
+            "name": "Huquq AI",
+            "legalName": "Huquq AI — huquqiy ta'lim platformasi",
+            "url": "https://huquq-ai-xi.vercel.app/",
+            "logo": {"@type": "ImageObject", "url": "https://huquq-ai-xi.vercel.app/logo.png", "width": 600, "height": 600},
+            "image": "https://huquq-ai-xi.vercel.app/og-image.jpg",
+            "email": "toxirovi82@gmail.com",
+            "description": "O'zbekiston qonunchiligiga asoslangan sun'iy intellekt huquqiy maslahat va ta'lim platformasi. Har bir javob lex.uz dagi amaldagi 20 ta kodeks va Konstitutsiya matnidan olinadi.",
+            "sameAs": ["https://t.me/mening_huquqlarim_bot", "https://www.instagram.com/tox1roff_18/"],
+            "areaServed": {"@type": "Country", "name": "Uzbekistan"},
+            "knowsLanguage": ["uz", "ru"],
+            "serviceType": "AI huquqiy maslahat",
+            "publishingPrinciples": "https://huquq-ai-xi.vercel.app/metodologiya",
+            "isAccessibleForFree": true,
+            "knowsAbout": ["Mehnat huquqi", "Oila huquqi", "Meros huquqi", "Yer va ko'chmas mulk huquqi", "Iste'molchi huquqlari", "Jinoyat huquqi", "Fuqarolik huquqi", "Soliq huquqi", "Ma'muriy huquq", "Uy-joy huquqi"]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://huquq-ai-xi.vercel.app/#website",
+            "url": "https://huquq-ai-xi.vercel.app/",
+            "name": "Huquq AI",
+            "inLanguage": ["uz", "ru"],
+            "publisher": {"@id": "https://huquq-ai-xi.vercel.app/#organization"},
+            "hasPart": [
+              {"@type": "CollectionPage", "name": "O'zbekiston qonunlari va kodekslari", "url": "https://huquq-ai-xi.vercel.app/qonunlar"},
+              {"@type": "CollectionPage", "name": "Huquqiy savollar va javoblar", "url": "https://huquq-ai-xi.vercel.app/savollar"},
+              {"@type": "AboutPage", "name": "Metodologiya va tahririy siyosat", "url": "https://huquq-ai-xi.vercel.app/metodologiya"}
+            ]
+          },
+          {
+            "@type": "WebApplication",
+            "@id": "https://huquq-ai-xi.vercel.app/#webapp",
+            "name": "Huquq AI",
+            "url": "https://huquq-ai-xi.vercel.app/",
+            "applicationCategory": "LegalService",
+            "applicationSubCategory": "AI huquqiy maslahatchi",
+            "operatingSystem": "Web",
+            "browserRequirements": "JavaScript yoqilgan zamonaviy brauzer",
+            "inLanguage": ["uz", "ru"],
+            "provider": {"@id": "https://huquq-ai-xi.vercel.app/#organization"},
+            "featureList": ["AI huquqiy savol-javob", "Qonunlar kutubxonasi — 20 ta kodeks", "O'zbekiston Konstitutsiyasi", "124 ta huquqiy dars", "Izohli testlar"],
+            "offers": {"@type": "Offer", "price": "0", "priceCurrency": "UZS", "description": "Bepul tarif — har kuni bir necha AI savoli, bank kartasi talab qilinmaydi"}
+          }
+        ]
+      }
+    </script>
+
+    <!-- ⚠️ ZAXIRA blok — FAQAT JavaScript ishlamaydigan botlar uchun. Sahifa
+         o'z FAQPage/HowTo sxemasini berganda (Home.jsx) seo/head.js buni
+         `data-seo-fallback` bo'yicha o'chiradi — takror FAQPage qolmasligi uchun. -->
+    <script type="application/ld+json" data-seo-fallback="true">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "FAQPage",
+            "@id": "https://huquq-ai-xi.vercel.app/#faq-static",
+            "inLanguage": "uz",
+            "mainEntity": [
+              {"@type": "Question", "name": "Huquq AI professional advokatni almashtiradimi?", "acceptedAnswer": {"@type": "Answer", "text": "Yo'q. Huquq AI dastlabki yo'naltirish va umumiy huquqiy ma'lumot beradi. Murakkab yoki sud jarayoni talab qiladigan holatlarda malakali advokatga murojaat qilishni tavsiya qilamiz."}},
+              {"@type": "Question", "name": "Huquq AI javoblari qaysi manbaga asoslanadi?", "acceptedAnswer": {"@type": "Answer", "text": "Javoblar lex.uz dagi amaldagi kodekslar va O'zbekiston Respublikasi Konstitutsiyasi matniga asoslanadi. AI javob berishdan oldin tegishli moddani bazadan qidirib topadi va faqat shu tekshirilgan matndan foydalanadi."}},
+              {"@type": "Question", "name": "Huquq AI qaysi tillarda ishlaydi?", "acceptedAnswer": {"@type": "Answer", "text": "O'zbek va rus tillarida. Savol qaysi tilda berilsa, javob ham shu tilda keladi."}},
+              {"@type": "Question", "name": "Huquq AI dan bepul foydalanish mumkinmi?", "acceptedAnswer": {"@type": "Answer", "text": "Ha. Ro'yxatdan o'tgan har bir foydalanuvchiga kuniga bir nechta bepul savol imkoniyati beriladi — bank kartasi talab qilinmaydi."}},
+              {"@type": "Question", "name": "To'lovni qanday amalga oshiraman?", "acceptedAnswer": {"@type": "Answer", "text": "Click yoki Payme orqali, bir necha soniyada. To'lovdan so'ng tarifingiz avtomatik faollashadi."}}
+            ]
+          },
+          {
+            "@type": "HowTo",
+            "@id": "https://huquq-ai-xi.vercel.app/#howto",
+            "name": "Huquq AI orqali huquqiy javob olish",
+            "description": "O'zbekiston qonunchiligi bo'yicha savolingizga bir necha daqiqada javob olish tartibi.",
+            "totalTime": "PT2M",
+            "step": [
+              {"@type": "HowToStep", "position": 1, "name": "Savolni yozing", "text": "Huquqiy savolingizni oddiy tilda yozing — yuridik atama bilishingiz shart emas."},
+              {"@type": "HowToStep", "position": 2, "name": "AI qonunni qidiradi", "text": "Tizim savolingizga mos qonun moddasini amaldagi kodekslar bazasidan topadi."},
+              {"@type": "HowToStep", "position": 3, "name": "Javobni oling", "text": "Javob topilgan qonun matniga tayanib, sodda tilda tushuntiriladi."},
+              {"@type": "HowToStep", "position": 4, "name": "Chuqurroq o'rganing", "text": "Kerak bo'lsa Qonunlar kutubxonasidan modda matnini o'qing yoki tegishli darsni o'ting."}
+            ]
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <!-- ── JavaScript'siz ko'rinadigan qatlam ──
+         (1) JS o'chiq brauzerda bo'sh oq sahifa emas, ma'noli matn; (2) JS ishga
+         tushirmaydigan AI botlari faktik ma'lumot oladi. ⚠️ Matn saytdagi
+         haqiqiy mazmun bilan MOS bo'lishi shart — aks holda "cloaking". -->
+    <noscript>
+      <div style="max-width:760px;margin:0 auto;padding:32px 20px;font-family:system-ui,sans-serif;line-height:1.6;color:#0f172a">
+        <h1>Huquq AI — O'zbekiston qonunchiligi bo'yicha AI huquqiy maslahatchi</h1>
+        <p>
+          Huquq AI — O'zbekiston qonunchiligiga asoslangan sun'iy intellekt
+          huquqiy maslahat va ta'lim platformasi. Har bir javob lex.uz dagi
+          amaldagi kodekslar va Konstitutsiya matnidan olinadi.
+        </p>
+        <h2>Platforma imkoniyatlari</h2>
+        <ul>
+          <li><strong>AI huquqiy maslahatchi</strong> — savolingizga qonun moddasiga tayangan javob.</li>
+          <li><strong>Qonunlar kutubxonasi</strong> — O'zbekistonning amaldagi 20 ta kodeksi, ~6 950 modda.</li>
+          <li><strong>Konstitutsiya</strong> — 155 modda, 6 bo'lim va 27 bob bo'yicha to'liq matn.</li>
+          <li><strong>Huquqiy darslar</strong> — 124 ta dars va 6 ta kengaytirilgan darslik.</li>
+          <li><strong>Testlar</strong> — har bir savolga izoh bilan.</li>
+        </ul>
+        <h2>Qamrab olingan sohalar</h2>
+        <p>
+          Mehnat, oila, meros, yer va ko'chmas mulk, iste'molchi, jinoyat,
+          fuqarolik, soliq, ma'muriy va uy-joy huquqi.
+        </p>
+        <h2>Ro'yxatdan o'tmasdan ochiladigan bo'limlar</h2>
+        <p>
+          Quyidagi sahifalar login talab qilmaydi va server tomonda tayyor
+          HTML sifatida beriladi — ya'ni JavaScript ishga tushirmaydigan
+          tizimlar ham ularni to'liq o'qiy oladi:
+        </p>
+        <ul>
+          <li><a href="/qonunlar">O'zbekiston qonunlari va kodekslari</a> — to'liq matn, modda bo'yicha.</li>
+          <li><a href="/savollar">Huquqiy savollar va javoblar</a> — eng ko'p beriladigan savollarga qonun moddasiga tayangan javoblar.</li>
+          <li><a href="/metodologiya">Metodologiya va tahririy siyosat</a> — javoblar qanday tayyorlanadi va qanday tekshiriladi.</li>
+        </ul>
+        <h2>Muhim eslatma</h2>
+        <p>
+          Huquq AI advokat xizmatini almashtirmaydi — u dastlabki yo'naltirish
+          va umumiy huquqiy ma'lumot beradi. Saytdan to'liq foydalanish uchun
+          JavaScript'ni yoqing. AI tizimlari uchun:
+          <a href="/llms.txt">/llms.txt</a>
+        </p>
+      </div>
+    </noscript>
+
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

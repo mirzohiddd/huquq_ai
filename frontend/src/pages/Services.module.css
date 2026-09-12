@@ -1,0 +1,119 @@
+.servicesGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+
+.serviceCard {
+  display: flex;
+  flex-direction: column;
+  background: var(--white);
+  border: 1px solid var(--gray-100);
+  border-radius: var(--radius-md);
+  padding: 1.75rem 1.25rem;
+  cursor: pointer;
+  transition: all 0.24s;
+  position: relative;
+  overflow: hidden;
+}
+
+.serviceCard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s;
+}
+
+.serviceCard:hover::before {
+  transform: scaleX(1);
+}
+
+.serviceCard:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.serviceIcon {
+  font-size: 22px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.1rem;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--gold-pale) 0%, var(--white) 100%);
+  border: 1px solid rgba(201, 149, 58, 0.2);
+  color: var(--gold);
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), background 0.28s, color 0.28s;
+}
+
+.serviceCard:hover .serviceIcon {
+  transform: scale(1.1) rotate(-4deg);
+  background: linear-gradient(135deg, var(--gold) 0%, #b8770a 100%);
+  color: var(--white);
+}
+
+.serviceCard h3 {
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 0.4rem;
+}
+
+.serviceCard p {
+  font-size: 12.5px;
+  color: var(--gray-600);
+  line-height: 1.55;
+  font-weight: 300;
+  /* Tavsif uzunligi turlicha — "Batafsil" belgisi hamma kartada bir
+     xil balandlikda tursin */
+  flex: 1;
+  margin-bottom: 0.9rem;
+}
+
+/* Karta bosilishi mumkinligini bildiruvchi belgi. Avval kartalar
+   bosilardi-yu, buni ko'rsatadigan hech qanday vizual ishora yo'q
+   edi — foydalanuvchi ular oddiy matn deb o'ylardi. */
+.serviceMore {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--navy);
+  transition: gap 0.2s, color 0.2s;
+}
+
+.serviceMore svg {
+  flex-shrink: 0;
+}
+
+.serviceCard:hover .serviceMore {
+  gap: 8px;
+  color: var(--gold);
+}
+
+.ctaWrap {
+  text-align: center;
+  margin-top: 3rem;
+}
+
+@media (max-width: 1024px) {
+  .servicesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .servicesGrid {
+    grid-template-columns: 1fr;
+  }
+}

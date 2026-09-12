@@ -1,0 +1,20 @@
+{
+  "id": "/",
+  "name": "Huquq AI — O'zbekiston qonunchiligi bo'yicha AI huquqiy maslahatchi",
+  "short_name": "Huquq AI",
+  "description": "O'zbekiston qonunchiligiga asoslangan AI huquqiy maslahat va ta'lim platformasi. Javoblar amaldagi kodeks moddalariga tayanadi.",
+  "lang": "uz",
+  "dir": "ltr",
+  "start_url": "/?utm_source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#ffffff",
+  "theme_color": "#1a2744",
+  "categories": ["education", "productivity", "utilities"],
+  "icons": [
+    { "src": "/logo-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/logo-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/logo-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

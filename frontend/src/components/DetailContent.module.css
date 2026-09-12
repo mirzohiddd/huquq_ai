@@ -1,0 +1,191 @@
+/* ══════════════════════════════════════════════════════════════
+   DetailModal ICHIDAGI kontent uslublari.
+
+   Ataylab DetailModal.module.css dan AJRATILGAN: u fayl faqat oyna
+   qobig'i (fon, sarlavha, scroll) uchun javob beradi va boshqa
+   sahifalarda ham qayta ishlatilishi mumkin; bu fayl esa aynan
+   Bosh sahifadagi xizmat/maqola kontentiga tegishli.
+   ══════════════════════════════════════════════════════════════ */
+
+.lead {
+  font-size: 14.5px;
+  line-height: 1.72;
+  color: var(--gray-600);
+  margin: 0 0 1.35rem;
+}
+
+.para {
+  font-size: 14.5px;
+  line-height: 1.78;
+  color: var(--gray-600);
+  margin: 0 0 1rem;
+}
+
+.para:last-of-type {
+  margin-bottom: 0;
+}
+
+.blockTitle {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--navy, #0b1322);
+  margin: 0 0 0.75rem;
+}
+
+.blockTitle svg {
+  color: var(--gold, #c9953a);
+  flex-shrink: 0;
+}
+
+/* ── "Nima kiradi" ro'yxati ── */
+.checkList {
+  list-style: none;
+  margin: 0 0 1.5rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.checkList li {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--gray-600);
+}
+
+.checkList li svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: #16a34a;
+}
+
+/* ── Namunaviy savollar (bosilganda AI'ga yuboriladi) ── */
+.questions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.35rem;
+}
+
+.questionBtn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  text-align: left;
+  padding: 0.75rem 0.9rem;
+  border-radius: 11px;
+  border: 1px solid var(--gray-100, #f0ede8);
+  background: var(--gray-50, #faf9f7);
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--navy, #0b1322);
+  transition: border-color 0.2s, background 0.2s, transform 0.2s;
+}
+
+.questionBtn svg {
+  flex-shrink: 0;
+  color: var(--gold, #c9953a);
+  transition: transform 0.2s;
+}
+
+.questionBtn:hover {
+  background: var(--white, #fff);
+  border-color: rgba(201, 149, 58, 0.45);
+  transform: translateX(2px);
+}
+
+.questionBtn:hover svg {
+  transform: translateX(3px);
+}
+
+/* ── Ogohlantirish ── */
+.note {
+  margin: 0;
+  padding: 0.8rem 0.95rem;
+  border-radius: 10px;
+  background: rgba(201, 149, 58, 0.08);
+  border-left: 3px solid var(--gold, #c9953a);
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--gray-600, #64748b);
+}
+
+/* ── Maqola oxiridagi amaliy maslahatlar ── */
+.tips {
+  margin-top: 1.5rem;
+  padding: 1.05rem 1.15rem;
+  border-radius: 13px;
+  background: var(--gray-50, #faf9f7);
+  border: 1px solid var(--gray-100, #f0ede8);
+}
+
+.tipsTitle {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--navy, #0b1322);
+  margin: 0 0 0.7rem;
+}
+
+.tipsTitle svg {
+  color: var(--gold, #c9953a);
+  flex-shrink: 0;
+}
+
+.tips ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.tips li {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--gray-600);
+}
+
+.tips li::marker {
+  color: var(--gold, #c9953a);
+}
+
+/* ── Oyna pastidagi asosiy tugma ── */
+.ctaBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border-radius: 11px;
+  background: var(--navy, #0b1322);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  transition: filter 0.2s, transform 0.15s;
+}
+
+.ctaBtn:hover {
+  filter: brightness(1.15);
+}
+
+.ctaBtn:active {
+  transform: scale(0.99);
+}

@@ -1,0 +1,225 @@
+.aboutGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.aboutDesc {
+  font-size: 15.5px;
+  color: var(--gray-600);
+  line-height: 1.85;
+  margin-bottom: 2rem;
+  font-weight: 300;
+}
+
+/* DIQQAT: ikona ham `<span>` (JSX: <span className={statIcon}>), shuning
+   uchun tavsif uchun `.stat span` DEB YOZIB BO'LMAYDI — u ikonaga ham
+   tegib, uning oltin rangini kulrangga almashtirib qo'yardi
+   (`.stat span` = 0,1,1 > `.statIcon` = 0,1,0). Shu sabab tavsif
+   `.stat > div span` orqali, faqat ichki blok ichidan tanlanadi.
+   Statistika kartalari — saytning boshqa bo'limlaridagi "icon-badge"
+   uslubiga moslashtirildi. Avval bular oddiy ikona + matn qatorlari edi
+   (fon, ramka, tekislash yo'q) va bo'limning qolgan qismidan ajralib,
+   tartibsiz ko'rinardi. `.statIcon` ga berilgan `font-size` ham hech
+   narsa qilmasdi — ikonalar endi React komponentlari (SVG). */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  padding: 1.35rem 1rem;
+  background: var(--white);
+  border: 1px solid var(--gray-100);
+  border-radius: 14px;
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform 0.26s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.26s ease,
+    border-color 0.26s ease;
+}
+
+.stat:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(201, 149, 58, 0.35);
+}
+
+.statIcon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold-pale) 0%, #fff 100%);
+  border: 1px solid rgba(201, 149, 58, 0.2);
+  color: var(--gold);
+  flex-shrink: 0;
+}
+
+.stat strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.1;
+}
+
+.stat > div span {
+  display: block;
+  font-size: 12.5px;
+  color: var(--gray-600);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.aboutImage {
+  display: flex;
+  justify-content: center;
+}
+
+/* "Biz haqimizda" rasmi — CARD ko'rinishida.
+   Oq ramka (padding) + yumshoq soya rasmni "kartochka" qilib ko'rsatadi.
+   Burchaklar ataylab kamroq yumaloqlangan (18px → 12px) — foydalanuvchi
+   to'rtburchakroq ko'rinish so'ragan. Nisbat 3/2 — bu rasmning O'Z
+   nisbati (1280×853), shuning uchun hech qayeri kesilmaydi. */
+.aboutCard {
+  width: 100%;
+  max-width: 520px;
+  margin: 0;
+  padding: 10px;
+  background: var(--white);
+  border-radius: 12px;
+  border: 1px solid var(--gray-100);
+  box-shadow: var(--shadow-lg);
+  transition:
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.4s ease;
+}
+
+.aboutCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 22px 54px rgba(11, 19, 34, 0.2);
+}
+
+.aboutImg {
+  display: block;
+  width: 100%;
+  /* DIQQAT: bu yerda `aspect-ratio` + `object-fit: cover` ISHLATILMAYDI.
+     Ular rasmni majburiy nisbatga solib, chetlaridan qirqib tashlaydi
+     (foydalanuvchi "rasm qirqilib qolganga o'xshaydi" deb bildirgan).
+     `height: auto` bilan rasm O'Z nisbatida (1280×853) to'liq ko'rinadi. */
+  height: auto;
+  border-radius: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aboutImg,
+  .aboutImg:hover {
+    transition: none;
+    transform: none;
+  }
+}
+
+.lawGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.lawCard {
+  background: var(--white);
+  border: 1px solid var(--gray-100);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+}
+
+.lawTitle {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--navy);
+}
+
+.lawList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.lawList li {
+  font-size: 13px;
+  color: var(--gray-600);
+  padding-left: 14px;
+  position: relative;
+  font-weight: 300;
+}
+
+.lawList li::before {
+  content: "·";
+  position: absolute;
+  left: 0;
+  color: var(--gold);
+  font-weight: 700;
+}
+
+.warn {
+  background: var(--gold-pale);
+  border: 1px solid rgba(201, 149, 58, 0.25);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  font-size: 14px;
+  color: var(--gray-600);
+  line-height: 1.7;
+}
+
+@media (max-width: 1024px) {
+  .aboutGrid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  .aboutImage {
+    order: -1;
+  }
+  .lawGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 860px) {
+  .stats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+  }
+  .stat {
+    padding: 1.1rem 0.6rem;
+  }
+  .statIcon {
+    width: 42px;
+    height: 42px;
+  }
+  .stat strong {
+    font-size: 21px;
+  }
+  .stat > div span {
+    font-size: 11.5px;
+  }
+}
+
+@media (max-width: 640px) {
+  .lawGrid {
+    grid-template-columns: 1fr;
+  }
+}

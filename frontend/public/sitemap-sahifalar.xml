@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Huquq AI — STATIK sahifalar xaritasi.
+
+  Bu fayl `sitemap.xml` (sitemap index) ichida ko'rsatilgan. Qonun
+  moddalari (~7 100 manzil) alohida, BAZADAN yaratiladigan xaritada:
+  /sitemap-qonunlar.xml
+
+  ⚠️ ANCHOR (#) MANZILLAR OLIB TASHLANDI. Avval bu yerda `/#pricing`,
+  `/#about` kabi manzillar bor edi — sitemap spetsifikatsiyasi bo'yicha
+  fragment (#) bir sahifaning QISMI, alohida sahifa emas; Google ularni
+  e'tiborsiz qoldiradi va xaritani "xatolar bilan" deb belgilaydi.
+  Bo'limlar baribir bosh sahifa orqali indekslanadi.
+
+  ⚠️ /lessons, /tests, /library, /constitution — YO'Q. Ular ro'yxatdan
+  o'tishni talab qiladi (robots.txt bilan mos).
+
+  hreflang: sayt bitta manzilda ikki tilda ishlaydi (til `localStorage`
+  da), shuning uchun ruscha variant `?lang=ru` bilan ko'rsatiladi.
+-->
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <url>
+    <loc>https://huquq-ai-xi.vercel.app/</loc>
+    <xhtml:link rel="alternate" hreflang="uz-UZ" href="https://huquq-ai-xi.vercel.app/"/>
+    <xhtml:link rel="alternate" hreflang="ru-UZ" href="https://huquq-ai-xi.vercel.app/?lang=ru"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://huquq-ai-xi.vercel.app/"/>
+    <lastmod>2026-08-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <url>
+    <loc>https://huquq-ai-xi.vercel.app/terms</loc>
+    <xhtml:link rel="alternate" hreflang="uz-UZ" href="https://huquq-ai-xi.vercel.app/terms"/>
+    <xhtml:link rel="alternate" hreflang="ru-UZ" href="https://huquq-ai-xi.vercel.app/terms?lang=ru"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://huquq-ai-xi.vercel.app/terms"/>
+    <lastmod>2026-08-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://huquq-ai-xi.vercel.app/privacy</loc>
+    <xhtml:link rel="alternate" hreflang="uz-UZ" href="https://huquq-ai-xi.vercel.app/privacy"/>
+    <xhtml:link rel="alternate" hreflang="ru-UZ" href="https://huquq-ai-xi.vercel.app/privacy?lang=ru"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://huquq-ai-xi.vercel.app/privacy"/>
+    <lastmod>2026-08-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://huquq-ai-xi.vercel.app/disclaimer</loc>
+    <xhtml:link rel="alternate" hreflang="uz-UZ" href="https://huquq-ai-xi.vercel.app/disclaimer"/>
+    <xhtml:link rel="alternate" hreflang="ru-UZ" href="https://huquq-ai-xi.vercel.app/disclaimer?lang=ru"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://huquq-ai-xi.vercel.app/disclaimer"/>
+    <lastmod>2026-08-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+</urlset>
