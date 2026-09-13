@@ -71,9 +71,9 @@ qaytadan takrorlanadi.
 Asosiy tuzilma: `frontend/` — asosiy sayt (Vite + React) · `admin/` — HAQIQIY
 ishlatiladigan standalone admin dashboard · `backend/` — Express + MongoDB API.
 
-Jonli manzillar (2026-08-22): backend — **Railway**
-`https://huquq-ai-production.up.railway.app` (Render O'CHIRILDI) · frontend —
-`https://huquq-ai-xi.vercel.app` · admin — `https://huquq-ai-admin.vercel.app`.
+Jonli manzillar (2026-09-13): backend — **Render**
+`https://huquq-ai-7v7a.onrender.com` (Railway manzili o'chgan, 404) · frontend —
+`https://huquq-ai-teal.vercel.app` · admin — `https://huquq-ai-yalg.vercel.app`.
 
 ## ⚠️ Muhim tuzoqlar (har doim amal qiling)
 

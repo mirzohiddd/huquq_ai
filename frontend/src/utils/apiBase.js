@@ -21,7 +21,7 @@
  */
 
 /* 2026-08-22: hosting Render'dan Railway'ga ko'chirildi. */
-const DEFAULT_REMOTE = "https://huquq-ai-production.up.railway.app";
+const DEFAULT_REMOTE = "https://huquq-ai-7v7a.onrender.com";
 const DEFAULT_LOCAL = "http://localhost:3000";
 
 /**

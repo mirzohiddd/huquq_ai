@@ -81,9 +81,9 @@ const defaultOrigins = [
   "http://localhost:5173",
   "http://localhost:5174",
   "http://127.0.0.1:5173",
-  "https://huquq-ai-xi.vercel.app", // joriy frontend
-  "https://huquq-ai-production.up.railway.app", // backendning o'zi (Railway)
-  "https://huquq-ai-admin.vercel.app", // admin paneli
+  "https://huquq-ai-teal.vercel.app", // joriy frontend
+  "https://huquq-ai-7v7a.onrender.com", // backendning o'zi (Render)
+  "https://huquq-ai-yalg.vercel.app", // admin paneli
 ];
 const frontendUrl = process.env.FRONTEND_URL;
 

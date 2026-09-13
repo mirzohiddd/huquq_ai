@@ -2,43 +2,43 @@
   "rewrites": [
     {
       "source": "/qonunlar.md",
-      "destination": "https://huquq-ai-production.up.railway.app/public/qonunlar.md"
+      "destination": "https://huquq-ai-7v7a.onrender.com/public/qonunlar.md"
     },
     {
       "source": "/qonunlar",
-      "destination": "https://huquq-ai-production.up.railway.app/public/qonunlar"
+      "destination": "https://huquq-ai-7v7a.onrender.com/public/qonunlar"
     },
     {
       "source": "/qonun/:path*",
-      "destination": "https://huquq-ai-production.up.railway.app/public/qonun/:path*"
+      "destination": "https://huquq-ai-7v7a.onrender.com/public/qonun/:path*"
     },
     {
       "source": "/sitemap-qonunlar.xml",
-      "destination": "https://huquq-ai-production.up.railway.app/public/sitemap-qonunlar.xml"
+      "destination": "https://huquq-ai-7v7a.onrender.com/public/sitemap-qonunlar.xml"
     },
     {
       "source": "/savollar",
-      "destination": "https://huquq-ai-production.up.railway.app/public/savollar"
+      "destination": "https://huquq-ai-7v7a.onrender.com/public/savollar"
     },
     {
       "source": "/savollar.md",
-      "destination": "https://huquq-ai-production.up.railway.app/public/savollar.md"
+      "destination": "https://huquq-ai-7v7a.onrender.com/public/savollar.md"
     },
     {
       "source": "/savol/:path*",
-      "destination": "https://huquq-ai-production.up.railway.app/public/savol/:path*"
+      "destination": "https://huquq-ai-7v7a.onrender.com/public/savol/:path*"
     },
     {
       "source": "/metodologiya",
-      "destination": "https://huquq-ai-production.up.railway.app/public/metodologiya"
+      "destination": "https://huquq-ai-7v7a.onrender.com/public/metodologiya"
     },
     {
       "source": "/metodologiya.md",
-      "destination": "https://huquq-ai-production.up.railway.app/public/metodologiya.md"
+      "destination": "https://huquq-ai-7v7a.onrender.com/public/metodologiya.md"
     },
     {
       "source": "/sitemap-savollar.xml",
-      "destination": "https://huquq-ai-production.up.railway.app/public/sitemap-savollar.xml"
+      "destination": "https://huquq-ai-7v7a.onrender.com/public/sitemap-savollar.xml"
     },
     {
       "source": "/(.*)",
