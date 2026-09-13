@@ -62,3 +62,35 @@
   }
 }
 
+
+/* Kutish paytidagi aylanma ikona */
+.spin {
+  animation: installSpin 0.9s linear infinite;
+}
+
+@keyframes installSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Telegram/Instagram'dan brauzerga o'tib kelganda — tugmani ajratib ko'rsatish */
+.attention {
+  animation: installPulse 1.6s ease-out 3;
+}
+
+@keyframes installPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(201, 149, 58, 0.6);
+  }
+  100% {
+    box-shadow: 0 0 0 14px rgba(201, 149, 58, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spin,
+  .attention {
+    animation: none;
+  }
+}

@@ -59,6 +59,49 @@ export function subscribeInstall(fn) {
   return () => listeners.delete(fn);
 }
 
+/* Brauzer o'rnatish oynasini hali tayyorlamagan bo'lishi mumkin (sahifa
+   endigina ochilgan). Qo'llanma ko'rsatishdan oldin qisqa kutamiz.
+   ⚠️ Kutish 2,5 s dan oshmasin — `prompt()` foydalanuvchi bosgandan
+   keyin ~5 s ichida chaqirilishi shart, aks holda brauzer rad etadi. */
+export function waitForPrompt(ms = 2500) {
+  if (deferred) return Promise.resolve(true);
+  return new Promise((resolve) => {
+    const timer = setTimeout(() => {
+      off();
+      resolve(false);
+    }, ms);
+    const off = subscribeInstall(() => {
+      if (!deferred) return;
+      clearTimeout(timer);
+      off();
+      resolve(true);
+    });
+  });
+}
+
+export function isAndroid() {
+  return /Android/i.test(navigator.userAgent || "");
+}
+
+/* Telegram/Instagram ichki brauzeridan saytni haqiqiy brauzerda ochadi
+   (`?install=1` bilan — u yerda tugma ajratib ko'rsatiladi).
+   Android: intent orqali Chrome (Chrome yo'q bo'lsa standart brauzer).
+   iOS 17+: `x-safari-https://` sxemasi Safari'ni ochadi; eski iOS'da
+   hech narsa bo'lmaydi va qo'llanma ko'rinib turadi. */
+export function openInRealBrowser() {
+  const url = new URL(window.location.href);
+  url.searchParams.set("install", "1");
+  if (isAndroid()) {
+    const fallback = encodeURIComponent(url.href);
+    window.location.href =
+      `intent://${url.host}${url.pathname}${url.search}#Intent;scheme=https;` +
+      `package=com.android.chrome;S.browser_fallback_url=${fallback};end`;
+    return true;
+  }
+  window.location.href = `x-safari-${url.href}`;
+  return false;
+}
+
 if (typeof window !== "undefined") {
   window.addEventListener("beforeinstallprompt", (e) => {
     e.preventDefault(); // brauzerning o'z mini-bannerini emas, bizning tugmani ishlatamiz
