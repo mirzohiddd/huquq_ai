@@ -96,6 +96,15 @@ export default function InstallGuide({ platform, onClose }) {
           </button>
         )}
 
+        {/* Samsung/Xiaomi'da bosh ekran qulflangan bo'lsa telefon belgini
+            qo'shmaydi ("Внешний вид главного экрана заблокирован") — bu
+            sozlama, sayt xatosi emas. Foydalanuvchiga yechim shu yerda. */}
+        {platform === "android" && (
+          <p className={s.hint}>
+            <strong>{t.install_lock_title}</strong> {t.install_lock_hint}
+          </p>
+        )}
+
         <p className={s.note}>{t.install_note}</p>
       </div>
     </div>,

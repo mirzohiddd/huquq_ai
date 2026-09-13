@@ -74,13 +74,15 @@ setInterval(
   5 * 60 * 1000,
 ).unref?.();
 
+/* ⚠️ XAVFSIZLIK (2026-09-13): avval `X-Forwarded-For` ning BIRINCHI
+   qiymati olinardi. Bu qiymatni MIJOZNING O'ZI yozadi — ya'ni har
+   so'rovda soxta IP yuborib (a) login IP-qatlamini, (b) mehmonlarning
+   kunlik bepul AI limitini cheksiz chetlab o'tish mumkin edi.
+   Endi `req.ip` ishlatiladi: Express uni `trust proxy` sozlamasi
+   (server.js) bo'yicha FAQAT ishonchli proksi qo'shgan qiymatdan
+   oladi. `express-rate-limit` ham aynan shu qiymatga tayanadi. */
 function getClientIp(req) {
-  return (
-    req.headers["x-forwarded-for"]?.split(",")[0]?.trim() ||
-    req.headers["x-real-ip"] ||
-    req.socket?.remoteAddress ||
-    "unknown"
-  );
+  return req.ip || req.socket?.remoteAddress || "unknown";
 }
 
 /**

@@ -34,8 +34,11 @@ const DEFAULT_SENDER_EMAIL = "acd052001@smtp-brevo.com";
 const SENDER_EMAIL = process.env.BREVO_SENDER_EMAIL || DEFAULT_SENDER_EMAIL;
 const SENDER_NAME = "Mening Huquqim";
 
+/* ⚠️ `Math.random()` kriptografik jihatdan xavfsiz EMAS — uning holatini
+   bir nechta chiqishdan tiklab, keyingi kodlarni oldindan aytish mumkin.
+   Tasdiqlash kodi uchun faqat `crypto.randomInt` ishlatiladi. */
 function generateOTP() {
-  return String(Math.floor(100000 + Math.random() * 900000));
+  return String(require("crypto").randomInt(100000, 1000000));
 }
 
 async function sendViaBrevoApiOnce({

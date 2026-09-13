@@ -82,6 +82,22 @@ function isProviderConfigured(provider) {
   return false;
 }
 
+/* ⚠️ XAVFSIZLIK (2026-09-13): avval merchant kalitlari kiritilmagan
+   bo'lsa test tasdiqlash AVTOMATIK yoqilardi. Kalitlar hali yo'q bo'lgani
+   uchun bu jonli saytda HAR QANDAY foydalanuvchi pul to'lamasdan
+   Premium olishi mumkinligini anglatardi. Endi test rejimi faqat
+   `PAYMENT_TEST_MODE=true` ANIQ yozilganda ishlaydi (demo/lokal sinov). */
+function isTestPaymentAllowed() {
+  return process.env.PAYMENT_TEST_MODE === "true";
+}
+
+/* Imzo/kalitni vaqt bo'yicha xavfsiz solishtirish (timing attack'ga qarshi) */
+function safeEqual(a, b) {
+  const x = Buffer.from(String(a ?? ""));
+  const y = Buffer.from(String(b ?? ""));
+  return x.length === y.length && crypto.timingSafeEqual(x, y);
+}
+
 async function activatePlan(userId, tier) {
   const user = await User.findById(userId);
   if (!user) return;
@@ -196,6 +212,11 @@ router.post("/checkout", userGuard, async (req, res) => {
     if (!isPaidTier(tier)) {
       return res.status(400).json({ error: "tier 'basic', 'pro' yoki 'premium' bo'lishi kerak" });
     }
+    if (!isProviderConfigured(provider) && !isTestPaymentAllowed()) {
+      return res.status(503).json({
+        error: "Bu to'lov usuli hozircha ulanmagan. Iltimos, keyinroq urinib ko'ring.",
+      });
+    }
 
     const merchantTransId = newMerchantTransId();
     const amount = getPlanConfig(tier).priceUzs;
@@ -266,6 +287,9 @@ router.post("/checkout", userGuard, async (req, res) => {
 ═══════════════════════════════════════════════════════════════ */
 router.post("/test/confirm", userGuard, async (req, res) => {
   try {
+    if (!isTestPaymentAllowed()) {
+      return res.status(403).json({ error: "Test to'lov rejimi o'chirilgan." });
+    }
     const { merchantTransId } = req.body || {};
     if (!merchantTransId) {
       return res.status(400).json({ error: "merchantTransId kerak" });
@@ -375,7 +399,7 @@ router.post("/click/webhook", async (req, res) => {
   }
 
   const expectedSign = clickSign(p, secretKey);
-  if (expectedSign !== p.sign_string) {
+  if (!safeEqual(expectedSign, p.sign_string)) {
     return res.json({ ...base, error: CLICK_ERROR.SIGN_FAILED, error_note: "Imzo mos emas" });
   }
 
@@ -451,7 +475,7 @@ function paymeAuthOk(req) {
   const header = req.headers.authorization || "";
   if (!header.startsWith("Basic ")) return false;
   const decoded = Buffer.from(header.slice(6), "base64").toString("utf8");
-  return decoded === `Paycom:${key}`;
+  return safeEqual(decoded, `Paycom:${key}`);
 }
 
 function paymeRpcError(id, code, message) {
@@ -515,6 +539,10 @@ router.post("/payme/webhook", async (req, res) => {
         const payment = await Payment.findOne({ providerTransactionId: params.id });
         if (!payment) {
           return res.json(paymeRpcError(id, PAYME_ERROR.TRANSACTION_NOT_FOUND, "Topilmadi"));
+        }
+        // Bekor qilingan tranzaksiya qayta "to'langan" bo'lib, tarif yoqilmasin
+        if (payment.status === "cancelled" || payment.status === "failed") {
+          return res.json(paymeRpcError(id, PAYME_ERROR.UNABLE_TO_PERFORM, "Bekor qilingan"));
         }
         if (payment.status !== "paid") {
           payment.status = "paid";

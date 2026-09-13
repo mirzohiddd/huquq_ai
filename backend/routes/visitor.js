@@ -12,7 +12,9 @@ router.post("/track", async (req, res) => {
     // sahifa yuklanishida tashqi xizmatga (api.ipify.org) so'rov qilardi —
     // bu ortiqcha tarmoq kechikishi va begona xizmatga bog'liqlik edi.
     // Server IP'ni so'rovning o'zidan biladi.
-    const ip = req.body.ip || getClientIp(req);
+    // ⚠️ `req.body.ip` ATAYLAB o'qilmaydi — mijoz yozgan IP'ga ishonib
+    // bo'lmaydi (statistikani soxta IP'lar bilan to'ldirish mumkin edi).
+    const ip = getClientIp(req);
     if (!ip) {
       return res.status(400).json({ error: "IP manzil aniqlanmadi" });
     }

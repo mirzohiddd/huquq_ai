@@ -795,6 +795,9 @@ export const translations = {
       "«Ilovani o'rnatish» yoki «Bosh ekranga qo'shish» bandini tanlang",
       "«O'rnatish» tugmasini bosing — ilova bosh ekranda paydo bo'ladi",
     ],
+    install_lock_title: "Belgi qo'shilmadimi?",
+    install_lock_hint:
+      "«Bosh ekran qulflangan» xabari chiqsa: bosh ekranni bosib turing → Sozlamalar → «Bosh ekran joylashuvini qulflash» ni o'chiring va qayta urinib ko'ring.",
     install_steps_inapp: [
       "Yuqoridagi ⋮ yoki ••• menyusini oching",
       "«Brauzerda ochish» (Chrome yoki Safari) bandini tanlang",
@@ -2124,6 +2127,9 @@ export const translations = {
       "Выберите «Установить приложение» или «Добавить на главный экран»",
       "Нажмите «Установить» — приложение появится на главном экране",
     ],
+    install_lock_title: "Значок не добавился?",
+    install_lock_hint:
+      "Если появилось «Внешний вид главного экрана заблокирован»: удерживайте палец на главном экране → Настройки → отключите «Блокировка главного экрана» и попробуйте снова.",
     install_steps_inapp: [
       "Откройте меню ⋮ или ••• вверху экрана",
       "Выберите «Открыть в браузере» (Chrome или Safari)",

@@ -150,7 +150,7 @@ router.post(
       });
     } catch (err) {
       console.error("Voice chat xato:", err.message);
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ error: "Ovozni qayta ishlashda xatolik. Qayta urinib ko'ring." });
     } finally {
       cleanup(req.file?.path);
     }
@@ -174,7 +174,7 @@ router.post(
       const result = await speechToText(req.file.path, req.body.lang || null);
       res.json({ text: result.text, language: result.language });
     } catch (err) {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ error: "Ovozni qayta ishlashda xatolik. Qayta urinib ko'ring." });
     } finally {
       cleanup(req.file?.path);
     }
@@ -250,7 +250,7 @@ router.post("/speak", optionalUserGuard, async (req, res) => {
     res.send(result.buffer);
   } catch (err) {
     console.error("TTS speak xato:", err.message);
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: "Ovozni qayta ishlashda xatolik. Qayta urinib ko'ring." });
   }
 });
 
@@ -352,7 +352,7 @@ router.post(
       });
     } catch (err) {
       console.error("Voice clone xato:", err.message);
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ error: "Ovozni qayta ishlashda xatolik. Qayta urinib ko'ring." });
     } finally {
       cleanup(req.file?.path);
     }

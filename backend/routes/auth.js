@@ -13,6 +13,7 @@ const {
 const { generateOTP, sendOTPEmail } = require("../services/emailService");
 const parseDevice = require("../middleware/parseDevice");
 const { isHosted } = require("../utils/hosting");
+const otpGuard = require("../utils/otpGuard");
 
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -332,9 +333,21 @@ router.post("/verify-otp", async (req, res) => {
           error: "Tasdiqlash kodining muddati tugagan. Qayta ro'yxatdan o'ting",
         });
     }
-    if (user.otpCode !== String(otp).trim()) {
+    /* ⚠️ Urinishlar soni email bo'yicha cheklanadi — izoh `utils/otpGuard.js` da */
+    if (!otpGuard.safeEqual(user.otpCode, String(otp).trim())) {
+      if (otpGuard.recordOtpFailure(user.email)) {
+        user.otpCode = null;
+        user.otpExpires = null;
+        await user.save();
+        otpGuard.clearOtpFailures(user.email);
+        return res.status(429).json({
+          error:
+            "Juda ko'p noto'g'ri urinish. Kod bekor qilindi — «Kodni qayta yuborish» tugmasini bosing.",
+        });
+      }
       return res.status(400).json({ error: "Tasdiqlash kodi noto'g'ri" });
     }
+    otpGuard.clearOtpFailures(user.email);
 
     // Telegram bog'lash tokeni yaratish
     const cryptoV = require("crypto");
@@ -386,6 +399,14 @@ router.post("/resend-otp", async (req, res) => {
       return res.status(404).json({ error: "Tasdiqlanmagan hisob topilmadi" });
     }
 
+    /* Email bombardimoniga qarshi: bitta manzilga daqiqada bitta kod */
+    const wait = otpGuard.resendWaitSeconds(user.email);
+    if (wait) {
+      return res
+        .status(429)
+        .json({ error: `Yangi kodni ${wait} soniyadan keyin so'rashingiz mumkin.` });
+    }
+
     const otp = generateOTP();
     const expires = new Date(Date.now() + 10 * 60 * 1000);
 
@@ -397,6 +418,8 @@ router.post("/resend-otp", async (req, res) => {
     if (!sent.ok) {
       return res.status(sent.status).json({ error: sent.error });
     }
+    otpGuard.markOtpSent(user.email);
+    otpGuard.clearOtpFailures(user.email);
 
     return res.json({
       message: sent.viaConsole
