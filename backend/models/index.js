@@ -271,6 +271,8 @@ const DailyStatSchema = new mongoose.Schema({
     mistral: { type: Number, default: 0 },
     openai: { type: Number, default: 0 },
     cohere: { type: Number, default: 0 },
+    // 2026-09-26: API'siz lokal AI javoblari (services/localAI)
+    local: { type: Number, default: 0 },
   },
 });
 

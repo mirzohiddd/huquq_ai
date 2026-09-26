@@ -59,6 +59,8 @@ const NAV_USER = [
   // hujjat va unga saytda alohida sahifa ajratilgan.
   { to: "/constitution", key: "nav_constitution" },
   { to: "/library", key: "feat_library_title" },
+  // Protsessual kodekslar alohida sahifada (pages/Legislation.jsx)
+  { to: "/legislation", key: "nav_legislation" },
 ];
 
 export default function SiteLayout() {
@@ -607,6 +609,9 @@ export default function SiteLayout() {
               </li>
               <li>
                 <Link to="/library">{t.feat_library_title}</Link>
+              </li>
+              <li>
+                <Link to="/legislation">{t.legis_title}</Link>
               </li>
             </ul>
           </nav>

@@ -63,7 +63,7 @@ Har qanday faylni o'zgartirishdan oldin: 1) kodni to'liq o'qib chiq, 2) qanday i
 
 ## Loyiha holati va tarix
 
-To'liq texnik tarix (66 ta yozuv: nima o'zgardi, nima uchun, nimaga tegilmadi)
+To'liq texnik tarix (67 ta yozuv: nima o'zgardi, nima uchun, nimaga tegilmadi)
 `loyiha-tarixi` skillida. **Mavjud funksiyani o'zgartirishdan yoki nosozlikni
 tekshirishdan OLDIN uni yuklang** — aks holda allaqachon hal qilingan muammo
 qaytadan takrorlanadi.

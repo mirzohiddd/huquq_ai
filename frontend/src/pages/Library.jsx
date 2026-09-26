@@ -20,9 +20,15 @@ import { scrollToTop } from "../utils/smoothScroll";
  * Qonunlar kutubxonasi — kodekslar ro'yxati va ular ichidagi moddalar.
  * Ma'lumot backenddagi LegalChunk bazasidan olinadi (lex.uz'dan yuklangan,
  * har 24 soatda avtomatik yangilanadi).
+ *
+ * `codes` berilsa — faqat shu kodekslar (shu tartibda) ko'rsatiladi.
+ * "Qonunchilik hujjatlari" sahifasi (Legislation.jsx) aynan shu
+ * komponentni protsessual kodekslar ro'yxati bilan ishlatadi — mantiq
+ * nusxalanmadi, shuning uchun qidiruv/tarjima/modda ochish bir xil.
  */
-export default function Library() {
+export default function Library({ codes = null, title, sub } = {}) {
   const { t, lang } = useLang();
+  const heroTitle = title || t.feat_library_title;
 
   const [laws, setLaws] = useState(null);
   const [activeLaw, setActiveLaw] = useState(null); // { code, name, url }
@@ -49,7 +55,14 @@ export default function Library() {
   useEffect(() => {
     api
       .get("/library/laws")
-      .then(({ data }) => setLaws(data.laws || []))
+      .then(({ data }) => {
+        const list = data.laws || [];
+        setLaws(
+          codes
+            ? codes.map((c) => list.find((l) => l.code === c)).filter(Boolean)
+            : list,
+        );
+      })
       .catch(() => setLaws([]));
   }, [lang]);
 
@@ -157,7 +170,7 @@ export default function Library() {
   return (
     <>
       {/* Faqat ro'yxatdan o'tganlar uchun — indekslanmaydi */}
-      <Seo title={t.seo_library_title} noindex />
+      <Seo title={title || t.seo_library_title} noindex />
       {/* ⚠️ `shared.container` ATAYLAB YO'Q — u kenglikni 1200px ga
           cheklardi va hero ekran chetiga yetib bormasdi. Kontent
           baribir 1200px chizig'ida qoladi (`.hero` ning padding'i). */}
@@ -176,17 +189,17 @@ export default function Library() {
         <header className={s.hero}>
           <div className={s.heroBody}>
             <span className={s.badge}>
-              <LibraryIcon size={15} /> {t.feat_library_title}
+              <LibraryIcon size={15} /> {heroTitle}
             </span>
 
-            <h1 className={s.heroTitle}>{t.feat_library_title}</h1>
+            <h1 className={s.heroTitle}>{heroTitle}</h1>
 
             {/* Oltin bezak: chiziq — romb — chiziq (Testlar sahifasidagi kabi) */}
             <span className={s.ornament} aria-hidden="true">
               <i /> <b /> <i />
             </span>
 
-            <p className={s.heroSub}>{t.library_sub}</p>
+            <p className={s.heroSub}>{sub || t.library_sub}</p>
 
             <div className={s.perks}>
               {[

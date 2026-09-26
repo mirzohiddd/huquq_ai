@@ -8,3 +8,5 @@ uploads
 coverage
 .vscode
 .expo
+# Lokal AI korpusi snapshot (services/localAI/lawIndex.js)
+.cache

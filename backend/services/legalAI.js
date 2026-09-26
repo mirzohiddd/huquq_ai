@@ -11,6 +11,7 @@ const Anthropic = require("@anthropic-ai/sdk");
 const https = require("https");
 const { searchWeb, formatSearchContext } = require("./webSearch");
 const { retrieveLegalContext } = require("./legalRetrieval");
+const { isLocalMode, localLegalAnswer } = require("./localAI");
 const {
   isFileRequest,
   fileRequestReply,
@@ -1359,6 +1360,13 @@ async function getLegalAdvice(
      boshqa mavzu (salomlashish, dori, dasturlash) rad etiladi. */
   const lenientTopic = inDialog || opts.fromVoice === true;
   if (!imageBase64 && !isLegalQuestion(msg, lenientTopic)) {
+    /* Lokal rejimda kalit so'z filtri yakuniy hakam emas: u protsessual
+       atamalarni ("himoyachi", "apellyatsiya") bilmaydi. Savol bazadan
+       QAT'IY mezon bilan qidiriladi — aniq mos modda bo'lsagina javob. */
+    if (isLocalMode() && !/^(salom|assalom|привет|hello|hi|hey)\b/i.test(msg)) {
+      const local = await localLegalAnswer({ msg, lang: detectedLang, strict: true });
+      if (local.found) return local;
+    }
     return { answer: offTopicReply(detectedLang, msg), category: "off_topic" };
   }
 
@@ -1384,6 +1392,21 @@ async function getLegalAdvice(
       : msg;
   const category = detectCategory(topicText);
   const uzCategory = UZ_CAT[category] || "boshqa";
+
+  // 5.1. LOKAL REJIM (standart): javob FAQAT saytdagi qonun matnlari va
+  // tayyor savol-javoblardan yig'iladi, hech qanday tashqi API
+  // chaqirilmaydi — services/localAI/index.js. `AI_MODE=llm` bo'lsa
+  // quyidagi avvalgi LLM zanjiri o'zgarishsiz ishlaydi.
+  if (isLocalMode()) {
+    return localLegalAnswer({
+      msg,
+      prevUserText,
+      lang: detectedLang,
+      codes: CATEGORY_TO_LAWCODE[category] || null,
+      category: uzCategory,
+      hasImage: !!imageBase64,
+    });
+  }
 
   // 6. Hujjat modemi? MUHIM: faqat mavzu so'zi (masalan "shartnoma")
   // borligi YETARLI EMAS — aks holda "shartnomani qanday bekor qilaman"

@@ -458,6 +458,10 @@ mongoose
        kontent AI kutmasdan, keshdan bir zumda kelishi uchun. */
     require("./services/translationWarmup").startWarmup();
 
+    /* Lokal AI (API'siz) qidiruv indeksini fonda tayyorlash — birinchi
+       savol berilganda foydalanuvchi indeks qurilishini kutmasligi uchun. */
+    require("./services/localAI").warmLawIndex();
+
     seedLawSources()
       .then(() => ensureVectorIndex())
       .then(

@@ -15,6 +15,7 @@ const AuthPages = lazy(() => import("./pages/AuthPages"));
 const VoiceChat = lazy(() => import("./pages/VoiceChat"));
 const Library = lazy(() => import("./pages/Library"));
 const Constitution = lazy(() => import("./pages/Constitution"));
+const Legislation = lazy(() => import("./pages/Legislation"));
 const Lessons = lazy(() => import("./pages/Lessons"));
 const Tests = lazy(() => import("./pages/Tests"));
 const Legal = lazy(() => import("./pages/Legal"));
@@ -108,6 +109,14 @@ function AppRoutes() {
           element={
             <RequireAuth>
               <Library />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/legislation"
+          element={
+            <RequireAuth>
+              <Legislation />
             </RequireAuth>
           }
         />

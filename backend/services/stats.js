@@ -24,6 +24,7 @@ async function recordStat(source, category, provider) {
       "mistral",
       "openai",
       "cohere",
+      "local", // API'siz lokal AI (services/localAI)
     ].includes(provider)
       ? provider
       : null;
