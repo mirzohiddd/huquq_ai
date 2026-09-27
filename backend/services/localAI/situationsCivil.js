@@ -1,99 +1,10 @@
 "use strict";
 /**
- * HAYOTIY VAZIYATLAR — MEHNAT, QARZ, ISTE'MOLCHI, MEROS.
+ * HAYOTIY VAZIYATLAR — QARZ, ISTE'MOLCHI, MEROS.
  * Tuzilma va qoidalar — situationsFamily.js izohida.
  */
 
 module.exports = [
-  {
-    id: "dismissal",
-    match: (t) =>
-      /ishdan (boshat|hayda|chiqar|ketkaz|olib tashla)|boshatib yubor|haydab yubor|увол/.test(t),
-    title: { uz: "Ishdan bo'shatish", ru: "Увольнение с работы" },
-    summary: {
-      uz:
-        "Ish beruvchi mehnat shartnomasini faqat qonunda ko'rsatilgan asoslar bo'yicha va belgilangan " +
-        "tartibda bekor qila oladi. Asossiz bo'shatilgan xodim ishga tiklanishi mumkin.",
-      ru:
-        "Работодатель может расторгнуть трудовой договор только по основаниям, указанным в законе, и в " +
-        "установленном порядке. Незаконно уволенный работник может быть восстановлен на работе.",
-    },
-    pins: [["MK", "161"], ["MK", "163"], ["MK", "561"], ["MK", "560"]],
-    codes: ["MK"],
-    terms: "mehnat shartnomasini bekor qilish ish beruvchining tashabbusi ishga tiklash",
-    steps: {
-      uz: [
-        "Ish beruvchidan bo'shatish to'g'risidagi buyruqning nusxasini va bo'shatish asosini yozma talab qiling.",
-        "Oxirgi hisob-kitob (ish haqi, foydalanilmagan ta'til kompensatsiyasi) to'liq to'langanini tekshiring.",
-        "Bo'shatish asossiz deb hisoblasangiz — mehnat nizolari komissiyasiga yoki to'g'ridan-to'g'ri sudga murojaat qiling. Murojaat muddati cheklangan, shuning uchun kechiktirmang.",
-      ],
-      ru: [
-        "Потребуйте у работодателя копию приказа об увольнении и письменное основание увольнения.",
-        "Проверьте, что окончательный расчёт (зарплата, компенсация за неиспользованный отпуск) выплачен полностью.",
-        "Если увольнение незаконно — обратитесь в комиссию по трудовым спорам или сразу в суд. Срок обращения ограничен, не откладывайте.",
-      ],
-    },
-  },
-  {
-    id: "unpaid_salary",
-    match: (t) =>
-      /(ish haqi|oylik|maosh|зарплат|заработн)/.test(t) &&
-      /(bermay|tolamay|tolanmay|kechik|ushlab|bermadi|tolamadi|не плат|не выплач|задерж)/.test(t),
-    title: { uz: "Ish haqi to'lanmayapti", ru: "Не выплачивают зарплату" },
-    summary: {
-      uz:
-        "Ish haqi qonunda belgilangan muddatlarda to'lanishi shart. Kechiktirilgani uchun ish beruvchi " +
-        "moddiy javobgar bo'ladi.",
-      ru:
-        "Заработная плата должна выплачиваться в установленные законом сроки. За задержку работодатель " +
-        "несёт материальную ответственность.",
-    },
-    pins: [["MK", "253"], ["MK", "333"], ["MK", "244"], ["MK", "560"]],
-    codes: ["MK"],
-    terms: "ish haqini toʻlash muddatlari kechiktirganlik uchun javobgarlik",
-    steps: {
-      uz: [
-        "Ish beruvchiga qarzdorlikni to'lash talabi bilan yozma ariza bering va nusxasini saqlang.",
-        "Mehnat shartnomasi, hisob-varaqalar va bank ko'chirmalarini dalil sifatida yig'ing.",
-        "To'lanmasa — mehnat nizolari komissiyasiga, davlat mehnat inspeksiyasiga yoki sudga murojaat qiling.",
-      ],
-      ru: [
-        "Подайте работодателю письменное требование о выплате задолженности и сохраните копию.",
-        "Соберите доказательства: трудовой договор, расчётные листки, банковские выписки.",
-        "Если не выплатят — обратитесь в комиссию по трудовым спорам, государственную инспекцию труда или суд.",
-      ],
-    },
-  },
-  {
-    id: "employment_contract",
-    match: (t) =>
-      /mehnat shartnoma|ishga (kir|qabul|joylash)|трудов\S* договор|устро\S* на работу/.test(t) &&
-      !/bekor|boshat|hayda|увол|расторг/.test(t),
-    title: { uz: "Mehnat shartnomasi", ru: "Трудовой договор" },
-    summary: {
-      uz:
-        "Mehnat shartnomasi — xodim va ish beruvchi o'rtasidagi kelishuv. U yozma shaklda tuziladi, " +
-        "unda ish joyi, lavozim, ish haqi va boshqa majburiy shartlar ko'rsatiladi.",
-      ru:
-        "Трудовой договор — соглашение между работником и работодателем. Он заключается в письменной " +
-        "форме и содержит место работы, должность, оплату труда и другие обязательные условия.",
-    },
-    pins: [["MK", "103"], ["MK", "104"], ["MK", "106"], ["MK", "107"]],
-    codes: ["MK"],
-    terms: "mehnat shartnomasining shakli mazmuni rekvizitlari",
-    steps: {
-      uz: [
-        "Ishni boshlashdan oldin mehnat shartnomasi yozma tuzilishini talab qiling va bir nusxasini oling.",
-        "Shartnomada ish joyi, lavozim (mehnat vazifasi), ish haqi, ish vaqti va boshlanish sanasi aniq yozilganini tekshiring.",
-        "Qonundagi kafolatlaringizni kamaytiradigan shartlar haqiqiy emas — bunday shart bo'lsa, imzolashdan oldin o'zgartirishni so'rang.",
-      ],
-      ru: [
-        "До начала работы потребуйте заключить трудовой договор в письменной форме и получите свой экземпляр.",
-        "Проверьте, что в договоре точно указаны место работы, должность (трудовая функция), оплата, режим работы и дата начала.",
-        "Условия, ухудшающие ваши гарантии по закону, недействительны — попросите изменить их до подписания.",
-      ],
-    },
-  },
   {
     id: "debt",
     match: (t) =>

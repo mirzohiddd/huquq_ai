@@ -34,6 +34,12 @@ const { warmLawIndex } = require("./lawIndex");
    beriladi — bitta tasodifiy so'z ("ob-havo") javobga asos bo'lmaydi. */
 const STRICT_COVERAGE = 0.67;
 
+/* "Qaysi moddaga asoslanding?", "isbot keltir" — o'zi mavzusiz davom savoli.
+   Uning javobi OLDINGI savol vaziyatining moddalari bo'lishi kerak; avval u
+   alohida qidirilib, "modda"/"asos" so'zlariga mos tasodifiy modda chiqardi. */
+const FOLLOW_UP =
+  /qaysi (modda|kodeks|qonun)|asoslan|isbot|dalil|manba|qayerda yozilgan|какая статья|какой закон|на основании|основани|докаж|источник/i;
+
 /**
  * @param {{ msg: string, prevUserText?: string, lang?: string,
  *           codes?: string|string[]|null, category?: string, hasImage?: boolean,
@@ -66,7 +72,10 @@ async function localLegalAnswer({
   try {
     // Hayotiy vaziyat ("erim urdi", "ishdan haydashdi") — kalit so'z
     // filtri uni rad etgan bo'lsa ham (strict) bu aniq huquqiy savol.
-    const situation = detectSituation(query);
+    let situation = detectSituation(query);
+    if (!situation && prevUserText && (FOLLOW_UP.test(msg) || tokenize(query).length < 4)) {
+      situation = detectSituation(prevUserText);
+    }
     if (situation) {
       const { hits, state, terms } = await searchLaws(`${query} ${situation.terms}`, {
         lang,

@@ -22,6 +22,7 @@ const { normalize, uzCyrToLatin, isUzCyrillic } = require("./text");
 
 const SITUATIONS = [
   ...require("./situationsFamily"),
+  ...require("./situationsWork"),
   ...require("./situationsCivil"),
   ...require("./situationsCrime"),
 ];
