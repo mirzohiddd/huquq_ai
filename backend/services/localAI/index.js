@@ -15,14 +15,15 @@
  *
  * Hech qanday LLM, embedding yoki boshqa tashqi xizmat chaqirilmaydi.
  *
- * Rejim `.env` dagi `AI_MODE` bilan tanlanadi:
- *   AI_MODE=local (standart) — shu lokal tizim;
- *   AI_MODE=llm             — avvalgi LLM zanjiri (legalAI.js, o'zgarmagan).
- * Eski yo'l O'CHIRILMADI — kerak bo'lsa bitta o'zgaruvchi bilan qaytadi.
+ * 2026-09-27: chat uchun YAGONA yo'l. Avvalgi `AI_MODE=llm` almashtirgichi
+ * va chatning LLM zanjiri foydalanuvchi talabi bilan olib tashlandi
+ * ("API'larni butunlay olib tashla"). Kundalik tildagi savollar
+ * ("meni erim urdi") endi hayotiy vaziyat sifatida taniladi — situations.js.
  */
 const { searchLaws } = require("./search");
 const { matchQa } = require("./qaMatch");
-const { composeAnswer, localText } = require("./compose");
+const { composeAnswer, composeSituation, localText } = require("./compose");
+const { detectSituation, pinnedDocs } = require("./situations");
 const { tokenize, isUzCyrillic, uzCyrToLatin } = require("./text");
 const { warmLawIndex } = require("./lawIndex");
 
@@ -32,10 +33,6 @@ const { warmLawIndex } = require("./lawIndex");
    savol so'zlarining KO'PCHILIGI (va kamida 2 tasi) moddada topilsagina
    beriladi — bitta tasodifiy so'z ("ob-havo") javobga asos bo'lmaydi. */
 const STRICT_COVERAGE = 0.67;
-
-function isLocalMode() {
-  return String(process.env.AI_MODE || "local").toLowerCase() !== "llm";
-}
 
 /**
  * @param {{ msg: string, prevUserText?: string, lang?: string,
@@ -67,7 +64,22 @@ async function localLegalAnswer({
   }
 
   try {
-    const qa = strict ? null : matchQa(query, lang);
+    // Hayotiy vaziyat ("erim urdi", "ishdan haydashdi") — kalit so'z
+    // filtri uni rad etgan bo'lsa ham (strict) bu aniq huquqiy savol.
+    const situation = detectSituation(query);
+    if (situation) {
+      const { hits, state, terms } = await searchLaws(`${query} ${situation.terms}`, {
+        lang,
+        codes: situation.codes,
+        onlyCodes: true,
+        limit: 6,
+      });
+      const pinned = pinnedDocs(situation, state);
+      const { answer, found } = composeSituation({ situation, pinned, hits, state, terms, lang });
+      return { answer, category, provider: "local", found };
+    }
+
+    const qa = strict ? null : matchQa(query, lang, codes);
     const { hits, state, terms } = await searchLaws(query, { lang, codes, limit: 6 });
     const opts = strict ? { minCoverage: STRICT_COVERAGE, minMatched: 2 } : {};
     const { answer, found } = composeAnswer({ hits, state, terms, qa, lang, ...opts });
@@ -78,4 +90,4 @@ async function localLegalAnswer({
   }
 }
 
-module.exports = { isLocalMode, localLegalAnswer, warmLawIndex };
+module.exports = { localLegalAnswer, warmLawIndex };

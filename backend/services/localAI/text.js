@@ -23,9 +23,15 @@ const UZ_CYR = {
   қ: "q", ғ: "g", ҳ: "h",
 };
 
-/** O'zbek kirill yozuvi (ў/қ/ғ/ҳ harflari bo'yicha tanib olinadi). */
+/* ў/қ/ғ/ҳ harflarisiz yozilgan o'zbekcha kirill ("Эрим мени урди") —
+   ko'p uchraydigan o'zbekcha so'zlar bo'yicha. ⚠️ JS'da `\b` kirillni
+   tanimaydi, shuning uchun chegara bo'sh joy/tinish belgisi bilan. */
+const UZ_CYR_WORDS =
+  /(^|[\s,.!?])(мени|менга|менинг|мендан|эрим|хотиним|нима|учун|билан|керак|бўлса|қандай|қилай|ишдан|бермаяпти|урди|уради)(?=$|[\s,.!?])/i;
+
+/** O'zbek kirill yozuvi (ў/қ/ғ/ҳ harflari yoki o'zbekcha so'zlar bo'yicha). */
 function isUzCyrillic(text = "") {
-  return /[ўқғҳЎҚҒҲ]/.test(text);
+  return /[ўқғҳЎҚҒҲ]/.test(text) || UZ_CYR_WORDS.test(text);
 }
 
 function uzCyrToLatin(text = "") {
@@ -59,6 +65,11 @@ const STOP = new Set(
     "boladi bolgan bolib agar hali qilib qilish qiladi kerakmi mumkinmi " +
     "tushuntir tushuntirib savol javob salom rahmat iltimos endi keyin oldin " +
     "huquq huquqi huquqiy qonun qonuni qonunda qonunchilik " +
+    // So'roq so'zining shakllari va yordamchi fe'llar ("etadi", "qilinadi") —
+    // ular qo'shimchasi bilan to'xtatuv ro'yxatidan o'tib ketib, "qachon…",
+    // "eta…" kabi tasodifiy so'zlarga mos kelardi.
+    "qachondan qachongacha qanaqa qancha qanday qilib etadi etiladi etib etish " +
+    "etgan etilgan etilishi etsa qilinadi qilingan qilindi boladimi " +
     "modda moddasi moddasiga kodeks kodeksi kodeksiga respublikasi " +
     "ozbekiston ozbekistonda davlat bugun ertaga kecha hozir " +
     "и или но а для с со на в во по из у к о об от до за при мне меня мой " +

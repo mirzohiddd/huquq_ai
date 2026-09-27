@@ -17,7 +17,7 @@
  * o'ylab topilmaydi — "topilmadi" deyiladi (compose.js).
  */
 const { getIndex } = require("./lawIndex");
-const { queryPrefixes, distance } = require("./text");
+const { queryPrefixes, distance, tokenize } = require("./text");
 const { expandQuery } = require("../legalRetrievalQuery");
 const { parseArticleNumbers, parseLawCodes } = require("../articleLookup");
 
@@ -25,6 +25,7 @@ const K1 = 1.2;
 const B = 0.75;
 const CATEGORY_BOOST = 1.35;
 const MAX_EXPANSION = 60; // bitta prefiksga mos keladigan so'zlar chegarasi
+const TITLE_BONUS = 1.5;
 
 /* Jinoiy mavzudagi savol ko'pincha JARAYON haqida bo'ladi ("ushlanganning
    huquqlari", "himoyachi") — ustunlik protsessual va ijro kodekslariga ham
@@ -80,6 +81,20 @@ function queryGroups(query, idx) {
   return { groups, ownCount: own.length };
 }
 
+/* SARLAVHA MOSLIGI (2026-09-27): savol so'zlari modda SARLAVHASIDA qancha
+   ko'p va sarlavha qanchalik qisqa bo'lsa, modda shuncha aniq mos keladi.
+   Faqat matn chastotasi bilan "Himoyachi qachondan ishtirok etadi?"
+   savoliga "Jamoat himoyachisi" kabi yon moddalar birinchi chiqardi,
+   "Himoyachi" moddasining o'zi esa beshinchi o'rinda edi. */
+function titleFit(doc, own, useRu, ownCount) {
+  const key = useRu ? "_ttRu" : "_tt";
+  if (!doc[key]) doc[key] = new Set(tokenize(useRu ? doc.titleRu : doc.title));
+  const tt = doc[key];
+  if (!tt.size || !ownCount) return 0;
+  const hit = own.filter((g) => g.terms.some((t) => tt.has(t))).length;
+  return (hit / ownCount) * Math.min(1, hit / tt.size);
+}
+
 function directHits(query, state, fallbackCodes) {
   const numbers = parseArticleNumbers(query);
   if (!numbers.length) return [];
@@ -97,10 +112,11 @@ function directHits(query, state, fallbackCodes) {
 
 /**
  * @param {string} query
- * @param {{ lang?: string, codes?: string[]|string|null, limit?: number }} opts
+ * @param {{ lang?: string, codes?: string[]|string|null, limit?: number,
+ *           onlyCodes?: boolean }} opts
  * @returns {Promise<{ hits: object[], state: object, terms: string[] }>}
  */
-async function searchLaws(query, { lang = "uz", codes = null, limit = 3 } = {}) {
+async function searchLaws(query, { lang = "uz", codes = null, limit = 3, onlyCodes = false } = {}) {
   const state = await getIndex();
   const baseCodes = (Array.isArray(codes) ? codes : [codes]).filter(Boolean);
   const catCodes = [...baseCodes, ...baseCodes.flatMap((c) => RELATED[c] || [])];
@@ -139,14 +155,28 @@ async function searchLaws(query, { lang = "uz", codes = null, limit = 3 } = {}) 
   }
 
   const ranked = [];
+  const own = groups.filter((g) => g.own);
   for (const [doc, raw] of scores) {
     const coverage = ownCount ? (matched.get(doc) || 0) / ownCount : 0;
-    let score = raw * (0.4 + coverage);
+    let score = raw * (1 + TITLE_BONUS * titleFit(state.docs[doc], own, useRu, ownCount)) * (0.4 + coverage);
     if (catCodes.includes(state.docs[doc].lawCode)) score *= CATEGORY_BOOST;
     ranked.push({ docIdx: doc, score, coverage, matched: matched.get(doc) || 0 });
   }
   ranked.sort((a, b) => b.score - a.score);
-  return { hits: ranked.slice(0, limit), state, terms };
+
+  /* ⚠️ Mavzu kodeksidan TASHQARIDAGI moddalar (2026-09-27): "xotinim bilan
+     ajrashmoqchiman" savoliga Mehnat kodeksining ta'til moddasi chiqardi —
+     unda "xotin" va "ajrashgan" so'zlari bor. Ustunlik koeffitsienti buni
+     to'xtata olmadi. Endi: vaziyat aniq bo'lsa (`onlyCodes`) — faqat o'sha
+     kodekslar; mavzu kodeksida savolga yaxshi mos modda bor bo'lsa —
+     boshqa kodekslar natijadan chiqariladi. */
+  const inCat = (r) => catCodes.includes(state.docs[r.docIdx].lawCode);
+  let pool = ranked;
+  if (onlyCodes && catCodes.length) pool = ranked.filter(inCat);
+  else if (catCodes.length && ranked.some((r) => inCat(r) && r.coverage >= 0.5)) {
+    pool = ranked.filter(inCat);
+  }
+  return { hits: pool.slice(0, limit), state, terms };
 }
 
 module.exports = { searchLaws };

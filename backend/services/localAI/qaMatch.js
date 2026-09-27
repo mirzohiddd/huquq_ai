@@ -33,12 +33,19 @@ function prepare() {
 /**
  * @returns {null | { q: object, score: number }} eng mos tayyor savol
  */
-function matchQa(query, lang = "uz") {
+function matchQa(query, lang = "uz", codes = null) {
   const qTokens = new Set(queryPrefixes(query));
   if (qTokens.size < 2) return null;
 
+  /* Savol mavzusi (kodeksi) ma'lum bo'lsa — faqat shu kodeksga tayanadigan
+     tayyor javob olinadi. Aks holda "mehnat shartnomasi qanday tuziladi"
+     savoliga umumiy (fuqarolik) shartnoma haqidagi javob tanlanardi. */
+  const wanted = (Array.isArray(codes) ? codes : [codes]).filter(Boolean);
+  const fits = (item) => !wanted.length || item.q.refs.some((r) => wanted.includes(r.code));
+
   let best = null;
   for (const item of prepare()) {
+    if (!fits(item)) continue;
     const target = lang === "ru" && /[а-яё]/i.test(query) ? item.ru : item.uz;
     if (!target.size) continue;
     let overlap = 0;

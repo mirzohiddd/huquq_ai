@@ -18,11 +18,13 @@ const EXCERPT_MAX = 700;
 const DIRECT_MAX = 1800;
 const MIN_COVERAGE = 0.5;
 const RELATIVE_CUTOFF = 0.45;
+const SITUATION_DOCS = 4;
 
 const T = {
   uz: {
     intro: "Savolingiz bo'yicha sayt bazasidagi qonun hujjatlaridan quyidagilar topildi:",
     qaTitle: "Qisqa javob",
+    stepsTitle: "Nima qilish kerak",
     lawTitle: "Qonunchilikda nima deyilgan",
     article: "modda",
     more:
@@ -42,6 +44,7 @@ const T = {
   ru: {
     intro: "По вашему вопросу в законодательной базе сайта найдено следующее:",
     qaTitle: "Краткий ответ",
+    stepsTitle: "Что делать",
     lawTitle: "Что говорит закон",
     article: "статья",
     more: "📖 Полный текст статей — в разделах «Законодательные акты» и «Библиотека законов» на сайте.",
@@ -104,6 +107,36 @@ function renderDoc(doc, n, lang, terms, direct, L) {
 }
 
 /**
+ * Hayotiy vaziyat tanilganda (situations.js): vaziyat mazmuni → amaliy
+ * qadamlar → vaziyatga bevosita tegishli moddalar (`pinned`) va shu
+ * kodekslar ichidan topilgan qo'shimcha moddalar.
+ */
+function composeSituation({ situation, pinned, hits, state, terms, lang }) {
+  const L = pickLang(lang);
+  const pick = (v) => (lang === "ru" ? v.ru : v.uz);
+  const top = hits[0]?.score || 0;
+  const extra = hits
+    .filter((h) => h.coverage >= MIN_COVERAGE && h.score >= top * RELATIVE_CUTOFF)
+    .map((h) => h.docIdx)
+    .filter((i) => !pinned.includes(i));
+  const docs = [...pinned, ...extra].slice(0, SITUATION_DOCS);
+
+  const steps = pick(situation.steps)
+    .map((st, i) => `${i + 1}. ${st}`)
+    .join("\n");
+  const parts = [
+    `**${pick(situation.title)}**\n${pick(situation.summary)}`,
+    `**${L.stepsTitle}:**\n${steps}`,
+  ];
+  if (docs.length) {
+    parts.push(`**${L.lawTitle}:**`);
+    docs.forEach((d, i) => parts.push(renderDoc(state.docs[d], i + 1, lang, terms, false, L)));
+  }
+  parts.push(L.more, L.note);
+  return { answer: parts.join("\n\n"), found: true };
+}
+
+/**
  * @param {{ hits: object[], state: object, terms: string[], qa: object|null,
  *           lang: string, minCoverage?: number, minMatched?: number }} p
  * @returns {{ answer: string, found: boolean }}
@@ -145,4 +178,4 @@ function composeAnswer({ hits, state, terms, qa, lang, minCoverage = MIN_COVERAG
   return { answer: parts.join("\n\n"), found: true };
 }
 
-module.exports = { composeAnswer, localText: pickLang };
+module.exports = { composeAnswer, composeSituation, localText: pickLang };

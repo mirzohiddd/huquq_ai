@@ -10,8 +10,7 @@ const { GoogleGenAI } = require("@google/genai");
 const Anthropic = require("@anthropic-ai/sdk");
 const https = require("https");
 const { searchWeb, formatSearchContext } = require("./webSearch");
-const { retrieveLegalContext } = require("./legalRetrieval");
-const { isLocalMode, localLegalAnswer } = require("./localAI");
+const { localLegalAnswer } = require("./localAI");
 const {
   isFileRequest,
   fileRequestReply,
@@ -1328,7 +1327,6 @@ async function getLegalAdvice(
   if (safety.status === "blocked") {
     return { answer: blockedReply(detectedLang), category: "blocked" };
   }
-  const hasCrime = safety.status === "redirected";
 
   // 2. Fayl/material yuborish so'rovi?
   // ⚠️ Bu tekshiruv "huquqiy savolmi?" dan OLDIN turadi: "dasturlarni
@@ -1363,18 +1361,14 @@ async function getLegalAdvice(
     /* Lokal rejimda kalit so'z filtri yakuniy hakam emas: u protsessual
        atamalarni ("himoyachi", "apellyatsiya") bilmaydi. Savol bazadan
        QAT'IY mezon bilan qidiriladi — aniq mos modda bo'lsagina javob. */
-    if (isLocalMode() && !/^(salom|assalom|привет|hello|hi|hey)\b/i.test(msg)) {
+    if (!/^(salom|assalom|привет|hello|hi|hey)\b/i.test(msg)) {
       const local = await localLegalAnswer({ msg, lang: detectedLang, strict: true });
       if (local.found) return local;
     }
     return { answer: offTopicReply(detectedLang, msg), category: "off_topic" };
   }
 
-  // 4. Intent & complexity
-  const intent = parseIntent(msg);
-  const format = responseFormat(intent.complexity);
-
-  // 5. Kategoriya
+  // 4. Kategoriya
   // Qisqa davom savolida ("muddati qancha?") mavzu joriy xabardan
   // aniqlanmaydi — shuning uchun oldingi savollar ham hisobga olinadi.
   // Aks holda mehnat nizosi haqidagi suhbatda AI Fuqarolik kodeksidan
@@ -1393,217 +1387,20 @@ async function getLegalAdvice(
   const category = detectCategory(topicText);
   const uzCategory = UZ_CAT[category] || "boshqa";
 
-  // 5.1. LOKAL REJIM (standart): javob FAQAT saytdagi qonun matnlari va
-  // tayyor savol-javoblardan yig'iladi, hech qanday tashqi API
-  // chaqirilmaydi — services/localAI/index.js. `AI_MODE=llm` bo'lsa
-  // quyidagi avvalgi LLM zanjiri o'zgarishsiz ishlaydi.
-  if (isLocalMode()) {
-    return localLegalAnswer({
-      msg,
-      prevUserText,
-      lang: detectedLang,
-      codes: CATEGORY_TO_LAWCODE[category] || null,
-      category: uzCategory,
-      hasImage: !!imageBase64,
-    });
-  }
-
-  // 6. Hujjat modemi? MUHIM: faqat mavzu so'zi (masalan "shartnoma")
-  // borligi YETARLI EMAS — aks holda "shartnomani qanday bekor qilaman"
-  // kabi oddiy INFORMATSION savollar ham noto'g'ri "yangi hujjat yoz"
-  // rejimiga tushib, RAG konteksti ishlatilmay qolardi. Endi hujjat turi
-  // so'zi BILAN BIRGA "yoz/tayyorla/tuz/yarat" kabi yaratish fe'li ham
-  // borligi talab qilinadi.
-  const isDoc =
-    /ariza|shikoyat|da['']vo|shartnoma|petitsiya|bildirishnoma/i.test(msg) &&
-    /yoz|tayyorla|tuz|yarat/i.test(msg);
-  const docType = isDoc ? detectDocType(msg) : null;
-
-  // 7. Qonun retrieval (RAG) — LegalChunk vektor bazasidan eng mos
-  // moddalarni topadi. Rasm tahlili va yangi hujjat yozishda kerak emas
-  // (ular alohida promptlar bilan ishlaydi) — faqat oddiy huquqiy savolda.
-  // Muvaffaqiyatsiz bo'lsa (masalan indeks hali yo'q) — jim davom etadi,
-  // so'rov bloklanmaydi, AI odatdagidek javob beradi.
-  // Qidiruv so'rovi: qisqa davom savolida ("qancha muddat ichida?") faqat
-  // shu matn bilan qidirilsa, vektor qidiruv mavzuni topa olmaydi —
-  // shuning uchun oldingi savol matni ham qo'shiladi (mavzu joriy
-  // xabardan aniq bo'lsa — o'zgarishsiz qoladi).
-  const ragQuery =
-    topicText === msg ? msg : `${prevUserText} ${msg}`.slice(-500);
-  const webContext =
-    !imageBase64 && !isDoc
-      ? (
-          await retrieveLegalContext(
-            ragQuery,
-            5,
-            CATEGORY_TO_LAWCODE[category] || null,
-          )
-        ).context
-      : "";
-
-  // 8. History
-  const relHistory = buildHistory(history);
-
-  // 9. Model
-  const model = selectModel(msg, category, !!imageBase64, isPro);
-
-  // 10. System prompt — rasm bo'lsa (hujjat generatsiyasidan ustun,
-  // chunki foydalanuvchi odatda MAVJUD hujjatni tahlil qilishni so'raydi)
-  // erkin tahlil prompti, aks holda hujjat yozish yoki oddiy maslahat prompti.
-  const sysPrompt = imageBase64
-    ? imageAnalysisSystemPrompt(detectedLang)
-    : isDoc
-      ? docSystemPrompt(docType)
-      : buildSystemPrompt({
-          lang: detectedLang,
-          category,
-          webContext,
-          format,
-          intent,
-          hasCrime,
-          isPro,
-          explanatory: !needsAdvice(msg),
-        });
-
-  // 11. LLM
-  let rawAnswer = "";
-  const msgs = [
-    { role: "system", content: sysPrompt },
-    ...relHistory,
-    { role: "user", content: msg },
-  ];
-
-  /* ⚠️ ZANJIR QAYTA YOZILDI (2026-08-07) — "Texnik muammo" xatosining
-     ASOSIY SABABI shu yerda edi.
-
-     Avvalgi kod qattiq `if/else` zanjiri edi va u ISHLAYDIGAN
-     provayderni CHETLAB O'TARDI. Aniq misol (o'lchangan holat:
-     Claude 400 "credit balance too low", Gemini 429 "quota exceeded",
-     Cloudflare va Groq ishlaydi):
-       Pro foydalanuvchi → Claude ❌ → (fallback) Groq → kvota tugagan
-       bo'lsa ❌ → (oxirgi fallback) Gemini ❌ → "Texnik muammo".
-     Cloudflare TIRIK bo'lsa ham UMUMAN chaqirilmasdi, chunki u faqat
-     PRIMARY bo'lgandagina zanjirga kirardi.
-     Rasm tahlilida holat battar edi: primary Gemini ❌ → Groq (rasmni
-     KO'RMAYDI) → oxirgi shart `model.provider !== "gemini"` yolg'on
-     bo'lgani uchun darhol "Texnik muammo".
-
-     Endi — TARTIBLANGAN NOMZODLAR RO'YXATI: har bir provayder ko'pi
-     bilan bir marta sinaladi, ishlamagani keyingisiga o'tadi, kvota
-     xatosi bergani esa 15 daqiqaga o'chiriladi (yuqoridagi circuit
-     breaker) va keyingi so'rovlarda vaqt yo'qotilmaydi. */
-  const candidates = [];
-  const add = (name, fn, opts = {}) => {
-    if (!opts.enabled) return;
-    if (candidates.some((c) => c.name === name)) return; // takror bo'lmasin
-    if (!providerAvailable(name)) return; // cooldown'da
-    candidates.push({ name, fn });
-  };
-
-  const cfEnabled = !!(CF_ACCOUNT_ID && CF_API_TOKEN);
-  const claudeCall = () =>
-    callClaude(sysPrompt, relHistory, msg, imageBase64, imageMimeType);
-  const geminiCall = () =>
-    callGemini(sysPrompt, msg, relHistory, imageBase64, imageMimeType);
-  const cfCall = () => callCloudflare(msgs);
-  const groqCall = (m) => () => callGroq(msgs, m || model.model);
-  const mistralCall = () => callMistral(msgs);
-  const cohereCall = () => callCohere(msgs);
-  const openaiCall = () =>
-    callOpenAI(msgs, null, imageBase64, imageMimeType);
-
-  // 1) Avval `selectModel` tanlagani (Pro → Claude, rasm → Gemini, ...)
-  if (model.provider === "claude") add("claude", claudeCall, { enabled: !!anthropicClient });
-  else if (model.provider === "gemini") add("gemini", geminiCall, { enabled: !!geminiClient });
-  else if (model.provider === "cloudflare") add("cloudflare", cfCall, { enabled: cfEnabled });
-  else add("groq", groqCall(), { enabled: !!groqClient });
-
-  if (imageBase64) {
-    /* Rasm bo'lsa — faqat RASMNI KO'RA OLADIGAN provayderlar.
-       Groq/Cloudflare matn modellari rasmni umuman ko'rmaydi va
-       "rasmda nima bor?" degan savolga o'ylab topilgan javob berardi —
-       bu noto'g'ri javobdan ko'ra yomonroq. Shuning uchun ular bu
-       yerda ATAYLAB ro'yxatga qo'shilmaydi. */
-    add("gemini", geminiCall, { enabled: !!geminiClient });
-    add("claude", claudeCall, { enabled: !!anthropicClient });
-    // gpt-4o-mini rasmni KO'RADI — Gemini va Claude ishlamay qolganda
-    // rasm tahlili butunlay to'xtab qolmasligi uchun uchinchi imkoniyat.
-    add("openai", openaiCall, { enabled: !!OPENAI_API_KEY });
-  } else {
-    /* 2) Qolgan barcha matn provayderlari — bepullari oldinda.
-       Mistral Gemini'dan OLDINDA: Gemini bepul darajasi kuniga atigi
-       20 ta so'rov (juda tor), Mistral esa ancha keng — shu sabab
-       Gemini rasm uchun zaxirada qolgani ma'qul. Cohere eng oxirida
-       (o'zbek tilidagi sifati zaifroq — yuqoridagi izohga qarang). */
-    add("cloudflare", cfCall, { enabled: cfEnabled });
-    add("groq", groqCall("llama-3.3-70b-versatile"), { enabled: !!groqClient });
-    add("mistral", mistralCall, { enabled: !!MISTRAL_API_KEY });
-    add("gemini", geminiCall, { enabled: !!geminiClient });
-    /* OpenAI Claude'dan OLDINDA: `gpt-4o-mini` sezilarli arzon, ya'ni
-       zaxiraga tushilganda xarajat kamroq bo'ladi. Ikkalasi ham pullik,
-       shuning uchun bepul provayderlardan KEYIN turadi. */
-    add("openai", openaiCall, { enabled: !!OPENAI_API_KEY });
-    add("claude", claudeCall, { enabled: !!anthropicClient });
-    add("cohere", cohereCall, { enabled: !!COHERE_API_KEY });
-  }
-
-  let actualProvider = model.provider;
-  const failures = [];
-  for (const c of candidates) {
-    try {
-      rawAnswer = await withTimeout(c.fn(), LLM_TIMEOUT_MS, c.name);
-      if (rawAnswer && rawAnswer.trim()) {
-        actualProvider = c.name;
-        break;
-      }
-      // Bo'sh javob ham muvaffaqiyatsizlik — keyingisiga o'tamiz
-      failures.push(`${c.name}: bo'sh javob`);
-      rawAnswer = "";
-    } catch (err) {
-      failures.push(`${c.name}: ${String(err.message).slice(0, 100)}`);
-      markProviderDown(c.name, err);
-    }
-  }
-
-  if (!rawAnswer || !rawAnswer.trim()) {
-    console.error(
-      "Barcha AI provayderlar ishlamadi:",
-      failures.length ? failures.join(" | ") : "sozlangan provayder yo'q",
-    );
-    return {
-      answer:
-        {
-          uz: "Hozir AI xizmati vaqtincha band. Iltimos, bir necha daqiqadan so'ng qayta urinib ko'ring.",
-          ru: "Сервис AI временно перегружен. Пожалуйста, повторите попытку через несколько минут.",
-        }[detectedLang] || "Texnik muammo.",
-      category: uzCategory,
-      provider: null,
-    };
-  }
-
-  // Og'ir jinoyat ogohlantirish
-  if (hasCrime) {
-    const w = {
-      uz: "⚠️ Bu og'ir jinoyat mavzusi. Advokat bilan darhol maslahatlashing. Jimlik huquqingiz bor — advokatdan tashqari hech narsa aytmang.\n\n",
-      ru: "⚠️ Это серьёзная уголовная тема. Немедленно обратитесь к адвокату. Вы имеете право молчать.\n\n",
-    };
-    rawAnswer = (w[detectedLang] || w.uz) + rawAnswer;
-  }
-
-  // 12. Validate
-  const finalAnswer = validateAnswer(rawAnswer, msg);
-  if (!finalAnswer) {
-    return {
-      answer:
-        {
-          uz: "Javob yaratishda xatolik. Qayta yozing.",
-          ru: "Ошибка генерации. Переформулируйте.",
-        }[detectedLang] || "Xatolik.",
-      category: uzCategory,
-    };
-  }
-
-  return { answer: finalAnswer, category: uzCategory, provider: actualProvider };
+  // 5. JAVOB — FAQAT saytdagi qonun matnlari va tayyor savol-javoblardan
+  // (services/localAI). ⚠️ 2026-09-27: foydalanuvchi talabi bilan chatning
+  // LLM zanjiri (Claude/Groq/Gemini/Cloudflare/Mistral/OpenAI/Cohere) va
+  // `AI_MODE` almashtirgichi OLIB TASHLANDI — chat hech qanday tashqi API
+  // chaqirmaydi. Quyidagi provayder funksiyalari faqat `askStructured`
+  // (dars topshiriqlarini baholash) uchun qoldi.
+  return localLegalAnswer({
+    msg,
+    prevUserText,
+    lang: detectedLang,
+    codes: CATEGORY_TO_LAWCODE[category] || null,
+    category: uzCategory,
+    hasImage: !!imageBase64,
+  });
 }
 
 /* ═══════════════ SAVOL TURI: TUSHUNTIRISH yoki HARAKAT ═══════════════
