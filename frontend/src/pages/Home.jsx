@@ -350,7 +350,7 @@ export default function Home() {
                   <span className={s.featureIcon}>
                     <Icon size={22} />
                   </span>
-                  <h3>{f.title}</h3>
+                  <h2>{f.title}</h2>
                   <p>{f.desc}</p>
                 </div>
               );
@@ -446,7 +446,7 @@ export default function Home() {
       <div id="services">
         <div className={`${shared.pageHero} animate-fade-up`}>
           <div className={shared.container}>
-            <h1 className={shared.pageHeroTitle}>{t.services_title}</h1>
+            <h2 className={shared.pageHeroTitle}>{t.services_title}</h2>
             <p className={shared.pageHeroSub}>{t.hero_subtitle}</p>
           </div>
         </div>
@@ -497,7 +497,7 @@ export default function Home() {
       <div id="articles">
         <div className={`${shared.pageHero} animate-fade-up`}>
           <div className={shared.container}>
-            <h1 className={shared.pageHeroTitle}>{t.articles_title}</h1>
+            <h2 className={shared.pageHeroTitle}>{t.articles_title}</h2>
             <p className={shared.pageHeroSub}>{t.footer_desc}</p>
           </div>
         </div>
@@ -516,7 +516,7 @@ export default function Home() {
               ).map((a, i) => {
                 const Icon = ARTICLE_ICONS[i % ARTICLE_ICONS.length] || FileText;
                 return (
-                  <article
+                  <div
                     key={a.title}
                     className={`${articlesS.articleCard} animate-fade-up`}
                     style={{ animationDelay: `${(i % ARTICLES_PREVIEW) * 0.08}s` }}
@@ -529,7 +529,7 @@ export default function Home() {
                       <Icon size={24} />
                     </div>
                     <span className={articlesS.articleCat}>{a.category}</span>
-                    <h2>{a.title}</h2>
+                    <h3>{a.title}</h3>
                     <p>{a.excerpt}</p>
                     <div className={articlesS.articleFoot}>
                       <time className={articlesS.articleDate}>{a.date}</time>
@@ -543,7 +543,7 @@ export default function Home() {
                         {t.articles_read} <ArrowRight size={13} />
                       </span>
                     </div>
-                  </article>
+                  </div>
                 );
               })}
             </div>
@@ -567,7 +567,7 @@ export default function Home() {
       <div id="contact">
         <div className={`${shared.pageHero} animate-fade-up`}>
           <div className={shared.container}>
-            <h1 className={shared.pageHeroTitle}>{t.contact_title}</h1>
+            <h2 className={shared.pageHeroTitle}>{t.contact_title}</h2>
             <p className={shared.pageHeroSub}>{t.hero_subtitle}</p>
           </div>
         </div>

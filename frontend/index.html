@@ -14,13 +14,13 @@
     <meta name="keywords" content="huquq AI, yuridik maslahat O'zbekiston, onlayn yurist, O'zbekiston qonunchiligi, mehnat kodeksi, oila kodeksi, jinoyat kodeksi, fuqarolik kodeksi, huquqiy yordam onlayn, sun'iy intellekt yurist, lex.uz, huquqiy savol javob, юрист онлайн Узбекистан" />
     <meta name="author" content="Huquq AI" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-    <link rel="canonical" href="https://huquq-ai-xi.vercel.app/" />
+    <link rel="canonical" href="https://huquq-ai-teal.vercel.app/" />
 
     <!-- ── hreflang: bir manzil, ikki til (til localStorage da saqlanadi,
          shuning uchun ruscha variant ?lang=ru bilan ko'rsatiladi) ── -->
-    <link rel="alternate" hreflang="uz-UZ" href="https://huquq-ai-xi.vercel.app/" />
-    <link rel="alternate" hreflang="ru-UZ" href="https://huquq-ai-xi.vercel.app/?lang=ru" />
-    <link rel="alternate" hreflang="x-default" href="https://huquq-ai-xi.vercel.app/" />
+    <link rel="alternate" hreflang="uz-UZ" href="https://huquq-ai-teal.vercel.app/" />
+    <link rel="alternate" hreflang="ru-UZ" href="https://huquq-ai-teal.vercel.app/?lang=ru" />
+    <link rel="alternate" hreflang="x-default" href="https://huquq-ai-teal.vercel.app/" />
 
     <!-- ── GEO: xizmat qaysi hududga mo'ljallangani ── -->
     <meta name="geo.region" content="UZ-TK" />
@@ -35,9 +35,9 @@
     <meta property="og:locale:alternate" content="ru_RU" />
     <meta property="og:title" content="Huquq AI — O'zbekiston qonunchiligi bo'yicha AI huquqiy maslahatchi" />
     <meta property="og:description" content="Mehnat, oila, meros, yer va jinoyat huquqi bo'yicha savollaringizga qonun moddalariga asoslangan aniq javob oling." />
-    <meta property="og:url" content="https://huquq-ai-xi.vercel.app/" />
-    <meta property="og:image" content="https://huquq-ai-xi.vercel.app/og-image.jpg" />
-    <meta property="og:image:secure_url" content="https://huquq-ai-xi.vercel.app/og-image.jpg" />
+    <meta property="og:url" content="https://huquq-ai-teal.vercel.app/" />
+    <meta property="og:image" content="https://huquq-ai-teal.vercel.app/og-image.jpg" />
+    <meta property="og:image:secure_url" content="https://huquq-ai-teal.vercel.app/og-image.jpg" />
     <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -47,7 +47,7 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Huquq AI — O'zbekiston qonunchiligi bo'yicha AI huquqiy maslahatchi" />
     <meta name="twitter:description" content="Huquqiy savollaringizga sun'iy intellekt yordamida, qonun moddalariga tayanib javob oling." />
-    <meta name="twitter:image" content="https://huquq-ai-xi.vercel.app/og-image.jpg" />
+    <meta name="twitter:image" content="https://huquq-ai-teal.vercel.app/og-image.jpg" />
     <meta name="twitter:image:alt" content="Huquq AI — AI huquqiy maslahatchi" />
 
     <meta name="color-scheme" content="light" />
@@ -70,15 +70,71 @@
          bor — ba'zi tizimlar aynan o'sha katalogda qidiradi. -->
     <link rel="alternate" type="text/plain" href="/llms.txt" title="llms.txt" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <!-- Backend DNS/TLS oldindan: birinchi API so'rovi ~150 ms tezroq -->
     <link rel="preconnect" href="https://huquq-ai-7v7a.onrender.com" crossorigin />
     <link rel="dns-prefetch" href="https://huquq-ai-7v7a.onrender.com" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <!-- ── TEZLIK (2026-09-28, PageSpeed) ──
+         Shriftlar O'Z domenimizdan: Google Fonts CSS render'ni ~1 s bloklardi va
+         2 ta qo'shimcha ulanish talab qilardi. Playfair Display umuman
+         ishlatilmasdi — olib tashlandi. Faqat latin + latin-ext (o'zbek lotin,
+         ʻ belgisi); kirill uchun tizim shrifti ishlatiladi (Poppins'da kirill yo'q). -->
+    <link rel="preload" href="/fonts/poppins-400-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/poppins-600-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <style>
+@font-face{font-family:Poppins;font-style:normal;font-weight:300;font-display:swap;src:url(/fonts/poppins-300-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:Poppins;font-style:normal;font-weight:300;font-display:swap;src:url(/fonts/poppins-300-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/poppins-400-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/poppins-400-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:Poppins;font-style:normal;font-weight:500;font-display:swap;src:url(/fonts/poppins-500-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:Poppins;font-style:normal;font-weight:500;font-display:swap;src:url(/fonts/poppins-500-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/poppins-600-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/poppins-600-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/poppins-700-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/poppins-700-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+
+      /* App shell — faqat html.app-shell da ko'rinadi (yuqoridagi skript) */
+      .shell { display: none; }
+      html.app-shell .shell { display: block; }
+      .shell-nav { height: 68px; background: #0b1322; border-bottom: 1px solid rgba(201,149,58,.15); }
+      .shell-hero {
+        min-height: 100vh;
+        display: flex; flex-direction: column; justify-content: center;
+        background: linear-gradient(105deg, rgba(11,19,34,.94) 0%, rgba(11,19,34,.6) 55%, rgba(11,19,34,.3) 100%),
+          url("/hero-1600.webp") center/cover no-repeat;
+        font-family: Poppins, system-ui, sans-serif;
+      }
+      .shell-inner { max-width: 1200px; margin: 0 auto; padding: 100px 1.5rem 130px; width: 100%; box-sizing: border-box; }
+      .shell-hero h1 { font-size: clamp(28px, 4.5vw, 52px); color: #fff; font-weight: 700; line-height: 1.15; margin: 0 0 1.25rem; max-width: 620px; }
+      .shell-hero p { font-size: clamp(14px, 1.6vw, 17px); color: rgba(255,255,255,.72); line-height: 1.75; font-weight: 300; max-width: 520px; margin: 0; }
+      @media (max-width: 800px) {
+        .shell-hero { background: linear-gradient(105deg, rgba(11,19,34,.94) 0%, rgba(11,19,34,.6) 55%, rgba(11,19,34,.3) 100%), url("/hero-800.webp") center/cover no-repeat; }
+      }
+      @media (max-width: 768px) { .shell-nav { height: 60px; } }
+      @media (max-width: 420px) { .shell-nav { height: 56px; } }
+    </style>
+    <!-- Bosh sahifa hero rasmi (LCP) — HTML dan darhol topiladi. Ekran
+         kengligiga qarab bittasi yuklanadi; media qiymatlari Home.module.css
+         dagi .hero bilan AYNAN bir xil bo'lishi shart (aks holda ikkita rasm). -->
+    <script>
+      /* APP SHELL (2026-09-28, PageSpeed LCP): mehmon bosh sahifani o'zbek
+         tilida ochganda hero HTML'dan DARHOL chiziladi — React bo'lagi
+         yuklanishini kutmasdan. React ishga tushgach #root ichini o'zi
+         almashtiradi. Boshqa holatda (ichki sahifa, ruscha, login qilgan)
+         shell ko'rsatilmaydi — noto'g'ri matn bir lahza ham chiqmasin. */
+      try {
+        if (location.pathname === "/" && !localStorage.getItem("user") && localStorage.getItem("lang") !== "ru") {
+          document.documentElement.classList.add("app-shell");
+        }
+      } catch (e) {}
+      if (location.pathname === "/") {
+        [["/hero-800.webp", "(max-width: 800px)"], ["/hero-1600.webp", "(min-width: 801px)"]].forEach(function (h) {
+          var l = document.createElement("link");
+          l.rel = "preload"; l.as = "image"; l.type = "image/webp";
+          l.href = h[0]; l.media = h[1]; l.fetchPriority = "high";
+          document.head.appendChild(l);
+        });
+      }
+    </script>
 
     <!-- ── Structured data (schema.org) ──
          SEO: Google "huquqiy xizmat" deb tanib boyitilgan natija ko'rsatadi.
@@ -90,46 +146,46 @@
         "@graph": [
           {
             "@type": ["Organization", "LegalService"],
-            "@id": "https://huquq-ai-xi.vercel.app/#organization",
+            "@id": "https://huquq-ai-teal.vercel.app/#organization",
             "name": "Huquq AI",
             "legalName": "Huquq AI — huquqiy ta'lim platformasi",
-            "url": "https://huquq-ai-xi.vercel.app/",
-            "logo": {"@type": "ImageObject", "url": "https://huquq-ai-xi.vercel.app/logo.png", "width": 600, "height": 600},
-            "image": "https://huquq-ai-xi.vercel.app/og-image.jpg",
+            "url": "https://huquq-ai-teal.vercel.app/",
+            "logo": {"@type": "ImageObject", "url": "https://huquq-ai-teal.vercel.app/logo.png", "width": 600, "height": 600},
+            "image": "https://huquq-ai-teal.vercel.app/og-image.jpg",
             "email": "toxirovi82@gmail.com",
             "description": "O'zbekiston qonunchiligiga asoslangan sun'iy intellekt huquqiy maslahat va ta'lim platformasi. Har bir javob lex.uz dagi amaldagi 20 ta kodeks va Konstitutsiya matnidan olinadi.",
             "sameAs": ["https://t.me/mening_huquqlarim_bot", "https://www.instagram.com/tox1roff_18/"],
             "areaServed": {"@type": "Country", "name": "Uzbekistan"},
             "knowsLanguage": ["uz", "ru"],
             "serviceType": "AI huquqiy maslahat",
-            "publishingPrinciples": "https://huquq-ai-xi.vercel.app/metodologiya",
+            "publishingPrinciples": "https://huquq-ai-teal.vercel.app/metodologiya",
             "isAccessibleForFree": true,
             "knowsAbout": ["Mehnat huquqi", "Oila huquqi", "Meros huquqi", "Yer va ko'chmas mulk huquqi", "Iste'molchi huquqlari", "Jinoyat huquqi", "Fuqarolik huquqi", "Soliq huquqi", "Ma'muriy huquq", "Uy-joy huquqi"]
           },
           {
             "@type": "WebSite",
-            "@id": "https://huquq-ai-xi.vercel.app/#website",
-            "url": "https://huquq-ai-xi.vercel.app/",
+            "@id": "https://huquq-ai-teal.vercel.app/#website",
+            "url": "https://huquq-ai-teal.vercel.app/",
             "name": "Huquq AI",
             "inLanguage": ["uz", "ru"],
-            "publisher": {"@id": "https://huquq-ai-xi.vercel.app/#organization"},
+            "publisher": {"@id": "https://huquq-ai-teal.vercel.app/#organization"},
             "hasPart": [
-              {"@type": "CollectionPage", "name": "O'zbekiston qonunlari va kodekslari", "url": "https://huquq-ai-xi.vercel.app/qonunlar"},
-              {"@type": "CollectionPage", "name": "Huquqiy savollar va javoblar", "url": "https://huquq-ai-xi.vercel.app/savollar"},
-              {"@type": "AboutPage", "name": "Metodologiya va tahririy siyosat", "url": "https://huquq-ai-xi.vercel.app/metodologiya"}
+              {"@type": "CollectionPage", "name": "O'zbekiston qonunlari va kodekslari", "url": "https://huquq-ai-teal.vercel.app/qonunlar"},
+              {"@type": "CollectionPage", "name": "Huquqiy savollar va javoblar", "url": "https://huquq-ai-teal.vercel.app/savollar"},
+              {"@type": "AboutPage", "name": "Metodologiya va tahririy siyosat", "url": "https://huquq-ai-teal.vercel.app/metodologiya"}
             ]
           },
           {
             "@type": "WebApplication",
-            "@id": "https://huquq-ai-xi.vercel.app/#webapp",
+            "@id": "https://huquq-ai-teal.vercel.app/#webapp",
             "name": "Huquq AI",
-            "url": "https://huquq-ai-xi.vercel.app/",
+            "url": "https://huquq-ai-teal.vercel.app/",
             "applicationCategory": "LegalService",
             "applicationSubCategory": "AI huquqiy maslahatchi",
             "operatingSystem": "Web",
             "browserRequirements": "JavaScript yoqilgan zamonaviy brauzer",
             "inLanguage": ["uz", "ru"],
-            "provider": {"@id": "https://huquq-ai-xi.vercel.app/#organization"},
+            "provider": {"@id": "https://huquq-ai-teal.vercel.app/#organization"},
             "featureList": ["AI huquqiy savol-javob", "Qonunlar kutubxonasi — 20 ta kodeks", "O'zbekiston Konstitutsiyasi", "124 ta huquqiy dars", "Izohli testlar"],
             "offers": {"@type": "Offer", "price": "0", "priceCurrency": "UZS", "description": "Bepul tarif — har kuni bir necha AI savoli, bank kartasi talab qilinmaydi"}
           }
@@ -146,7 +202,7 @@
         "@graph": [
           {
             "@type": "FAQPage",
-            "@id": "https://huquq-ai-xi.vercel.app/#faq-static",
+            "@id": "https://huquq-ai-teal.vercel.app/#faq-static",
             "inLanguage": "uz",
             "mainEntity": [
               {"@type": "Question", "name": "Huquq AI professional advokatni almashtiradimi?", "acceptedAnswer": {"@type": "Answer", "text": "Yo'q. Huquq AI dastlabki yo'naltirish va umumiy huquqiy ma'lumot beradi. Murakkab yoki sud jarayoni talab qiladigan holatlarda malakali advokatga murojaat qilishni tavsiya qilamiz."}},
@@ -158,7 +214,7 @@
           },
           {
             "@type": "HowTo",
-            "@id": "https://huquq-ai-xi.vercel.app/#howto",
+            "@id": "https://huquq-ai-teal.vercel.app/#howto",
             "name": "Huquq AI orqali huquqiy javob olish",
             "description": "O'zbekiston qonunchiligi bo'yicha savolingizga bir necha daqiqada javob olish tartibi.",
             "totalTime": "PT2M",
@@ -174,7 +230,7 @@
     </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root"><div class="shell"><div class="shell-nav"></div><section class="shell-hero"><div class="shell-inner"><h1>Huquqingizni biling, kelajagingizni himoya qiling</h1><p>Professional huquqiy yordam — mehnat, oila, meros, yer va boshqa sohalarda. AI maslahatchi va tajribali mutaxassislar yoningizda.</p></div></section></div></div>
 
     <!-- ── JavaScript'siz ko'rinadigan qatlam ──
          (1) JS o'chiq brauzerda bo'sh oq sahifa emas, ma'noli matn; (2) JS ishga

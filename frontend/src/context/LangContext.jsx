@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
-import { translations, defaultLang } from "../i18n/translations";
+import { defaultLang, SUPPORTED_LANGS, getDict, loadLang } from "../i18n/translations";
 
 const LangContext = createContext(null);
 
@@ -13,9 +13,14 @@ const LangContext = createContext(null);
         server uni tanimay, kontentni tarjimasiz qaytarardi.
    Shuning uchun noma'lum til standart tilga ALMASHTIRILADI va
    `localStorage` ham darhol tuzatiladi. */
-function readStoredLang() {
-  const saved = localStorage.getItem("lang");
-  if (saved && translations[saved]) return saved;
+export function readStoredLang() {
+  let saved = null;
+  try {
+    saved = localStorage.getItem("lang");
+  } catch {
+    return defaultLang;
+  }
+  if (saved && SUPPORTED_LANGS.includes(saved)) return saved;
   if (saved) localStorage.setItem("lang", defaultLang);
   return defaultLang;
 }
@@ -23,13 +28,17 @@ function readStoredLang() {
 export function LangProvider({ children }) {
   const [lang, setLang] = useState(readStoredLang);
 
+  /* Ruscha lug'at alohida bo'lakda (i18n/translations.js). U yuklangandan
+     KEYIN til almashadi — aks holda bir lahza matnsiz interfeys chiqardi. */
   function changeLang(l) {
-    if (!translations[l]) return; // qo'llab-quvvatlanmaydigan til
-    setLang(l);
-    localStorage.setItem("lang", l);
+    if (!SUPPORTED_LANGS.includes(l)) return; // qo'llab-quvvatlanmaydigan til
+    loadLang(l).then(() => {
+      setLang(l);
+      localStorage.setItem("lang", l);
+    });
   }
 
-  const t = translations[lang] || translations[defaultLang];
+  const t = getDict(lang) || getDict(defaultLang);
 
   return (
     <LangContext.Provider value={{ lang, changeLang, t }}>

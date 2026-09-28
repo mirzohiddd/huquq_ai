@@ -56,7 +56,7 @@ app.use(securityHeaders);
    BUG FIX (2026-08-04): bu ro'yxatda faqat ESKI, allaqachon o'chirilgan
    manzillar (huquq-ai-rose.vercel.app, huquq-ai-fpa2.onrender.com)
    turgan edi. Vercel/Render har safar yangi deploy'da yangi subdomen
-   beradi, natijada jonli frontend (huquq-ai-xi.vercel.app) backendga
+   beradi, natijada jonli frontend (huquq-ai-teal.vercel.app) backendga
    murojaat qilganda brauzer HAMMA so'rovni "No Access-Control-Allow-Origin"
    deb bloklardi — sayt umuman ma'lumot ololmasdi.
 

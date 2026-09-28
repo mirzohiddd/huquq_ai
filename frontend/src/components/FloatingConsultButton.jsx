@@ -19,7 +19,7 @@ export default function FloatingConsultButton() {
     >
       <span className={s.fabPulse} aria-hidden="true" />
       <span className={s.fabIcon}>
-        <img width={60} src="/logo-96.png" alt="" />
+        <img width={60} height={60} src="/logo-96.png" alt="" />
       </span>
       <span className={s.fabText}>{t.nav_consult_free}</span>
     </button>

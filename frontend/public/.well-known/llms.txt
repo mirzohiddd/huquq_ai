@@ -5,13 +5,13 @@ Ba'zi AI tizimlari faylni ildizda, ba'zilari `.well-known/` da qidiradi
 — ikkala manzil ham ishlashi uchun nusxa saqlanadi.
 
 To'liq va yangilanadigan versiya:
-https://huquq-ai-xi.vercel.app/llms.txt
+https://huquq-ai-teal.vercel.app/llms.txt
 
 Batafsil ma'lumot fayli:
-https://huquq-ai-xi.vercel.app/llms-full.txt
+https://huquq-ai-teal.vercel.app/llms-full.txt
 
 Metodologiya va tahririy siyosat (manba, tekshiruv, cheklovlar):
-https://huquq-ai-xi.vercel.app/metodologiya
+https://huquq-ai-teal.vercel.app/metodologiya
 
 Qisqacha: Huquq AI — O'zbekiston qonunchiligiga asoslangan sun'iy
 intellekt huquqiy maslahat va ta'lim platformasi. Har bir javob lex.uz

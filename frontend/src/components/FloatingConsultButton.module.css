@@ -41,6 +41,10 @@
   line-height: 1;
 }
 
+.fabIcon img {
+  object-fit: contain;
+}
+
 .fabText {
   display: none;
 }

@@ -1,0 +1,48 @@
+{
+  "specVersion": "1.0",
+  "host": {
+    "displayName": "Huquq AI",
+    "documentationUrl": "https://huquq-ai-teal.vercel.app/metodologiya",
+    "logoUrl": "https://huquq-ai-teal.vercel.app/logo-512.png"
+  },
+  "entries": [
+    {
+      "identifier": "urn:air:huquq-ai-teal.vercel.app:legal:uz-law-assistant",
+      "displayName": "Huquq AI — O'zbekiston qonunchiligi bo'yicha yordamchi",
+      "type": "application/agent-card+json",
+      "data": {
+        "name": "Huquq AI",
+        "description": "O'zbekiston Respublikasi qonunchiligi (Konstitutsiya va 20 ta kodeks, lex.uz rasmiy matnlari) asosida huquqiy savollarga javob beradigan yordamchi. Javoblar faqat saytdagi rasmiy qonun matnlari va darslardan olinadi.",
+        "url": "https://huquq-ai-teal.vercel.app/",
+        "provider": { "organization": "Huquq AI", "url": "https://huquq-ai-teal.vercel.app/" },
+        "defaultInputModes": ["text/plain"],
+        "defaultOutputModes": ["text/markdown"],
+        "languages": ["uz", "ru"]
+      },
+      "description": "O'zbekiston qonunchiligi bo'yicha huquqiy ma'lumot: mehnat, oila, meros, iste'molchi, uy-joy, jinoyat va ma'muriy huquq.",
+      "tags": ["legal", "uzbekistan", "law", "huquq", "qonunchilik"],
+      "capabilities": ["LegalQuestionAnswering", "LawArticleLookup", "LegalEducation"],
+      "representativeQueries": [
+        "Ishdan asossiz bo'shatishsa nima qilish kerak?",
+        "Ajrashganda bola kim bilan qoladi?",
+        "Mehnat kodeksi bo'yicha yillik ta'til necha kun?"
+      ],
+      "version": "1.0.0",
+      "updatedAt": "2026-09-28T00:00:00Z"
+    },
+    {
+      "identifier": "urn:air:huquq-ai-teal.vercel.app:legal:law-library",
+      "displayName": "Qonunchilik kutubxonasi — llms.txt",
+      "type": "text/markdown; profile=\"urn:air:agent-skills\"",
+      "url": "https://huquq-ai-teal.vercel.app/llms.txt",
+      "description": "Saytning ochiq bo'limlari xaritasi: qonun moddalari (/qonun/{KOD}/{MODDA}), savol-javoblar (/savol/{slug}), metodologiya va ularning Markdown nusxalari.",
+      "tags": ["legal", "llms-txt", "markdown"],
+      "representativeQueries": [
+        "O'zbekiston Oila kodeksi moddalari",
+        "Jinoyat kodeksi 168-modda matni"
+      ],
+      "version": "1.0.0",
+      "updatedAt": "2026-09-28T00:00:00Z"
+    }
+  ]
+}

@@ -10,11 +10,11 @@
 -->
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap>
-    <loc>https://huquq-ai-xi.vercel.app/sitemap-sahifalar.xml</loc>
+    <loc>https://huquq-ai-teal.vercel.app/sitemap-sahifalar.xml</loc>
     <lastmod>2026-08-18</lastmod>
   </sitemap>
   <sitemap>
-    <loc>https://huquq-ai-xi.vercel.app/sitemap-qonunlar.xml</loc>
+    <loc>https://huquq-ai-teal.vercel.app/sitemap-qonunlar.xml</loc>
   </sitemap>
   <!--
     Savol-javob markazi (AEO) + Metodologiya sahifasi. Ham bazadan
@@ -23,6 +23,6 @@
     qo'shilganda xarita unutilib qolardi.
   -->
   <sitemap>
-    <loc>https://huquq-ai-xi.vercel.app/sitemap-savollar.xml</loc>
+    <loc>https://huquq-ai-teal.vercel.app/sitemap-savollar.xml</loc>
   </sitemap>
 </sitemapindex>

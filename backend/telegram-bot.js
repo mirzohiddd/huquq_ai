@@ -25,7 +25,7 @@ const sessions = new Map(); // tgUserId -> { messages, sessionId }
 const userLang = new Map(); // tgUserId -> "uz"|"ru"|"en"
 const verifiedUsers = new Map(); // tgUserId -> user._id
 
-const SITE_URL = process.env.SITE_URL || "https://huquq-ai-xi.vercel.app/";
+const SITE_URL = process.env.SITE_URL || "https://huquq-ai-teal.vercel.app/";
 
 // ─────────────────────────────────────────────────────────────
 // TIL VA ALIFBO ANIQLASH — bot xabarini tahlil qiladi

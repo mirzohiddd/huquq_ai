@@ -144,7 +144,7 @@ Allow: /
 # ── Sayt xaritasi va AI uchun qisqacha ma'lumot ──
 # Bu — sayt xaritalari RO'YXATI (index): ichida statik sahifalar va
 # ~7 100 ta qonun moddasi xaritasi bor.
-Sitemap: https://huquq-ai-xi.vercel.app/sitemap.xml
+Sitemap: https://huquq-ai-teal.vercel.app/sitemap.xml
 
 # LLM'lar uchun sayt xulosasi (llmstxt.org standarti):
-# https://huquq-ai-xi.vercel.app/llms.txt
+# https://huquq-ai-teal.vercel.app/llms.txt

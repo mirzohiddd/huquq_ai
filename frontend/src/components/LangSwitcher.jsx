@@ -49,7 +49,9 @@ export default function LangSwitcher({ dark = false, compact = false, dropUp = f
         onClick={() => setOpen((v) => !v)}
         aria-haspopup="listbox"
         aria-expanded={open}
-        aria-label="Language"
+        /* Nom ko'rinadigan matnni ("UZ") o'z ichiga olishi shart — ovozli
+           boshqaruv va AI agentlar tugmani shu matn bilan topadi */
+        aria-label={`${current.short} — Til / Язык`}
       >
         <span className={s.triggerFlag}>{current.flag}</span>
         <span className={s.triggerLabel}>{current.short}</span>

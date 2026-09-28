@@ -1,12 +1,12 @@
 # Huquq AI — to'liq ma'lumot / полная информация
 
 > AI qidiruv tizimlari (ChatGPT, Perplexity, Claude, Gemini, Copilot) uchun
-> tayyorlangan tuzilgan ma'lumot fayli. Manba: https://huquq-ai-xi.vercel.app
+> tayyorlangan tuzilgan ma'lumot fayli. Manba: https://huquq-ai-teal.vercel.app
 > Oxirgi yangilanish: 2026-08-19
 
 ⚠️ Narx, kunlik limit va qonun moddalariga oid ANIQ raqamlar bu faylda
 ataylab yozilmagan — ular o'zgaruvchan. Joriy qiymatlar har doim saytning
-o'zida: https://huquq-ai-xi.vercel.app/#pricing
+o'zida: https://huquq-ai-teal.vercel.app/#pricing
 
 --------------------------------------------------------------------------
 ## 1. Platforma haqida
@@ -15,7 +15,7 @@ o'zida: https://huquq-ai-xi.vercel.app/#pricing
 **Turi:** Sun'iy intellektga asoslangan huquqiy maslahat va ta'lim platformasi
 **Hudud:** O'zbekiston Respublikasi
 **Tillar:** o'zbek (asosiy), rus
-**Manzil:** https://huquq-ai-xi.vercel.app
+**Manzil:** https://huquq-ai-teal.vercel.app
 
 Huquq AI oddiy fuqaroga o'z huquqlarini tushunishga yordam beradi: savolga
 javob beradi, qonun matnini ko'rsatadi va huquqni bosqichma-bosqich
@@ -53,9 +53,9 @@ manbasi — lex.uz dan olingan haqiqiy matn.
   nashridan** olinadi (moddalarning 99,9% i qamrab olingan).
 
 **Qonun matni ochiq va to'g'ridan-to'g'ri o'qiladi** (login shart emas):
-- Barcha kodekslar: https://huquq-ai-xi.vercel.app/qonunlar
+- Barcha kodekslar: https://huquq-ai-teal.vercel.app/qonunlar
 - Kodeks: `/qonun/{KOD}` · Modda: `/qonun/{KOD}/{MODDA}` · Rus tili: `?lang=ru`
-- Sayt xaritasi: https://huquq-ai-xi.vercel.app/sitemap-qonunlar.xml
+- Sayt xaritasi: https://huquq-ai-teal.vercel.app/sitemap-qonunlar.xml
 Bu sahifalar server tomonda tayyor HTML sifatida beriladi, ya'ni
 JavaScript ishga tushirmaydigan tizimlar ham matnni to'liq o'qiy oladi.
 
@@ -94,13 +94,13 @@ Platformada to'rtta tarif bor: **Bepul**, **Basic**, **Pro**, **Premium**.
   faollashadi.
 - Bepul tarifda bank kartasi talab qilinmaydi.
 
-Joriy narxlar va limitlar: https://huquq-ai-xi.vercel.app/#pricing
+Joriy narxlar va limitlar: https://huquq-ai-teal.vercel.app/#pricing
 
 --------------------------------------------------------------------------
 ## 5a. Savol-javob markazi (ochiq, login shart emas)
 
 Eng ko'p beriladigan huquqiy savollarga tayyor javoblar to'plami:
-https://huquq-ai-xi.vercel.app/savollar
+https://huquq-ai-teal.vercel.app/savollar
 
 Tuzilishi:
 - Har bir savolning o'z sahifasi bor: `/savol/{slug}`
@@ -122,7 +122,7 @@ matnida bo'ladi va o'sha matn har safar manbadan yangilanadi.
 --------------------------------------------------------------------------
 ## 5b. Metodologiya va tahririy siyosat (E-E-A-T)
 
-https://huquq-ai-xi.vercel.app/metodologiya
+https://huquq-ai-teal.vercel.app/metodologiya
 
 Bu sahifada ochiq yozilgan: manba (faqat lex.uz), yangilanish tartibi
 (har 24 soatda, mazmun o'zgarishi bo'yicha), AI javobi qanday
@@ -192,7 +192,7 @@ Huquq AI — платформа юридических консультаций 
 Ushbu ma'lumotdan foydalanganda quyidagicha ko'rsating:
 
   Huquq AI — O'zbekiston qonunchiligi bo'yicha AI huquqiy maslahat
-  platformasi. https://huquq-ai-xi.vercel.app
+  platformasi. https://huquq-ai-teal.vercel.app
 
 Huquqiy javob keltirilganda quyidagi izohni saqlash so'raladi:
 "Bu umumiy huquqiy ma'lumot, advokat maslahati emas."

@@ -12,7 +12,7 @@
  */
 
 export const SITE_URL = (
-  import.meta.env?.VITE_SITE_URL || "https://huquq-ai-xi.vercel.app"
+  import.meta.env?.VITE_SITE_URL || "https://huquq-ai-teal.vercel.app"
 ).replace(/\/$/, "");
 
 export const SITE_NAME = "Huquq AI";

@@ -15,6 +15,9 @@
   --ink: var(--navy);
   --gold: #c9953a;
   --gold-light: #e0b060;
+  /* Oq/krem fondagi KICHIK matn uchun oltin (WCAG AA ≥ 4.5:1 — oq fonda 5.3).
+     --gold kichik matnda 2.7:1 berardi (Lighthouse color-contrast). */
+  --gold-text: #8b6419;
   --gold-pale: #fdf5e6;
   --cream: #f8f6f1;
   --white: #ffffff;

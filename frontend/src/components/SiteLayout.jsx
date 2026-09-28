@@ -20,7 +20,8 @@ import InstallAppButton from "./InstallAppButton";
 // TEZLIK: ChatDrawer react-markdown + remark-gfm ni tortadi va u faqat
 // chat ochilganda kerak — shuning uchun alohida bo'lakka ajratildi.
 const ChatDrawer = lazy(() => import("./ChatDrawer"));
-import ProfileModal from "./ProfileModal";
+// TEZLIK: Profil oynasi (~30 KB) faqat ochilganda yuklanadi
+const ProfileModal = lazy(() => import("./ProfileModal"));
 import api from "../utils/api";
 import s from "./SiteLayout.module.css";
 import { API_BASE } from "../utils/apiBase";
@@ -66,7 +67,14 @@ const NAV_USER = [
 export default function SiteLayout() {
   const { t, lang } = useLang();
   const { user } = useAuth();
-  const { openChat } = useChatPanel();
+  const { openChat, isOpen: chatOpen } = useChatPanel();
+  /* TEZLIK (PageSpeed "unused JavaScript"): chat kodi birinchi OCHILGANDA
+     yuklanadi, keyin mount bo'lib qoladi (suhbat holati saqlanadi). Avval
+     yopiq holatda ham mount qilinib, bosh sahifada 56 KB behuda yuklanardi. */
+  const [chatMounted, setChatMounted] = useState(false);
+  useEffect(() => {
+    if (chatOpen) setChatMounted(true);
+  }, [chatOpen]);
   const location = useLocation();
   const navigate = useNavigate();
   const currentHash = location.pathname === "/" ? location.hash : "";
@@ -219,13 +227,17 @@ export default function SiteLayout() {
       <nav className={`${s.nav} ${navScrolled ? s.navScrolled : ""}`}>
         <div className={s.navInner}>
           <Link to="/" className={s.logo} onClick={() => setMenuOpen(false)}>
-            <img
-              src="/logo-96.png"
-              alt="Huquq AI"
-              className={s.logoImg}
-              width="36"
-              height="36"
-            />
+            {/* TEZLIK: 36 px logo uchun 2,4 KB AVIF (avval 15 KB PNG) */}
+            <picture style={{ display: "contents" }}>
+              <source srcSet="/logo-72.avif" type="image/avif" />
+              <img
+                src="/logo-72.png"
+                alt="Huquq AI"
+                className={s.logoImg}
+                width="36"
+                height="36"
+              />
+            </picture>
             <span className={s.logoText}>{t.nav_logo}</span>
           </Link>
 
@@ -381,13 +393,17 @@ export default function SiteLayout() {
           />
           <div className={s.mobileMenu}>
             <div className={s.mobileMenuHead}>
-              <img
-              src="/logo-96.png"
-              alt="Huquq AI"
-              className={s.logoImg}
-              width="36"
-              height="36"
-            />
+              {/* TEZLIK: 36 px logo uchun 2,4 KB AVIF (avval 15 KB PNG) */}
+              <picture style={{ display: "contents" }}>
+                <source srcSet="/logo-72.avif" type="image/avif" />
+                <img
+                src="/logo-72.png"
+                alt="Huquq AI"
+                className={s.logoImg}
+                width="36"
+                height="36"
+              />
+              </picture>
               <span>{t.nav_logo}</span>
               <button
                 type="button"
@@ -528,19 +544,23 @@ export default function SiteLayout() {
       {/* Telefon ekranida pastki navigatsiya (desktopda ko'rinmaydi) */}
       <BottomNav />
 
-      <Suspense fallback={null}>
-        <ChatDrawer />
-      </Suspense>
+      {chatMounted && (
+        <Suspense fallback={null}>
+          <ChatDrawer />
+        </Suspense>
+      )}
 
       {/* Profile Modal */}
       {profileOpen && (
-        <ProfileModal
-          initialTab={profileInitialTab}
-          onClose={() => {
-            setProfileOpen(false);
-            setProfileInitialTab("profile");
-          }}
-        />
+        <Suspense fallback={null}>
+          <ProfileModal
+            initialTab={profileInitialTab}
+            onClose={() => {
+              setProfileOpen(false);
+              setProfileInitialTab("profile");
+            }}
+          />
+        </Suspense>
       )}
 
       {/* ═══════════════════════════════════════════════════════════
@@ -556,13 +576,18 @@ export default function SiteLayout() {
           {/* ── Brend ── */}
           <div className={s.footerBrand}>
             <Link to="/" className={s.footerLogo}>
-              <img
-                src="/logo-96.png"
-                alt="Huquq AI"
-                className={s.logoImg}
-                width="36"
-                height="36"
-              />
+              {/* alt bo'sh: havola nomi yonidagi matndan olinadi — ikki marta o'qilmasin */}
+              {/* TEZLIK: 36 px logo uchun 2,4 KB AVIF (avval 15 KB PNG) */}
+              <picture style={{ display: "contents" }}>
+                <source srcSet="/logo-72.avif" type="image/avif" />
+                <img
+                  src="/logo-72.png"
+                  alt=""
+                  className={s.logoImg}
+                  width="36"
+                  height="36"
+                />
+              </picture>
               <span>{t.nav_logo}</span>
             </Link>
             <p className={s.footerTagline}>{t.footer_desc}</p>
@@ -573,7 +598,7 @@ export default function SiteLayout() {
                 rel="noreferrer"
                 aria-label="Telegram"
               >
-                <img width={18} src={telegram} alt="" />
+                <img width={18} height={18} src={telegram} alt="" loading="lazy" />
               </a>
               {instagramLink && (
                 <a
@@ -582,7 +607,7 @@ export default function SiteLayout() {
                   rel="noreferrer"
                   aria-label="Instagram"
                 >
-                  <img width={18} src={instagram} alt="" />
+                  <img width={18} height={18} src={instagram} alt="" loading="lazy" />
                 </a>
               )}
               <a href={`mailto:${email}`} aria-label="Email">

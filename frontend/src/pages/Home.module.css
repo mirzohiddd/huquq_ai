@@ -9,11 +9,25 @@
       rgba(11, 19, 34, 0.6) 55%,
       rgba(11, 19, 34, 0.3) 100%
     ),
-    url("https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1600&q=80")
-      center/cover no-repeat;
+    url("/hero-1600.webp") center/cover no-repeat;
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+/* Telefonda kichik nusxa (37 KB). ⚠️ Chegara index.html dagi preload
+   `media` qiymati bilan bir xil — aks holda rasm ikki marta yuklanadi. */
+@media (max-width: 800px) {
+  .hero {
+    background:
+      linear-gradient(
+        105deg,
+        rgba(11, 19, 34, 0.94) 0%,
+        rgba(11, 19, 34, 0.6) 55%,
+        rgba(11, 19, 34, 0.3) 100%
+      ),
+      url("/hero-800.webp") center/cover no-repeat;
+  }
 }
 
 .heroOverlay {
@@ -243,7 +257,7 @@
   transform: scale(1.15) rotate(-6deg);
 }
 
-.featureCard h3 {
+.featureCard h2 {
   font-size: 15px;
   font-weight: 600;
   color: var(--navy, #1a1a2e);
@@ -337,7 +351,7 @@
     font-size: 22px;
   }
 
-  .featureCard h3 {
+  .featureCard h2 {
     font-size: 13px;
   }
 

@@ -23,40 +23,40 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
   <url>
-    <loc>https://huquq-ai-xi.vercel.app/</loc>
-    <xhtml:link rel="alternate" hreflang="uz-UZ" href="https://huquq-ai-xi.vercel.app/"/>
-    <xhtml:link rel="alternate" hreflang="ru-UZ" href="https://huquq-ai-xi.vercel.app/?lang=ru"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://huquq-ai-xi.vercel.app/"/>
+    <loc>https://huquq-ai-teal.vercel.app/</loc>
+    <xhtml:link rel="alternate" hreflang="uz-UZ" href="https://huquq-ai-teal.vercel.app/"/>
+    <xhtml:link rel="alternate" hreflang="ru-UZ" href="https://huquq-ai-teal.vercel.app/?lang=ru"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://huquq-ai-teal.vercel.app/"/>
     <lastmod>2026-08-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 
   <url>
-    <loc>https://huquq-ai-xi.vercel.app/terms</loc>
-    <xhtml:link rel="alternate" hreflang="uz-UZ" href="https://huquq-ai-xi.vercel.app/terms"/>
-    <xhtml:link rel="alternate" hreflang="ru-UZ" href="https://huquq-ai-xi.vercel.app/terms?lang=ru"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://huquq-ai-xi.vercel.app/terms"/>
+    <loc>https://huquq-ai-teal.vercel.app/terms</loc>
+    <xhtml:link rel="alternate" hreflang="uz-UZ" href="https://huquq-ai-teal.vercel.app/terms"/>
+    <xhtml:link rel="alternate" hreflang="ru-UZ" href="https://huquq-ai-teal.vercel.app/terms?lang=ru"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://huquq-ai-teal.vercel.app/terms"/>
     <lastmod>2026-08-18</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 
   <url>
-    <loc>https://huquq-ai-xi.vercel.app/privacy</loc>
-    <xhtml:link rel="alternate" hreflang="uz-UZ" href="https://huquq-ai-xi.vercel.app/privacy"/>
-    <xhtml:link rel="alternate" hreflang="ru-UZ" href="https://huquq-ai-xi.vercel.app/privacy?lang=ru"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://huquq-ai-xi.vercel.app/privacy"/>
+    <loc>https://huquq-ai-teal.vercel.app/privacy</loc>
+    <xhtml:link rel="alternate" hreflang="uz-UZ" href="https://huquq-ai-teal.vercel.app/privacy"/>
+    <xhtml:link rel="alternate" hreflang="ru-UZ" href="https://huquq-ai-teal.vercel.app/privacy?lang=ru"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://huquq-ai-teal.vercel.app/privacy"/>
     <lastmod>2026-08-18</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 
   <url>
-    <loc>https://huquq-ai-xi.vercel.app/disclaimer</loc>
-    <xhtml:link rel="alternate" hreflang="uz-UZ" href="https://huquq-ai-xi.vercel.app/disclaimer"/>
-    <xhtml:link rel="alternate" hreflang="ru-UZ" href="https://huquq-ai-xi.vercel.app/disclaimer?lang=ru"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://huquq-ai-xi.vercel.app/disclaimer"/>
+    <loc>https://huquq-ai-teal.vercel.app/disclaimer</loc>
+    <xhtml:link rel="alternate" hreflang="uz-UZ" href="https://huquq-ai-teal.vercel.app/disclaimer"/>
+    <xhtml:link rel="alternate" hreflang="ru-UZ" href="https://huquq-ai-teal.vercel.app/disclaimer?lang=ru"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://huquq-ai-teal.vercel.app/disclaimer"/>
     <lastmod>2026-08-18</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
