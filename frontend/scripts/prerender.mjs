@@ -77,5 +77,13 @@ html = html.replace(/<div id="root">[\s\S]*?<!--ssr-end-->/, `<div id="root" dat
 if (html.length === before) throw new Error("prerender: #root belgisi (<!--ssr-end-->) topilmadi");
 
 fs.writeFileSync(path.join(dist, "index.html"), html);
+
+// VAQTINCHA (Lighthouse tajribasi): bir xil sahifaning ikki varianti
+const testHtml = html.replace('location.pathname === "/"', "true");
+fs.writeFileSync(path.join(dist, "lhtest-a.html"), testHtml);
+fs.writeFileSync(
+  path.join(dist, "lhtest-b.html"),
+  testHtml.replace("</head>", "<style>*,*::before,*::after{animation:none!important;transition:none!important}</style></head>"),
+);
 fs.rmSync(path.join(root, "dist-ssr"), { recursive: true, force: true });
 console.log(`prerender: / → ${Math.round(appHtml.length / 1024)} KB HTML`);
