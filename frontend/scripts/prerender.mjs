@@ -43,6 +43,22 @@ html = html.replace(
   (_, _co, href) => `<style data-app-css>${fs.readFileSync(path.join(dist, href), "utf8")}</style>`,
 );
 
+/* ASOSIY JS — SSR sahifa ko'rinadigan holatda `load` dan KEYIN so'raladi.
+   Sabab (jonli o'lchov, 2026-09-28): SSR hero ~0,4 s da chiziladi, lekin
+   Lighthouse `simulate` modeli (PageSpeed shu bilan o'lchaydi) LCP gacha
+   BOSHLANGAN barcha so'rovlarni LCP grafiga qo'shadi — 127 KB JS HTML bilan
+   birga so'ralgani uchun mobil LCP 3 s, Performance 88 chiqardi. Sahifa JS'siz
+   ham to'liq ko'rinadi (havolalar oddiy <a>), JS faqat interaktivlik uchun.
+   Boshqa holatda (html.ssr-off: ichki sahifa, ruscha, login) JS DARHOL. */
+html = html.replace(/<script type="module" crossorigin src="(\/assets\/index-[^"]+\.js)"><\/script>/, (_, src) =>
+  `<script>(function(){var s=document.createElement("script");s.type="module";s.crossOrigin="anonymous";s.src=${JSON.stringify(src)};` +
+  `function go(){document.head.appendChild(s)}` +
+  `if(document.documentElement.classList.contains("ssr-off"))go();` +
+  `else if(document.readyState==="complete")setTimeout(go,0);` +
+  `else addEventListener("load",function(){setTimeout(go,0)},{once:true})})()</script>`,
+);
+if (!/document\.createElement\("script"\)/.test(html)) throw new Error("prerender: asosiy skript tegi topilmadi");
+
 const before = html.length;
 html = html.replace(/<div id="root">[\s\S]*?<!--ssr-end-->/, `<div id="root" data-ssr="1">${appHtml}</div>`);
 if (html.length === before) throw new Error("prerender: #root belgisi (<!--ssr-end-->) topilmadi");
