@@ -7,6 +7,8 @@ import {
   FacebookIcon,
   XIcon,
 } from "./ShareIcons";
+import { useLocation } from "react-router-dom";
+import { SITE_URL } from "../seo/siteMeta";
 import s from "./ShareBar.module.css";
 
 /**
@@ -26,8 +28,13 @@ export default function ShareBar({ url, title }) {
   const { t } = useLang();
   const [copied, setCopied] = useState(false);
 
-  const shareUrl =
-    url || (typeof window !== "undefined" ? window.location.href : "");
+  const { pathname } = useLocation();
+  /* ⚠️ SSR: manzil `window.location` dan EMAS, kanonik domen + router yo'lidan.
+     Bosh sahifa build vaqtida serverda render qilinadi (scripts/prerender.mjs),
+     u yerda `window` yo'q — havola bo'sh chiqardi va hydration uni TUZATMASDI
+     (React production'da atribut farqlarini yangilamaydi). Kanonik manzil
+     ulashish uchun to'g'riroq ham: preview/eski domen tarqalmaydi. */
+  const shareUrl = url || `${SITE_URL}${pathname}`;
   const shareText = title || t.seo_home_title || "Huquq AI";
   const u = encodeURIComponent(shareUrl);
   const txt = encodeURIComponent(shareText);

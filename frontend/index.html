@@ -78,7 +78,10 @@
          2 ta qo'shimcha ulanish talab qilardi. Playfair Display umuman
          ishlatilmasdi — olib tashlandi. Faqat latin + latin-ext (o'zbek lotin,
          ʻ belgisi); kirill uchun tizim shrifti ishlatiladi (Poppins'da kirill yo'q). -->
-    <link rel="preload" href="/fonts/poppins-400-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <!-- Hero matni: sarlavha 700, tavsif 300, tugmalar 600. Aynan shular oldindan —
+         aks holda kech kelgan shrift matnni qayta joylab, kartalarni surardi (CLS). -->
+    <link rel="preload" href="/fonts/poppins-700-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/poppins-300-latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/poppins-600-latin.woff2" as="font" type="font/woff2" crossorigin />
     <style>
 @font-face{font-family:Poppins;font-style:normal;font-weight:300;font-display:swap;src:url(/fonts/poppins-300-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
@@ -92,40 +95,25 @@
 @font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/poppins-700-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF}
 @font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/poppins-700-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
 
-      /* App shell — faqat html.app-shell da ko'rinadi (yuqoridagi skript) */
-      .shell { display: none; }
-      html.app-shell .shell { display: block; }
-      .shell-nav { height: 68px; background: #0b1322; border-bottom: 1px solid rgba(201,149,58,.15); }
-      .shell-hero {
-        min-height: 100vh;
-        display: flex; flex-direction: column; justify-content: center;
-        background: linear-gradient(105deg, rgba(11,19,34,.94) 0%, rgba(11,19,34,.6) 55%, rgba(11,19,34,.3) 100%),
-          url("/hero-1600.webp") center/cover no-repeat;
-        font-family: Poppins, system-ui, sans-serif;
-      }
-      .shell-inner { max-width: 1200px; margin: 0 auto; padding: 100px 1.5rem 130px; width: 100%; box-sizing: border-box; }
-      .shell-hero h1 { font-size: clamp(28px, 4.5vw, 52px); color: #fff; font-weight: 700; line-height: 1.15; margin: 0 0 1.25rem; max-width: 620px; }
-      .shell-hero p { font-size: clamp(14px, 1.6vw, 17px); color: rgba(255,255,255,.72); line-height: 1.75; font-weight: 300; max-width: 520px; margin: 0; }
-      @media (max-width: 800px) {
-        .shell-hero { background: linear-gradient(105deg, rgba(11,19,34,.94) 0%, rgba(11,19,34,.6) 55%, rgba(11,19,34,.3) 100%), url("/hero-800.webp") center/cover no-repeat; }
-      }
-      @media (max-width: 768px) { .shell-nav { height: 60px; } }
-      @media (max-width: 420px) { .shell-nav { height: 56px; } }
+      html.ssr-off #root[data-ssr] { display: none; }
     </style>
     <!-- Bosh sahifa hero rasmi (LCP) — HTML dan darhol topiladi. Ekran
          kengligiga qarab bittasi yuklanadi; media qiymatlari Home.module.css
          dagi .hero bilan AYNAN bir xil bo'lishi shart (aks holda ikkita rasm). -->
     <script>
-      /* APP SHELL (2026-09-28, PageSpeed LCP): mehmon bosh sahifani o'zbek
-         tilida ochganda hero HTML'dan DARHOL chiziladi — React bo'lagi
-         yuklanishini kutmasdan. React ishga tushgach #root ichini o'zi
-         almashtiradi. Boshqa holatda (ichki sahifa, ruscha, login qilgan)
-         shell ko'rsatilmaydi — noto'g'ri matn bir lahza ham chiqmasin. */
+      /* SSR (2026-09-28, PageSpeed): #root ichida build vaqtida render qilingan
+         bosh sahifa (mehmon, o'zbekcha) turadi — scripts/prerender.mjs.
+         Aynan shu holatda React uni hydrate qiladi (main.jsx). Boshqa holatda
+         (ichki sahifa, ruscha, login qilgan) u CHIZILMASDAN yashiriladi va
+         React noldan chizadi — noto'g'ri sahifa bir lahza ham ko'rinmasin.
+         Teskari mantiq ataylab: JS'siz brauzer va botlar SSR matnni ko'radi. */
       try {
-        if (location.pathname === "/" && !localStorage.getItem("user") && localStorage.getItem("lang") !== "ru") {
-          document.documentElement.classList.add("app-shell");
+        if (!(location.pathname === "/" && !localStorage.getItem("user") && localStorage.getItem("lang") !== "ru")) {
+          document.documentElement.classList.add("ssr-off");
         }
-      } catch (e) {}
+      } catch (e) {
+        document.documentElement.classList.add("ssr-off");
+      }
       if (location.pathname === "/") {
         [["/hero-800.webp", "(max-width: 800px)"], ["/hero-1600.webp", "(min-width: 801px)"]].forEach(function (h) {
           var l = document.createElement("link");
@@ -230,7 +218,7 @@
     </script>
   </head>
   <body>
-    <div id="root"><div class="shell"><div class="shell-nav"></div><section class="shell-hero"><div class="shell-inner"><h1>Huquqingizni biling, kelajagingizni himoya qiling</h1><p>Professional huquqiy yordam — mehnat, oila, meros, yer va boshqa sohalarda. AI maslahatchi va tajribali mutaxassislar yoningizda.</p></div></section></div></div>
+    <div id="root"></div><!--ssr-end-->
 
     <!-- ── JavaScript'siz ko'rinadigan qatlam ──
          (1) JS o'chiq brauzerda bo'sh oq sahifa emas, ma'noli matn; (2) JS ishga

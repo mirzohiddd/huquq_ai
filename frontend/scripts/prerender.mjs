@@ -1,0 +1,52 @@
+/**
+ * BUILD'DAN KEYIN: bosh sahifani HTML ga aylantirish va dist/index.html ga joylash.
+ *
+ *   1. dist-ssr/entry-server.js (vite build --ssr) → render("/")
+ *   2. natija #root ichiga, `data-ssr="1"` belgisi bilan
+ *   3. asosiy CSS HTML ichiga (<style>) — SSR matni uslubsiz ko'rinmasin va
+ *      render qo'shimcha so'rovni kutmasin
+ *
+ * ⚠️ Node'da brauzer obyektlari yo'q. Quyidagi zaxiralar faqat komponentlar
+ * RENDER paytida murojaat qilsa yiqilmasligi uchun; ular brauzerdagi mehmon
+ * holatini (bo'sh localStorage, keng ekran emas) takrorlaydi. Hydration
+ * mosligi brauzerda alohida tekshiriladi.
+ */
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const dist = path.join(root, "dist");
+
+const memory = new Map();
+const storage = {
+  getItem: (k) => (memory.has(k) ? memory.get(k) : null),
+  setItem: (k, v) => memory.set(k, String(v)),
+  removeItem: (k) => memory.delete(k),
+  clear: () => memory.clear(),
+};
+Object.defineProperty(globalThis, "localStorage", { value: storage, configurable: true });
+Object.defineProperty(globalThis, "sessionStorage", { value: storage, configurable: true });
+// Node 20 da global `navigator` yo'q (21+ da bor) — Vercel build muhiti farq qilishi mumkin
+if (typeof globalThis.navigator === "undefined") {
+  Object.defineProperty(globalThis, "navigator", { value: { userAgent: "", language: "uz" }, configurable: true });
+}
+
+const { render } = await import(pathToFileURL(path.join(root, "dist-ssr/entry-server.js")).href);
+const appHtml = await render("/");
+
+let html = fs.readFileSync(path.join(dist, "index.html"), "utf8");
+
+// Asosiy CSS → inline
+html = html.replace(
+  /<link rel="stylesheet"( crossorigin)? href="(\/assets\/index-[^"]+\.css)">/,
+  (_, _co, href) => `<style data-app-css>${fs.readFileSync(path.join(dist, href), "utf8")}</style>`,
+);
+
+const before = html.length;
+html = html.replace(/<div id="root">[\s\S]*?<!--ssr-end-->/, `<div id="root" data-ssr="1">${appHtml}</div>`);
+if (html.length === before) throw new Error("prerender: #root belgisi (<!--ssr-end-->) topilmadi");
+
+fs.writeFileSync(path.join(dist, "index.html"), html);
+fs.rmSync(path.join(root, "dist-ssr"), { recursive: true, force: true });
+console.log(`prerender: / → ${Math.round(appHtml.length / 1024)} KB HTML`);
