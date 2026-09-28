@@ -165,5 +165,12 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/lhtest-:name.html",
+      "destination": "/",
+      "permanent": true
+    }
   ]
 }
