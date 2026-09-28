@@ -60,9 +60,25 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
 
     <!-- Logo: UI uchun kichik nusxa, ijtimoiy tarmoq uchun og-image.jpg -->
-    <link rel="icon" href="/logo-96.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/logo-180.png" />
-    <link rel="manifest" href="/site.webmanifest" />
+    <!-- Manifest sahifa yuklangach qo'shiladi (quyidagi skript): u bilan birga
+         brauzer 45 KB ilova ikonasini ham yuklardi — birinchi ko'rinishga
+         keraksiz, lekin mobil LCP bilan tarmoqni bo'lishardi. PWA o'rnatish
+         ishlayveradi (beforeinstallprompt manifest topilgach keladi). -->
+    <script>
+      // "Ilovani yuklash" hodisasi asosiy JS'dan oldin kelsa — saqlab qo'yiladi
+      // (utils/pwaInstall.js uni `window.__bip` dan oladi)
+      addEventListener("beforeinstallprompt", function (e) {
+        e.preventDefault();
+        window.__bip = e;
+      });
+      addEventListener("load", function () {
+        var m = document.createElement("link");
+        m.rel = "manifest"; m.href = "/site.webmanifest";
+        document.head.appendChild(m);
+      }, { once: true });
+    </script>
 
     <!-- ── LLMO: AI tizimlari uchun sayt xulosasi ──
          Bot faylni o'zi topa olishi uchun <head> dan ham ko'rsatiladi
@@ -115,7 +131,7 @@
         document.documentElement.classList.add("ssr-off");
       }
       if (location.pathname === "/") {
-        [["/hero-800.webp", "(max-width: 800px)"], ["/hero-1600.webp", "(min-width: 801px)"]].forEach(function (h) {
+        [["/hero-720.webp", "(max-width: 800px)"], ["/hero-1600.webp", "(min-width: 801px)"]].forEach(function (h) {
           var l = document.createElement("link");
           l.rel = "preload"; l.as = "image"; l.type = "image/webp";
           l.href = h[0]; l.media = h[1]; l.fetchPriority = "high";

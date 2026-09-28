@@ -49,13 +49,20 @@ html = html.replace(
    BOSHLANGAN barcha so'rovlarni LCP grafiga qo'shadi — 127 KB JS HTML bilan
    birga so'ralgani uchun mobil LCP 3 s, Performance 88 chiqardi. Sahifa JS'siz
    ham to'liq ko'rinadi (havolalar oddiy <a>), JS faqat interaktivlik uchun.
+   `load` ham, 2 ta kadr ham YETMAYDI: brauzer chizish vaqtini kadrdan keyin
+   qayd etadi va JS baribir LCP grafiga tushib qolardi. Shuning uchun aniq
+   signal kutiladi — brauzer hero rasmini LCP sifatida QAYD ETGANI
+   (PerformanceObserver). Zaxiralar: `load` dan keyin 0,8 s, umumiy 3 s
+   (yashirin tab, LCP boshqa element bo'lgan holat).
    Boshqa holatda (html.ssr-off: ichki sahifa, ruscha, login) JS DARHOL. */
 html = html.replace(/<script type="module" crossorigin src="(\/assets\/index-[^"]+\.js)"><\/script>/, (_, src) =>
   `<script>(function(){var s=document.createElement("script");s.type="module";s.crossOrigin="anonymous";s.src=${JSON.stringify(src)};` +
-  `function go(){document.head.appendChild(s)}` +
-  `if(document.documentElement.classList.contains("ssr-off"))go();` +
-  `else if(document.readyState==="complete")setTimeout(go,0);` +
-  `else addEventListener("load",function(){setTimeout(go,0)},{once:true})})()</script>`,
+  `var done=0,hero=0,loaded=0;function go(){if(done)return;done=1;document.head.appendChild(s)}` +
+  `function check(){if(loaded&&hero)setTimeout(go,0)}` +
+  `if(document.documentElement.classList.contains("ssr-off"))go();else{` +
+  `try{new PerformanceObserver(function(l){l.getEntries().forEach(function(e){if(/hero-/.test(e.url||""))hero=1});check()}).observe({type:"largest-contentful-paint",buffered:true})}catch(e){hero=1}` +
+  `function onLoad(){loaded=1;check();setTimeout(go,800)}` +
+  `if(document.readyState==="complete")onLoad();else addEventListener("load",onLoad,{once:true});setTimeout(go,3000)}})()</script>`,
 );
 if (!/document\.createElement\("script"\)/.test(html)) throw new Error("prerender: asosiy skript tegi topilmadi");
 

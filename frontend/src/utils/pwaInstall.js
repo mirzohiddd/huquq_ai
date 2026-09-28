@@ -103,6 +103,14 @@ export function openInRealBrowser() {
 }
 
 if (typeof window !== "undefined") {
+  /* ⚠️ SSR (2026-09-28): bosh sahifada bu modul `load` dan KEYIN yuklanadi.
+     Hodisa undan oldin kelgan bo'lsa, uni index.html dagi <head> skripti
+     ushlab `window.__bip` ga saqlaydi — aks holda "Ilovani yuklash" tugmasi
+     brauzer oynasini hech qachon ocha olmasdi. */
+  if (window.__bip) {
+    deferred = window.__bip;
+    window.__bip = null;
+  }
   window.addEventListener("beforeinstallprompt", (e) => {
     e.preventDefault(); // brauzerning o'z mini-bannerini emas, bizning tugmani ishlatamiz
     deferred = e;
@@ -115,10 +123,13 @@ if (typeof window !== "undefined") {
 
   /* Faqat production'da: dev rejimida SW Vite HMR bilan aralashishi mumkin */
   if (import.meta.env.PROD && "serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
+    // Modul `load` dan keyin yuklangan bo'lishi mumkin (SSR bosh sahifa) —
+    // u holda hodisa qayta kelmaydi, shuning uchun darhol ro'yxatdan o'tkaziladi
+    const registerSw = () =>
       navigator.serviceWorker.register("/sw.js").catch(() => {
         /* SW bo'lmasa ham sayt to'liq ishlaydi — faqat oflayn sahifa yo'q */
       });
-    });
+    if (document.readyState === "complete") registerSw();
+    else window.addEventListener("load", registerSw, { once: true });
   }
 }

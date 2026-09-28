@@ -15,7 +15,7 @@
   justify-content: center;
 }
 
-/* Telefonda kichik nusxa (37 KB). ⚠️ Chegara index.html dagi preload
+/* Telefonda kichik nusxa (29 KB, 720 px — 412 px × 1,75 zichlik). ⚠️ Chegara index.html dagi preload
    `media` qiymati bilan bir xil — aks holda rasm ikki marta yuklanadi. */
 @media (max-width: 800px) {
   .hero {
@@ -26,7 +26,7 @@
         rgba(11, 19, 34, 0.6) 55%,
         rgba(11, 19, 34, 0.3) 100%
       ),
-      url("/hero-800.webp") center/cover no-repeat;
+      url("/hero-720.webp") center/cover no-repeat;
   }
 }
 
