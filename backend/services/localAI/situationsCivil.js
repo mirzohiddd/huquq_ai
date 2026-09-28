@@ -37,9 +37,10 @@ module.exports = [
   {
     id: "defective_goods",
     match: (t) =>
-      /(nuqsonli|sifatsiz|yaroqsiz|брак|некачеств)/.test(t) ||
+      !/(kelmadi|kelmay|yetkazilmadi|не доставил)/.test(t) &&
+      (/(nuqsonli|sifatsiz|yaroqsiz|брак|некачеств)/.test(t) ||
       (/(tovar|mahsulot|telefon|buyum|kiyim|texnika|товар|телефон)/.test(t) &&
-        /(buzuq|buzil|ishlamay|singan|nuqson|qaytar|almashtir|вернуть|обменя|сломал)/.test(t)),
+        /(buzuq|buzil|ishlamay|singan|nuqson|qaytar|almashtir|вернуть|обменя|сломал)/.test(t))),
     title: { uz: "Sifatsiz (nuqsonli) tovar", ru: "Некачественный товар" },
     summary: {
       uz:
@@ -67,7 +68,9 @@ module.exports = [
   },
   {
     id: "inheritance",
-    match: (t) => /meros|vasiyat|наслед|завещ/.test(t),
+    // Vasiyatnomani YOZISH haqidagi savol — intents.js dagi aniq mavzuga
+    match: (t) =>
+      /meros|vasiyat|наслед|завещ/.test(t) && !/vasiyatnoma\S*.{0,30}(yoz|tuz|qanday|shakl|notarius)/.test(t),
     title: { uz: "Meros", ru: "Наследство" },
     summary: {
       uz:

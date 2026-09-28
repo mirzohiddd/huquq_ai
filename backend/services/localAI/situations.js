@@ -22,9 +22,12 @@ const { normalize, uzCyrToLatin, isUzCyrillic } = require("./text");
 
 const SITUATIONS = [
   ...require("./situationsFamily"),
+  ...require("./situationsSexual"),
   ...require("./situationsWork"),
   ...require("./situationsCivil"),
   ...require("./situationsCrime"),
+  ...require("./situationsMisc"),
+  ...require("./situationsFines"),
 ];
 
 const clean = (s) => normalize(s).replace(/\s+/g, " ").trim();
@@ -48,8 +51,11 @@ function detectSituation(text = "") {
 /** Vaziyat moddalarini indeksdagi hujjat raqamlariga aylantirish. */
 function pinnedDocs(situation, state) {
   return situation.pins
-    .map(([code, num]) => state.docs.findIndex((d) => d.lawCode === code && d.articleNumber === num))
-    .filter((i) => i >= 0);
+    .map(([code, num, focus]) => ({
+      idx: state.docs.findIndex((d) => d.lawCode === code && d.articleNumber === num),
+      focus,
+    }))
+    .filter((p) => p.idx >= 0);
 }
 
 module.exports = { detectSituation, pinnedDocs, SITUATIONS };

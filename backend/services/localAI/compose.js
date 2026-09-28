@@ -18,7 +18,6 @@ const EXCERPT_MAX = 700;
 const DIRECT_MAX = 1800;
 const MIN_COVERAGE = 0.5;
 const RELATIVE_CUTOFF = 0.45;
-const SITUATION_DOCS = 4;
 
 const T = {
   uz: {
@@ -37,6 +36,7 @@ const T = {
       "Savolni asosiy tushunchalar bilan qayta yozib ko'ring, masalan:\n" +
       "• «mehnat shartnomasini bekor qilish»\n• «aliment undirish»\n" +
       "• «sudga da'vo arizasi berish muddati»\n• «Jinoyat-protsessual kodeksi 46-modda»",
+    near: "Balki sizga quyidagi mavzular kerakdir (savolni shu mavzu nomi bilan yozib ko'ring):",
     image:
       "Rasmdagi hujjatni tahlil qilish hozircha mavjud emas — javoblar faqat saytdagi qonun matnlari asosida beriladi. " +
       "Iltimos, savolingizni matn ko'rinishida yozing.",
@@ -56,6 +56,7 @@ const T = {
       "Попробуйте переформулировать вопрос ключевыми понятиями, например:\n" +
       "• «расторжение трудового договора»\n• «взыскание алиментов»\n" +
       "• «срок подачи искового заявления»\n• «УПК статья 46»",
+    near: "Возможно, вам подойдут темы (напишите вопрос с названием темы):",
     image:
       "Анализ документов на изображениях пока недоступен — ответы даются только на основе текстов законов сайта. " +
       "Пожалуйста, напишите вопрос текстом.",
@@ -93,47 +94,22 @@ function excerpt(text, terms, max) {
 
 function renderDoc(doc, n, lang, terms, direct, L) {
   const ru = lang === "ru" && doc.textRu;
-  const name = ru ? doc.lawNameRu : doc.lawName;
-  const title = (ru ? doc.titleRu : doc.title) || "";
   const body = ru ? doc.textRu : doc.text;
   const text = direct
     ? body.length > DIRECT_MAX
       ? `${body.slice(0, DIRECT_MAX)}…`
       : body
     : excerpt(body, terms, EXCERPT_MAX);
-  const num = lang === "ru" ? `${L.article} ${doc.articleNumber}` : `${doc.articleNumber}-${L.article}`;
-  const head = `**${n}. ${name}, ${num}${title ? ` — ${title}` : ""}**`;
-  return `${head}\n${text}`;
+  return `${docHead(doc, n, lang, L)}\n${text}`;
 }
 
-/**
- * Hayotiy vaziyat tanilganda (situations.js): vaziyat mazmuni → amaliy
- * qadamlar → vaziyatga bevosita tegishli moddalar (`pinned`) va shu
- * kodekslar ichidan topilgan qo'shimcha moddalar.
- */
-function composeSituation({ situation, pinned, hits, state, terms, lang }) {
-  const L = pickLang(lang);
-  const pick = (v) => (lang === "ru" ? v.ru : v.uz);
-  const top = hits[0]?.score || 0;
-  const extra = hits
-    .filter((h) => h.coverage >= MIN_COVERAGE && h.score >= top * RELATIVE_CUTOFF)
-    .map((h) => h.docIdx)
-    .filter((i) => !pinned.includes(i));
-  const docs = [...pinned, ...extra].slice(0, SITUATION_DOCS);
-
-  const steps = pick(situation.steps)
-    .map((st, i) => `${i + 1}. ${st}`)
-    .join("\n");
-  const parts = [
-    `**${pick(situation.title)}**\n${pick(situation.summary)}`,
-    `**${L.stepsTitle}:**\n${steps}`,
-  ];
-  if (docs.length) {
-    parts.push(`**${L.lawTitle}:**`);
-    docs.forEach((d, i) => parts.push(renderDoc(state.docs[d], i + 1, lang, terms, false, L)));
-  }
-  parts.push(L.more, L.note);
-  return { answer: parts.join("\n\n"), found: true };
+/** "**1. Jinoyat kodeksi, 118-modda — Nomusga tegish**" */
+function docHead(doc, n, lang, L) {
+  const ru = lang === "ru" && doc.textRu;
+  const name = ru ? doc.lawNameRu : doc.lawName;
+  const title = (ru ? doc.titleRu : doc.title) || "";
+  const num = lang === "ru" ? `${L.article} ${doc.articleNumber}` : `${doc.articleNumber}-${L.article}`;
+  return `**${n}. ${name}, ${num}${title ? ` — ${title}` : ""}**`;
 }
 
 /**
@@ -141,13 +117,18 @@ function composeSituation({ situation, pinned, hits, state, terms, lang }) {
  *           lang: string, minCoverage?: number, minMatched?: number }} p
  * @returns {{ answer: string, found: boolean }}
  */
-function composeAnswer({ hits, state, terms, qa, lang, minCoverage = MIN_COVERAGE, minMatched = 1 }) {
+function composeAnswer({ hits, state, terms, qa, lang, minCoverage = MIN_COVERAGE, minMatched = 1, needTitle = false }) {
   const L = pickLang(lang);
   const top = hits[0]?.score || 0;
+  /* `needTitle` — modda SARLAVHASIDA savol so'zi bo'lmasa, u faqat matnda
+     tasodifan uchragan so'zlar bilan tanlangan bo'ladi ("pensiyaga chiqish
+     yoshi" → "Jamoa shartnomasining mazmuni"). Bunday moddani ko'rsatishdan
+     ko'ra "topilmadi" deyish to'g'ri. */
   let good = hits.filter(
     (h) =>
       h.direct ||
-      (h.coverage >= minCoverage && h.matched >= minMatched && h.score >= top * RELATIVE_CUTOFF),
+      (h.coverage >= minCoverage && h.matched >= minMatched && h.score >= top * RELATIVE_CUTOFF &&
+        (!needTitle || h.titleFit > 0)),
   );
 
   // Tayyor savol-javobning qonun havolalari birinchi o'ringa qo'yiladi
@@ -178,4 +159,4 @@ function composeAnswer({ hits, state, terms, qa, lang, minCoverage = MIN_COVERAG
   return { answer: parts.join("\n\n"), found: true };
 }
 
-module.exports = { composeAnswer, composeSituation, localText: pickLang };
+module.exports = { composeAnswer, docHead, localText: pickLang };

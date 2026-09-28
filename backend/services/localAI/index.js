@@ -22,10 +22,15 @@
  */
 const { searchLaws } = require("./search");
 const { matchQa } = require("./qaMatch");
-const { composeAnswer, composeSituation, localText } = require("./compose");
+const { composeAnswer, localText } = require("./compose");
+const { composeSituation } = require("./composeSituation");
 const { detectSituation, pinnedDocs } = require("./situations");
+const { matchIntent } = require("./intents");
+const { searchTopics } = require("./lessonTopics");
+const { composeTopic } = require("./composeTopic");
 const { tokenize, isUzCyrillic, uzCyrToLatin } = require("./text");
-const { warmLawIndex } = require("./lawIndex");
+const { warmLawIndex, getIndex } = require("./lawIndex");
+const { parseArticleNumbers, parseLawCodes } = require("../articleLookup");
 
 /* `strict` — kalit so'z filtri savolni "huquqiy emas" deb topgan holat.
    Bunday savol baribir bazadan qidiriladi (masalan "Himoyachi qachondan
@@ -39,6 +44,26 @@ const STRICT_COVERAGE = 0.67;
    alohida qidirilib, "modda"/"asos" so'zlariga mos tasodifiy modda chiqardi. */
 const FOLLOW_UP =
   /qaysi (modda|kodeks|qonun)|asoslan|isbot|dalil|manba|qayerda yozilgan|какая статья|какой закон|на основании|основани|докаж|источник/i;
+
+/** Vaziyat (barcha tillar) yoki dars mavzusiga biriktirilgan niyat (o'zbekcha). */
+function pickTarget(text, uz) {
+  const first = uz ? matchIntent(text, true) : null;
+  if (first) return { topic: first };
+  const situation = detectSituation(text);
+  if (situation) return { situation };
+  const topic = uz ? matchIntent(text) : null;
+  return topic ? { topic } : null;
+}
+
+/* Mavzu qidiruvi natijasiga ishonch: savol so'zlarining ko'pchiligi mos
+   kelishi VA mavzu sarlavhasida yoki ibora sifatida uchrashi shart.
+   Chegaralar 45 ta real savol bo'yicha tanlangan — past chegarada
+   aloqasiz mavzular ("fuqarolikdan chiqish" → bojxona) o'tib ketardi. */
+function confident(r, minCov = 0.6) {
+  // Bitta ma'noli so'zli savol ("prokuror nima qiladi?") — so'z sarlavhada bo'lsa yetarli
+  if (r.coverage === 1 && r.headFit === 1) return true;
+  return r.coverage >= minCov && r.matched >= 2 && (r.headFit >= 0.5 || r.phrase >= 0.5);
+}
 
 /**
  * @param {{ msg: string, prevUserText?: string, lang?: string,
@@ -63,36 +88,51 @@ async function localLegalAnswer({
   if (hasImage) return { answer: L.image, category, provider: "local", found: false };
 
   let query = uzCyr ? uzCyrToLatin(msg) : msg;
+  const done = ({ answer, found }) => ({ answer, category, provider: "local", found });
 
-  // Qisqa davom savoli ("muddati qancha?") — mavzu oldingi savoldan olinadi
-  if (tokenize(query).length < 2 && prevUserText) {
+  // "Qaysi moddaga asoslanding?" — OLDINGI savol butunlay qayta ishlanadi
+  // (javobi qaysi yo'ldan kelgan bo'lsa ham — vaziyat, mavzu yoki modda).
+  if (prevUserText && FOLLOW_UP.test(msg) && tokenize(query).length < 7) {
+    query = prevUserText.slice(-600);
+  } else if (tokenize(query).length < 2 && prevUserText) {
+    // Qisqa davom savoli ("muddati qancha?") — mavzu oldingi savoldan olinadi
     query = `${prevUserText} ${query}`.slice(-600);
   }
 
   try {
-    // Hayotiy vaziyat ("erim urdi", "ishdan haydashdi") — kalit so'z
-    // filtri uni rad etgan bo'lsa ham (strict) bu aniq huquqiy savol.
-    let situation = detectSituation(query);
-    if (!situation && prevUserText && (FOLLOW_UP.test(msg) || tokenize(query).length < 4)) {
-      situation = detectSituation(prevUserText);
+    const state = await getIndex();
+    const uz = lang !== "ru";
+    // Aniq modda so'ralgan ("JK 169-modda") — vaziyat/mavzu emas, o'sha modda
+    const exact = parseArticleNumbers(query).length > 0 && parseLawCodes(query).length > 0;
+
+    // 1–2. Hayotiy vaziyat yoki ko'p so'raladigan savol (kuratorlik qilingan)
+    let target = exact ? null : pickTarget(query, uz);
+    if (!target && !exact && prevUserText && tokenize(query).length < 4) {
+      target = pickTarget(prevUserText, uz);
     }
-    if (situation) {
-      const { hits, state, terms } = await searchLaws(`${query} ${situation.terms}`, {
-        lang,
-        codes: situation.codes,
-        onlyCodes: true,
-        limit: 6,
-      });
-      const pinned = pinnedDocs(situation, state);
-      const { answer, found } = composeSituation({ situation, pinned, hits, state, terms, lang });
-      return { answer, category, provider: "local", found };
+    if (target?.situation) {
+      const pinned = pinnedDocs(target.situation, state);
+      return done(composeSituation({ situation: target.situation, pinned, state, lang }));
+    }
+    if (target?.topic) return done(composeTopic({ topic: target.topic, state, lang }));
+
+    // 3. Dars mavzulari bo'yicha qidiruv — faqat YUQORI ishonchda (lessonTopics.js)
+    const topics = uz && !exact ? searchTopics(query, 4) : [];
+    if (topics[0] && confident(topics[0])) {
+      const related = topics.slice(1).filter((t) => t.topic.lawRefs.length && confident(t, 0.5)).slice(0, 2);
+      return done(composeTopic({ topic: topics[0].topic, state, lang, related: related.map((r) => r.topic) }));
     }
 
+    // 4. Qonun matni bo'yicha qidiruv (aniq modda, tayyor savol-javob)
     const qa = strict ? null : matchQa(query, lang, codes);
-    const { hits, state, terms } = await searchLaws(query, { lang, codes, limit: 6 });
-    const opts = strict ? { minCoverage: STRICT_COVERAGE, minMatched: 2 } : {};
-    const { answer, found } = composeAnswer({ hits, state, terms, qa, lang, ...opts });
-    return { answer, category, provider: "local", found };
+    const { hits, terms } = await searchLaws(query, { lang, codes, limit: 6 });
+    const opts = strict || uz ? { minCoverage: STRICT_COVERAGE, minMatched: 2, needTitle: uz } : {};
+    const res = composeAnswer({ hits, state, terms, qa, lang, ...opts });
+    if (res.found || strict) return done(res);
+
+    // 5. Topilmadi — to'qib chiqarilgan javob o'rniga halol javob + yaqin mavzular
+    const near = topics.filter((t) => t.coverage >= 0.5).slice(0, 3).map((t) => t.topic.heading);
+    return done({ answer: near.length ? `${L.notFound}\n\n${L.near}\n${near.map((h) => `• «${h}»`).join("\n")}` : L.notFound, found: false });
   } catch (err) {
     console.error("Lokal AI xatosi:", err.message);
     return { answer: L.notFound, category, provider: "local", found: false };

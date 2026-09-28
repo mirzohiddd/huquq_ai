@@ -158,9 +158,10 @@ async function searchLaws(query, { lang = "uz", codes = null, limit = 3, onlyCod
   const own = groups.filter((g) => g.own);
   for (const [doc, raw] of scores) {
     const coverage = ownCount ? (matched.get(doc) || 0) / ownCount : 0;
-    let score = raw * (1 + TITLE_BONUS * titleFit(state.docs[doc], own, useRu, ownCount)) * (0.4 + coverage);
+    const tf = titleFit(state.docs[doc], own, useRu, ownCount);
+    let score = raw * (1 + TITLE_BONUS * tf) * (0.4 + coverage);
     if (catCodes.includes(state.docs[doc].lawCode)) score *= CATEGORY_BOOST;
-    ranked.push({ docIdx: doc, score, coverage, matched: matched.get(doc) || 0 });
+    ranked.push({ docIdx: doc, score, coverage, matched: matched.get(doc) || 0, titleFit: tf });
   }
   ranked.sort((a, b) => b.score - a.score);
 
@@ -179,4 +180,4 @@ async function searchLaws(query, { lang = "uz", codes = null, limit = 3, onlyCod
   return { hits: pool.slice(0, limit), state, terms };
 }
 
-module.exports = { searchLaws };
+module.exports = { searchLaws, byPrefix, fuzzy };
