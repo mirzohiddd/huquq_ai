@@ -302,6 +302,7 @@ app.use("/api/notifications", require("./routes/notifications"));
 app.use("/api/support", require("./routes/support"));
 app.use("/api/payment", require("./routes/payment"));
 app.use("/api/library", require("./routes/library"));
+app.use("/api/legislation", require("./routes/legislation"));
 app.use("/api/admin/laws", require("./routes/adminLaws"));
 app.use("/api/lessons", require("./routes/lessons"));
 app.use("/api/lesson-practice", require("./routes/lessonPractice"));
@@ -461,6 +462,10 @@ mongoose
     /* Lokal AI (API'siz) qidiruv indeksini fonda tayyorlash — birinchi
        savol berilganda foydalanuvchi indeks qurilishini kutmasligi uchun. */
     require("./services/localAI").warmLawIndex();
+
+    /* "Qonunchilik hujjatlari": lex.uz rekvizitlari, tuzilmasi (bo'lim/bob)
+       va modda o'zgarishlari — fonda, 2 daqiqadan keyin va har 24 soatda. */
+    require("./services/legislation/dossier").startDossierRefresh();
 
     seedLawSources()
       .then(() => ensureVectorIndex())

@@ -86,7 +86,7 @@ const uz = {
   nav_constitution: "Konstitutsiya",
   nav_legislation: "Qonunchilik",
   legis_title: "Qonunchilik hujjatlari",
-  legis_sub: "O'zbekiston Respublikasining barcha protsessual kodekslari — sud ishlari qanday yuritilishini belgilovchi rasmiy matnlar.",
+  legis_sub: "Konstitutsiya, kodekslar va qonunlar — rasmiy matn, tuzilma, amaldagi holat va oddiy tildagi tushuntirishlar bilan.",
   const_title: "O'zbekiston Respublikasi Konstitutsiyasi",
   const_sub: "Eng yuqori yuridik kuchga ega hujjat — barcha 155 modda to'liq matni bilan",
   const_toc: "Boblar",

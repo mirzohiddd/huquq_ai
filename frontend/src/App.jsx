@@ -16,6 +16,8 @@ const VoiceChat = lazy(() => import("./pages/VoiceChat"));
 const Library = lazy(() => import("./pages/Library"));
 const Constitution = lazy(() => import("./pages/Constitution"));
 const Legislation = lazy(() => import("./pages/Legislation"));
+const LegislationDoc = lazy(() => import("./pages/legislation/DocPage"));
+const LegislationArticle = lazy(() => import("./pages/legislation/ArticlePage"));
 const Lessons = lazy(() => import("./pages/Lessons"));
 const Tests = lazy(() => import("./pages/Tests"));
 const Legal = lazy(() => import("./pages/Legal"));
@@ -117,6 +119,22 @@ function AppRoutes() {
           element={
             <RequireAuth>
               <Legislation />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/legislation/:code"
+          element={
+            <RequireAuth>
+              <LegislationDoc />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/legislation/:code/:num"
+          element={
+            <RequireAuth>
+              <LegislationArticle />
             </RequireAuth>
           }
         />

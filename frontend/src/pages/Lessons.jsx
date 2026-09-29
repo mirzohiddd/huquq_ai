@@ -524,11 +524,14 @@ export default function Lessons() {
        bergan `sectionCount`/`contentChars` dan olinadi — aks holda
        kartochkada "0 bo'lim, 0 daqiqa" ko'rinardi. */
     const locked = !!lesson.locked;
-    const text = (lesson.sections || []).map(plainText).join(" ");
-    const sectionCount = locked
+    /* ⚠️ TEZLIK: ro'yxat endi mavzu matnlarisiz keladi (`summary: true`,
+       avval 2 MB edi) — son va hajm server bergan maydonlardan. */
+    const light = locked || lesson.summary;
+    const text = light ? "" : (lesson.sections || []).map(plainText).join(" ");
+    const sectionCount = light
       ? lesson.sectionCount || 0
       : (lesson.sections || []).length;
-    const charCount = locked ? lesson.contentChars || 0 : text.length;
+    const charCount = light ? lesson.contentChars || 0 : text.length;
     const topic = detectTopic(lesson.title);
     const st = allState[lesson._id] || { read: [], completed: false };
     const pct =
@@ -582,7 +585,7 @@ export default function Lessons() {
           </span>
           <span>
             <Clock size={13} />{" "}
-            {locked ? minutesFromChars(charCount) : readingMinutes(text)}{" "}
+            {light ? minutesFromChars(charCount) : readingMinutes(text)}{" "}
             {t.lesson_min}
           </span>
         </div>
@@ -858,6 +861,19 @@ export default function Lessons() {
   }
 
   /* ═══════════════════ DARS KO'RINISHI ═══════════════════ */
+  /* Ro'yxatdagi nusxada mavzular yo'q (`summary`) — to'liq dars kelguncha
+     bo'sh "0 mavzu" sahifasi o'rniga yuklanish holati ko'rsatiladi. */
+  if (active.summary) {
+    return (
+      <div className={s.page}>
+        <Seo title={active.title} noindex />
+        <main className={s.wrap}>
+          <p className={s.stateText}>{t.library_loading}</p>
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className={s.page}>
       <Seo title={active.title} noindex />
@@ -1384,7 +1400,7 @@ export default function Lessons() {
                               ? t.plan_locked_badge
                               : allState[l._id]?.completed
                                 ? t.lesson_badge_done
-                                : `${l.sections.length} ${t.lessons_sections}`}
+                                : `${l.sectionCount ?? l.sections.length} ${t.lessons_sections}`}
                           </em>
                         </span>
                         {l.locked ? <Lock size={14} /> : <ArrowRight size={14} />}

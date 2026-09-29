@@ -7,6 +7,13 @@
  * foydalanuvchilarga ko'rinadi (published:true bo'lsa).
  */
 const router = require("express").Router();
+
+/* Darslar o'zgarganda foydalanuvchi ro'yxati va dars keshi darhol
+   tozalansin (routes/lessons.js — kesh tezlik uchun qo'shilgan). */
+router.use("/lessons", (req, res, next) => {
+  if (req.method !== "GET") require("../utils/queryCache").clearCache("lessons:");
+  next();
+});
 const multer = require("multer");
 const { Lesson, Quiz } = require("../models");
 const { adminGuard } = require("../middleware/auth");

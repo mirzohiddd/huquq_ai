@@ -1,0 +1,42 @@
+/* ── Hujjat kartasi va holat nishoni ── */
+.doc {
+  display: flex; flex-direction: column; gap: 0.7rem; padding: 1.15rem 1.2rem; border-radius: 16px;
+  background: var(--white); border: 1px solid var(--gray-100); transition: all 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+  min-width: 0;
+}
+.doc:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: rgba(201, 149, 58, 0.35); }
+.docTop { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.typeTag {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; padding: 4px 9px;
+  border-radius: 7px; background: linear-gradient(135deg, var(--gold) 0%, #b8770a 100%); color: var(--white);
+}
+.iconBtn {
+  margin-left: auto; display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px;
+  border-radius: 9px; border: 1px solid var(--gray-200); background: var(--white); color: var(--gray-600); cursor: pointer;
+}
+.iconBtn:hover { border-color: var(--gold); color: var(--gold-text); }
+.iconBtnOn { background: var(--gold-pale); border-color: rgba(201, 149, 58, 0.45); color: var(--gold-text); }
+.docLink { color: inherit; }
+.docName { font-size: 15.5px; font-weight: 700; color: var(--navy); line-height: 1.4; margin: 0; }
+.docLink:hover .docName { color: var(--gold-text); }
+.docOfficial { font-size: 12px; color: var(--gray-600); margin: 3px 0 0; line-height: 1.45; }
+.docMeta { list-style: none; padding: 0; margin: 0; display: grid; gap: 4px; }
+.docMeta li { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--gray-600); }
+.docMeta li svg { flex-shrink: 0; color: var(--gold); }
+.docMeta b { color: var(--navy); font-weight: 600; }
+.docFoot {
+  margin-top: auto; display: flex; justify-content: space-between; align-items: center; gap: 8px;
+  padding-top: 0.7rem; border-top: 1px solid var(--gray-100); font-size: 12.5px; color: var(--gray-600);
+}
+.openLink { display: inline-flex; align-items: center; gap: 2px; font-weight: 600; color: var(--gold-text); }
+
+.statusWrap { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+.status {
+  display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 999px;
+  font-size: 12.5px; font-weight: 600; border: 1px solid transparent; white-space: nowrap;
+}
+.statusSm { padding: 3px 8px; font-size: 11.5px; }
+.st_active { background: var(--green-bg); color: var(--green); border-color: rgba(26, 92, 53, 0.2); }
+.st_repealed { background: var(--red-bg); color: var(--red); border-color: rgba(139, 26, 26, 0.2); }
+.st_pending { background: var(--blue-bg); color: #1d4ed8; border-color: rgba(29, 78, 216, 0.2); }
+.st_new_edition, .st_amended { background: var(--gold-pale); color: var(--gold-text); border-color: rgba(201, 149, 58, 0.3); }

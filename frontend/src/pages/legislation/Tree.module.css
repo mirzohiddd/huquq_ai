@@ -1,0 +1,45 @@
+/* ── Tuzilma daraxti: qism → bo'lim → bob → paragraf → modda ── */
+.tools { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 0.6rem; }
+.search {
+  flex: 1 1 260px; display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-radius: 11px;
+  border: 1px solid var(--gray-200); background: var(--white); color: var(--gray-400); min-width: 0;
+}
+.search:focus-within { border-color: var(--gold); }
+.search input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; font-size: 13.5px; color: var(--navy); }
+.toolBtn { padding: 8px 12px; border-radius: 10px; border: 1px solid var(--gray-200); background: var(--white); font-size: 12.5px; font-weight: 600; color: var(--navy); cursor: pointer; }
+.toolBtn:hover { border-color: var(--gold); }
+.legend { display: flex; align-items: center; gap: 5px; font-size: 11.5px; color: var(--gray-600); margin: 0 0 0.8rem; }
+.empty { color: var(--gray-600); font-size: 13.5px; padding: 1.5rem 0; text-align: center; }
+
+.tree { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+.node { min-width: 0; }
+.nodeHead {
+  display: flex; align-items: flex-start; gap: 8px; width: 100%; padding: 9px 12px; border-radius: 11px; border: 1px solid var(--gray-100);
+  background: var(--white); text-align: left; font-size: 13.5px; font-weight: 600; color: var(--navy); cursor: pointer; line-height: 1.4;
+}
+.nodeHead svg { flex-shrink: 0; margin-top: 1px; color: var(--gold); }
+.nodeHead:hover { border-color: rgba(201, 149, 58, 0.45); }
+.k_part > .nodeHead { background: var(--navy); color: var(--white); border-color: var(--navy); text-transform: uppercase; letter-spacing: 0.03em; }
+.k_part > .nodeHead svg { color: var(--gold-light); }
+.k_section > .nodeHead { background: var(--gold-pale); border-color: rgba(201, 149, 58, 0.3); }
+.k_paragraph > .nodeHead { font-weight: 500; font-size: 13px; background: var(--gray-50); }
+.nodeBody { padding: 6px 0 4px 14px; margin-left: 10px; border-left: 2px solid var(--gray-100); }
+
+.arts { list-style: none; padding: 0; margin: 0 0 4px; display: grid; gap: 2px; }
+.art {
+  display: flex; align-items: baseline; gap: 10px; padding: 7px 10px; border-radius: 9px; color: inherit; font-size: 13.5px;
+  transition: background 0.15s;
+}
+.art:hover { background: var(--gold-pale); }
+.artNum { flex-shrink: 0; min-width: 78px; font-weight: 700; color: var(--gold-text); font-size: 12.5px; }
+.artTitle { flex: 1; min-width: 0; color: var(--navy); line-height: 1.45; }
+.tag {
+  flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 50%;
+  background: var(--gold-pale); color: var(--gold-text); align-self: center;
+}
+.tagRead { background: var(--green-bg); color: var(--green); }
+
+@media (max-width: 520px) {
+  .artNum { min-width: 64px; }
+  .nodeBody { padding-left: 8px; margin-left: 4px; }
+}
