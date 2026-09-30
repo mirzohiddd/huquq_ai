@@ -303,6 +303,7 @@ app.use("/api/support", require("./routes/support"));
 app.use("/api/payment", require("./routes/payment"));
 app.use("/api/library", require("./routes/library"));
 app.use("/api/legislation", require("./routes/legislation"));
+app.use("/api/legislation", require("./routes/legislationActs"));
 app.use("/api/admin/laws", require("./routes/adminLaws"));
 app.use("/api/lessons", require("./routes/lessons"));
 app.use("/api/lesson-practice", require("./routes/lessonPractice"));
@@ -466,6 +467,8 @@ mongoose
     /* "Qonunchilik hujjatlari": lex.uz rekvizitlari, tuzilmasi (bo'lim/bob)
        va modda o'zgarishlari — fonda, 2 daqiqadan keyin va har 24 soatda. */
     require("./services/legislation/dossier").startDossierRefresh();
+    // Prezident farmonlari, qarorlari va farmoyishlari ro'yxati (LexUZ)
+    require("./services/presidentActs/crawl").startActsCrawl();
 
     seedLawSources()
       .then(() => ensureVectorIndex())

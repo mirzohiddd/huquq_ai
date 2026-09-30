@@ -65,6 +65,14 @@ const uz = {
   score: "Natija", again: "Qaytadan", readArticle: "Moddani o'qish", toTests: "Testlar bo'limi", toLessons: "Darslar",
   glossary: "Huquqiy atamalar", glossaryHint: "Matndagi nuqtali tagchiziqli so'zni bosing — izohi chiqadi.",
   statusTip: "Faqat amaldagi tahrir ko'rsatiladi — eski hujjat amaldagi bilan adashtirilmaydi.",
+  presTitle: "Prezident hujjatlari", presSub: "O'zbekiston Respublikasi Prezidentining amaldagi farmonlari, qarorlari va farmoyishlari — LexUZ milliy bazasidan, har kuni yangilanadi.",
+  latest: "Eng yangilari", viewAll: "Barchasini ko'rish", allForms: "Barchasi", presSearch: "Nomi, raqami (PF-206, PQ-346) yoki sana…",
+  acts: "Prezident hujjatlari", actsEmpty: "Hujjat topilmadi.", actsLoading: "Ro'yxat LexUZ'dan yuklanmoqda — birozdan so'ng qayta oching.",
+  page: "Sahifa", prevPage: "Oldingi", nextPage: "Keyingi",
+  pdfOnly: "Bu hujjatning matni LexUZ'da hozircha faqat PDF ko'rinishida — to'liq matnni rasmiy manbada oching.",
+  openPdf: "PDF'ni ochish", textError: "Matnni LexUZ'dan olib bo'lmadi. Rasmiy manbada oching.",
+  unknownStatus: "Holatini LexUZ'da tekshiring", appendix: "Ilova", actNote: "Rasmiy matn LexUZ'dan olingan, platforma tomonidan o'zgartirilmagan.",
+  ruTitleNote: "Hujjat nomlari LexUZ ro'yxatidagi o'zbekcha shaklda.",
 };
 
 const ru = {
@@ -126,6 +134,14 @@ const ru = {
   score: "Результат", again: "Заново", readArticle: "Читать статью", toTests: "Раздел тестов", toLessons: "Уроки",
   glossary: "Юридические термины", glossaryHint: "Нажмите на слово с пунктирным подчёркиванием — появится пояснение.",
   statusTip: "Показывается только действующая редакция — старый документ не спутать с действующим.",
+  presTitle: "Акты Президента", presSub: "Действующие указы, постановления и распоряжения Президента Республики Узбекистан — из национальной базы LexUZ, обновляются ежедневно.",
+  latest: "Последние", viewAll: "Смотреть все", allForms: "Все", presSearch: "Название, номер (УП-206, ПП-346) или дата…",
+  acts: "Акты Президента", actsEmpty: "Документы не найдены.", actsLoading: "Список загружается с LexUZ — откройте чуть позже.",
+  page: "Страница", prevPage: "Назад", nextPage: "Далее",
+  pdfOnly: "Текст этого документа на LexUZ пока доступен только в PDF — откройте полный текст в официальном источнике.",
+  openPdf: "Открыть PDF", textError: "Не удалось получить текст с LexUZ. Откройте официальный источник.",
+  unknownStatus: "Проверьте статус на LexUZ", appendix: "Приложение", actNote: "Официальный текст получен с LexUZ и платформой не изменялся.",
+  ruTitleNote: "Названия документов — в узбекской форме, как в списке LexUZ.",
 };
 
 const DICT = { uz, ru };

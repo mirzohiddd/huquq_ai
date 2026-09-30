@@ -19,6 +19,7 @@ const { compareArticle } = require("../services/legislation/editions");
 const { buildQuiz } = require("../services/legislation/quiz");
 const { refreshAll } = require("../services/legislation/dossier");
 const { GLOSSARY } = require("../config/legalGlossary");
+const { mergeCatalog, actsForSearch } = require("../services/presidentActs/merge");
 
 const langOf = (req) => (String(req.query.lang || "").toLowerCase() === "ru" ? "ru" : "uz");
 const codeOf = (req) => String(req.params.code || "").toUpperCase().slice(0, 12);
@@ -31,7 +32,8 @@ function fail(res, err, where) {
 
 router.get("/catalog", userGuard, async (req, res) => {
   try {
-    res.json({ success: true, ...(await getCatalog(langOf(req))) });
+    const lang = langOf(req);
+    res.json({ success: true, ...(await mergeCatalog(await getCatalog(lang), lang)) });
   } catch (e) {
     fail(res, e, "catalog");
   }
@@ -55,8 +57,11 @@ router.get("/search", userGuard, async (req, res) => {
     const { docs: all } = await getCatalog(lang);
     const docs = filterDocs(all, f);
     const scope = filterDocs(all, { ...f, q: "" }).map((d) => d.code);
-    const articles = q.length >= 2 ? await searchArticles(q, { lang, codes: scope, limit: 40 }) : [];
-    res.json({ success: true, docs, articles });
+    const [articles, acts] = await Promise.all([
+      q.length >= 2 ? searchArticles(q, { lang, codes: scope, limit: 40 }) : [],
+      actsForSearch(f, lang).catch(() => null),
+    ]);
+    res.json({ success: true, docs, articles, acts });
   } catch (e) {
     fail(res, e, "search");
   }

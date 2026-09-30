@@ -11,6 +11,7 @@ import FilterPanel from "./FilterPanel";
 import CatalogResults from "./CatalogResults";
 import ShelfStrip from "./ShelfStrip";
 import DocCard from "./DocCard";
+import PresidentStrip from "./PresidentStrip";
 import s from "./Catalog.module.css";
 
 const KEYS = ["q", "type", "status", "area", "year", "dateField"];
@@ -113,7 +114,17 @@ export default function Catalog() {
           <div className={s.main}>
             {error && <p className={s.state}>{L.error}</p>}
             {!catalog && !error && <p className={s.state}>{L.loading}</p>}
-            {catalog && searching && <CatalogResults result={result} loading={loading} />}
+            {catalog && searching && (
+              <CatalogResults
+                result={result}
+                loading={loading}
+                query={{
+                  ...(filters.q && { q: filters.q }),
+                  ...(["decree", "resolution", "order"].includes(filters.type) && { form: filters.type }),
+                  ...(filters.year && { year: filters.year }),
+                }}
+              />
+            )}
             {catalog && !searching && <Overview catalog={catalog} onArea={(id) => apply({ ...filters, area: id })} />}
           </div>
         </div>
@@ -136,7 +147,9 @@ function Overview({ catalog, onArea }) {
             <h2 className={s.blockTitle}>
               {g.label} <span className={s.count}>{list.length}</span>
             </h2>
-            {list.length ? (
+            {g.id === "president" && catalog.president ? (
+              <PresidentStrip data={catalog.president} facets={facets} />
+            ) : list.length ? (
               <div className={s.docGrid}>
                 {list.map((d) => (
                   <DocCard key={d.code} doc={d} />
