@@ -87,3 +87,39 @@
 .subRow:hover td {
   background: var(--bg2);
 }
+
+/* ── Buyurtmalar sahifasi (Orders.jsx) ── */
+.notice {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  border-radius: var(--radius-sm);
+  background: var(--yellow-bg);
+  border: 1px solid var(--yellow-border);
+  color: var(--yellow);
+  font-size: 13px;
+  line-height: 1.55;
+}
+.notice svg { flex-shrink: 0; margin-top: 2px; }
+.notice code { background: rgba(0, 0, 0, .25); padding: 1px 6px; border-radius: 4px; }
+.phoneLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--text);
+  text-decoration: none;
+  font-variant-numeric: tabular-nums;
+}
+.phoneLink:hover { color: var(--accent); }
+.statusSelect {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: var(--radius-sm);
+  padding: 5px 8px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.statusSelect:disabled { opacity: .5; cursor: wait; }

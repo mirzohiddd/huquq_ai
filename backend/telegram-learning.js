@@ -275,7 +275,8 @@ function registerLearning({ bot, safeSend, getLang, findOrLinkUser, sendNotRegis
     return safeSend(chatId, `${T.locked_title}\n\n${sub}`, {
       reply_markup: {
         inline_keyboard: [
-          [{ text: T.locked_cta, url: `${SITE_URL}/#pricing` }],
+          // Botning o'zidagi «💎 Tariflar» ochiladi (telegram/plans.js) — saytga chiqib ketmasin
+          [{ text: T.locked_cta, callback_data: "plans" }],
           [{ text: T.back_list, callback_data: "lnlist" }],
         ],
       },

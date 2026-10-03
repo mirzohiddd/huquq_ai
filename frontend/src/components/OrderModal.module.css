@@ -1,0 +1,123 @@
+/* Buyurtma oynasi — umumiy qobiq PaymentMethodModal.module.css dan olinadi,
+   bu yerda faqat forma va muvaffaqiyat ekrani uslublari. */
+
+.lead {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--gray-600);
+  text-align: center;
+  margin: 0 0 1rem;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 0.7rem;
+  min-width: 0;
+}
+
+.input {
+  width: 100%;
+  min-width: 0;
+  border: 1.5px solid var(--gray-200);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--navy);
+  background: var(--white);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input:focus {
+  border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(11, 19, 34, 0.07);
+}
+
+.inputError,
+.inputError:focus {
+  border-color: #dc2626;
+  background: #fef2f2;
+}
+
+.success {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.successIcon {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--green);
+  background: var(--green-bg);
+  margin-bottom: 0.9rem;
+  animation: pop 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.successTitle {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--navy);
+  margin: 0 0 0.45rem;
+}
+
+.successText {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--gray-600);
+  margin: 0 0 0.6rem;
+}
+
+.ghostBtn {
+  margin-top: 0.6rem;
+  width: 100%;
+  padding: 12px;
+  border-radius: 11px;
+  border: 1.5px solid var(--gray-200);
+  background: transparent;
+  color: var(--navy);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.ghostBtn:hover {
+  background: var(--gray-50);
+}
+
+@media (max-width: 380px) {
+  .row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}

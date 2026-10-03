@@ -8,6 +8,7 @@ import Seo from "../components/Seo";
 import axios from "axios";
 import api from "../utils/api";
 import { API_ORIGIN } from "../utils/apiBase";
+import { formatPhoneInput } from "../utils/phone";
 import s from "./Auth.module.css";
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
@@ -797,9 +798,12 @@ export function Register() {
   const [form, setForm] = useState({
     username: "",
     password: "",
-    fullName: "",
+    firstName: "",
+    lastName: "",
+    phone: "+998 ",
     email: "",
   });
+  const [errField, setErrField] = useState("");
   const [err, setErr] = useState("");
   const [busy, setBusy] = useState(false);
   const [needsVerify, setNeedsVerify] = useState(false);
@@ -831,7 +835,11 @@ export function Register() {
       const result = await register(
         form.username.trim(),
         form.password,
-        form.fullName.trim(),
+        {
+          firstName: form.firstName.trim(),
+          lastName: form.lastName.trim(),
+          phone: form.phone.trim(),
+        },
         form.email.trim(),
       );
       if (result?.needsVerification) {
@@ -845,10 +853,19 @@ export function Register() {
       }
     } catch (ex) {
       setErr(ex.response?.data?.error || t.error_generic);
+      setErrField(ex.response?.data?.field || "");
     } finally {
       setBusy(false);
     }
   }
+
+  // Maydon o'zgarganda o'sha maydondagi xato belgisi o'chadi
+  const setField = (k) => (e) => {
+    const v = k === "phone" ? formatPhoneInput(e.target.value) : e.target.value;
+    setForm((p) => ({ ...p, [k]: v }));
+    if (errField === k) setErrField("");
+  };
+  const inputCls = (k) => `${s.input} ${errField === k ? s.inputError : ""}`;
 
   async function handleGoogle(credential) {
     setErr("");
@@ -921,14 +938,39 @@ export function Register() {
                 (≤400px) CSS avtomatik bitta ustunga tushiradi. */}
             <div className={s.formGrid}>
             <label className={s.label}>
-              {t.register_fullname}
+              {t.register_first_name}
               <input
-                className={s.input}
-                value={form.fullName}
-                onChange={(e) =>
-                  setForm((p) => ({ ...p, fullName: e.target.value }))
-                }
-                placeholder={t.register_fullname_ph}
+                className={inputCls("firstName")}
+                value={form.firstName}
+                onChange={setField("firstName")}
+                placeholder={t.register_first_name_ph}
+                autoComplete="given-name"
+                required
+                autoFocus
+              />
+            </label>
+            <label className={s.label}>
+              {t.register_last_name}
+              <input
+                className={inputCls("lastName")}
+                value={form.lastName}
+                onChange={setField("lastName")}
+                placeholder={t.register_last_name_ph}
+                autoComplete="family-name"
+                required
+              />
+            </label>
+            <label className={s.label}>
+              {t.register_phone}
+              <input
+                className={inputCls("phone")}
+                type="tel"
+                inputMode="tel"
+                value={form.phone}
+                onChange={setField("phone")}
+                placeholder="+998 90 123 45 67"
+                autoComplete="tel"
+                required
               />
             </label>
             <label className={s.label}>
@@ -936,12 +978,10 @@ export function Register() {
               <input
                 className={s.input}
                 value={form.username}
-                onChange={(e) =>
-                  setForm((p) => ({ ...p, username: e.target.value }))
-                }
+                onChange={setField("username")}
                 placeholder={t.register_username_ph}
+                autoComplete="username"
                 required
-                autoFocus
               />
             </label>
             <label className={s.label}>
@@ -968,7 +1008,7 @@ export function Register() {
                 }
                 placeholder={t.register_password_ph}
                 required
-                minLength={6}
+                minLength={8}
               />
             </label>
             </div>

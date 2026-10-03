@@ -265,6 +265,10 @@ router.get("/users", adminGuard, async (req, res) => {
         { username: { $regex: search.slice(0, 50), $options: "i" } },
         { email: { $regex: search.slice(0, 50), $options: "i" } },
         { fullName: { $regex: search.slice(0, 50), $options: "i" } },
+        // Telefon bo'yicha ham (raqamlar bo'shliqsiz saqlanadi)
+        ...(search.replace(/\D/g, "").length >= 3
+          ? [{ phone: { $regex: search.replace(/\D/g, "").slice(0, 15) } }]
+          : []),
       ];
     }
 

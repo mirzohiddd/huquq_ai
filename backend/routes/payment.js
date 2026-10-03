@@ -118,6 +118,11 @@ router.get("/plans", async (req, res) => {
   try {
     res.json({
       plans: Object.entries(PLANS).map(([id, cfg]) => ({ id, ...cfg })),
+      /* Onlayn to'lov (Click/Payme/Uzum yoki test rejimi) ishlaydimi.
+         `false` bo'lsa Narxlar bo'limi faqat buyurtma oynasini ko'rsatadi —
+         avval to'lov oynasi ochilib, har doim "ulanmagan" xatosi chiqardi. */
+      onlinePayment:
+        ["click", "payme", "uzum"].some(isProviderConfigured) || isTestPaymentAllowed(),
     });
   } catch (err) {
     console.error("payment/plans xato:", err.message);

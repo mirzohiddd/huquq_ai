@@ -295,6 +295,9 @@ app.use(
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/chat", require("./routes/chat"));
 app.use("/api/voice", require("./routes/voice"));
+// Buyurtmalar — admin qismi `/api/admin` dan OLDIN ulanadi (aniq yo'l)
+app.use("/api/orders", require("./routes/orders").router);
+app.use("/api/admin/orders", require("./routes/orders").adminRouter);
 app.use("/api/admin", require("./routes/admin"));
 app.use("/api/visitor", require("./routes/visitor"));
 app.use("/api/site", require("./routes/site"));

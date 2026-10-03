@@ -10,6 +10,7 @@ const NAV = [
   { to: "/chats",        icon: "◉",  label: "Suhbatlar"            },
   { to: "/users",        icon: "⬡",  label: "Foydalanuvchilar"     },
   { to: "/payments",     icon: "◆",  label: "To'lovlar"            },
+  { to: "/orders",       icon: "◇",  label: "Buyurtmalar"          },
   { to: "/lessons",      icon: "▤",  label: "Darslar"              },
   { to: "/tests",        icon: "▥",  label: "Testlar"              },
   { to: "/laws",         icon: "§",  label: "Qonunlar"             },

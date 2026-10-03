@@ -137,6 +137,15 @@ const UserSchema = new mongoose.Schema(
     },
     password: { type: String, default: "" },
     fullName: { type: String, trim: true, default: "" },
+    /* Ism, familiya va telefon — ro'yxatdan o'tishda so'raladi
+       (2026-10-03). Tarif sotib olmoqchi bo'lgan foydalanuvchiga admin
+       shu raqam orqali Telegram'da yozadi. `fullName` moslik uchun
+       saqlanadi va "Ism Familiya" ko'rinishida to'ldiriladi. */
+    firstName: { type: String, trim: true, default: "" },
+    lastName: { type: String, trim: true, default: "" },
+    phone: { type: String, trim: true, default: "", index: true },
+    // Telegram kontakt orqali kelgan raqam — Telegram o'zi tasdiqlagan
+    phoneVerified: { type: Boolean, default: false },
     email: {
       type: String,
       trim: true,
@@ -146,7 +155,12 @@ const UserSchema = new mongoose.Schema(
     },
     emailVerified: { type: Boolean, default: false },
     googleId: { type: String, sparse: true, unique: true },
-    authProvider: { type: String, enum: ["local", "google"], default: "local" },
+    // "telegram" — hisob botda telefon raqami yuborilib ochilgan (parolsiz)
+    authProvider: {
+      type: String,
+      enum: ["local", "google", "telegram"],
+      default: "local",
+    },
     otpCode: { type: String, default: null },
     otpExpires: { type: Date, default: null },
     lastLogin: { type: Date, default: null },

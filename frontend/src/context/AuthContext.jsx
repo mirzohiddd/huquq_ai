@@ -71,12 +71,14 @@ export function AuthProvider({ children }) {
     return data.user;
   }, []);
 
-  const register = useCallback(async (username, password, fullName, email) => {
+  /* `profile` — { firstName, lastName, phone } (2026-10-03: majburiy).
+     Tarif sotib olinganda admin shu raqam orqali Telegram'da bog'lanadi. */
+  const register = useCallback(async (username, password, profile, email) => {
     const { data } = await api.post("/auth/register", {
       username,
       password,
-      fullName,
       email,
+      ...profile,
     });
     if (data.needsVerification) return data;
     localStorage.setItem("token", data.token);

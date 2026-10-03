@@ -4,6 +4,7 @@ import { AuthProvider, useAuth } from "./context/AuthContext";
 import { LangProvider } from "./context/LangContext";
 import { ChatPanelProvider } from "./context/ChatPanelContext";
 import SiteLayout from "./components/SiteLayout";
+import TelegramLinkIntent from "./components/TelegramLinkIntent";
 import Home from "./pages/Home";
 
 /* TEZLIK: avval hamma sahifa bitta bundle'ga qo'shilardi (677 KB) va
@@ -205,6 +206,7 @@ export default function App() {
     <LangProvider>
       <ChatPanelProvider>
         <AuthProvider>
+          <TelegramLinkIntent />
           <AppRoutes />
         </AuthProvider>
       </ChatPanelProvider>

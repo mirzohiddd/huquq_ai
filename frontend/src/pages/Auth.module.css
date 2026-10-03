@@ -237,6 +237,12 @@
 .input:focus {
   border-color: var(--navy);
 }
+/* Server qaysi maydonni rad etgan bo'lsa — o'sha maydon qizil */
+.inputError,
+.inputError:focus {
+  border-color: #dc2626;
+  background: #fef2f2;
+}
 .btn {
   background: var(--navy);
   color: #fff;

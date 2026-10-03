@@ -9,6 +9,7 @@ import JsonLd from "./JsonLd";
 import { graph, pricingSchema } from "../seo/schema";
 import { PAYMENT_PROVIDERS } from "./PaymentLogos";
 import PaymentMethodModal from "./PaymentMethodModal";
+import OrderModal from "./OrderModal";
 import s from "./PricingSection.module.css";
 
 // Faqat pullik 3 ta tarif — eng past (Basic) dan eng yuqori (Premium) gacha.
@@ -34,13 +35,35 @@ export default function PricingSection() {
   const [currentPlan, setCurrentPlan] = useState(null);
   // Tanlangan tarif — bosilganda to'lov usulini tanlash oynasi ochiladi
   const [checkoutPlan, setCheckoutPlan] = useState(null);
+  /* "Sotib olish" → avval BUYURTMA oynasi (adminga xabar ketadi).
+     Onlayn to'lov ulangan bo'lsa, u yerdan to'lov oynasiga o'tiladi. */
+  const [orderPlan, setOrderPlan] = useState(null);
+  const [onlinePayment, setOnlinePayment] = useState(false);
 
   useEffect(() => {
     api
       .get("/payment/plans")
-      .then(({ data }) => setPlans(data.plans))
+      .then(({ data }) => {
+        setPlans(data.plans);
+        setOnlinePayment(!!data.onlinePayment);
+      })
       .catch(() => {});
   }, []);
+
+  /* Login qilmay "Sotib olish" bosilgan bo'lsa, tanlov saqlangan —
+     kirgandan keyin shu yerda buyurtma oynasi avtomatik ochiladi. */
+  useEffect(() => {
+    if (!user || !plans) return;
+    let pending = null;
+    try {
+      pending = JSON.parse(localStorage.getItem("pendingCheckout") || "null");
+    } catch {
+      /* buzilgan qiymat */
+    }
+    localStorage.removeItem("pendingCheckout");
+    const plan = pending && plans.find((p) => p.id === pending.tier);
+    if (plan) setOrderPlan(plan);
+  }, [user, plans]);
 
   useEffect(() => {
     if (!user) {
@@ -55,14 +78,11 @@ export default function PricingSection() {
 
   function handleBuyClick(plan) {
     if (!user) {
-      localStorage.setItem(
-        "pendingCheckout",
-        JSON.stringify({ tier: plan.id, provider: "click" }),
-      );
-      window.location.href = "/login";
+      localStorage.setItem("pendingCheckout", JSON.stringify({ tier: plan.id }));
+      window.location.href = "/register";
       return;
     }
-    setCheckoutPlan(plan);
+    setOrderPlan(plan);
   }
 
   function handleActivated(tier) {
@@ -191,6 +211,20 @@ export default function PricingSection() {
         </div>
         )}
       </div>
+
+      {orderPlan && (
+        <OrderModal
+          tier={orderPlan.id}
+          planLabel={t[`tier_${orderPlan.id}`] || orderPlan.label}
+          priceUzs={orderPlan.priceUzs}
+          onlinePayment={onlinePayment}
+          onClose={() => setOrderPlan(null)}
+          onPayOnline={() => {
+            setCheckoutPlan(orderPlan);
+            setOrderPlan(null);
+          }}
+        />
+      )}
 
       {checkoutPlan && (
         <PaymentMethodModal

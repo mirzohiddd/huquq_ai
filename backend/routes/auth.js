@@ -14,6 +14,7 @@ const { generateOTP, sendOTPEmail } = require("../services/emailService");
 const parseDevice = require("../middleware/parseDevice");
 const { isHosted } = require("../utils/hosting");
 const otpGuard = require("../utils/otpGuard");
+const { normalizePhone, cleanName } = require("../utils/phone");
 
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -132,6 +133,9 @@ function userPublic(user) {
     id: user._id,
     username: user.username,
     fullName: user.fullName,
+    firstName: user.firstName || "",
+    lastName: user.lastName || "",
+    phone: user.phone || "",
     email: user.email,
   };
 }
@@ -165,10 +169,27 @@ async function logLogin(req, userId, source = "web") {
 ───────────────────────────────────────── */
 router.post("/register", async (req, res) => {
   try {
-    const { username, password, fullName, email } = req.body;
+    const { username, password, email } = req.body;
 
     if (!username || !password || !email) {
       return res.status(400).json({ error: "Username, email va parol kerak" });
+    }
+    /* Ism, familiya, telefon — MAJBURIY (2026-10-03). Tarif sotib
+       olinganda admin mijozga shu raqam orqali Telegram'da yozadi. */
+    const firstName = cleanName(req.body.firstName);
+    const lastName = cleanName(req.body.lastName);
+    const phone = normalizePhone(req.body.phone);
+    if (!firstName) {
+      return res.status(400).json({ error: "Ismingizni kiriting (kamida 2 harf)", field: "firstName" });
+    }
+    if (!lastName) {
+      return res.status(400).json({ error: "Familiyangizni kiriting (kamida 2 harf)", field: "lastName" });
+    }
+    if (!phone) {
+      return res.status(400).json({
+        error: "Telefon raqamini to'g'ri kiriting (masalan: +998 90 123 45 67)",
+        field: "phone",
+      });
     }
     if (username.length < 3 || username.length > 30) {
       return res
@@ -230,7 +251,10 @@ router.post("/register", async (req, res) => {
     const user = await User.create({
       username: username.trim().toLowerCase(),
       password,
-      fullName: fullName?.trim() || "",
+      fullName: `${firstName} ${lastName}`,
+      firstName,
+      lastName,
+      phone,
       email: email.trim().toLowerCase(),
       emailVerified: false,
       authProvider: "local",
@@ -797,7 +821,7 @@ router.put(
   require("../middleware/auth").userGuard,
   async (req, res) => {
     try {
-      const { fullName, username } = req.body;
+      const { fullName, username, firstName, lastName, phone } = req.body;
       const user = await User.findById(req.authUser.id);
       if (!user)
         return res.status(404).json({ error: "Foydalanuvchi topilmadi" });
@@ -828,18 +852,33 @@ router.put(
       }
 
       if (fullName !== undefined) {
-        user.fullName = fullName.trim().slice(0, 100);
+        user.fullName = String(fullName).trim().slice(0, 100);
+      }
+      // Ism / familiya / telefon — yuborilgan bo'lsa tekshiriladi
+      if (firstName !== undefined) {
+        const v = cleanName(firstName);
+        if (!v) return res.status(400).json({ error: "Ism noto'g'ri", field: "firstName" });
+        user.firstName = v;
+      }
+      if (lastName !== undefined) {
+        const v = cleanName(lastName);
+        if (!v) return res.status(400).json({ error: "Familiya noto'g'ri", field: "lastName" });
+        user.lastName = v;
+      }
+      if (firstName !== undefined || lastName !== undefined) {
+        user.fullName = `${user.firstName} ${user.lastName}`.trim();
+      }
+      if (phone !== undefined) {
+        const v = normalizePhone(phone);
+        if (!v) return res.status(400).json({ error: "Telefon raqami noto'g'ri", field: "phone" });
+        if (v !== user.phone) user.phoneVerified = false;
+        user.phone = v;
       }
 
       await user.save();
       return res.json({
         message: "Profil muvaffaqiyatli yangilandi",
-        user: {
-          id: user._id,
-          username: user.username,
-          fullName: user.fullName,
-          email: user.email,
-        },
+        user: userPublic(user),
       });
     } catch (err) {
       console.error("profile update error:", err.message);

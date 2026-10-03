@@ -3,6 +3,7 @@ import { CheckCircle2, AlertCircle, Send, Star, Scale, X, User, Lock, LogOut, Ch
 import { useAuth } from "../context/AuthContext";
 import { useLang } from "../context/LangContext";
 import { useNavigate } from "react-router-dom";
+import { formatPhoneInput } from "../utils/phone";
 import api from "../utils/api";
 import PaymentMethodModal from "./PaymentMethodModal";
 import CancelPlanModal from "./CancelPlanModal";
@@ -17,6 +18,8 @@ export default function ProfileModal({ onClose, initialTab = "profile" }) {
 
   // Profile tab
   const [fullName, setFullName] = useState(user?.fullName || "");
+  // Telefon — admin tarif buyurtmasi bo'yicha shu raqam orqali bog'lanadi
+  const [phone, setPhone] = useState(formatPhoneInput(user?.phone || ""));
   const [username, setUsername] = useState(user?.username || "");
   const [profileMsg, setProfileMsg] = useState({ type: "", text: "" });
   const [profileBusy, setProfileBusy] = useState(false);
@@ -92,7 +95,9 @@ export default function ProfileModal({ onClose, initialTab = "profile" }) {
     setProfileBusy(true);
     setProfileMsg({ type: "", text: "" });
     try {
-      const { data } = await api.put("/auth/profile", { fullName, username: username.trim().toLowerCase() });
+      const body = { fullName, username: username.trim().toLowerCase() };
+      if (phone.replace(/\D/g, "") !== String(user?.phone || "").replace(/\D/g, "")) body.phone = phone;
+      const { data } = await api.put("/auth/profile", body);
       const saved = JSON.parse(localStorage.getItem("user") || "{}");
       localStorage.setItem("user", JSON.stringify({ ...saved, ...data.user }));
       setProfileMsg({ type: "success", text: t.profile_updated });
@@ -309,6 +314,9 @@ export default function ProfileModal({ onClose, initialTab = "profile" }) {
               </Field>
               <Field label={t.profile_username_label}>
                 <Input value={username} onChange={e => setUsername(e.target.value.toLowerCase())} placeholder={t.profile_username_ph} minLength={3} maxLength={30} />
+              </Field>
+              <Field label={t.register_phone}>
+                <Input type="tel" inputMode="tel" value={phone} onChange={e => setPhone(formatPhoneInput(e.target.value))} placeholder="+998 90 123 45 67" autoComplete="tel" />
               </Field>
               <Field label={t.profile_email_label}>
                 <Input value={user?.email || ""} disabled style={{ opacity: 0.6, cursor: "not-allowed" }} />

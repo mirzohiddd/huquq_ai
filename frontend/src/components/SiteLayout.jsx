@@ -150,23 +150,16 @@ export default function SiteLayout() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.search]);
 
-  // Pricing bo'limida "Sotib olish" bosilganda login qilinmagan bo'lsa,
-  // foydalanuvchi /login ga yo'naltiriladi va tanlovi localStorage'da
-  // saqlanadi — login qilingandan keyin shu yerda avtomatik davom etadi.
+  /* Pricing bo'limida "Sotib olish" bosilganda login qilinmagan bo'lsa,
+     tanlov localStorage'da saqlanadi. Kirgandan keyin foydalanuvchi
+     Narxlar bo'limiga qaytariladi va u yerda BUYURTMA oynasi o'zi ochiladi
+     (PricingSection.jsx). ⚠️ Avval bu yerda to'g'ridan-to'g'ri Click
+     checkout chaqirilardi: to'lov ulanmagani uchun xato JIM yutilardi,
+     test rejimida esa `undefined` manziliga o'tib ketardi. */
   useEffect(() => {
-    if (!user) return;
-    const pending = localStorage.getItem("pendingCheckout");
-    if (!pending) return;
-    localStorage.removeItem("pendingCheckout");
-    (async () => {
-      try {
-        const { provider, tier } = JSON.parse(pending);
-        const { data } = await api.post("/payment/checkout", { provider, tier });
-        window.location.href = data.url;
-      } catch {
-        /* jim — foydalanuvchi Pricing bo'limidan qayta urinib ko'rishi mumkin */
-      }
-    })();
+    if (!user || !localStorage.getItem("pendingCheckout")) return;
+    if (location.pathname !== "/") navigate("/#pricing");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   useEffect(() => {

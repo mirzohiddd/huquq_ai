@@ -161,6 +161,7 @@ function ResetPasswordModal({ user, onClose }) {
               {user.fullName || user.username}
             </div>
             <div className={ms.userCardEmail}>{user.email || "Email yo'q"}</div>
+            {user.phone && <div className={ms.userCardEmail}>📞 {user.phone}</div>}
           </div>
         </div>
 
@@ -329,7 +330,7 @@ export default function Users() {
             setSearch(v);
             setPage(1);
           }}
-          placeholder="Username, email yoki ism..."
+          placeholder="Username, email, ism yoki telefon..."
         />
       </div>
 
@@ -379,7 +380,15 @@ export default function Users() {
                       )}
                     </span>
                   </td>
-                  <td>{u.fullName || <span className={s.anon}>—</span>}</td>
+                  <td>
+                    {u.fullName || <span className={s.anon}>—</span>}
+                    {/* Telefon — buyurtma bo'yicha mijoz bilan bog'lanish uchun */}
+                    {u.phone && (
+                      <a href={`tel:${u.phone}`} className={s.fullname} style={{ display: "block" }}>
+                        {u.phone}
+                      </a>
+                    )}
+                  </td>
                   <td>
                     <span
                       style={{
