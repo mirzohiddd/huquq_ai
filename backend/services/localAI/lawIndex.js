@@ -16,24 +16,34 @@
  *
  * Qayta qurish: birinchi so'rovda (yoki server ishga tushgach fonda) va
  * keyin har REBUILD_MS da — lex.uz yangilanishi indeksga ham tushadi.
+ *
+ * ⚠️ XOTIRA (2026-10-02): production'da "JavaScript heap out of memory"
+ * (heap ~256 MB) xatosidan keyin indeks qayta qurildi — matnlar heap'dan
+ * tashqaridagi Buffer'da (corpus.js), BM25 ro'yxatlari tipli massivda
+ * (postings.js), bazadan o'qish esa kursor bilan, bo'lib-bo'lib.
+ * O'lchov: indeks 54 MB → ~8 MB heap.
  */
-const fs = require("fs");
-const path = require("path");
 const { LegalChunk } = require("../../models");
 const { getLaws } = require("../lawRegistry");
 const { tokenize } = require("./text");
+const { packPostings } = require("./postings");
+const { assemble, readSnapshot, writeSnapshot } = require("./corpus");
 
 const REBUILD_MS = 6 * 60 * 60 * 1000;
+const RETRY_MS = 10 * 60 * 1000; // yangilash yiqilsa — darhol qayta urinilmaydi
 const TITLE_WEIGHT = 3; // sarlavhadagi so'z matndagidan 3 barobar muhim
+const FETCH_PARALLEL = 6;
+const YIELD_EVERY = 200;
 
 let state = null; // { docs, uz, ru, builtAt }
 let building = null;
+let retryAt = 0;
 
-function emptyLang() {
-  return { postings: new Map(), docLen: [], avgLen: 1, vocab: [] };
-}
+/* Indekslash sinxron va og'ir (15 mln belgi) — har YIELD_EVERY moddada
+   navbat boshqa so'rovlarga beriladi, server bu paytda "qotib" qolmaydi. */
+const breathe = () => new Promise((r) => setImmediate(r));
 
-function addDoc(idx, docIdx, title, text) {
+function addDoc(lists, docLen, docIdx, title, text) {
   const tf = new Map();
   for (const t of tokenize(title)) tf.set(t, (tf.get(t) || 0) + TITLE_WEIGHT);
   let len = 0;
@@ -41,93 +51,112 @@ function addDoc(idx, docIdx, title, text) {
     tf.set(t, (tf.get(t) || 0) + 1);
     len++;
   }
-  idx.docLen[docIdx] = len + TITLE_WEIGHT * 2;
+  docLen[docIdx] = len + TITLE_WEIGHT * 2;
   for (const [term, n] of tf) {
-    let list = idx.postings.get(term);
-    if (!list) idx.postings.set(term, (list = []));
+    let list = lists.get(term);
+    if (!list) lists.set(term, (list = []));
     list.push(docIdx, n);
   }
 }
 
-function finish(idx) {
-  const lens = idx.docLen.filter((n) => n > 0);
-  idx.avgLen = lens.reduce((a, b) => a + b, 0) / (lens.length || 1);
-  idx.vocab = [...idx.postings.keys()].sort(); // prefiks qidiruvi uchun tartiblangan
+/** Bitta til indeksi. `pick(doc)` → [sarlavha, matn] yoki null (matn yo'q). */
+async function indexLang(docs, pick) {
+  const lists = new Map();
+  const docLen = new Array(docs.length).fill(0);
+  for (let i = 0; i < docs.length; i++) {
+    const pair = pick(docs[i]);
+    if (pair) addDoc(lists, docLen, i, pair[0], pair[1]);
+    if (i % YIELD_EVERY === YIELD_EVERY - 1) await breathe();
+  }
+  const lens = docLen.filter((n) => n > 0);
+  const avgLen = lens.reduce((a, b) => a + b, 0) / (lens.length || 1);
+  return { ...packPostings(lists, docs.length), docLen, avgLen };
+}
+
+/* Tillar KETMA-KET indekslanadi: vaqtinchalik ro'yxatlar (bir til uchun
+   ~7 MB) ixcham massivga o'tkazilgach, keyingi til boshlanadi. */
+async function indexDocs(docs, builtAt) {
+  const uz = await indexLang(docs, (d) => [d.title, d.text]);
+  const ru = await indexLang(docs, (d) => {
+    const text = d.textRu;
+    return text ? [d.titleRu, text] : null;
+  });
+  return { docs, uz, ru, builtAt };
 }
 
 /* ⚠️ Moddalar KODEKS BO'YICHA PARALLEL olinadi. O'lchandi: bitta
    ketma-ket kursor 7126 moddani 235 s da o'qidi (Atlas har bir ~19 KB
-   hujjatni diskdan o'qiydi), 21 ta parallel so'rov — 40 s. */
-async function fetchDocs() {
-  const laws = await getLaws();
-  const parts = await Promise.all(
-    laws.map((law) =>
-      LegalChunk.find({ lawCode: law.code })
+   hujjatni diskdan o'qiydi), parallel so'rovlar — 40 s.
+
+   XOTIRA: avval 21 ta kodeksning HAMMASI bir vaqtda to'liq massiv bo'lib
+   kelardi (~31 MB satr + nusxalar). Endi bir vaqtda FETCH_PARALLEL ta
+   kursor, har bir modda matni kelishi bilan Buffer'ga o'tkaziladi. */
+async function fetchCorpus() {
+  const laws = (await getLaws()).map((l) => ({
+    code: l.code,
+    name: l.name || l.code,
+    nameRu: l.nameI18n?.ru || l.name || l.code,
+  }));
+  const parts = new Array(laws.length);
+  let next = 0;
+  const worker = async () => {
+    while (next < laws.length) {
+      const i = next++;
+      const rows = [];
+      const cursor = LegalChunk.find({ lawCode: laws[i].code })
         .select("articleNumber title text titleRu textRu -_id")
         .lean()
-        .then((rows) =>
-          rows.map((d) => ({
-            lawCode: law.code,
-            lawName: law.name || law.code,
-            lawNameRu: law.nameI18n?.ru || law.name || law.code,
-            articleNumber: d.articleNumber,
-            title: d.title || "",
-            text: d.text || "",
-            titleRu: d.titleRu || "",
-            textRu: d.textRu || "",
-          })),
-        ),
-    ),
-  );
-  return parts.flat();
+        .cursor({ batchSize: 100 });
+      for await (const d of cursor) {
+        rows.push({
+          num: d.articleNumber,
+          title: d.title || "",
+          titleRu: d.titleRu || "",
+          uz: Buffer.from(d.text || "", "utf8"),
+          ru: Buffer.from(d.textRu || "", "utf8"),
+        });
+      }
+      parts[i] = rows;
+    }
+  };
+  await Promise.all(Array.from({ length: FETCH_PARALLEL }, worker));
+  return assemble(laws, parts);
 }
 
-/* Disk nusxasi: server qayta ishga tushganda korpus bazadan qayta
-   o'qilmaydi (bir zumda tiklanadi), yangilanish esa fonda ketadi. */
-const SNAPSHOT = path.join(__dirname, "../../.cache/local-ai-corpus.json");
-
-function readSnapshot() {
-  try {
-    const raw = JSON.parse(fs.readFileSync(SNAPSHOT, "utf8"));
-    return Array.isArray(raw.docs) && raw.docs.length ? raw : null;
-  } catch {
-    return null;
-  }
-}
-
-function writeSnapshot(docs) {
-  try {
-    fs.mkdirSync(path.dirname(SNAPSHOT), { recursive: true });
-    fs.writeFileSync(SNAPSHOT, JSON.stringify({ savedAt: Date.now(), docs }));
-  } catch (e) {
-    console.warn("Lokal AI snapshot yozilmadi:", e.message);
-  }
-}
-
-function indexDocs(docs, builtAt) {
-  const uz = emptyLang();
-  const ru = emptyLang();
-  docs.forEach((d, i) => {
-    addDoc(uz, i, d.title, d.text);
-    if (d.textRu) addDoc(ru, i, d.titleRu, d.textRu);
-    else ru.docLen[i] = 0;
-  });
-  finish(uz);
-  finish(ru);
-  return { docs, uz, ru, builtAt };
-}
+const heapMb = () => Math.round(process.memoryUsage().heapUsed / 1048576);
 
 async function build() {
   const t0 = Date.now();
-  const docs = await fetchDocs();
-  if (!docs.length) throw new Error("LegalChunk bo'sh — qonunlar hali yuklanmagan");
-  state = indexDocs(docs, Date.now());
-  writeSnapshot(docs);
+  const corpus = await fetchCorpus();
+  if (!corpus.docs.length) throw new Error("LegalChunk bo'sh — qonunlar hali yuklanmagan");
+  state = await indexDocs(corpus.docs, Date.now());
+  /* Disk nusxasi: server qayta ishga tushganda korpus bazadan qayta
+     o'qilmaydi (bir zumda tiklanadi), yangilanish esa fonda ketadi. */
+  writeSnapshot(corpus);
   console.log(
-    `🔎 Lokal AI indeksi qurildi: ${docs.length} modda, ` +
-      `${state.uz.vocab.length}+${state.ru.vocab.length} o'zak, ${Date.now() - t0} ms`,
+    `🔎 Lokal AI indeksi qurildi: ${corpus.docs.length} modda, ` +
+      `${state.uz.vocab.length}+${state.ru.vocab.length} o'zak, ${Date.now() - t0} ms, heap ${heapMb()} MB`,
   );
   return state;
+}
+
+/* Birinchi yuklash: disk nusxasi bo'lsa — undan, aks holda bazadan. */
+async function load() {
+  const snap = readSnapshot();
+  if (!snap) return build();
+  state = await indexDocs(snap.docs, snap.savedAt);
+  return state;
+}
+
+function refreshIfStale() {
+  const now = Date.now();
+  if (!state || building || now - state.builtAt <= REBUILD_MS || now < retryAt) return;
+  building = build()
+    .catch((e) => {
+      retryAt = Date.now() + RETRY_MS;
+      console.warn("Lokal AI indeksi yangilanmadi:", e.message);
+    })
+    .finally(() => (building = null));
 }
 
 /**
@@ -136,19 +165,11 @@ async function build() {
  */
 async function getIndex() {
   if (!state) {
-    const snap = readSnapshot();
-    if (snap) state = indexDocs(snap.docs, snap.savedAt);
+    if (!building) building = load().finally(() => (building = null));
+    await building;
   }
-  if (state && Date.now() - state.builtAt > REBUILD_MS && !building) {
-    building = build()
-      .catch((e) => console.warn("Lokal AI indeksi yangilanmadi:", e.message))
-      .finally(() => (building = null));
-  }
-  if (state) return state;
-  if (!building) {
-    building = build().finally(() => (building = null));
-  }
-  return building;
+  refreshIfStale();
+  return state;
 }
 
 /** Server ishga tushganda fonda chaqiriladi (birinchi savol kutmasin). */
