@@ -45,7 +45,7 @@ export function setLink(rel, href) {
  * ALOHIDA manzil ko'rsatiladi — aks holda Google ikkala variantni ham
  * bitta sahifa deb biladi va faqat bittasini indekslaydi.
  */
-export function setAlternates(pathname) {
+export function setAlternates(pathname, singleLang = false) {
   // ⚠️ BARCHA hreflang havolalari o'chiriladi, faqat o'zimiz qo'shganlari
   // emas: `index.html` da ham statik hreflang bor (JavaScript ishlamaydigan
   // botlar uchun). Faqat `data-seo-hreflang` bo'yicha tozalansa, sahifada
@@ -54,6 +54,11 @@ export function setAlternates(pathname) {
   document.head
     .querySelectorAll('link[rel="alternate"][hreflang]')
     .forEach((el) => el.remove());
+
+  // Faqat bitta tilda yozilgan sahifa (masalan huquqiy hujjatlar) —
+  // til versiyalari e'lon QILINMAYDI (aks holda Google ruscha deb
+  // ko'rsatilgan manzilda o'zbekcha matn topib, signalga ishonmay qo'yadi).
+  if (singleLang) return;
 
   const base = `${SITE_URL}${pathname === "/" ? "/" : pathname}`;
   const entries = Object.entries(HREFLANG).map(([lang, code]) => [

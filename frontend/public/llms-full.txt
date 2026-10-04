@@ -90,8 +90,8 @@ Platformada to'rtta tarif bor: **Bepul**, **Basic**, **Pro**, **Premium**.
   yo'naltiriladi — chuqurroq va aniqroq javoblar.
 - Limit **avtomatik**, tarifga bog'liq: foydalanuvchi tarifni sotib
   olganda tegishli limit o'zi beriladi.
-- To'lov: **Click** va **Payme** orqali; to'lovdan keyin tarif darhol
-  faollashadi.
+- Sotib olish: Narxlar bo'limida «Sotib olish» → ism va telefon
+  qoldiriladi → admin Telegram orqali bog'lanib, to'lovni tushuntiradi.
 - Bepul tarifda bank kartasi talab qilinmaydi.
 
 Joriy narxlar va limitlar: https://huquq-ai-teal.vercel.app/#pricing
@@ -167,7 +167,7 @@ savol beriladi; ro'yxatdan o'tmagan mehmon ham platformani sinab ko'rishi
 mumkin.
 
 **S: To'lovni qanday amalga oshiraman?**
-J: Click yoki Payme orqali, bir necha soniyada. Tarif avtomatik yoqiladi.
+J: Narxlar bo'limida tarifni tanlab «Sotib olish» tugmasini bosing va ism hamda telefon raqamingizni qoldiring — admin siz bilan Telegram orqali bog'lanib, to'lov tartibini tushuntiradi. To'lovdan so'ng tarifingiz yoqiladi.
 
 --------------------------------------------------------------------------
 ## 7. Ограничения и краткое описание на русском
@@ -182,7 +182,7 @@ Huquq AI — платформа юридических консультаций 
   lex.uz, а не из машинного перевода.
 - Разделы: AI-консультант, библиотека законов, Конституция, 124 урока и
   6 расширенных курсов, тесты с пояснениями.
-- Тарифы: Бесплатный, Basic, Pro, Premium. Оплата через Click и Payme.
+- Тарифы: Бесплатный, Basic, Pro, Premium. Покупка: заявка на сайте или в Telegram-боте, администратор связывается в Telegram.
 - **Huquq AI не заменяет адвоката** — платформа даёт первичную
   ориентацию и общую правовую информацию.
 

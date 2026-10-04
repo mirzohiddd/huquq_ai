@@ -1,6 +1,6 @@
 # ─────────────────────────────────────────────────────────────
 #  Huquq AI — robots.txt
-#  Yangilangan: 2026-08-18
+#  Yangilangan: 2026-10-03
 #
 #  Ikki maqsad:
 #   1) SEO  — klassik qidiruv tizimlari (Google, Bing, Yandex) uchun.
@@ -39,6 +39,9 @@ Disallow: /lessons
 Disallow: /tests
 Disallow: /library
 Disallow: /constitution
+# Ilova ichidagi qonunchilik bo'limi (login bilan). Uning OCHIQ nusxalari:
+# /qonun/... (kodekslar) va /hujjat/... (Prezident hujjatlari).
+Disallow: /legislation
 
 # ⚠️ /qonunlar va /qonun/... — ATAYLAB OCHIQ va indekslanadi.
 # Bu sahifalar server tomonda tayyor HTML sifatida beriladi (backend
@@ -56,6 +59,12 @@ Allow: /qonun/
 Allow: /savollar
 Allow: /savol/
 Allow: /metodologiya
+
+# ⚠️ Prezident hujjatlari (farmon, qaror, farmoyish) — server tomonda
+# chiziladi va ATAYLAB ochiq (2026-10-03). Matn lex.uz dagi rasmiy
+# ochiq ma'lumot. Ilova ichidagi /legislation (qidiruv) — login bilan.
+Allow: /hujjatlar
+Allow: /hujjat/
 
 # LLM uchun toza matn nusxalari (`.md`). Ular HTML sahifaning AYNAN
 # o'zi, faqat navigatsiya va uslubsiz — takroriy kontent emas, chunki

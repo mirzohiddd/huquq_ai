@@ -25,4 +25,11 @@
   <sitemap>
     <loc>https://huquq-ai-teal.vercel.app/sitemap-savollar.xml</loc>
   </sitemap>
+  <!--
+    Prezident farmonlari, qarorlari va farmoyishlari (~5 600 ta) —
+    backend `routes/publicActs.js` (2026-10-03).
+  -->
+  <sitemap>
+    <loc>https://huquq-ai-teal.vercel.app/sitemap-hujjatlar.xml</loc>
+  </sitemap>
 </sitemapindex>

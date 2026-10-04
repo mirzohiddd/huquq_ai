@@ -649,6 +649,9 @@ export default function SiteLayout() {
                 <a href="/qonunlar">{t.footer_public_laws}</a>
               </li>
               <li>
+                <a href="/hujjatlar">{t.footer_public_acts}</a>
+              </li>
+              <li>
                 <a href="/savollar">{t.footer_qa}</a>
               </li>
               <li>

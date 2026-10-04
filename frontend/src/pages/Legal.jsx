@@ -39,6 +39,7 @@ function LegalPage({ title, seoTitle, sections, current, children }) {
         title={seoTitle || title}
         description={t.seo_legal_desc}
         jsonLd={jsonLd}
+        singleLang
       />
       <div className={`${shared.pageHero} animate-fade-up`}>
         <div className={shared.container}>

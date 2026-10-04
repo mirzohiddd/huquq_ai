@@ -132,6 +132,18 @@ ul.arts b{color:var(--gold);font-weight:650;margin-right:7px}
   padding:7px 15px}
 .areaNav a:hover{border-color:var(--gold);color:#a06f0c}
 
+/* ── Prezident hujjati matni (actPages.js) ── */
+.actText h3{font-size:15px;font-weight:650;margin:22px 0 10px;color:var(--navy)}
+.actText>:first-child{margin-top:0}
+.actText .chg{font-size:13px;color:var(--muted);font-style:italic;margin:-6px 0 14px}
+.actText .sign{margin-top:22px;font-weight:600;text-align:right}
+.actText .req{font-size:13.5px;color:var(--muted);margin:0 0 6px}
+.actText .annex{font-weight:700;margin:26px 0 10px;text-align:right}
+.pages{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.pages a,.pages span{padding:7px 13px;border:1px solid var(--line);border-radius:9px;
+  text-decoration:none;color:var(--ink);background:var(--card);font-size:14px}
+.pages span{background:var(--navy);color:#fff;border-color:var(--navy)}
+
 /* ── Pastki qism ── */
 .note{margin-top:20px;font-size:13px;color:var(--muted);
   border-left:3px solid var(--gold);padding-left:13px}

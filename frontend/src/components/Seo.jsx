@@ -43,6 +43,8 @@ export default function Seo({
   type = "website",
   noindex = false,
   jsonLd = null,
+  // `true` — sahifa matni faqat o'zbekcha (tarjima yo'q): hreflang yo'q, canonical bitta
+  singleLang = false,
 }) {
   const { lang } = useLang();
   const { pathname } = useLocation();
@@ -52,14 +54,18 @@ export default function Seo({
     const fullTitle = title
       ? `${title} | ${SITE_NAME}`
       : `${SITE_NAME} — O'zbekiston qonunchiligi bo'yicha AI huquqiy maslahatchi`;
-    const url = `${SITE_URL}${pathname === "/" ? "/" : pathname}`;
+    /* Canonical — sahifaning SHU tildagi manzili (hreflang bilan mos).
+       Avval ruscha sahifa ham canonical'da o'zbekcha manzilni ko'rsatardi:
+       Google uni "nusxa" deb hisoblab, ruscha versiyani indekslamasdi. */
+    const base = `${SITE_URL}${pathname === "/" ? "/" : pathname}`;
+    const url = singleLang || safeLang === DEFAULT_LOCALE ? base : `${base}?lang=${safeLang}`;
     const img = image || OG_IMAGE_BY_LANG[safeLang] || OG_IMAGE;
     // Tavsif har doim bo'lishi shart: bo'sh qolsa `setMeta` tegni
     // o'chiradi va sahifa ijtimoiy tarmoqda tavsifsiz ulashiladi.
     const desc = description || AI_SUMMARY[safeLang] || AI_SUMMARY.uz;
 
     document.title = fullTitle;
-    document.documentElement.lang = safeLang;
+    document.documentElement.lang = singleLang ? DEFAULT_LOCALE : safeLang;
 
     setMeta("name", "description", desc);
     setMeta("name", "keywords", keywords);
@@ -73,7 +79,7 @@ export default function Seo({
         : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
     );
     setLink("canonical", url);
-    setAlternates(pathname);
+    setAlternates(pathname, singleLang);
 
     /* ── Open Graph (Telegram, Facebook, LinkedIn) ── */
     setMeta("property", "og:type", type);
@@ -100,7 +106,7 @@ export default function Seo({
     setMeta("name", "geo.placename", GEO.placename);
     setMeta("name", "geo.position", `${GEO.latitude};${GEO.longitude}`);
     setMeta("name", "ICBM", `${GEO.latitude}, ${GEO.longitude}`);
-  }, [title, description, keywords, image, type, noindex, lang, pathname]);
+  }, [title, description, keywords, image, type, noindex, lang, pathname, singleLang]);
 
   // Sahifaga xos structured data — faqat shu sahifa ochiq turganda
   // <head>da bo'ladi. Massiv ham, bitta obyekt ham qabul qilinadi.

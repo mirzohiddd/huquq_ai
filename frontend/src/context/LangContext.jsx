@@ -14,6 +14,26 @@ const LangContext = createContext(null);
    Shuning uchun noma'lum til standart tilga ALMASHTIRILADI va
    `localStorage` ham darhol tuzatiladi. */
 export function readStoredLang() {
+  /* ⚠️ URL'dagi `?lang=ru` USTUN (2026-10-03, SEO). hreflang Google'ga
+     ruscha versiya `/?lang=ru` da deb aytadi — avval ilova parametrni
+     e'tiborsiz qoldirib, u manzilda ham o'zbekcha ko'rsatardi. Natijada
+     Google ziddiyatli signal olib, til versiyalarini umuman tan olmasdi.
+     Tanlov saqlanadi: havola orqali kelgan foydalanuvchi ruscha qoladi. */
+  try {
+    if (typeof window !== "undefined") {
+      const q = new URLSearchParams(window.location.search).get("lang");
+      if (q && SUPPORTED_LANGS.includes(q)) {
+        try {
+          localStorage.setItem("lang", q);
+        } catch {
+          /* yopiq storage — baribir URL tili ishlatiladi */
+        }
+        return q;
+      }
+    }
+  } catch {
+    /* URL o'qilmadi — saqlangan tilga o'tiladi */
+  }
   let saved = null;
   try {
     saved = localStorage.getItem("lang");

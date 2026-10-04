@@ -34,6 +34,7 @@ const T = {
     brand: "Huquq AI",
     home: "Bosh sahifa",
     laws: "Qonunlar",
+    acts: "Prezident hujjatlari",
     lawsTitle: "O'zbekiston qonunlari va kodekslari",
     lawsDesc:
       "O'zbekiston Respublikasining amaldagi kodekslari va qonunlari — " +
@@ -87,6 +88,7 @@ const T = {
     brand: "Huquq AI",
     home: "Главная",
     laws: "Законы",
+    acts: "Документы Президента",
     lawsTitle: "Законы и кодексы Узбекистана",
     lawsDesc:
       "Действующие кодексы и законы Республики Узбекистан — полный " +
@@ -153,6 +155,9 @@ const path = {
   qaIndex: () => "/savollar",
   qa: (slug) => `/savol/${encodeURIComponent(slug)}`,
   method: () => "/metodologiya",
+  /* Prezident farmonlari, qarorlari, farmoyishlari (2026-10-03) */
+  acts: (q = "") => `/hujjatlar${q}`,
+  act: (docId) => `/hujjat/${encodeURIComponent(docId)}`,
 };
 
 module.exports = {

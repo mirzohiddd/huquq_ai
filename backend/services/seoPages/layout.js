@@ -59,6 +59,8 @@ function crumbs(trail, lang) {
  * @param {object|array} o.schema JSON-LD (ixtiyoriy)
  * @param {string} o.mdPath  shu sahifaning Markdown nusxasi (ixtiyoriy)
  * @param {string} o.ogType  og:type (standart "article")
+ * @param {boolean} o.noindex  `true` — sahifa indekslanmaydi (masalan matni hali yo'q)
+ * @param {boolean} o.altLangs `false` — faqat bitta tildagi sahifa (hreflang chiqmaydi)
  */
 function page({
   lang,
@@ -69,11 +71,16 @@ function page({
   schema,
   mdPath,
   ogType = "article",
+  noindex = false,
+  altLangs = true,
 }) {
   const t = T[lang] || T.uz;
   const url = `${SITE_URL}${canonical}`;
   const altLangUrl = (l) => (l === "uz" ? url : `${url}?lang=${l}`);
-  const alts = Object.entries(HREFLANG)
+  /* ⚠️ Prezident hujjatlari faqat o'zbekcha matnda (LexUZ /uz/docs).
+     Ularga ?lang=ru hreflang berilsa, Google bir xil matnni ikki tilda
+     takror deb hisoblardi — shu sabab `altLangs: false`. */
+  const alts = !altLangs ? "" : Object.entries(HREFLANG)
     .map(
       ([l, code]) =>
         `<link rel="alternate" hreflang="${code}" href="${esc(altLangUrl(l))}">`,
@@ -112,10 +119,10 @@ function page({
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>${esc(title)} — ${SITE_NAME}</title>
     <meta name="description" content="${esc(description)}">
-    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+    <meta name="robots" content="${noindex ? "noindex, follow" : "index, follow, max-snippet:-1, max-image-preview:large"}">
     <link rel="canonical" href="${esc(altLangUrl(lang))}">
     ${alts}
-    <link rel="alternate" hreflang="x-default" href="${esc(url)}">
+    ${altLangs ? `<link rel="alternate" hreflang="x-default" href="${esc(url)}">` : ""}
     ${mdPath ? `<link rel="alternate" type="text/markdown" href="${esc(SITE_URL + mdPath)}" title="${esc(t.markdown)}">` : ""}
     <link rel="alternate" type="text/plain" href="${SITE_URL}/llms.txt" title="llms.txt">
     <meta property="og:type" content="${esc(ogType)}">
@@ -146,8 +153,9 @@ function page({
         </a>
         <span class="nav-sp"></span>
         <a class="navlink" href="${P.laws()}">${esc(t.laws)}</a>
+        <a class="navlink" href="${P.acts()}">${esc(t.acts)}</a>
         <a class="navlink" href="${P.qaIndex()}">${esc(t.qa)}</a>
-        <a class="navlink" href="${esc(altLangUrl(lang === "uz" ? "ru" : "uz"))}" rel="alternate">${esc(t.lang)}</a>
+        ${altLangs ? `<a class="navlink" href="${esc(altLangUrl(lang === "uz" ? "ru" : "uz"))}" rel="alternate">${esc(t.lang)}</a>` : ""}
         <a class="cta" href="${SITE_URL}/#pricing">${esc(t.ctaBtn)}</a>
       </div>
     </header>
@@ -156,6 +164,7 @@ function page({
       <div class="wrap">
         <a href="${SITE_URL}/">${esc(t.home)}</a>
         <a href="${P.laws()}">${esc(t.laws)}</a>
+        <a href="${P.acts()}">${esc(t.acts)}</a>
         <a href="${P.qaIndex()}">${esc(t.qa)}</a>
         <a href="${P.method()}">${esc(t.method)}</a>
         <a href="${SITE_URL}/terms">${lang === "ru" ? "Условия" : "Shartlar"}</a>

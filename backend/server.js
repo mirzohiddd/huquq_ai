@@ -332,6 +332,8 @@ app.use("/public", require("./routes/publicSeo"));
 /* Savol-javob markazi (AEO), Metodologiya sahifasi (E-E-A-T) va
    ularning Markdown nusxalari. */
 app.use("/public", require("./routes/publicQa"));
+// Prezident farmon/qaror/farmoyishlari — ochiq SEO sahifalar (2026-10-03)
+app.use("/public", require("./routes/publicActs"));
 
 /* ⚠️ Backend domenining O'ZI (up.railway.app) indekslanmasligi kerak —
    aks holda bir xil sahifa ikki manzilda turib, "duplicate content"

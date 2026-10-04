@@ -43,6 +43,18 @@
       "destination": "https://huquq-ai-7v7a.onrender.com/public/sitemap-savollar.xml"
     },
     {
+      "source": "/hujjatlar",
+      "destination": "https://huquq-ai-7v7a.onrender.com/public/hujjatlar"
+    },
+    {
+      "source": "/hujjat/:path*",
+      "destination": "https://huquq-ai-7v7a.onrender.com/public/hujjat/:path*"
+    },
+    {
+      "source": "/sitemap-hujjatlar.xml",
+      "destination": "https://huquq-ai-7v7a.onrender.com/public/sitemap-hujjatlar.xml"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

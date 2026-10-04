@@ -57,6 +57,20 @@ qonun matnini beradi. Manzil tuzilishi barqaror:
 - Rus tilidagi variant: manzil oxiriga `?lang=ru` qo'shiladi
 - Sayt xaritasi: https://huquq-ai-teal.vercel.app/sitemap-qonunlar.xml
 
+## Prezident hujjatlari — farmon, qaror, farmoyish (login shart emas)
+
+O'zbekiston Respublikasi Prezidentining ~5 600 ta farmoni, qarori va
+farmoyishi: raqami, sanasi, holati va to'liq rasmiy matni (manba: lex.uz,
+faqat o'zbek tilida).
+
+- [Barcha hujjatlar](https://huquq-ai-teal.vercel.app/hujjatlar)
+- Tur bo'yicha: `/hujjatlar?tur=farmon`, `?tur=qaror`, `?tur=farmoyish`
+- Yil bo'yicha: `/hujjatlar?yil=2026`
+- Bitta hujjat: `https://huquq-ai-teal.vercel.app/hujjat/{lexuz_id}`
+  (identifikator lex.uz dagi bilan bir xil: `lex.uz/uz/docs/-8509858` →
+  `/hujjat/-8509858`)
+- Sayt xaritasi: https://huquq-ai-teal.vercel.app/sitemap-hujjatlar.xml
+
 ## Savol-javob markazi — tayyor javoblar (login shart emas)
 
 Eng ko'p beriladigan huquqiy savollarga qisqa va aniq javoblar. Har bir

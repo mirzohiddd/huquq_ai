@@ -124,7 +124,9 @@
          React noldan chizadi — noto'g'ri sahifa bir lahza ham ko'rinmasin.
          Teskari mantiq ataylab: JS'siz brauzer va botlar SSR matnni ko'radi. */
       try {
-        if (!(location.pathname === "/" && !localStorage.getItem("user") && localStorage.getItem("lang") !== "ru")) {
+        // `?lang=ru` (hreflang havolasi) ham ruscha — o'zbekcha SSR ko'rsatilmasin
+        var ruUrl = /[?&]lang=ru(&|$)/.test(location.search);
+        if (ruUrl || !(location.pathname === "/" && !localStorage.getItem("user") && localStorage.getItem("lang") !== "ru")) {
           document.documentElement.classList.add("ssr-off");
         }
       } catch (e) {
@@ -213,7 +215,7 @@
               {"@type": "Question", "name": "Huquq AI javoblari qaysi manbaga asoslanadi?", "acceptedAnswer": {"@type": "Answer", "text": "Javoblar lex.uz dagi amaldagi kodekslar va O'zbekiston Respublikasi Konstitutsiyasi matniga asoslanadi. AI javob berishdan oldin tegishli moddani bazadan qidirib topadi va faqat shu tekshirilgan matndan foydalanadi."}},
               {"@type": "Question", "name": "Huquq AI qaysi tillarda ishlaydi?", "acceptedAnswer": {"@type": "Answer", "text": "O'zbek va rus tillarida. Savol qaysi tilda berilsa, javob ham shu tilda keladi."}},
               {"@type": "Question", "name": "Huquq AI dan bepul foydalanish mumkinmi?", "acceptedAnswer": {"@type": "Answer", "text": "Ha. Ro'yxatdan o'tgan har bir foydalanuvchiga kuniga bir nechta bepul savol imkoniyati beriladi — bank kartasi talab qilinmaydi."}},
-              {"@type": "Question", "name": "To'lovni qanday amalga oshiraman?", "acceptedAnswer": {"@type": "Answer", "text": "Click yoki Payme orqali, bir necha soniyada. To'lovdan so'ng tarifingiz avtomatik faollashadi."}}
+              {"@type": "Question", "name": "To'lovni qanday amalga oshiraman?", "acceptedAnswer": {"@type": "Answer", "text": "Narxlar bo'limida tarifni tanlab «Sotib olish» tugmasini bosing va ism hamda telefon raqamingizni qoldiring — admin siz bilan Telegram orqali bog'lanib, to'lov tartibini tushuntiradi. To'lovdan so'ng tarifingiz yoqiladi."}}
             ]
           },
           {

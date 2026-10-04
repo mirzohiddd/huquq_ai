@@ -790,6 +790,7 @@ const uz = {
   // Footer'dagi ochiq qonun sahifalariga havola (server tomonda
   // chiziladi — SEO uchun muhim ichki havola)
   footer_public_laws: "Qonunlar matni",
+  footer_public_acts: "Prezident hujjatlari",
   footer_qa: "Savol-javob",
   footer_method: "Metodologiya",
   footer_ssl: "SSL himoyalangan",
@@ -1259,7 +1260,7 @@ const uz = {
   faq_3_q: "Pro tarifda oddiy tarifdan nima farq qiladi?",
   faq_3_a: "Pro va Premium tariflarda so'rovlaringiz kuchliroq AI modeliga (Claude) yo'naltiriladi — bu chuqurroq, aniqroq va professionalroq javoblar degani. Shuningdek kunlik savol limiti ham ancha yuqori.",
   faq_4_q: "To'lovni qanday amalga oshiraman?",
-  faq_4_a: "Click yoki Payme orqali, bir necha soniyada. To'lovdan so'ng tarifingiz avtomatik faollashadi.",
+  faq_4_a: "Narxlar bo'limida tarifni tanlab «Sotib olish» tugmasini bosing va ism hamda telefon raqamingizni qoldiring — admin siz bilan Telegram orqali bog'lanib, to'lov tartibini tushuntiradi. To'lovdan so'ng tarifingiz yoqiladi.",
   faq_5_q: "Bepul tarifda nima beriladi?",
   faq_5_a: "Ro'yxatdan o'tgan har bir foydalanuvchiga kuniga bir nechta bepul savol imkoniyati beriladi — kredit karta shart emas.",
 
