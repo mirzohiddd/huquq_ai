@@ -35,7 +35,7 @@ export default function ShareBar({ url, title }) {
      (React production'da atribut farqlarini yangilamaydi). Kanonik manzil
      ulashish uchun to'g'riroq ham: preview/eski domen tarqalmaydi. */
   const shareUrl = url || `${SITE_URL}${pathname}`;
-  const shareText = title || t.seo_home_title || "Huquq AI";
+  const shareText = title || t.seo_home_title || "HuquqTech";
   const u = encodeURIComponent(shareUrl);
   const txt = encodeURIComponent(shareText);
 

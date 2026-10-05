@@ -1,4 +1,4 @@
-/* Huquq AI — service worker (PWA o'rnatish uchun).
+/* HuquqTech — service worker (PWA o'rnatish uchun).
 
    ⚠️ ATAYLAB MINIMAL: hech qanday JS/CSS/API javobi keshlanmaydi.
    Keshlangan eski `index.html` yangi deploy'dan keyin mavjud bo'lmagan
@@ -7,7 +7,7 @@
    bo'lmagandagina oflayn sahifa ko'rsatiladi. Qolgan barcha so'rovlar
    (API, rasm, /qonun rewrite'lari) SW'ga umuman tegmaydi. */
 
-const CACHE = "huquq-offline-v1";
+const CACHE = "huquq-offline-v2"; // v2: HuquqTech logosi (eski kesh tozalanadi)
 const OFFLINE_URL = "/offline.html";
 
 self.addEventListener("install", (event) => {

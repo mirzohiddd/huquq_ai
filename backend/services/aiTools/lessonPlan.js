@@ -16,19 +16,19 @@ const T = {
     edu: (h) => `O'quvchilar «${h}» mazmunini tushuntirib bera oladi`,
     dev: "Huquqiy vaziyatni tahlil qilish va qonun manbasiga tayanib xulosa chiqarish ko'nikmasi rivojlanadi",
     up: "Qonunga hurmat, o'z huquq va burchlarini bilish hamda mas'uliyat hissi tarbiyalanadi",
-    tools: ["Taqdimot (Huquq AI slayd generatori)", "Tarqatma: mavzu bo'yicha asosiy fikrlar", "Qonun matnlari (lex.uz yoki Huquq AI «Qonunchilik hujjatlari» bo'limi)", "Doska, marker"],
+    tools: ["Taqdimot (HuquqTech slayd generatori)", "Tarqatma: mavzu bo'yicha asosiy fikrlar", "Qonun matnlari (lex.uz yoki HuquqTech «Qonunchilik hujjatlari» bo'limi)", "Doska, marker"],
     stages: {
       org: ["Tashkiliy qism", "Salomlashish, davomatni aniqlash, dars maqsadi bilan tanishtirish."],
       check: ["O'tilgan mavzuni takrorlash", "Oldingi dars bo'yicha 2–3 ta savol; o'quvchilar javoblarini tinglash."],
       main: ["Yangi mavzu bayoni", "Quyidagi mavzular ketma-ket tushuntiriladi:"],
       case: ["Hayotiy vaziyat tahlili", "O'quvchilar guruhlarda vaziyatni muhokama qiladi va qonunga tayanib javob beradi:"],
-      fix: ["Mustahkamlash", "Savol-javob va qisqa test (Huquq AI test generatori)."],
+      fix: ["Mustahkamlash", "Savol-javob va qisqa test (HuquqTech test generatori)."],
       end: ["Baholash va yakun", "Faol o'quvchilarni rag'batlantirish, uy vazifasini tushuntirish."],
     },
     homework: (h) => `«${h}» mavzusi bo'yicha hayotdan bitta misol topib, uni qonun nuqtai nazaridan qisqacha yozma tahlil qiling.`,
     criteria: ["Mavzu tushunchalarini to'g'ri izohlaydi", "Qonun manbasiga (moddaga) to'g'ri tayanadi", "Hayotiy vaziyatga qonunni qo'llay oladi", "Muhokamada faol ishtirok etadi"],
     ask: (h) => `«${h}» nima va u nimani anglatadi?`,
-    source: "Manba: Huquq AI darslari va O'zbekiston Respublikasi qonunchiligi (lex.uz)",
+    source: "Manba: HuquqTech darslari va O'zbekiston Respublikasi qonunchiligi (lex.uz)",
   },
 };
 

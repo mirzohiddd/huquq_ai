@@ -1,4 +1,4 @@
-# SEO / AEO / GEO / LLMO / SMO — Huquq AI
+# SEO / AEO / GEO / LLMO / SMO — HuquqTech
 
 Bu papka saytning qidiruv va AI ko'rinuvchanligini boshqaradi. Quyida
 qaysi qism nima uchun javob berishi va **nimaga tegmaslik kerakligi**

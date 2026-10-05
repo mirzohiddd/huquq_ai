@@ -177,8 +177,8 @@ const uz = {
   lesson_summary_sub: "Shu darsda ko'rib chiqilgan mavzular:",
   lesson_cta_title: "Savolingiz qoldimi?",
   lesson_cta_sub:
-    "O'z holatingizni yozing — Huquq AI O'zbekiston qonunchiligi asosida javob beradi va keyingi qadamni aytadi.",
-  lesson_cta_btn: "Huquq AI'dan so'rash",
+    "O'z holatingizni yozing — HuquqTech O'zbekiston qonunchiligi asosida javob beradi va keyingi qadamni aytadi.",
+  lesson_cta_btn: "HuquqTech'dan so'rash",
   lesson_nav_title: "Dars bo'limlari",
   lesson_actions_title: "Tezkor amallar",
   lesson_action_download: "Konspektni yuklab olish",
@@ -337,7 +337,8 @@ const uz = {
   drawer_back_chat: "Chatga qaytish",
   drawer_no_history: "Hali suhbat tarixi yo'q",
   drawer_no_title: "Suhbat",
-  nav_logo: "HUQUQ AI",
+  brand_sub: "Huquqiy ta'lim platformasi",
+  nav_logo: "HuquqTech",
   // ── SEO (components/Seo.jsx orqali <title>/<meta> ga yoziladi) ──
   seo_home_title: "O'zbekiston qonunchiligi bo'yicha AI huquqiy maslahatchi",
   seo_home_desc:
@@ -349,9 +350,9 @@ const uz = {
   seo_library_title: "Qonunlar kutubxonasi",
 
   seo_legal_desc:
-    "Huquq AI platformasidan foydalanish qoidalari, maxfiylik siyosati va sun'iy intellekt javoblariga oid rasmiy bildirishnoma.",
+    "HuquqTech platformasidan foydalanish qoidalari, maxfiylik siyosati va sun'iy intellekt javoblariga oid rasmiy bildirishnoma.",
   seo_home_keywords:
-    "huquq AI, yuridik maslahat O'zbekiston, onlayn yurist, O'zbekiston qonunchiligi, mehnat kodeksi, oila kodeksi, meros huquqi, iste'molchi huquqlari, huquqiy yordam onlayn, sun'iy intellekt yurist",
+    "HuquqTech, yuridik maslahat O'zbekiston, onlayn yurist, O'zbekiston qonunchiligi, mehnat kodeksi, oila kodeksi, meros huquqi, iste'molchi huquqlari, huquqiy yordam onlayn, sun'iy intellekt yurist",
 
   // ── SMO: ulashish paneli (components/ShareBar.jsx) ──
   share_label: "Ulashish:",
@@ -797,7 +798,7 @@ const uz = {
   footer_ssl: "SSL himoyalangan",
   footer_made_in: "O'zbekistonda ishlab chiqilgan",
   install_app: "Ilovani yuklash",
-  install_guide_title: "Huquq AI ilovasini o'rnating",
+  install_guide_title: "HuquqTech ilovasini o'rnating",
   install_guide_sub: "Ilova telefoningiz bosh ekraniga qo'shiladi va alohida ilova kabi ochiladi.",
   install_sub_ios: "iPhone'da ilova Safari orqali bir necha soniyada o'rnatiladi.",
   install_sub_android: "Ilova telefoningiz bosh ekraniga qo'shiladi va alohida ilova kabi ochiladi.",
@@ -831,6 +832,33 @@ const uz = {
   install_close: "Yopish",
   install_desktop_here: "Yoki shu kompyuterga o'rnatish",
   install_note: "App Store yoki Play Market shart emas · bepul · joy deyarli egallamaydi",
+  auth_hero_title: "Huquqiy bilim,\nishonchli va qulay",
+  auth_hero_sub: "Kodekslar, darslar, testlar va AI yordamchi — barchasi bitta platformada.",
+  auth_f1_title: "Darslar",
+  auth_f1_text: "Huquq sohasidagi mavzular bo'yicha bosqichma-bosqich darslar.",
+  auth_f2_title: "Kodekslar bazasi",
+  auth_f2_text: "Barcha muhim qonunlar va kodekslar doim qo'lingizda.",
+  auth_f3_title: "Test va mashqlar",
+  auth_f3_text: "Bilimingizni mustahkamlash uchun testlar va amaliy topshiriqlar.",
+  auth_f4_title: "AI yordamchi",
+  auth_f4_text: "Huquqiy savollaringizga tez va aniq javob oling.",
+  auth_login_label: "Username yoki email",
+  auth_password_ph: "Parolni kiriting",
+  auth_warming: "Server uyg'onmoqda, biroz kuting...",
+  auth_register_sub: "Platformadagi imkoniyatlardan foydalanish uchun hisob yarating.",
+  auth_email_label: "Email manzil",
+  auth_username_label: "Foydalanuvchi nomi",
+  auth_confirm_label: "Parolni tasdiqlang",
+  auth_confirm_ph: "Parolni qayta kiriting",
+  auth_password_mismatch: "Parollar bir-biriga mos kelmadi",
+  auth_agree_required: "Davom etish uchun foydalanish shartlariga rozilik bildiring",
+  auth_agree_prefix: "Men",
+  auth_agree_terms: "foydalanish shartlari",
+  auth_agree_privacy: "maxfiylik siyosatiga",
+  auth_agree_suffix: "roziman.",
+  auth_already: "Allaqachon hisobingiz bormi?",
+  auth_show_password: "Parolni ko'rsatish",
+  auth_hide_password: "Parolni yashirish",
   auth_legal_prefix: "Davom etish orqali siz",
   auth_legal_and: "va",
   login_title: "Kirish",
@@ -841,7 +869,7 @@ const uz = {
   login_loading: "Kirilmoqda...",
   login_no_account: "Hisobingiz yo'qmi?",
   login_register_link: "Ro'yxatdan o'ting",
-  tech_support: "Parolni unutdingizmi ?",
+  tech_support: "Parolni unutdingizmi?",
 
   support_error: "Xatolik yuz berdi",
 
@@ -853,7 +881,7 @@ const uz = {
   register_last_name_ph: "Familiyangiz",
   register_phone: "Telefon raqam",
   register_username_ph: "falonchi123",
-  register_password_ph: "Kamida 6 belgi",
+  register_password_ph: "Kamida 8 belgi",
   register_btn: "Hisob yaratish",
   register_loading: "Yaratilmoqda...",
   register_have_account: "Hisobingiz bormi?",
@@ -878,7 +906,7 @@ const uz = {
   ],
 
   about_lead:
-    "\"HUQUQ AI\" — O'zbekiston Respublikasi qonunchiligi bo'yicha AI huquqiy maslahatchi. Ko'pchilik fuqarolar o'z huquqlarini bilmaydi va advokatga murojaat imkoni yo'q — bu xizmat shu bo'shliqni to'ldiradi.",
+    "\"HuquqTech\" — O'zbekiston Respublikasi qonunchiligi bo'yicha AI huquqiy maslahatchi. Ko'pchilik fuqarolar o'z huquqlarini bilmaydi va advokatga murojaat imkoni yo'q — bu xizmat shu bo'shliqni to'ldiradi.",
   about_laws_title: "Qonunlar bazasi",
   about_warn:
     "⚠️ Bu xizmat umumiy huquqiy ma'lumot beradi va professional advokat maslahati o'rnini bosa olmaydi.",
@@ -886,7 +914,7 @@ const uz = {
   /* ── "Biz haqimizda" ALOHIDA SAHIFA ──
      Landing Page'dan olib chiqilib, /about manziliga ko'chirildi. */
   about_page_lead:
-    "\"HUQUQ AI\" — O'zbekiston Respublikasi qonunchiligi bo'yicha sun'iy intellekt texnologiyalari asosida tez, ishonchli va aniq huquqiy yordam beruvchi platforma.",
+    "\"HuquqTech\" — O'zbekiston Respublikasi qonunchiligi bo'yicha sun'iy intellekt texnologiyalari asosida tez, ishonchli va aniq huquqiy yordam beruvchi platforma.",
 
   about_mission_title: "Bizning vazifamiz",
   about_mission_text:
@@ -911,7 +939,7 @@ const uz = {
   ],
 
   about_quote: "Adolat — bu faqat qonunda emas, uni tushunishda hamdir.",
-  about_quote_author: "— HUQUQ AI",
+  about_quote_author: "— HuquqTech",
 
   about_highlights: [
     {
@@ -966,7 +994,7 @@ const uz = {
     {
       year: "2025",
       title: "Boshlanish",
-      desc: "HUQUQ AI loyihasi o'z faoliyatini boshladi",
+      desc: "HuquqTech loyihasi o'z faoliyatini boshladi",
     },
     {
       year: "2025",
@@ -993,7 +1021,7 @@ const uz = {
 
   /* ── "Biz haqimizda" kengaytmasi ── */
   about_text_2:
-    "Huquq AI — shunchaki chatbot emas. Har bir javob lex.uz'dagi rasmiy qonun matniga asoslanadi: tizim savolingizni tahlil qilib, amaldagi kodekslardan tegishli moddani topadi va javobni aynan shu tekshirilgan matn asosida shakllantiradi. Shuning uchun javobda modda raqami va qonun nomi ko'rsatiladi — siz uni o'zingiz tekshirib ko'rishingiz mumkin.",
+    "HuquqTech — shunchaki chatbot emas. Har bir javob lex.uz'dagi rasmiy qonun matniga asoslanadi: tizim savolingizni tahlil qilib, amaldagi kodekslardan tegishli moddani topadi va javobni aynan shu tekshirilgan matn asosida shakllantiradi. Shuning uchun javobda modda raqami va qonun nomi ko'rsatiladi — siz uni o'zingiz tekshirib ko'rishingiz mumkin.",
   about_text_3:
     "Maqsadimiz — huquqiy bilimni hamma uchun ochiq qilish. Shu sababli platformada nafaqat maslahat, balki darslar, testlar va to'liq qonunlar kutubxonasi ham bor: foydalanuvchi bir marta javob olib qolmay, o'z huquqini bosqichma-bosqich o'rganib boradi.",
 
@@ -1031,7 +1059,7 @@ const uz = {
     {
       title: "Aniqlik",
       desc: "Javob taxminga emas, qonun matniga asoslanadi. Tizim moddani topa olmasa, o'zidan raqam yoki muddat to'qib chiqarmaydi — huquqiy mahsulotda bu eng muhim qoida.",
-      long: "Oddiy chatbot javobni o'z \"xotirasidan\" tuzadi va shu sababli mavjud bo'lmagan modda raqamini yoki noto'g'ri muddatni ishonch bilan aytib yuborishi mumkin. Huquqiy masalada bunday xato qimmatga tushadi. Shuning uchun Huquq AI boshqacha ishlaydi: har bir javobdan OLDIN qonun bazasidan tegishli moddani qidirib topadi va javobni aynan shu tekshirilgan matn asosida tuzadi.",
+      long: "Oddiy chatbot javobni o'z \"xotirasidan\" tuzadi va shu sababli mavjud bo'lmagan modda raqamini yoki noto'g'ri muddatni ishonch bilan aytib yuborishi mumkin. Huquqiy masalada bunday xato qimmatga tushadi. Shuning uchun HuquqTech boshqacha ishlaydi: har bir javobdan OLDIN qonun bazasidan tegishli moddani qidirib topadi va javobni aynan shu tekshirilgan matn asosida tuzadi.",
       points: [
         "Har bir javob oldidan tizim bazadan tegishli moddani qidiradi",
         "Javobda modda raqami va qonun nomi ko'rsatiladi — o'zingiz tekshira olasiz",
@@ -1111,14 +1139,14 @@ const uz = {
   profile_username_ph: "username",
   profile_email_label: "Email",
   password_mismatch: "Yangi parollar mos kelmadi",
-  password_min_length: "Parol kamida 6 ta belgi bo'lsin",
+  password_min_length: "Parol kamida 8 ta belgi bo'lsin",
   password_changed: "Parol o'zgartirildi",
   password_changing: "O'zgartirilmoqda…",
   password_change: "Parolni o'zgartirish",
   password_current: "Joriy parol",
   password_current_ph: "Hozirgi parolingiz",
   password_new: "Yangi parol",
-  password_new_ph: "Kamida 6 ta belgi",
+  password_new_ph: "Kamida 8 ta belgi",
   password_confirm: "Yangi parolni tasdiqlang",
   password_confirm_ph: "Yangi parolni takrorlang",
   profile_tab: "Profil",
@@ -1211,7 +1239,7 @@ const uz = {
   // ── AI imkoniyatlari ──
   capabilities_title: "Sun'iy intellekt imkoniyatlari",
   capabilities_subtitle:
-    "Huquq AI oddiy chatbot emas — O'zbekiston qonunchiligiga ixtisoslashgan huquqiy yordamchi.",
+    "HuquqTech oddiy chatbot emas — O'zbekiston qonunchiligiga ixtisoslashgan huquqiy yordamchi.",
   cap_1_title: "24/7 mavjud",
   cap_1_desc: "Kechayu kunduz, dam olish kunlari ham — navbatsiz, kutmasdan javob oling.",
   cap_2_title: "Kontekstni eslab qoladi",
@@ -1225,8 +1253,8 @@ const uz = {
   cap_6_title: "Tezkor javob",
   cap_6_desc: "Soniyalar ichida aniq va tushunarli javob — vaqtingizni tejaydi.",
 
-  // ── Nima uchun aynan Huquq AI ──
-  whyus_title: "Nima uchun aynan Huquq AI",
+  // ── Nima uchun aynan HuquqTech ──
+  whyus_title: "Nima uchun aynan HuquqTech",
   whyus_subtitle: "Oddiy qidiruv yoki umumiy chatbotlardan farqli — biz aniq muammoingizga mos yechim beramiz.",
   whyus_1_title: "Mutaxassis darajasidagi tahlil",
   whyus_1_desc: "Pro tarifda so'rovlaringiz Claude — dunyodagi eng ilg'or AI modellaridan biriga yo'naltiriladi.",
@@ -1239,7 +1267,7 @@ const uz = {
 
   // ── Foydalanuvchilar fikrlari (placeholder) ──
   testimonials_title: "Foydalanuvchilar fikri",
-  testimonials_subtitle: "Huquq AI'dan foydalanganlar shunday deydi",
+  testimonials_subtitle: "HuquqTech'dan foydalanganlar shunday deydi",
   testimonials_note: "* Namunaviy fikrlar — loyiha rivojlanishi bilan haqiqiy sharhlar bilan almashtiriladi",
   test_1_name: "Dilnoza R.",
   test_1_role: "Tadbirkor",
@@ -1254,8 +1282,8 @@ const uz = {
   // ── FAQ ──
   faq_title: "Ko'p beriladigan savollar",
   faq_subtitle: "Savolingiz javobini topolmadingizmi? Bizga yozing.",
-  faq_1_q: "Huquq AI professional advokatni almashtiradimi?",
-  faq_1_a: "Yo'q. Huquq AI dastlabki yo'naltirish va umumiy huquqiy ma'lumot beradi. Murakkab yoki sud jarayoni talab qiladigan holatlarda malakali advokatga murojaat qilishni tavsiya qilamiz.",
+  faq_1_q: "HuquqTech professional advokatni almashtiradimi?",
+  faq_1_a: "Yo'q. HuquqTech dastlabki yo'naltirish va umumiy huquqiy ma'lumot beradi. Murakkab yoki sud jarayoni talab qiladigan holatlarda malakali advokatga murojaat qilishni tavsiya qilamiz.",
   faq_2_q: "Ma'lumotlarim maxfiymi?",
   faq_2_a: "Ha. Suhbatlaringiz shaxsiy hisobingizga bog'liq va uchinchi shaxslarga oshkor qilinmaydi.",
   faq_3_q: "Pro tarifda oddiy tarifdan nima farq qiladi?",

@@ -19,7 +19,7 @@
 const METHOD = {
   uz: {
     intro:
-      "Huquq AI — huquqiy ma'lumot platformasi. Quyida javoblar qanday " +
+      "HuquqTech — huquqiy ma'lumot platformasi. Quyida javoblar qanday " +
       "tayyorlanishi, manba qayerdan olinishi va qanday cheklovlar " +
       "borligi ochiq yozilgan. Bu sahifa foydalanuvchiga ham, javobimizni " +
       "iqtibos keltiradigan qidiruv va AI tizimlariga ham mo'ljallangan.",
@@ -81,7 +81,7 @@ const METHOD = {
       {
         h: "5. Cheklovlar (ochiq aytilgan)",
         p: [
-          "Huquq AI advokat emas va advokat xizmatini almashtirmaydi. U " +
+          "HuquqTech advokat emas va advokat xizmatini almashtirmaydi. U " +
             "dastlabki yo'naltirish va umumiy huquqiy ma'lumot beradi. Sud " +
             "jarayoni, shartnoma imzolash yoki jiddiy moliyaviy oqibatga ega " +
             "qarorlar uchun malakali mutaxassisga murojaat qiling.",
@@ -105,7 +105,7 @@ const METHOD = {
   },
   ru: {
     intro:
-      "Huquq AI — платформа правовой информации. Ниже открыто описано, " +
+      "HuquqTech — платформа правовой информации. Ниже открыто описано, " +
       "как готовятся ответы, откуда берётся источник и какие есть " +
       "ограничения. Страница предназначена как для пользователей, так и " +
       "для поисковых и AI-систем, которые цитируют наши ответы.",
@@ -165,7 +165,7 @@ const METHOD = {
       {
         h: "5. Ограничения (сказано открыто)",
         p: [
-          "Huquq AI не является адвокатом и не заменяет услуги адвоката. Он " +
+          "HuquqTech не является адвокатом и не заменяет услуги адвоката. Он " +
             "даёт первичную ориентацию и общую правовую информацию. Для " +
             "судебного процесса, подписания договора или решений с " +
             "серьёзными финансовыми последствиями обратитесь к " +

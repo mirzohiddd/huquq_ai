@@ -1,5 +1,5 @@
 # ─────────────────────────────────────────────────────────────
-#  Huquq AI — robots.txt
+#  HuquqTech — robots.txt
 #  Yangilangan: 2026-10-03
 #
 #  Ikki maqsad:

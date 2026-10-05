@@ -260,7 +260,7 @@ export default function Home() {
             text: step.d,
           })),
         }),
-        breadcrumbSchema([{ name: t.nav_home || "Huquq AI", path: "/" }]),
+        breadcrumbSchema([{ name: t.nav_home || "HuquqTech", path: "/" }]),
         // ⚠️ CSS-modul sinflari (`.heroSub`) build paytida hash'ga
         // aylanadi — selektor mos kelmay qolardi. Shu sabab faqat
         // oddiy teg selektorlari ishlatiladi.

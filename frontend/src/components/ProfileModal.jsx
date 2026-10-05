@@ -112,7 +112,7 @@ export default function ProfileModal({ onClose, initialTab = "profile" }) {
   async function handlePasswordChange(e) {
     e.preventDefault();
     if (newPassword !== confirmPassword) return setPasswordMsg({ type: "error", text: t.password_mismatch });
-    if (newPassword.length < 6) return setPasswordMsg({ type: "error", text: t.password_min_length });
+    if (newPassword.length < 8) return setPasswordMsg({ type: "error", text: t.password_min_length });
     setPasswordBusy(true);
     setPasswordMsg({ type: "", text: "" });
     try {

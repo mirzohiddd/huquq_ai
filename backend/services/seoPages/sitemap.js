@@ -59,7 +59,7 @@ function buildSitemap(laws, articles) {
   }
 
   return `<?xml version="1.0" encoding="UTF-8"?>
-<!-- Huquq AI — qonun moddalari sayt xaritasi (avtomatik yaratiladi). -->
+<!-- HuquqTech — qonun moddalari sayt xaritasi (avtomatik yaratiladi). -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${nodes.join("\n")}
 </urlset>`;

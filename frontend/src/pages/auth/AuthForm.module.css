@@ -1,0 +1,155 @@
+/* KIRISH / RO'YXATDAN O'TISH — KARTA ICHI (forma, tugmalar). Namuna
+   asosida, ko'k o'rniga navy + oltin. Tuzilma: AuthShell.module.css */
+
+.cardLogo { display: inline-flex; margin-bottom: clamp(0.75rem, 2vh, 1.1rem); }
+.title { font-size: clamp(1.6rem, 2.1vw, 2.15rem); font-weight: 700; letter-spacing: -0.02em; color: var(--navy); line-height: 1.15; }
+.sub { margin-top: 0.45rem; max-width: 26rem; font-size: 15.5px; line-height: 1.5; color: #5b6170; }
+
+.form { margin-top: clamp(0.9rem, 2.2vh, 1.2rem); display: grid; gap: clamp(0.65rem, 1.6vh, 0.9rem); }
+.row2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.85rem; }
+.row2 > * { min-width: 0; }
+
+.label { display: block; margin-bottom: 0.35rem; font-size: 14.5px; font-weight: 500; color: var(--navy); }
+.field { position: relative; }
+.icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #6b7280; pointer-events: none; }
+
+.input {
+  width: 100%;
+  min-width: 0;
+  height: 44px;
+  padding: 0 14px 0 46px;
+  border: 1px solid #d5d9e0;
+  border-radius: 9px;
+  background: var(--white);
+  font: inherit;
+  font-size: 15px;
+  color: var(--navy);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.input::placeholder { color: #9aa1ad; }
+.input:hover { border-color: #c3c8d1; }
+.input:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201, 149, 58, 0.16); }
+.withEye { padding-right: 46px; }
+.inputError, .inputError:focus { border-color: #dc2626; background: #fef2f2; box-shadow: none; }
+
+.eye {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: #4b5563;
+  cursor: pointer;
+}
+
+.eye:hover { background: var(--gray-50); color: var(--navy); }
+
+.forgotRow { display: flex; justify-content: flex-end; margin-top: -0.35rem; }
+
+.check { display: flex; align-items: flex-start; gap: 0.7rem; font-size: 14.5px; line-height: 1.45; color: #4b5563; cursor: pointer; }
+.check input { flex-shrink: 0; width: 20px; height: 20px; margin-top: 1px; accent-color: var(--navy); cursor: pointer; }
+.check a, .inlineLink { color: var(--gold-text); text-decoration: underline; text-underline-offset: 2px; }
+
+.btn {
+  width: 100%;
+  height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  border: 0;
+  border-radius: 9px;
+  background: var(--navy);
+  color: #fff;
+  font: inherit;
+  font-size: 15.5px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.btn:hover:not(:disabled) { background: var(--navy-light); }
+.btn:active:not(:disabled) { transform: scale(0.985); }
+.btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.btn svg { transition: transform 0.2s ease; }
+.btn:hover:not(:disabled) svg { transform: translateX(3px); }
+
+.divider { display: flex; align-items: center; gap: 1rem; margin: clamp(0.7rem, 1.7vh, 0.95rem) 0; font-size: 14px; color: #8a909c; }
+.divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: #e3e6eb; }
+
+.googleBtn {
+  width: 100%;
+  min-width: 0;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  border: 1px solid #d5d9e0;
+  border-radius: 9px;
+  background: var(--white);
+  font: inherit;
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--navy);
+}
+
+.foot { margin-top: clamp(0.7rem, 1.7vh, 0.95rem); text-align: center; font-size: 14.5px; color: #5b6170; }
+.foot a { margin-left: 0.4rem; color: var(--gold-text); font-weight: 600; }
+.foot a:hover, .inlineLink:hover { text-decoration: underline; }
+.legal { margin-top: 0.85rem; text-align: center; font-size: 12.5px; line-height: 1.5; color: #8a909c; }
+.legal a { color: var(--gold-text); text-decoration: underline; text-underline-offset: 2px; }
+.warm { margin-top: -0.2rem; text-align: center; font-size: 12px; color: #888; }
+
+.error { margin-top: 1rem; padding: 0.75rem 1rem; border: 1px solid #fecaca; border-radius: 9px; background: var(--red-bg); color: var(--red); font-size: 13.5px; }
+.notice { margin-top: 1rem; padding: 0.75rem 1rem; border: 1px solid #fde68a; border-radius: 9px; background: #fffbeb; color: #92400e; font-size: 13.5px; }
+.success { margin-top: 1rem; padding: 0.75rem 1rem; border: 1px solid #bbf7d0; border-radius: 9px; background: #f0fdf4; color: #15803d; font-size: 13.5px; }
+
+.linkBtn { border: 0; background: none; padding: 0.25rem; font: inherit; font-size: 14px; font-weight: 500; color: var(--gold-text); cursor: pointer; }
+.linkBtn:hover { text-decoration: underline; }
+.linkBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── OTP ── */
+.otpIcon { width: 64px; height: 64px; display: grid; place-items: center; margin-bottom: 1rem; border-radius: 16px; background: var(--gold-pale); color: var(--gold-text); }
+.otpInput { padding: 0 14px; text-align: center; font-size: 26px; font-weight: 700; letter-spacing: 8px; }
+.otpFooter { margin-top: 1rem; display: flex; flex-direction: column; align-items: center; gap: 0.35rem; font-size: 14px; color: var(--gray-600); }
+.center { text-align: center; }
+.successIcon { display: flex; justify-content: center; margin-bottom: 1rem; color: #16a34a; }
+.tgBtn { background: #229ed9; margin-bottom: 0.75rem; }
+.tgBtn:hover:not(:disabled) { background: #1b8cc2; }
+
+/* ── Parolni tiklash oynasi ── */
+.overlay { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 1rem; background: rgba(11, 19, 34, 0.5); }
+.modal { width: 100%; max-width: 450px; padding: 1.75rem; border-radius: 18px; background: var(--white); box-shadow: var(--shadow-lg); }
+.modalHead { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
+.modalHead h2 { font-size: 20px; color: var(--navy); }
+.modalClose { border: 0; background: none; padding: 0; font-size: 28px; line-height: 1; color: var(--gray-600); cursor: pointer; }
+.modalClose:hover { color: var(--navy); }
+.modalDesc { margin-bottom: 1rem; font-size: 14px; color: var(--gray-600); }
+.textarea { width: 100%; padding: 11px 14px; border: 1px solid #d5d9e0; border-radius: 9px; font: inherit; font-size: 15px; color: var(--navy); resize: vertical; }
+.textarea:focus { outline: none; border-color: var(--gold); }
+
+@media (max-width: 560px) {
+  .row2 { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Past ekran (noutbuklar ~800–980px): karta scrollsiz sig'sin */
+@media (max-height: 980px) and (min-width: 961px) {
+  .cardLogo { margin-bottom: 0.6rem; }
+  .title { font-size: 1.7rem; }
+  .sub { margin-top: 0.3rem; font-size: 14.5px; }
+  .form { margin-top: 0.85rem; gap: 0.6rem; }
+  .label { margin-bottom: 0.25rem; font-size: 14px; }
+  .input, .googleBtn { height: 40px; }
+  .btn { height: 42px; }
+  .divider { margin: 0.55rem 0; }
+  .foot { margin-top: 0.55rem; }
+}

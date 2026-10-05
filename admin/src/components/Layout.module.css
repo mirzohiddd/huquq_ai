@@ -42,8 +42,9 @@
   font-size: 22px; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
   width: 36px; height: 36px;
-  background: linear-gradient(135deg, var(--accent-glow), rgba(96,165,250,.08));
-  border: 1px solid rgba(59,130,246,.25);
+  /* HuquqTech belgisi oltin — qutichasi ham oltin tusda (2026-10-05) */
+  background: linear-gradient(135deg, rgba(201,149,58,.16), rgba(201,149,58,.05));
+  border: 1px solid rgba(201,149,58,.3);
   border-radius: var(--radius-sm);
 }
 .brandText {

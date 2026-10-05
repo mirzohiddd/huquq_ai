@@ -42,12 +42,10 @@
   height: 36px;
   object-fit: contain;
   flex-shrink: 0;
-  /* DIQQAT: bu yerda `filter: brightness(0) invert(1)` ISHLATILMAYDI.
-     Logo — oltin rangdagi tafsilotli medalyon (adolat ma'budasi va
-     "HUQUQ TA'LIMI" yozuvi, och krem fonda). O'sha filtr uni butunlay
-     bir tekis OQ DOIRAGA aylantirib, logoni tanib bo'lmas holga
-     keltirgan edi. Medalyonning o'z foni allaqachon och, shuning uchun
-     to'q ko'k navbarda hech qanday filtrsiz ham aniq ko'rinadi. */
+  /* 2026-10-05: logo — HuquqTech kitob belgisi, inline SVG (BrandLogo.jsx),
+     rangi `color` orqali (oltin). ⚠️ Avvalgi medalyon PNG'ga
+     `filter: brightness(0) invert(1)` berilgani uni oq doiraga aylantirgan
+     edi — rasmga filtr berishdan oldin rasmning o'ziga qarang. */
   transition: transform 0.2s;
 }
 
@@ -57,7 +55,7 @@
 
 .logoText {
   font-family: var(--font-display);
-  font-size: 15px;
+  font-size: 20px;
   font-weight: 700;
   color: #fff;
   letter-spacing: 0.02em;
@@ -281,7 +279,7 @@
   justify-content: space-between;
   color: #fff;
   font-family: var(--font-display);
-  font-size: 14px;
+  font-size: 17px;
   font-weight: 700;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
@@ -364,7 +362,7 @@
   gap: 10px;
   color: #fff;
   font-family: var(--font-display);
-  font-size: 15px;
+  font-size: 19px;
   font-weight: 700;
   letter-spacing: 0.01em;
 }

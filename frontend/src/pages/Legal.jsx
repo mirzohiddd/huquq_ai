@@ -26,7 +26,7 @@ function LegalPage({ title, seoTitle, sections, current, children }) {
     () =>
       graph(
         breadcrumbSchema([
-          { name: t.nav_home || "Huquq AI", path: "/" },
+          { name: t.nav_home || "HuquqTech", path: "/" },
           { name: title, path: current },
         ]),
       ),
@@ -108,7 +108,7 @@ export function Terms() {
       <section id="terms-1">
         <h2>1. Umumiy qoidalar</h2>
         <p>
-          Huquq AI platformasidan foydalanish orqali foydalanuvchi ushbu
+          HuquqTech platformasidan foydalanish orqali foydalanuvchi ushbu
           Shartlarga to'liq rozilik bildiradi.
         </p>
       </section>
@@ -116,7 +116,7 @@ export function Terms() {
       <section id="terms-2">
         <h2>2. Xizmat tavsifi</h2>
         <p>
-          Huquq AI sun'iy intellekt asosida O'zbekiston qonunchiligi bo'yicha
+          HuquqTech sun'iy intellekt asosida O'zbekiston qonunchiligi bo'yicha
           umumiy ma'lumot va tushuntirishlar beradi.
         </p>
       </section>
@@ -124,7 +124,7 @@ export function Terms() {
       <section id="terms-3">
         <h2>3. Advokat emas</h2>
         <p>
-          Huquq AI advokat, notarius yoki davlat organi hisoblanmaydi.
+          HuquqTech advokat, notarius yoki davlat organi hisoblanmaydi.
           Platforma tomonidan berilgan javoblar professional yuridik
           maslahat o'rnini bosa olmaydi.
         </p>
@@ -142,7 +142,7 @@ export function Terms() {
         <h2>5. Muhim qarorlar</h2>
         <p>
           Sud ishlari, shartnomalar, moliyaviy yoki boshqa huquqiy
-          oqibatlarga olib keladigan qarorlarni faqat Huquq AI javoblariga
+          oqibatlarga olib keladigan qarorlarni faqat HuquqTech javoblariga
           asoslanib qabul qilmaslik kerak.
         </p>
       </section>
@@ -171,7 +171,7 @@ export function Terms() {
       <section id="terms-8">
         <h2>8. Intellektual mulk</h2>
         <p>
-          Platforma dizayni, logotipi va dasturiy ta'minoti Huquq AI mulki
+          Platforma dizayni, logotipi va dasturiy ta'minoti HuquqTech mulki
           hisoblanadi.
         </p>
       </section>
@@ -179,7 +179,7 @@ export function Terms() {
       <section id="terms-9">
         <h2>9. Xizmatni o'zgartirish</h2>
         <p>
-          Huquq AI istalgan vaqtda xizmatni yangilashi, o'zgartirishi yoki
+          HuquqTech istalgan vaqtda xizmatni yangilashi, o'zgartirishi yoki
           vaqtincha to'xtatishi mumkin.
         </p>
       </section>
@@ -196,14 +196,14 @@ export function Terms() {
         <h2>11. Uchinchi tomon xizmatlari</h2>
         <p>
           Platforma tashqi API yoki xizmatlardan foydalanishi mumkin.
-          Ularning ishlashi uchun Huquq AI javobgar emas.
+          Ularning ishlashi uchun HuquqTech javobgar emas.
         </p>
       </section>
 
       <section id="terms-12">
         <h2>12. Javobgarlikni cheklash</h2>
         <p>
-          Huquq AI xizmatdan foydalanish natijasida yuzaga kelgan bevosita
+          HuquqTech xizmatdan foydalanish natijasida yuzaga kelgan bevosita
           yoki bilvosita zararlar uchun qonunchilikda nazarda tutilgan
           doirada javobgar bo'ladi.
         </p>
@@ -219,7 +219,7 @@ export function Terms() {
 
       <section id="terms-14">
         <h2>14. Shartlarni o'zgartirish</h2>
-        <p>Huquq AI ushbu shartlarni istalgan vaqtda yangilashi mumkin.</p>
+        <p>HuquqTech ushbu shartlarni istalgan vaqtda yangilashi mumkin.</p>
       </section>
 
       <section id="terms-15">
@@ -384,18 +384,18 @@ export function Privacy() {
 
 /* ══════════════════ AI DISCLAIMER ══════════════════ */
 const DISCLAIMER_ITEMS = [
-  "Huquq AI sun'iy intellekt texnologiyasidan foydalanadi.",
+  "HuquqTech sun'iy intellekt texnologiyasidan foydalanadi.",
   "Barcha javoblar faqat axborot va tavsiya xarakteriga ega.",
-  "Huquq AI advokat yoki davlat organi emas.",
-  "Huquq AI javoblari rasmiy huquqiy xulosa hisoblanmaydi.",
+  "HuquqTech advokat yoki davlat organi emas.",
+  "HuquqTech javoblari rasmiy huquqiy xulosa hisoblanmaydi.",
   "Qonunchilik o'zgarishi sababli ayrim javoblar eskirishi mumkin.",
   "Muhim huquqiy masalalarda malakali yurist bilan maslahatlashing.",
   "Sud, prokuratura, ichki ishlar, soliq yoki boshqa davlat organlariga taqdim etiladigan hujjatlar AI javoblariga to'liq asoslanmasligi kerak.",
-  "Huquq AI javoblari foydalanuvchi kiritgan ma'lumotlarga bog'liq.",
+  "HuquqTech javoblari foydalanuvchi kiritgan ma'lumotlarga bog'liq.",
   "Noto'g'ri yoki to'liq bo'lmagan ma'lumot noto'g'ri javobga olib kelishi mumkin.",
   "Platforma favqulodda yoki hayot uchun xavfli vaziyatlarda foydalanish uchun mo'ljallanmagan.",
   "Platformadan foydalanish foydalanuvchining o'z mas'uliyati ostida amalga oshiriladi.",
-  "Huquq AI qonunchilikdagi o'zgarishlarni imkon qadar tez yangilashga harakat qiladi, biroq doimiy ravishda dolzarblik kafolatlanmaydi.",
+  "HuquqTech qonunchilikdagi o'zgarishlarni imkon qadar tez yangilashga harakat qiladi, biroq doimiy ravishda dolzarblik kafolatlanmaydi.",
   "Rasmiy huquqiy manba sifatida amaldagi normativ-huquqiy hujjatlar ustuvor hisoblanadi.",
   "Platformadan foydalanish ushbu Disclaimer va Foydalanish Shartlariga rozilikni anglatadi.",
   "Agar ushbu shartlarga rozi bo'lmasangiz, platformadan foydalanishni to'xtatishingiz kerak.",

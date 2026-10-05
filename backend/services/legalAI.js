@@ -1,6 +1,6 @@
 "use strict";
 /**
- * HUQUQ AI — v3 Single-File Production Pipeline
+ * HuquqTech — v3 Single-File Production Pipeline
  * Barcha logika bir faylda — tashqi yangi fayllar kerak emas.
  * Mavjud fayllar: webSearch.js (saqlanadi)
  */
@@ -276,8 +276,8 @@ function offTopicReply(lang, text) {
     )
   ) {
     return {
-      uz: "Men — Huquq AI, O'zbekiston qonunchiligi bo'yicha yordamchi. Mehnat, oila, meros, uy-joy, iste'molchi huquqlari va jinoyat masalalarida yordam bera olaman: huquqlaringizni tushuntiraman, qaysi qonun moddasi tegishli ekanini ko'rsataman, qayerga murojaat qilishni aytaman va ariza/shikoyat matnini tayyorlab beraman. Savolingizni oddiy so'zlar bilan yozavering.",
-      ru: "Я — Huquq AI, помощник по законодательству Узбекистана. Помогу с трудовыми, семейными, наследственными, жилищными, потребительскими и уголовными вопросами: объясню ваши права, укажу нужную статью закона, подскажу, куда обращаться, и подготовлю текст заявления или жалобы. Просто опишите свою ситуацию.",
+      uz: "Men — HuquqTech, O'zbekiston qonunchiligi bo'yicha yordamchi. Mehnat, oila, meros, uy-joy, iste'molchi huquqlari va jinoyat masalalarida yordam bera olaman: huquqlaringizni tushuntiraman, qaysi qonun moddasi tegishli ekanini ko'rsataman, qayerga murojaat qilishni aytaman va ariza/shikoyat matnini tayyorlab beraman. Savolingizni oddiy so'zlar bilan yozavering.",
+      ru: "Я — HuquqTech, помощник по законодательству Узбекистана. Помогу с трудовыми, семейными, наследственными, жилищными, потребительскими и уголовными вопросами: объясню ваши права, укажу нужную статью закона, подскажу, куда обращаться, и подготовлю текст заявления или жалобы. Просто опишите свою ситуацию.",
     }[lang];
   }
 

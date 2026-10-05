@@ -25,6 +25,7 @@ const ProfileModal = lazy(() => import("./ProfileModal"));
 import api from "../utils/api";
 import s from "./SiteLayout.module.css";
 import { API_BASE } from "../utils/apiBase";
+import { BrandMark, BrandWord } from "./brand/BrandLogo";
 
 // public/ ichidagi fayllar import qilinmaydi — ular / ildiz manzilida
 // serve qilinadi (Vite qoidasi), shuning uchun to'g'ridan-to'g'ri URL.
@@ -222,18 +223,11 @@ export default function SiteLayout() {
       <nav className={`${s.nav} ${navScrolled ? s.navScrolled : ""}`}>
         <div className={s.navInner}>
           <Link to="/" className={s.logo} onClick={() => setMenuOpen(false)}>
-            {/* TEZLIK: 36 px logo uchun 2,4 KB AVIF (avval 15 KB PNG) */}
-            <picture style={{ display: "contents" }}>
-              <source srcSet="/logo-72.avif" type="image/avif" />
-              <img
-                src="/logo-72.png"
-                alt="Huquq AI"
-                className={s.logoImg}
-                width="36"
-                height="36"
-              />
-            </picture>
-            <span className={s.logoText}>{t.nav_logo}</span>
+            {/* HuquqTech logosi — inline SVG (rasm so'rovi yo'q, har o'lchamda tiniq) */}
+            <BrandMark className={s.logoImg} />
+            <span className={s.logoText}>
+              <BrandWord onDark />
+            </span>
           </Link>
 
           <div className={s.navCenter}>
@@ -388,18 +382,8 @@ export default function SiteLayout() {
           />
           <div className={s.mobileMenu}>
             <div className={s.mobileMenuHead}>
-              {/* TEZLIK: 36 px logo uchun 2,4 KB AVIF (avval 15 KB PNG) */}
-              <picture style={{ display: "contents" }}>
-                <source srcSet="/logo-72.avif" type="image/avif" />
-                <img
-                src="/logo-72.png"
-                alt="Huquq AI"
-                className={s.logoImg}
-                width="36"
-                height="36"
-              />
-              </picture>
-              <span>{t.nav_logo}</span>
+              <BrandMark className={s.logoImg} />
+              <BrandWord onDark />
               <button
                 type="button"
                 className={s.mobileClose}
@@ -571,19 +555,9 @@ export default function SiteLayout() {
           {/* ── Brend ── */}
           <div className={s.footerBrand}>
             <Link to="/" className={s.footerLogo}>
-              {/* alt bo'sh: havola nomi yonidagi matndan olinadi — ikki marta o'qilmasin */}
-              {/* TEZLIK: 36 px logo uchun 2,4 KB AVIF (avval 15 KB PNG) */}
-              <picture style={{ display: "contents" }}>
-                <source srcSet="/logo-72.avif" type="image/avif" />
-                <img
-                  src="/logo-72.png"
-                  alt=""
-                  className={s.logoImg}
-                  width="36"
-                  height="36"
-                />
-              </picture>
-              <span>{t.nav_logo}</span>
+              {/* Belgi aria-hidden: havola nomi yonidagi matndan olinadi */}
+              <BrandMark className={s.logoImg} />
+              <BrandWord onDark />
             </Link>
             <p className={s.footerTagline}>{t.footer_desc}</p>
             <div className={s.footerSocial}>

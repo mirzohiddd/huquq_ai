@@ -64,7 +64,7 @@ router.get("/sitemap-hujjatlar.xml", async (req, res, next) => {
         ...["farmon", "qaror", "farmoyish"].map((s) => node(path.acts(`?tur=${s}`), "", "0.7")),
         ...refs.map((r) => node(path.act(r.docId), /^\d{8}$/.test(String(r.dateKey)) ? day(r.dateKey) : "", "0.5")),
       ];
-      smCache = `<?xml version="1.0" encoding="UTF-8"?>\n<!-- Huquq AI — Prezident hujjatlari (avtomatik). -->\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${nodes.join("\n")}\n</urlset>`;
+      smCache = `<?xml version="1.0" encoding="UTF-8"?>\n<!-- HuquqTech — Prezident hujjatlari (avtomatik). -->\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${nodes.join("\n")}\n</urlset>`;
       smAt = Date.now();
     }
     return res.type("application/xml").send(smCache);

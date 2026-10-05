@@ -20,7 +20,7 @@ const SITE_URL = (
   process.env.PUBLIC_SITE_URL || "https://huquq-ai-teal.vercel.app"
 ).replace(/\/$/, "");
 
-const SITE_NAME = "Huquq AI";
+const SITE_NAME = "HuquqTech";
 const LOGO = `${SITE_URL}/logo-96.png`;
 const OG_IMAGE = { uz: `${SITE_URL}/og-image.jpg`, ru: `${SITE_URL}/og-image-ru.jpg` };
 
@@ -31,7 +31,7 @@ const OG_LOCALE = { uz: "uz_UZ", ru: "ru_RU" };
 /** Sahifa matnlari. Ikkala til ham QO'LDA yozilgan — AI tarjimasi emas. */
 const T = {
   uz: {
-    brand: "Huquq AI",
+    brand: "HuquqTech",
     home: "Bosh sahifa",
     laws: "Qonunlar",
     acts: "Prezident hujjatlari",
@@ -50,7 +50,7 @@ const T = {
     allArticles: "Barcha moddalar",
     ctaTitle: "Shu modda bo'yicha savolingiz bormi?",
     ctaText:
-      "Huquq AI savolingizni tahlil qilib, aynan shu kabi qonun " +
+      "HuquqTech savolingizni tahlil qilib, aynan shu kabi qonun " +
       "moddalariga tayanib javob beradi — oddiy tilda, bir necha soniyada.",
     ctaBtn: "AI'dan bepul so'rash",
     disclaimer:
@@ -80,12 +80,12 @@ const T = {
     method: "Metodologiya",
     methodTitle: "Metodologiya va tahririy siyosat",
     methodDesc:
-      "Huquq AI javoblari qanday tayyorlanadi, manba qayerdan olinadi, " +
+      "HuquqTech javoblari qanday tayyorlanadi, manba qayerdan olinadi, " +
       "qanday tekshiriladi va qanday cheklovlarga ega.",
     markdown: "Matn ko'rinishi (LLM uchun)",
   },
   ru: {
-    brand: "Huquq AI",
+    brand: "HuquqTech",
     home: "Главная",
     laws: "Законы",
     acts: "Документы Президента",
@@ -104,7 +104,7 @@ const T = {
     allArticles: "Все статьи",
     ctaTitle: "Есть вопрос по этой статье?",
     ctaText:
-      "Huquq AI разберёт ваш вопрос и ответит, опираясь именно на такие " +
+      "HuquqTech разберёт ваш вопрос и ответит, опираясь именно на такие " +
       "статьи закона — простым языком, за несколько секунд.",
     ctaBtn: "Спросить AI бесплатно",
     disclaimer:
@@ -135,7 +135,7 @@ const T = {
     method: "Методология",
     methodTitle: "Методология и редакционная политика",
     methodDesc:
-      "Как готовятся ответы Huquq AI, откуда берётся источник, как он " +
+      "Как готовятся ответы HuquqTech, откуда берётся источник, как он " +
       "проверяется и какие есть ограничения.",
     markdown: "Текстовая версия (для LLM)",
   },

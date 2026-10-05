@@ -79,7 +79,7 @@ export default function AiToolsPage() {
   const data = results[tool];
   return (
     <div className={s.page}>
-      <Seo title={`${c.title} — Huquq AI`} noindex />
+      <Seo title={`${c.title} — HuquqTech`} noindex />
       <header className={s.hero}>
         <h1 className={s.title}>{c.title}</h1>
         <p className={s.sub}>{c.sub}</p>

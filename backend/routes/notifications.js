@@ -62,7 +62,7 @@ router.post("/send-test", adminGuard, async (req, res) => {
     const user = await User.findById(userId).select("pushToken").lean();
     if (!user?.pushToken) return res.status(404).json({ error: "Foydalanuvchi push token ga ega emas" });
 
-    const result = await sendPushNotification(user.pushToken, title || "Huquq AI", body || "Test bildirishnoma", data);
+    const result = await sendPushNotification(user.pushToken, title || "HuquqTech", body || "Test bildirishnoma", data);
     return res.json({ success: true, result });
   } catch (err) {
     console.error("send-test error:", err.message);

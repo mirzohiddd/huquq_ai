@@ -37,7 +37,7 @@ const groqClient = process.env.GROQ_API_KEY
 const MODERATION_MODEL = "llama-3.3-70b-versatile";
 const MAX_VIOLATIONS_BEFORE_BLOCK = 3;
 
-const SYSTEM_PROMPT = `Sen — huquqiy maslahat platformasidagi (Huquq AI) xabarlarni nazorat qiluvchi moderatorsan.
+const SYSTEM_PROMPT = `Sen — huquqiy maslahat platformasidagi (HuquqTech) xabarlarni nazorat qiluvchi moderatorsan.
 Foydalanuvchi xabari O'ZBEK, RUS yoki INGLIZ tilida (yoki ularning aralashmasida, lotin/kirill yozuvida, xato imlo bilan yozilgan bo'lishi ham mumkin) bo'lishi mumkin — UCHALA TILDAGI so'kinish/haqoratni BIR XIL DARAJADA qattiq aniqla.
 Xabarni o'qib, FAQAT quyidagi ikki holatdan birini aniqla:
 1. "insult" — foydalanuvchi AI yordamchini yoki boshqa odamlarni HAQORAT qilmoqda, so'kinmoqda, kamsitmoqda. Bunga o'zbekcha (masalan: ahmoq, tentak, qotoq, jinni, eshak, lattachaynar, padarlanat va shu kabi so'zlar/iboralar hamda ularning turli yozilishlari) va ruscha (masalan: сука/suka, блять/blyat, хуй/xuy, пизда/pizda, мудак/mudak, урод/urod, дебил/debil, гандон/gandon, падла/padla, ублюдок/ublyudok, козел/kozel va shu kabilar, lotin yozuvida yozilgan bo'lsa ham) so'kinish/haqoratlar ham KIRADI.

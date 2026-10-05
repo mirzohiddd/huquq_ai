@@ -136,7 +136,7 @@ router.get("/sitemap-savollar.xml", (req, res) => {
     ...QUESTIONS.map((q) => ({ loc: `/savol/${q.slug}`, pri: "0.8" })),
   ];
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<!-- Huquq AI — savol-javob markazi sayt xaritasi (avtomatik). -->
+<!-- HuquqTech — savol-javob markazi sayt xaritasi (avtomatik). -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${urls

@@ -103,7 +103,7 @@ export default function QuizView({ quiz, onAgain, loading }) {
 
       <PrintPortal>
         <h1 className={a.pTitle}>{quiz.title}</h1>
-        <p className={a.pMeta}>{quiz.gradeLabel} · {c.diff[quiz.difficulty]} · Huquq AI</p>
+        <p className={a.pMeta}>{quiz.gradeLabel} · {c.diff[quiz.difficulty]} · HuquqTech</p>
         <ol className={a.pList}>
           {qs.map((q, i) => (
             <li key={i}>

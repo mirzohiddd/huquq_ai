@@ -1,0 +1,61 @@
+/* HuquqTech logosi — BrandLogo.jsx */
+
+.mark {
+  display: block;
+  flex-shrink: 0;
+  color: var(--gold);
+}
+
+.word {
+  font-family: var(--font-display, inherit);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* "Tech" — oltin. Och fonda kichik matn kontrasti uchun to'qroq oltin
+   (--gold-text), to'q fonda — yorqinroq (--gold-light). */
+.tech {
+  color: var(--gold-text);
+}
+
+.techDark {
+  color: var(--gold-light);
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.sub {
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ── Fon ── */
+.light .word { color: var(--navy); }
+.light .sub { color: var(--gray-600); }
+
+.dark .word { color: #fff; }
+.dark .tech { color: var(--gold-light); }
+.dark .sub { color: rgba(255, 255, 255, 0.6); }
+
+/* ── O'lcham ── */
+.sm .word { font-size: 18px; }
+.md .word { font-size: 22px; }
+.lg .word { font-size: 27px; }
+.lg .sub { font-size: 10.5px; }

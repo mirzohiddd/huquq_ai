@@ -12,7 +12,7 @@ function SlideCard({ slide, deck, index, total, labels }) {
   const ru = deck.lang === "ru";
   const foot = (
     <footer className={s.foot}>
-      <span>Huquq AI · {deck.gradeLabel}</span>
+      <span>HuquqTech · {deck.gradeLabel}</span>
       <span>
         {index + 1} / {total}
       </span>
@@ -23,7 +23,7 @@ function SlideCard({ slide, deck, index, total, labels }) {
     return (
       <article className={`${s.slide} ${s.titleSlide}`}>
         <div className={s.titleBadge}>
-          <Scale /> Huquq AI
+          <Scale /> HuquqTech
         </div>
         <h2 className={s.bigTitle}>{slide.title}</h2>
         <p className={s.subtitle}>{slide.subtitle}</p>

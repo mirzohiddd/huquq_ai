@@ -49,7 +49,7 @@ async function searchLexUz(query) {
     const resp = await fetch(searchUrl, {
       signal: controller.signal,
       headers: {
-        "User-Agent":  "Mozilla/5.0 (compatible; HuquqAI/2.0)",
+        "User-Agent":  "Mozilla/5.0 (compatible; HuquqTech/2.0)",
         "Accept":      "text/html,application/xhtml+xml",
         "Accept-Language": "uz,ru;q=0.9",
       },

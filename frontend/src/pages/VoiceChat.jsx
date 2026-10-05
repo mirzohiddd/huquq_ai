@@ -7,19 +7,19 @@ import { API_BASE } from "../utils/apiBase";
 
 const T = {
   uz: {
-    title: "Huquq AI",
+    title: "HuquqTech",
     back: "Orqaga",
     noMic: "Mikrofon ruxsati kerak",
     error: "Xatolik",
   },
   ru: {
-    title: "Huquq AI",
+    title: "HuquqTech",
     back: "Назад",
     noMic: "Нужен доступ к микрофону",
     error: "Ошибка",
   },
   en: {
-    title: "Huquq AI",
+    title: "HuquqTech",
     back: "Back",
     noMic: "Microphone permission needed",
     error: "Error",

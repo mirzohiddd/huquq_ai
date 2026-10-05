@@ -1,7 +1,7 @@
 "use strict";
 /**
  * Sahifalarning yuqori/pastki chekkalarida takrorlanadigan
- * header/footer matnini (masalan "Huquq AI — Ichki hujjat") va sahifa
+ * header/footer matnini (masalan "HuquqTech — Ichki hujjat") va sahifa
  * raqamlarini ("3", "3 / 20", "- 3 -") asosiy matndan olib tashlaydi.
  *
  * Mantiq:

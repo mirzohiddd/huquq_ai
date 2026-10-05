@@ -32,7 +32,7 @@ const BREVO_API_URL = "https://api.brevo.com/v3/smtp/email";
 // jo'natuvchi hisoblanadi.
 const DEFAULT_SENDER_EMAIL = "acd052001@smtp-brevo.com";
 const SENDER_EMAIL = process.env.BREVO_SENDER_EMAIL || DEFAULT_SENDER_EMAIL;
-const SENDER_NAME = "Mening Huquqim";
+const SENDER_NAME = "HuquqTech";
 
 /* ⚠️ `Math.random()` kriptografik jihatdan xavfsiz EMAS — uning holatini
    bir nechta chiqishdan tiklab, keyingi kodlarni oldindan aytish mumkin.
@@ -679,7 +679,7 @@ async function sendOTPEmail(toEmail, otp, fullName = "") {
 <body>
   <div class="container">
     <div class="header">
-      <h1>⚖ Mening Huquqim</h1>
+      <h1>⚖ HuquqTech</h1>
       <p>O'zbekiston huquqiy maslahat platformasi</p>
     </div>
     <div class="body">
@@ -691,7 +691,7 @@ async function sendOTPEmail(toEmail, otp, fullName = "") {
       </div>
       <p>Agar siz bu so'rovni yubormagan bo'lsangiz, ushbu xatni e'tiborsiz qoldiring.</p>
     </div>
-    <div class="footer">© 2025 Mening Huquqim — O'zbekiston qonunchiligiga asoslangan AI maslahat</div>
+    <div class="footer">© 2025 HuquqTech — O'zbekiston qonunchiligiga asoslangan AI maslahat</div>
   </div>
 </body>
 </html>`;
@@ -699,7 +699,7 @@ async function sendOTPEmail(toEmail, otp, fullName = "") {
   try {
     const info = await sendEmail({
       toEmail,
-      subject: `Tasdiqlash kodi: ${otp} — Mening Huquqim`,
+      subject: `Tasdiqlash kodi: ${otp} — HuquqTech`,
       html,
       text: `Tasdiqlash kodingiz: ${otp}\n\nKod 10 daqiqa ichida amal qiladi.`,
     });
@@ -726,7 +726,7 @@ async function sendPasswordResetEmail(
 </head>
 <body style="font-family:Arial,sans-serif;background:#f5f3ef;padding:20px;">
   <div style="max-width:500px;margin:auto;background:#fff;border-radius:12px;padding:30px;">
-    <h2>⚖ Mening Huquqim</h2>
+    <h2>⚖ HuquqTech</h2>
 
     <p>Assalomu alaykum, <strong>${name}</strong>!</p>
 
@@ -758,7 +758,7 @@ async function sendPasswordResetEmail(
   try {
     const info = await sendEmail({
       toEmail,
-      subject: "Parolingiz o'zgartirildi — Mening Huquqim",
+      subject: "Parolingiz o'zgartirildi — HuquqTech",
       html,
       text: `Yangi parol: ${newPassword}`,
     });

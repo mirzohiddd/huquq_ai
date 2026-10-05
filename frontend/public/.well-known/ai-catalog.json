@@ -1,20 +1,20 @@
 {
   "specVersion": "1.0",
   "host": {
-    "displayName": "Huquq AI",
+    "displayName": "HuquqTech",
     "documentationUrl": "https://huquq-ai-teal.vercel.app/metodologiya",
     "logoUrl": "https://huquq-ai-teal.vercel.app/logo-512.png"
   },
   "entries": [
     {
       "identifier": "urn:air:huquq-ai-teal.vercel.app:legal:uz-law-assistant",
-      "displayName": "Huquq AI — O'zbekiston qonunchiligi bo'yicha yordamchi",
+      "displayName": "HuquqTech — O'zbekiston qonunchiligi bo'yicha yordamchi",
       "type": "application/agent-card+json",
       "data": {
-        "name": "Huquq AI",
+        "name": "HuquqTech",
         "description": "O'zbekiston Respublikasi qonunchiligi (Konstitutsiya va 20 ta kodeks, lex.uz rasmiy matnlari) asosida huquqiy savollarga javob beradigan yordamchi. Javoblar faqat saytdagi rasmiy qonun matnlari va darslardan olinadi.",
         "url": "https://huquq-ai-teal.vercel.app/",
-        "provider": { "organization": "Huquq AI", "url": "https://huquq-ai-teal.vercel.app/" },
+        "provider": { "organization": "HuquqTech", "url": "https://huquq-ai-teal.vercel.app/" },
         "defaultInputModes": ["text/plain"],
         "defaultOutputModes": ["text/markdown"],
         "languages": ["uz", "ru"]

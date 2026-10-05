@@ -4,6 +4,7 @@ import { useAdmin } from "../context/AdminContext";
 import axios from "axios";
 import s from "./Layout.module.css";
 import { API_BASE } from "../utils/apiBase";
+import BrandMark from "./BrandMark";
 
 const NAV = [
   { to: "/",             icon: "◈",  label: "Dashboard"            },
@@ -73,11 +74,11 @@ export default function Layout() {
       <aside className={s.sidebar}>
         <div className={s.brand}>
           <div className={s.brandGlow} />
-          <span className={s.brandIcon}>⚖️</span>
+          <span className={s.brandIcon}><BrandMark /></span>
           {!collapsed && (
             <div>
               <span className={s.brandText}>Admin Panel</span>
-              <span className={s.brandSub}>Mening Huquqim</span>
+              <span className={s.brandSub}>HuquqTech</span>
             </div>
           )}
         </div>
@@ -121,7 +122,7 @@ export default function Layout() {
       <div className={s.main}>
         <header className={s.topbar}>
           <div className={s.topLeft}>
-            <span className={s.topTitle}>Mening Huquqim</span>
+            <span className={s.topTitle}>HuquqTech</span>
             <span className={s.topBadge}>LIVE</span>
           </div>
           <div className={s.topRight}>

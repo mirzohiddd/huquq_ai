@@ -11,8 +11,8 @@ const { pickMaterial, lawState, resolveRefs, clip, lead } = require("./material"
 const { LEVELS, levelOf, gradeLabel, clampInt, localize } = require("./audience");
 
 const T = {
-  uz: { agenda: "Dars rejasi", law: "Qonun nima deydi", summary: "Xulosa", questions: "Muhokama uchun savollar", example: "Hayotiy misol", source: "Manba: Huquq AI darslari va O'zbekiston Respublikasi qonunchiligi (lex.uz)", ask: (h) => `«${h}» deganda nimani tushunasiz?`, why: (h) => `Nima uchun «${h}» har bir fuqaro uchun muhim?`, act: "Bunday vaziyatda o'zingiz qanday yo'l tutgan bo'lardingiz?" },
-  ru: { agenda: "План урока", law: "Что говорит закон", summary: "Выводы", questions: "Вопросы для обсуждения", example: "Пример из жизни", source: "Источник: уроки Huquq AI и законодательство Республики Узбекистан (lex.uz)", ask: (h) => `Что вы понимаете под «${h}»?`, why: (h) => `Почему «${h}» важно для каждого гражданина?`, act: "Как бы вы поступили в такой ситуации?" },
+  uz: { agenda: "Dars rejasi", law: "Qonun nima deydi", summary: "Xulosa", questions: "Muhokama uchun savollar", example: "Hayotiy misol", source: "Manba: HuquqTech darslari va O'zbekiston Respublikasi qonunchiligi (lex.uz)", ask: (h) => `«${h}» deganda nimani tushunasiz?`, why: (h) => `Nima uchun «${h}» har bir fuqaro uchun muhim?`, act: "Bunday vaziyatda o'zingiz qanday yo'l tutgan bo'lardingiz?" },
+  ru: { agenda: "План урока", law: "Что говорит закон", summary: "Выводы", questions: "Вопросы для обсуждения", example: "Пример из жизни", source: "Источник: уроки HuquqTech и законодательство Республики Узбекистан (lex.uz)", ask: (h) => `Что вы понимаете под «${h}»?`, why: (h) => `Почему «${h}» важно для каждого гражданина?`, act: "Как бы вы поступили в такой ситуации?" },
 };
 
 function contentSlide(topic, level, state) {

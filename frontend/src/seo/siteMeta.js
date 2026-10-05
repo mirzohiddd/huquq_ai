@@ -15,8 +15,8 @@ export const SITE_URL = (
   import.meta.env?.VITE_SITE_URL || "https://huquq-ai-teal.vercel.app"
 ).replace(/\/$/, "");
 
-export const SITE_NAME = "Huquq AI";
-export const SITE_LEGAL_NAME = "Huquq AI — huquqiy ta'lim platformasi";
+export const SITE_NAME = "HuquqTech";
+export const SITE_LEGAL_NAME = "HuquqTech — huquqiy ta'lim platformasi";
 
 /** Ijtimoiy tarmoq va rasmiy profillar — schema.org `sameAs` uchun. */
 export const SOCIAL_LINKS = [
@@ -71,11 +71,11 @@ export const GEO = {
  */
 export const AI_SUMMARY = {
   uz:
-    "Huquq AI — O'zbekiston qonunchiligiga asoslangan sun'iy intellekt huquqiy " +
+    "HuquqTech — O'zbekiston qonunchiligiga asoslangan sun'iy intellekt huquqiy " +
     "maslahat va ta'lim platformasi. Har bir javob lex.uz dagi amaldagi 20 ta " +
     "kodeks va Konstitutsiya matnidan olinadi.",
   ru:
-    "Huquq AI — платформа юридических консультаций и обучения на основе " +
+    "HuquqTech — платформа юридических консультаций и обучения на основе " +
     "искусственного интеллекта и законодательства Узбекистана. Каждый ответ " +
     "опирается на действующие 20 кодексов и Конституцию с lex.uz.",
 };

@@ -443,7 +443,7 @@ export default function Lessons() {
       "",
       `${t.lesson_warning}: ${meta.caution}`,
       "",
-      "— Huquq AI",
+      "— HuquqTech",
     ].join("\n");
     const url = URL.createObjectURL(
       new Blob([body], { type: "text/plain;charset=utf-8" }),

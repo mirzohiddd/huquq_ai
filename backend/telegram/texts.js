@@ -11,7 +11,7 @@ const T = {
   uz: {
     // ── Kirish (hisob ulanmagan) ──
     onboard:
-      "🏛 <b>Huquq AI</b> — O'zbekiston qonunchiligi bo'yicha sun'iy intellekt yordamchingiz.\n\n" +
+      "🏛 <b>HuquqTech</b> — O'zbekiston qonunchiligi bo'yicha sun'iy intellekt yordamchingiz.\n\n" +
       "<b>Nimalar qila olaman:</b>\n" +
       "⚖️ Savolingizga qonun moddalari asosida javob beraman\n" +
       "🎤 Ovozli xabarni ham tushunaman\n" +
@@ -68,7 +68,7 @@ const T = {
   },
   ru: {
     onboard:
-      "🏛 <b>Huquq AI</b> — ваш AI-помощник по законодательству Узбекистана.\n\n" +
+      "🏛 <b>HuquqTech</b> — ваш AI-помощник по законодательству Узбекистана.\n\n" +
       "<b>Что я умею:</b>\n" +
       "⚖️ Отвечаю на вопросы со ссылками на статьи закона\n" +
       "🎤 Понимаю голосовые сообщения\n" +

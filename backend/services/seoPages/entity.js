@@ -6,7 +6,7 @@
  * `Legislation` va `BreadcrumbList` sxemasi bor edi. Aynan shu sahifalar
  * AI botlari (GPTBot, PerplexityBot, ClaudeBot) eng ko'p o'qiydigan
  * sahifalar — chunki ular login talab qilmaydi va tayyor HTML beradi.
- * Lekin ularda "Huquq AI kim, nima qiladi, kim javobgar" degan signal
+ * Lekin ularda "HuquqTech kim, nima qiladi, kim javobgar" degan signal
  * YO'Q edi: `Organization` sxemasi faqat `index.html` da, ya'ni SPA
  * ichida turardi. Natijada bot 7 100 ta modda sahifasini o'qib, ularni
  * hech qanday manba (entity) bilan bog'lay olmasdi.

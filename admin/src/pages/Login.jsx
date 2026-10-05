@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAdmin } from "../context/AdminContext";
 import s from "./Login.module.css";
+import BrandMark from "../components/BrandMark";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -28,9 +29,9 @@ export default function Login() {
     <div className={s.page}>
       <div className={s.card}>
         <div className={s.logo}>
-          <span className={s.logoIcon}>⚖️</span>
+          <span className={s.logoIcon}><BrandMark size={26} /></span>
           <div>
-            <span className={s.logoText}>Mening Huquqim</span>
+            <span className={s.logoText}>HuquqTech</span>
             <span className={s.logoSub}>Boshqaruv paneli</span>
           </div>
         </div>

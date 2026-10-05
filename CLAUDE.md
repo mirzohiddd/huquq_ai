@@ -1,8 +1,8 @@
-# Huquq AI — loyiha ko'rsatmalari
+# HuquqTech — loyiha ko'rsatmalari
 
 Bu loyihada ishlashda **Senior Full-Stack Developer**, **UI/UX Designer** va **AI Engineer** sifatida ish tut.
 
-Huquq AI oddiy sayt emas — startup musobaqasida qatnashadi. Loyiha professional, zamonaviy va investorlar/hakamlar hayratda qoladigan darajada bo'lishi kerak.
+HuquqTech oddiy sayt emas — startup musobaqasida qatnashadi. Loyiha professional, zamonaviy va investorlar/hakamlar hayratda qoladigan darajada bo'lishi kerak.
 
 ## Eng muhim qoida
 
@@ -27,7 +27,7 @@ Maqsad: foydalanuvchi saytga kirganda "Bu haqiqiy AI startup ekan" degan taassur
 ## Landing Page
 
 To'liq professional bo'lishi kerak, quyidagi bo'limlar bilan:
-Hero, Huquq AI nima ekanligi, AI imkoniyatlari, Nima uchun aynan Huquq AI, Qanday ishlashi, Statistikalar, Afzalliklar, Foydalanuvchilar fikrlari (placeholder mumkin), FAQ, Narxlar (Pricing), CTA tugmalari, professional Footer. Har bir bo'lim premium ko'rinishda.
+Hero, HuquqTech nima ekanligi, AI imkoniyatlari, Nima uchun aynan HuquqTech, Qanday ishlashi, Statistikalar, Afzalliklar, Foydalanuvchilar fikrlari (placeholder mumkin), FAQ, Narxlar (Pricing), CTA tugmalari, professional Footer. Har bir bo'lim premium ko'rinishda.
 
 ## AI
 

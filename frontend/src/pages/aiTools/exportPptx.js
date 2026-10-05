@@ -17,7 +17,7 @@ function header(sl, title) {
 }
 
 function footer(sl, deck, i, n) {
-  sl.addText(`Huquq AI · ${deck.gradeLabel}`, { x: 0.6, y: 7.0, w: 8, h: 0.3, fontFace: FONT, fontSize: 10, color: MUTED });
+  sl.addText(`HuquqTech · ${deck.gradeLabel}`, { x: 0.6, y: 7.0, w: 8, h: 0.3, fontFace: FONT, fontSize: 10, color: MUTED });
   sl.addText(`${i + 1} / ${n}`, { x: 11.2, y: 7.0, w: 1.5, h: 0.3, fontFace: FONT, fontSize: 10, color: MUTED, align: "right" });
 }
 
@@ -29,7 +29,7 @@ export async function exportPptx(deck, labels) {
   const pptx = new PptxGenJS();
   pptx.layout = "LAYOUT_WIDE";
   pptx.title = deck.title;
-  pptx.company = "Huquq AI";
+  pptx.company = "HuquqTech";
   const ru = deck.lang === "ru";
   const n = deck.slides.length;
 
@@ -40,7 +40,7 @@ export async function exportPptx(deck, labels) {
       sl.addShape("rect", { x: 0.6, y: 2.2, w: 1.4, h: 0.08, fill: { color: GOLD } });
       sl.addText(s.title, { x: 0.6, y: 2.45, w: 12, h: 1.6, fontFace: FONT, fontSize: 44, bold: true, color: "FFFFFF", fit: "shrink" });
       sl.addText(s.subtitle || "", { x: 0.6, y: 4.1, w: 12, h: 0.7, fontFace: FONT, fontSize: 20, color: "E0B060" });
-      sl.addText(`${deck.gradeLabel} · Huquq AI`, { x: 0.6, y: 6.6, w: 12, h: 0.4, fontFace: FONT, fontSize: 14, color: "C9CED8" });
+      sl.addText(`${deck.gradeLabel} · HuquqTech`, { x: 0.6, y: 6.6, w: 12, h: 0.4, fontFace: FONT, fontSize: 14, color: "C9CED8" });
       return;
     }
     sl.background = { color: "FFFFFF" };

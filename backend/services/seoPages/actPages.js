@@ -76,7 +76,7 @@ function actPage({ act, text, related }) {
         .join("")}</ul></div>` : ""}
       <div class="ctaBox">
         <h2>Bu hujjat sizga qanday ta'sir qiladi?</h2>
-        <p>Huquq AI hujjat va qonun moddalariga tayanib, savolingizga oddiy tilda javob beradi.</p>
+        <p>HuquqTech hujjat va qonun moddalariga tayanib, savolingizga oddiy tilda javob beradi.</p>
         <a href="${SITE_URL}/">${esc(t.ctaBtn)}</a>
       </div>
       <p class="note">${esc(t.disclaimer)}</p>

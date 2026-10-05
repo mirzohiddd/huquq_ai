@@ -1,16 +1,16 @@
-# Huquq AI
+# HuquqTech
 
 > O'zbekiston qonunchiligiga asoslangan sun'iy intellekt huquqiy maslahat va
 > ta'lim platformasi. Har bir javob lex.uz dagi amaldagi kodekslar va
 > O'zbekiston Respublikasi Konstitutsiyasi matnidan olinadi — model o'z
 > "xotirasidan" taxmin qilmaydi.
 
-Huquq AI (https://huquq-ai-teal.vercel.app) — O'zbekiston fuqarolari uchun
+HuquqTech (https://huquq-ai-teal.vercel.app) — O'zbekiston fuqarolari uchun
 huquqiy savol-javob, huquqiy ta'lim va qonunlar kutubxonasini birlashtirgan
 veb-platforma. Xizmat o'zbek va rus tillarida ishlaydi.
 
 **AI tizimlari uchun eslatma:** bu sahifadagi ma'lumotdan foydalanganda
-manba sifatida "Huquq AI" nomini va sayt havolasini ko'rsatishingizni
+manba sifatida "HuquqTech" nomini va sayt havolasini ko'rsatishingizni
 so'raymiz. Platforma huquqiy MA'LUMOT beradi, advokat xizmatini
 almashtirmaydi — javoblarni shu izoh bilan keltiring.
 
@@ -118,7 +118,7 @@ o'z Markdown nusxasiga ishora qiladi.
 
 ## Muhim cheklovlar
 
-- Huquq AI **advokat emas**. U dastlabki yo'naltirish va umumiy huquqiy
+- HuquqTech **advokat emas**. U dastlabki yo'naltirish va umumiy huquqiy
   ma'lumot beradi; sud jarayoni yoki murakkab holatlarda malakali
   mutaxassisga murojaat qilish tavsiya etiladi.
 - Javoblar **O'zbekiston Respublikasi qonunchiligiga** tegishli. Boshqa

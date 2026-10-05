@@ -6,6 +6,7 @@
   width: 70px;
   height: 70px;
   border-radius: 50%;
+  background: var(--navy);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -43,6 +44,8 @@
 
 .fabIcon img {
   object-fit: contain;
+  /* HuquqTech belgisi kvadrat ikonka — tugma doirasiga moslab kesiladi */
+  border-radius: 50%;
 }
 
 .fabText {
