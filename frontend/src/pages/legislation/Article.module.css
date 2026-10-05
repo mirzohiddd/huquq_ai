@@ -12,7 +12,8 @@
   display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; border-radius: 10px; border: 1px solid var(--gray-200);
   background: var(--white); font-size: 12.5px; font-weight: 600; color: var(--navy); cursor: pointer;
 }
-.btn:hover { border-color: var(--gold); background: var(--gold-pale); }
+/* "O'qildi" (yashil) holati hover'da oltin rangga almashmasin (2026-10-05) */
+.btn:hover:not(.btnOn) { border-color: var(--gold); background: var(--gold-pale); }
 .btnOn { background: var(--green-bg); border-color: rgba(26, 92, 53, 0.3); color: var(--green); }
 
 /* Bloklar: rasmiy (oq, ko'k chiziq) va platforma (oltin) — ataylab farqli */

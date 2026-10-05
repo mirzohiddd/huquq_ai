@@ -519,6 +519,15 @@
   padding: 8px 0;
 }
 
+/* ⚠️ Maydon bir qatorli (rows=1): tor oynada placeholder ikki qatorga
+   bo'linib, ikkinchi qatori yarmidan kesilib qolardi (2026-10-05).
+   Endi bir qatorda, sig'masa "…" bilan qisqartiriladi. */
+.ta::placeholder {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .ta:disabled {
   opacity: 0.6;
   cursor: not-allowed;

@@ -1042,7 +1042,8 @@
   transition: all 0.22s ease;
 }
 
-.option:hover {
+/* Tanlangan variant ramkasi hover'da xiralashmasin (2026-10-05) */
+.option:hover:not(.optSelected) {
   border-color: rgba(197, 139, 28, 0.4);
   background: #fffdf8;
 }
@@ -2290,7 +2291,8 @@
   transition: all 0.22s ease;
 }
 
-.practiceTab:hover {
+/* Faol tabning oltin matni hover'da qorayib ketmasin (2026-10-05) */
+.practiceTab:hover:not(.practiceTabActive) {
   color: var(--dark);
 }
 

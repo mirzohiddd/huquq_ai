@@ -23,9 +23,17 @@
   transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
 }
 
-.plusBtn:hover:not(:disabled) {
+/* ⚠️ Hover faqat FAOL BO'LMAGAN elementga: `.x:hover` (sinf + psevdo-klass) holat
+   sinfidan kuchliroq va uning rangini bosib ketardi (2026-10-05). */
+.plusBtn:hover:not(:disabled):not(.plusOpen) {
   border-color: var(--gold);
   background: var(--gold-pale);
+}
+
+/* Menyu ochiq: oq ikonka och-oltin fonda ko'rinmay qolardi */
+.plusOpen:hover:not(:disabled) {
+  background: var(--navy-light);
+  border-color: var(--navy-light);
 }
 
 .plusOpen {
@@ -149,7 +157,8 @@
   transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
 }
 
-.act:hover:not(:disabled) {
+/* 👍/👎 bosilgan holat (yashil/qizil) hover'da kulrangga aylanmasin */
+.act:hover:not(:disabled):not(.actOn):not(.actOnBad) {
   background: var(--gray-50);
   border-color: var(--gray-100);
   color: var(--navy);

@@ -64,8 +64,11 @@
   transition: background 0.2s ease, color 0.2s ease;
 }
 
-.tab:hover {
+/* ⚠️ Hover faqat FAOL BO'LMAGAN elementga: `.x:hover` (sinf + psevdo-klass) holat
+   sinfidan kuchliroq va uning rangini bosib ketardi (2026-10-05). */
+.tab:hover:not(.tabOn) {
   color: #fff;
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .tabOn {
@@ -324,7 +327,8 @@
   transition: border-color 0.15s ease, background 0.15s ease;
 }
 
-.opt:hover { border-color: var(--gray-200); }
+/* Tanlangan / to'g'ri / noto'g'ri variantning ramka rangi hover'da yo'qolmasin */
+.opt:hover:not(.optPick):not(.optRight):not(.optWrong) { border-color: var(--gray-200); }
 .optL {
   flex-shrink: 0;
   width: 1.6rem;
