@@ -20,6 +20,7 @@ const { getIndex } = require("./lawIndex");
 const { queryPrefixes, distance, tokenize } = require("./text");
 const { expandQuery } = require("../legalRetrievalQuery");
 const { parseArticleNumbers, parseLawCodes } = require("../articleLookup");
+const { gatedOut } = require("./vocab");
 
 const K1 = 1.2;
 const B = 0.75;
@@ -172,10 +173,12 @@ async function searchLaws(query, { lang = "uz", codes = null, limit = 3, onlyCod
      kodekslar; mavzu kodeksida savolga yaxshi mos modda bor bo'lsa —
      boshqa kodekslar natijadan chiqariladi. */
   const inCat = (r) => catCodes.includes(state.docs[r.docIdx].lawCode);
-  let pool = ranked;
-  if (onlyCodes && catCodes.length) pool = ranked.filter(inCat);
-  else if (catCodes.length && ranked.some((r) => inCat(r) && r.coverage >= 0.5)) {
-    pool = ranked.filter(inCat);
+  // Tor sohali kodekslar (mahkumlar, soliq…) — faqat savol o'sha sohada bo'lsa (vocab.js)
+  const open = [...catCodes, ...explicit];
+  let pool = ranked.filter((r) => !gatedOut(state.docs[r.docIdx].lawCode, query, open));
+  if (onlyCodes && catCodes.length) pool = pool.filter(inCat);
+  else if (catCodes.length && pool.some((r) => inCat(r) && r.coverage >= 0.5)) {
+    pool = pool.filter(inCat);
   }
   return { hits: pool.slice(0, limit), state, terms };
 }

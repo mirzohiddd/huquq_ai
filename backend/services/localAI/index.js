@@ -31,6 +31,8 @@ const { composeTopic } = require("./composeTopic");
 const { tokenize, isUzCyrillic, uzCyrToLatin } = require("./text");
 const { warmLawIndex, getIndex } = require("./lawIndex");
 const { parseArticleNumbers, parseLawCodes } = require("../articleLookup");
+const { colloquial } = require("./vocab");
+const { outOfScopeAnswer } = require("./outOfScope");
 
 /* `strict` — kalit so'z filtri savolni "huquqiy emas" deb topgan holat.
    Bunday savol baribir bazadan qidiriladi (masalan "Himoyachi qachondan
@@ -65,6 +67,19 @@ function confident(r, minCov = 0.6) {
   return r.coverage >= minCov && r.matched >= 2 && (r.headFit >= 0.5 || r.phrase >= 0.5);
 }
 
+/** Muqobil javob (qayta generatsiya uchun) — topilmasa null. */
+async function alternative({ query, uz, exact, lang, codes, strict, skipTopics, done }) {
+  if (!skipTopics && uz && !exact) {
+    const topics = searchTopics(query, 4).filter((t) => confident(t, 0.5));
+    const first = pickTarget(query, uz)?.topic;
+    const t = topics.find((x) => x.topic !== first);
+    if (t) return done(composeTopic({ topic: t.topic, state: await getIndex(), lang }));
+  }
+  const { hits, terms } = await searchLaws(query, { lang, codes, limit: 6 });
+  const res = composeAnswer({ hits, state: await getIndex(), terms, qa: null, lang, minCoverage: STRICT_COVERAGE, minMatched: 2, needTitle: uz && !strict });
+  return res.found ? done(res) : null;
+}
+
 /**
  * @param {{ msg: string, prevUserText?: string, lang?: string,
  *           codes?: string|string[]|null, category?: string, hasImage?: boolean,
@@ -79,6 +94,7 @@ async function localLegalAnswer({
   category = "boshqa",
   hasImage = false,
   strict = false,
+  variant = 0,
 }) {
   // O'zbek kirill yozuvi — baza lotin yozuvida, javob esa o'zbekcha
   // (til aniqlagich kirillni "ru" deb hisoblaydi).
@@ -99,11 +115,24 @@ async function localLegalAnswer({
     query = `${prevUserText} ${query}`.slice(-600);
   }
 
+  // Kundalik so'zlarga qonun atamasi qo'shiladi ("maosh" → "ish haqi") — vocab.js
+  query = colloquial(query);
+
   try {
     const state = await getIndex();
     const uz = lang !== "ru";
     // Aniq modda so'ralgan ("JK 169-modda") — vaziyat/mavzu emas, o'sha modda
     const exact = parseArticleNumbers(query).length > 0 && parseLawCodes(query).length > 0;
+
+    /* QAYTA GENERATSIYA (`variant`): javob boshqa yo'ldan olinadi —
+       1: kuratorlik qilingan vaziyat/niyat chetlab o'tiladi (dars mavzusi
+       qidiruvi), 2: faqat qonun matni bo'yicha qidiruv. Hech qaysi yo'l
+       natija bermasa — odatdagi javob (variant 0) qaytadi. */
+    const v = variant % 3;
+    if (v > 0) {
+      const alt = await alternative({ query, uz, exact, lang, codes, strict, skipTopics: v === 2, done });
+      if (alt) return alt;
+    }
 
     // 1–2. Hayotiy vaziyat yoki ko'p so'raladigan savol (kuratorlik qilingan)
     let target = exact ? null : pickTarget(query, uz);
@@ -116,8 +145,18 @@ async function localLegalAnswer({
     }
     if (target?.topic) return done(composeTopic({ topic: target.topic, state, lang }));
 
+    // Sayt bazasida yo'q soha (pensiya, fuqarolik…) — aloqasiz modda o'rniga halol javob
+    const scoped = exact ? null : outOfScopeAnswer(query, lang);
+    // `scoped` — mavzu filtri rad etgan savolda ham bu halol javob ko'rsatilsin (legalAI.js)
+    if (scoped) return { ...done({ answer: scoped, found: false }), scoped: true };
+
     // 3. Dars mavzulari bo'yicha qidiruv — faqat YUQORI ishonchda (lessonTopics.js)
-    const topics = uz && !exact ? searchTopics(query, 4) : [];
+    // Savolda kodeks aytilgan bo'lsa ("Fuqarolik kodeksi bo'yicha da'vo muddati") —
+    // faqat o'sha kodeksga havolali mavzular (avval Soliq kodeksi darsi chiqardi)
+    const named = parseLawCodes(query);
+    const topics = uz && !exact
+      ? searchTopics(query, named.length ? 12 : 4).filter((t) => !named.length || t.topic.lawRefs.some((r) => named.includes(r.code))).slice(0, 4)
+      : [];
     if (topics[0] && confident(topics[0])) {
       const related = topics.slice(1).filter((t) => t.topic.lawRefs.length && confident(t, 0.5)).slice(0, 2);
       return done(composeTopic({ topic: topics[0].topic, state, lang, related: related.map((r) => r.topic) }));
@@ -131,7 +170,9 @@ async function localLegalAnswer({
     if (res.found || strict) return done(res);
 
     // 5. Topilmadi — to'qib chiqarilgan javob o'rniga halol javob + yaqin mavzular
-    const near = topics.filter((t) => t.coverage >= 0.5).slice(0, 3).map((t) => t.topic.heading);
+    // Yaqin mavzu faqat kamida 2 ta savol so'zi mos kelsa — avval bitta umumiy
+    // so'z bilan aloqasiz mavzular ("Ko'p uchraydigan xatolar") taklif qilinardi
+    const near = topics.filter((t) => t.coverage >= 0.5 && t.matched >= 2).slice(0, 3).map((t) => t.topic.heading);
     return done({ answer: near.length ? `${L.notFound}\n\n${L.near}\n${near.map((h) => `• «${h}»`).join("\n")}` : L.notFound, found: false });
   } catch (err) {
     console.error("Lokal AI xatosi:", err.message);

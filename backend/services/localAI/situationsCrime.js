@@ -9,7 +9,7 @@ module.exports = [
   {
     id: "detained",
     match: (t) =>
-      /(ushlab (ketdi|qoldi|turish|olib)|ushlandi|qamoqqa ol|hibsga ol|militsiya|politsiya|milisa|tergovchi|задерж|арестова)/.test(t),
+      /(ushlab (ketdi|qoldi|turish|olib)|ushlandi|advokatsiz|himoyachisiz|без адвоката|qamoqqa ol|hibsga ol|militsiya|politsiya|milisa|tergovchi|задерж|арестова)/.test(t),
     title: { uz: "Ushlab turilganda huquqlar", ru: "Права при задержании" },
     summary: {
       uz:

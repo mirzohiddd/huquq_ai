@@ -1363,7 +1363,8 @@ async function getLegalAdvice(
        QAT'IY mezon bilan qidiriladi — aniq mos modda bo'lsagina javob. */
     if (!/^(salom|assalom|привет|hello|hi|hey)\b/i.test(msg)) {
       const local = await localLegalAnswer({ msg, lang: detectedLang, strict: true });
-      if (local.found) return local;
+      // `scoped` — sayt bazasida yo'q huquqiy soha (pensiya, propiska…): rad emas, yo'naltirish
+      if (local.found || local.scoped) return local;
     }
     return { answer: offTopicReply(detectedLang, msg), category: "off_topic" };
   }
@@ -1400,6 +1401,8 @@ async function getLegalAdvice(
     codes: CATEGORY_TO_LAWCODE[category] || null,
     category: uzCategory,
     hasImage: !!imageBase64,
+    // "Qayta generatsiya" — boshqa manbadan muqobil javob (localAI/index.js)
+    variant: opts.variant || 0,
   });
 }
 

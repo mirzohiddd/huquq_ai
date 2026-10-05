@@ -111,6 +111,39 @@ module.exports = [
     },
   },
   {
+    // ⚠️ Umumiy ajrashishdan OLDIN (2026-10-05): "Как разделить имущество при
+    // разводе" avval ajrashish tartibini oldi. O'zbekcha savollarni intents.js
+    // PRIORITY dagi dars mavzusi oldinroq ushlaydi — bu ruscha uchun zaxira.
+    id: "property_division",
+    match: (t) => /(раздел|подел|делит|делят)\S*.{0,15}(имуществ|квартир|дом|жиль|машин)|(mol mulk|mulk)\S* (bolish|taqsim)/.test(t),
+    title: { uz: "Er-xotin mulkini bo'lish", ru: "Раздел имущества супругов" },
+    summary: {
+      uz:
+        "Nikoh davomida orttirilgan mol-mulk, kimning nomiga rasmiylashtirilganidan qat'i nazar, odatda er-xotinning " +
+        "umumiy mulki hisoblanadi va bo'linadi. Nikohgacha bo'lgan, hadya yoki meros sifatida olingan mulk esa har " +
+        "birining shaxsiy mulki bo'lib qoladi. Ulushlar qanday aniqlanishi — quyidagi moddalarda.",
+      ru:
+        "Имущество, нажитое в браке, независимо от того, на кого оно оформлено, как правило, является общим " +
+        "имуществом супругов и подлежит разделу. Добрачное имущество, а также полученное в дар или по наследству, " +
+        "остаётся личным. Как определяются доли — в статьях ниже.",
+    },
+    pins: [["OK", "23"], ["OK", "25"], ["OK", "27"], ["OK", "28"]],
+    codes: ["OK"],
+    terms: "er va xotinning umumiy mol-mulkini boʻlish ulushlar",
+    steps: {
+      uz: [
+        "Nikoh davomida olingan mulk ro'yxatini tuzing va har biri qachon, kimning mablag'iga olinganini tasdiqlovchi hujjatlarni yig'ing.",
+        "Nikohgacha bo'lgan, hadya yoki meros orqali olingan mulkingizni hujjat bilan isbotlang — u bo'linmaydi.",
+        "Kelishsangiz — mulkni bo'lish to'g'risida notarial kelishuv tuzing; kelisha olmasangiz — sudga da'vo bering (ajrashish bilan birga ham mumkin).",
+      ],
+      ru: [
+        "Составьте перечень имущества, нажитого в браке, и соберите документы о том, когда и на чьи средства оно приобретено.",
+        "Подтвердите документами добрачное имущество, а также полученное в дар или по наследству — оно не делится.",
+        "Если договоритесь — оформите нотариальное соглашение о разделе; если нет — подайте иск в суд (можно вместе с иском о разводе).",
+      ],
+    },
+  },
+  {
     id: "divorce",
     match: (t) => /ajrash|ajral|ajrim|taloq|nikohdan ajrat|nikohni bekor|развод|развест|расторг\S* брак/.test(t),
     title: { uz: "Nikohdan ajralish", ru: "Расторжение брака" },

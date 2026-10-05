@@ -24,8 +24,12 @@ const PRIORITY = [
   { re: /nikoh(dan)? (oldin|avval)\S*.{0,40}(mulk|mashina|uy|kvartira|pul)|shaxsiy mulk|(sovga|meros)\S*.{0,30}ajrash/, topic: "Shaxsiy mulk: nima bo'linmaydi" },
   { re: /ajrash\S*.{0,40}(uy|mulk|mashina|kvartira|hovli|pul|bolin)|(uy|mulk|mashina|kvartira)\S*.{0,40}ajrash|mulk\S* bolish|раздел\S* имуществ/, topic: "Mulkni bo'lish va da'vo muddati", lesson: "Oila huquqi" },
   { re: /aliment\S*.{0,40}(qama|jinoiy|javobgar|jazo)|(qama|jazo)\S*.{0,30}aliment/, topic: "Aliment to'lanmasa: javobgarlik" },
+  // Farzand/uka O'ZI qilmish qilgan ("bolam o'g'irlik qilib qo'ydi") — jabrlanuvchi
+  // vaziyati emas, javobgarlik yoshi (o'g'rilik vaziyatidan OLDIN tekshiriladi)
+  { re: /(bolam|oglim|qizim|ukam|singlim|\b1[0-7] yosh)\S*.{0,30}(ogirlik|ogrilik|jinoyat|mushtlash|urishib)\S*.{0,20}(qil|qoy)/, topic: "Javobgarlik yoshi va aqli rasolik" },
   // Zo'ravonlik bo'lsa ("urib uydan haydadi") — bu oilaviy zo'ravonlik vaziyati, uy-joy emas
-  { re: /^(?!.*(\bur(di|ib|adi|gan)|kaltak|zoravon)).*((uydan|uyga)\S*.{0,20}(hayda|chiqar|kiritma|kiritmay)|(hayda|chiqar)\S*.{0,20}uydan|выгнал\S* из дома|выселя)/, topic: "Oila a'zolarining huquqlari", lesson: "Yer va ko'chmas mulk" },
+  // Uy egasi / ijara bo'lsa — bu ijara nizosi (situationsHousing.js), oila emas
+  { re: /^(?!.*(\bur(di|ib|adi|gan)|kaltak|zoravon|uy egasi|kvartira egasi|ijara|kvartirant)).*((uydan|uyga)\S*.{0,20}(hayda|chiqar|kiritma|kiritmay)|(hayda|chiqar)\S*.{0,20}uydan|выгнал\S* из дома|выселя)/, topic: "Oila a'zolarining huquqlari", lesson: "Yer va ko'chmas mulk" },
 ];
 
 const INTENTS = [
@@ -40,7 +44,7 @@ const INTENTS = [
   { re: /ish vaqtidan tashqari|qoshimcha (soat|ish vaqt)|сверхурочн/, topic: "Ish vaqtidan tashqari ish", lesson: "Ish vaqti va uning rejimlari" },
   { re: /(necha|qaysi) yosh\S*.{0,20}ishla|\b1[0-7] yosh\S*.{0,25}ishla|voyaga yetmagan\S*.{0,20}ishla|с какого возраста работ/, topic: "Necha yoshdan ishlash mumkin" },
   { re: /(ish joyi|ishda|ishxona|ish vaqtida)\S*.{0,30}(jarohat|shikast|baxtsiz)|baxtsiz hodisa|производствен\S* травм/, topic: "Ishlab chiqarishdagi baxtsiz hodisa" },
-  { re: /mast\S*.{0,30}(hayda|mashina|rul)|(hayda|rul)\S*.{0,30}mast|пьян\S*.{0,20}(за рул|вожд)/, topic: "Mastlik holati: eng og'ir buzilish" },
+  { re: /(mast|ichib|ichkilik|spirtli)\S*.{0,30}(hayda|mashina|rul)|(hayda|rul)\S*.{0,30}mast|пьян\S*.{0,20}(за рул|вожд)/, topic: "Mastlik holati: eng og'ir buzilish" },
   { re: /giyohvand|narkot|нарко/, topic: "Giyohvandlik vositalari bilan bog'liq jinoyatlar" },
   { re: /\bpora|взятк/, topic: "Pora olish va berish" },
   { re: /soz erkinlig|fikr erkinlig|свобод\S* слова/, topic: "Fikr, so'z va axborot erkinligi" },
@@ -59,8 +63,8 @@ const INTENTS = [
   { re: /\bchek\S*.{0,20}(bermadi|bermay|yoq)|чек не/, topic: "Chek va hujjat: nima uchun hal qiluvchi" },
   { re: /(internet|onlayn|online|buyurtma)\S*.{0,40}(kelmadi|kelmay|yetkazilmadi|pul\S* qaytar)/, topic: "Tovar topshirish muddati buzilsa", lesson: "Iste'molchi huquqlari" },
   { re: /kafolat\S*.{0,30}(muddat|buzil|tamir)|гаранти/, topic: "Kafolat muddati", lesson: "Iste'molchi huquqlari" },
-  { re: /(yol harakati|yhq|gai|dyhxx)\S*.{0,40}(buz|jarima)|jarima\S*.{0,30}(yol|mashina|haydovchi|tezlik)|tezlikni oshir/, topic: "Eng ko'p uchraydigan qoidabuzarliklar" },
-  { re: /saylov\S*.{0,30}yosh|ovoz berish\S*.{0,20}yosh|necha yosh\S*.{0,20}(saylov|ovoz)/, topic: "Saylov prinsiplari", refs: [["SYK", "4"], ["SYK", "3"]] },
+  { re: /(yol harakati|yhq|gai|dyhxx)\S*.{0,40}(buz|jarima)|jarima\S*.{0,30}(yol|mashina|haydovchi|tezlik)|(mashina|avtomobil)\S*.{0,30}(jarima|evakuat)|tezlikni oshir/, topic: "Eng ko'p uchraydigan qoidabuzarliklar" },
+  { re: /saylov\S*.{0,30}(yosh|kim ovoz|ovoz bera ol)|kim saylay ol|ovoz berish\S*.{0,20}yosh|necha yosh\S*.{0,20}(saylov|ovoz)/, topic: "Saylov prinsiplari", refs: [["SYK", "4"], ["SYK", "3"]] },
   { re: /chet ?el\S*.{0,30}(chiq|ket|ishla|sayohat)|xorijga (chiq|ket)|выезд за границ/, topic: "Erkin harakatlanish huquqi" },
   { re: /sud\S* (qaror|hukm)\S*.{0,30}(rozi emas|norozi|shikoyat|qarshi)|apellyatsiya|обжал\S* решени/, topic: "Shikoyat instansiyalari", refs: [["FPK", "383"], ["FPK", "385-1"], ["FPK", "418"]] },
   { re: /(muddati|yaroqlilik muddati) ?ot(gan|ib)|yaroqlilik muddati|просроч/, topic: "Yaroqlilik muddati", lesson: "Iste'molchi huquqlari" },

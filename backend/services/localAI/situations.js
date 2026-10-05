@@ -24,6 +24,8 @@ const SITUATIONS = [
   ...require("./situationsFamily"),
   ...require("./situationsSexual"),
   ...require("./situationsWork"),
+  // Ijara qarzi ("ijara haqini to'lamayapti") — umumiy qarzdan OLDIN
+  ...require("./situationsHousing"),
   ...require("./situationsCivil"),
   ...require("./situationsCrime"),
   ...require("./situationsMisc"),

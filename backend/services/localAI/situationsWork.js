@@ -4,6 +4,14 @@
  * Tuzilma va qoidalar — situationsFamily.js izohida.
  */
 
+/* ⚠️ ISH HAQI (2026-10-05): "Maosh 2 oy berilmadi" → "topilmadi" edi.
+   Avvalgi naqsh faqat "bermadi/tolamadi" ni bilardi — majhul nisbat
+   ("berilmadi", "to'lanmagan"), "kechikdi", "oyligim", "zarplata"
+   shakllari tushib qolardi. Matn normallashtirilgan (apostrofsiz). */
+const SALARY = /ish haq|oylig|oylik|maosh|zarplat|зарплат|заработн/;
+const NOT_PAID =
+  /bermay|bermad|bermag|bermas|berilma|tolamay|tolamad|tolamag|tolanma|kechik|(?<!dan )ushlab|ololmay|olmayap|не плат|не выплач|не выда|не дают|задерж|не получ/;
+
 module.exports = [
   {
     // ⚠️ "Ishdan bo'shatish"dan OLDIN: "amaliyotda pul berilmaydi, 2 oydan keyin
@@ -44,6 +52,41 @@ module.exports = [
     },
   },
   {
+    // ⚠️ Umumiy bo'shatishdan OLDIN: homilador ayol va kichik bolali xodim
+    // uchun alohida kafolatlar bor (avval umumiy MK 161 chiqardi).
+    id: "pregnant_dismissal",
+    match: (t) =>
+      /homilador|dekret|tugruq|bola parvarish|беремен|декрет/.test(t) &&
+      /boshat|hayda|chiqar|bekor qil|сокра|увол/.test(t),
+    title: { uz: "Homiladorlik yoki kichik bola sababli bo'shatish", ru: "Увольнение беременной или работника с малолетним ребёнком" },
+    summary: {
+      uz:
+        "Homiladorlik yoki farzand borligi sababli ishdan bo'shatish, ishga olmaslik yoki ish haqini kamaytirish " +
+        "qonun bilan taqiqlangan. Homilador ayol bilan mehnat shartnomasini ish beruvchining tashabbusi bilan " +
+        "bekor qilishga faqat tashkilot butunlay tugatilganda yo'l qo'yiladi; kichik yoshdagi bolasi bor xodim " +
+        "uchun ham bo'shatish asoslari qat'iy cheklangan.",
+      ru:
+        "Увольнение, отказ в приёме или снижение зарплаты из-за беременности или наличия детей запрещены законом. " +
+        "Расторгнуть договор с беременной по инициативе работодателя можно только при полной ликвидации организации; " +
+        "для работника с малолетним ребёнком основания увольнения также строго ограничены.",
+    },
+    pins: [["MK", "408"], ["MK", "392"], ["MK", "409"], ["MK", "561"]],
+    codes: ["MK"],
+    terms: "homilador ayollar uchun kafolatlar mehnat shartnomasini bekor qilish",
+    steps: {
+      uz: [
+        "Ish beruvchiga homiladorlikni tasdiqlovchi tibbiy ma'lumotnomani yozma ariza bilan topshiring va qabul qilingani haqida belgi oling.",
+        "Bo'shatish to'g'risidagi buyruqqa \"o'z xohishim bilan\" deb ariza yozishga majburlansangiz — yozmang; bosim bo'lsa, buni yozma qayd eting.",
+        "Bo'shatilgan bo'lsangiz — ishga tiklash va majburiy bo'sh yurgan vaqt uchun haq to'lash talabi bilan mehnat nizolari komissiyasiga yoki sudga murojaat qiling. Muddat cheklangan — kechiktirmang.",
+      ],
+      ru: [
+        "Передайте работодателю справку о беременности вместе с письменным заявлением и получите отметку о принятии.",
+        "Если вас принуждают написать заявление «по собственному желанию» — не пишите; давление зафиксируйте письменно.",
+        "Если вас уволили — обратитесь в комиссию по трудовым спорам или в суд с требованием о восстановлении и оплате вынужденного прогула. Срок ограничен — не откладывайте.",
+      ],
+    },
+  },
+  {
     id: "dismissal",
     match: (t) =>
       /ishdan (boshat|hayda|chiqar|ketkaz|olib tashla)|boshatib yubor|haydab yubor|увол/.test(t),
@@ -74,17 +117,17 @@ module.exports = [
   },
   {
     id: "unpaid_salary",
-    match: (t) =>
-      /(ish haqi|oylik|maosh|зарплат|заработн)/.test(t) &&
-      /(bermay|tolamay|tolanmay|kechik|ushlab|bermadi|tolamadi|не плат|не выплач|задерж)/.test(t),
+    match: (t) => SALARY.test(t) && NOT_PAID.test(t),
     title: { uz: "Ish haqi to'lanmayapti", ru: "Не выплачивают зарплату" },
     summary: {
       uz:
-        "Ish haqi qonunda belgilangan muddatlarda to'lanishi shart. Kechiktirilgani uchun ish beruvchi " +
-        "moddiy javobgar bo'ladi.",
+        "Ish haqi qonunda belgilangan muddatlarda to'lanishi shart. Ish beruvchi o'zining moliyaviy ahvolini " +
+        "bahona qilib, bajarilgan ish uchun haq to'lashdan bosh torta olmaydi. Kechiktirilgan har bir kun uchun " +
+        "u qarzni kompensatsiya (foiz) bilan birga to'lashi shart — hisoblash tartibi quyidagi moddada.",
       ru:
-        "Заработная плата должна выплачиваться в установленные законом сроки. За задержку работодатель " +
-        "несёт материальную ответственность.",
+        "Заработная плата должна выплачиваться в установленные законом сроки. Работодатель не вправе отказаться " +
+        "от оплаты выполненной работы, ссылаясь на своё финансовое положение. За каждый день задержки он обязан " +
+        "выплатить долг вместе с компенсацией (процентами) — порядок расчёта в статье ниже.",
     },
     pins: [["MK", "253"], ["MK", "333"], ["MK", "244"], ["MK", "560"]],
     codes: ["MK"],

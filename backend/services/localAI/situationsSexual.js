@@ -17,6 +17,8 @@ const EXTORTION = /shantaj|tovlamachi|qorqitib pul|pul talab qil|шантаж|в
 const UNDER14 = /toʻrt yosh|to.rt yosh|четырнадцати/i;
 const CONFESSION = /aybni boʻyniga|aybni bo.yniga|явка с повинной/i;
 
+const INTIMACY = /(qiz|yigit|ogil|bola)\S*.{0,30}(munosabat\S* (qil|bol|kir)|yaqinlik|birga (yot|tunad|bolib)|uxlad)|связ\S* с (девоч|несовершен)|интим/;
+
 const MINOR =
   /\b([1-9]|1[0-7]) ?(yosh|ёш|лет|год)|voyaga yetmagan|balogat|maktab ?o?quvchi|несовершеннолет|малолет|pedofil|pedofel|педофил/;
 
@@ -61,7 +63,10 @@ module.exports = [
   },
   {
     id: "sexual_minor",
-    match: (t) => (SEXUAL.test(t) && MINOR.test(t)) || /pedofil|pedofel|педофил/.test(t),
+    // "…13 yoshli qiz bilan munosabatda bo'ldi" — evfemizm (2026-10-05): "jinsiy"
+    // so'zisiz ham voyaga yetmagan + yaqinlik iborasi bo'lsa shu vaziyat
+    match: (t) =>
+      ((SEXUAL.test(t) || INTIMACY.test(t)) && MINOR.test(t)) || /pedofil|pedofel|педофил/.test(t),
     title: { uz: "Voyaga yetmagan shaxsga nisbatan jinsiy jinoyatlar", ru: "Половые преступления против несовершеннолетних" },
     summary: {
       uz:
