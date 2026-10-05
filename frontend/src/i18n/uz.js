@@ -85,6 +85,7 @@ const uz = {
   bnav_library: "Kutubxona",
   nav_constitution: "Konstitutsiya",
   nav_legislation: "Qonunchilik",
+  nav_ai_tools: "AI vositalar",
   legis_title: "Qonunchilik hujjatlari",
   legis_sub: "Konstitutsiya, kodekslar va qonunlar — rasmiy matn, tuzilma, amaldagi holat va oddiy tildagi tushuntirishlar bilan.",
   const_title: "O'zbekiston Respublikasi Konstitutsiyasi",

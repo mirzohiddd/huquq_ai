@@ -10,6 +10,10 @@ const MessageSchema = new mongoose.Schema(
     content: { type: String, required: true },
     // imageData DB da saqlanmaydi — memory only (production: cloud storage ishlatilsin)
     imageMimeType: { type: String, default: null },
+    // AI javobiga foydalanuvchi bahosi (👍/👎) — /api/chat/feedback
+    feedback: { type: String, enum: ["like", "dislike", null], default: null },
+    // Biriktirilgan fayl nomi (hujjat/rasm tahlili) — faqat ko'rsatish uchun
+    attachment: { type: String, default: null },
   },
   { _id: false, timestamps: true },
 );

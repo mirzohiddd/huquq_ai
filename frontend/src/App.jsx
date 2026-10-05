@@ -24,6 +24,7 @@ const PresidentAct = lazy(() => import("./pages/legislation/ActPage"));
 const Lessons = lazy(() => import("./pages/Lessons"));
 const Tests = lazy(() => import("./pages/Tests"));
 const Legal = lazy(() => import("./pages/Legal"));
+const AiTools = lazy(() => import("./pages/aiTools/AiToolsPage"));
 
 const Login = lazy(() =>
   import("./pages/AuthPages").then((m) => ({ default: m.Login })),
@@ -154,6 +155,14 @@ function AppRoutes() {
           element={
             <RequireAuth>
               <LegislationArticle />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/ai-tools"
+          element={
+            <RequireAuth>
+              <AiTools />
             </RequireAuth>
           }
         />

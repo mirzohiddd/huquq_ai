@@ -62,6 +62,8 @@ const NAV_USER = [
   { to: "/library", key: "feat_library_title" },
   // Protsessual kodekslar alohida sahifada (pages/Legislation.jsx)
   { to: "/legislation", key: "nav_legislation" },
+  // Slayd, test va dars reja generatorlari (pages/aiTools)
+  { to: "/ai-tools", key: "nav_ai_tools" },
 ];
 
 export default function SiteLayout() {

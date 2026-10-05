@@ -1,0 +1,343 @@
+/* ═══ CHAT: vositalar menyusi, javob amallari, fayl va ovoz ═══
+   O'lchamlar rem/clamp bilan — chat oynasi telefon, planshet va katta
+   ekranda bir xil mutanosiblikda ko'rinadi. Animatsiyalar faqat
+   transform/opacity (kompozitor darajasida, arzon). */
+
+/* ── "+" vositalar menyusi ── */
+.toolsWrap {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+}
+
+.plusBtn {
+  width: 2.1rem;
+  height: 2.1rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--gray-200);
+  background: var(--white);
+  color: var(--navy);
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.plusBtn:hover:not(:disabled) {
+  border-color: var(--gold);
+  background: var(--gold-pale);
+}
+
+.plusOpen {
+  transform: rotate(45deg);
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #fff;
+}
+
+.plusBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.menu {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 0.75rem);
+  width: min(17.5rem, calc(100vw - 2.5rem));
+  padding: 0.4rem;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--gray-100);
+  border-radius: 14px;
+  box-shadow: var(--shadow-lg);
+  z-index: 20;
+  transform-origin: bottom left;
+  animation: menuIn 0.18s ease-out;
+}
+
+@keyframes menuIn {
+  from { opacity: 0; transform: translateY(6px) scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
+
+.menuItem {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.55rem 0.6rem;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  text-align: left;
+  font-family: inherit;
+  color: var(--navy);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.menuItem:hover,
+.menuItem:focus-visible {
+  background: var(--gray-50);
+  outline: none;
+}
+
+.menuIcon {
+  width: 2.1rem;
+  height: 2.1rem;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+}
+
+.ic_slides { background: #fff4e0; color: #b4690e; }
+.ic_quiz { background: #e8f4ec; color: #1a6b3c; }
+.ic_plan { background: #eaf0ff; color: #2a4bb0; }
+.ic_doc { background: #f3ecff; color: #6b3fb5; }
+.ic_img { background: #e6f6f8; color: #0f7480; }
+
+.menuText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.menuTitle {
+  font-size: 0.86rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.menuSub {
+  font-size: 0.72rem;
+  color: var(--gray-600);
+  line-height: 1.3;
+}
+
+.menuLock {
+  color: var(--gray-400);
+  flex-shrink: 0;
+}
+
+/* ── AI javobi ostidagi amallar ── */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.45rem;
+}
+
+.actions > * {
+  margin-top: 0 !important;
+}
+
+.act {
+  width: 1.85rem;
+  height: 1.85rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--gray-600);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+
+.act:hover:not(:disabled) {
+  background: var(--gray-50);
+  border-color: var(--gray-100);
+  color: var(--navy);
+}
+
+.act:active:not(:disabled) {
+  transform: scale(0.92);
+}
+
+.act:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.actOn { color: var(--green); background: var(--green-bg); }
+.actOnBad { color: var(--red); background: var(--red-bg); }
+
+.actNote {
+  font-size: 0.72rem;
+  color: var(--gray-600);
+  padding-left: 0.25rem;
+  flex-basis: 100%;
+}
+
+.errIcon {
+  display: inline;
+  vertical-align: -2px;
+  margin-right: 5px;
+}
+
+.sentImg {
+  display: block;
+  max-width: 100%;
+  max-height: 11rem;
+  border-radius: 8px;
+  margin-bottom: 6px;
+}
+
+/* ── Biriktirilgan fayl ── */
+.attachBar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 1rem;
+  border-top: 1px solid var(--gray-100);
+  background: var(--cream);
+  animation: menuIn 0.18s ease-out;
+}
+
+.attachImg,
+.attachDoc {
+  width: 3rem;
+  height: 3rem;
+  flex-shrink: 0;
+  border-radius: 9px;
+  object-fit: cover;
+  border: 2px solid var(--gold);
+}
+
+.attachDoc {
+  display: grid;
+  place-items: center;
+  background: var(--white);
+  color: var(--gold-text);
+}
+
+.attachName {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--navy);
+  overflow-wrap: anywhere;
+}
+
+.attachName small {
+  display: block;
+  font-weight: 400;
+  color: var(--gray-600);
+  font-size: 0.7rem;
+}
+
+.attachX {
+  width: 1.6rem;
+  height: 1.6rem;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: var(--red);
+  color: #fff;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ── Ovoz yozish ── */
+.recBar {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 0;
+  font-size: 0.85rem;
+  color: var(--red);
+}
+
+.recDot {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background: var(--red);
+  animation: pulse 1.1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  50% { opacity: 0.25; transform: scale(0.8); }
+}
+
+.micOn {
+  color: var(--red) !important;
+}
+
+.spin {
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Limit, ogohlantirish ── */
+.usage {
+  display: flex;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 1px solid currentColor;
+}
+
+.usageOk { color: #16a34a; background: #16a34a18; }
+.usageWarn { color: #b45309; background: #f59e0b18; }
+.usageBad { color: #dc2626; background: #dc262618; }
+
+.notice {
+  margin: 0 1rem 0.5rem;
+  padding: 0.55rem 0.8rem;
+  border-radius: 10px;
+  background: var(--red-bg);
+  color: var(--red);
+  font-size: 0.8rem;
+  animation: menuIn 0.18s ease-out;
+}
+
+.limitBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0.75rem 1rem;
+  background: #fef2f2;
+  border-top: 1px solid #fecaca;
+  text-align: center;
+  font-size: 0.82rem;
+  color: #b91c1c;
+}
+
+.typingNote {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.72rem;
+  color: var(--gray-600);
+}
+
+@media (max-width: 400px) {
+  .hideXs {
+    display: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu,
+  .attachBar,
+  .notice,
+  .recDot,
+  .spin {
+    animation: none;
+  }
+}
