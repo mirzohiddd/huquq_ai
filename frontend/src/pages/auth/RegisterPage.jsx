@@ -7,6 +7,7 @@ import Seo from "../../components/Seo";
 import BrandLogo from "../../components/brand/BrandLogo";
 import { formatPhoneInput } from "../../utils/phone";
 import AuthShell from "./AuthShell";
+import { AuthSwitchLink } from "./AuthSwitch";
 import Field from "./Field";
 import GoogleButton from "./GoogleButton";
 import OTPVerify from "./OTPVerify";
@@ -113,7 +114,7 @@ export default function RegisterPage() {
   });
 
   return (
-    <AuthShell switchTo={{ to: "/login", text: t.register_have_account, link: t.register_login_link }}>
+    <AuthShell>
       {/* Shaxsiy sahifa — qidiruv tizimlarida indekslanmaydi */}
       <Seo title={t.seo_register_title} noindex />
       <Link to="/" className={s.cardLogo} aria-label="HuquqTech">
@@ -156,7 +157,7 @@ export default function RegisterPage() {
 
       <p className={s.foot}>
         {t.auth_already}
-        <Link to="/login">{t.register_login_link}</Link>
+        <AuthSwitchLink to="/login">{t.register_login_link}</AuthSwitchLink>
       </p>
     </AuthShell>
   );

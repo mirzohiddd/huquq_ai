@@ -134,18 +134,6 @@
   margin-bottom: 0.6rem;
 }
 
-.switchLink {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  font-size: 15px;
-  color: var(--gray-600);
-}
-
-.switchLink b { color: var(--gold-text); font-weight: 600; }
-
-.switchLink:hover b { text-decoration: underline; }
-
 .card {
   margin-block: auto;
   background: var(--white);
@@ -189,5 +177,4 @@
     border-radius: 16px;
     padding: 1.25rem 1rem;
   }
-  .switchLink { font-size: 13.5px; }
 }

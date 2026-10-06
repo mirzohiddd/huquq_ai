@@ -1,0 +1,22 @@
+/* Kirish ⇄ Ro'yxatdan o'tish sahifa almashishi (AuthSwitch.jsx).
+   Chiqish — tez (ease-in), kirish — yumshoq (easeOutQuint). */
+
+/* Siljiyotgan sahifa gorizontal scroll hosil qilmasin */
+.viewport { overflow-x: clip; }
+
+.exit_left { animation: exitLeft 0.32s cubic-bezier(0.55, 0, 0.9, 0.4) forwards; }
+.exit_right { animation: exitRight 0.32s cubic-bezier(0.55, 0, 0.9, 0.4) forwards; }
+.enter_right { animation: enterRight 0.55s cubic-bezier(0.22, 1, 0.36, 1) backwards; }
+.enter_left { animation: enterLeft 0.55s cubic-bezier(0.22, 1, 0.36, 1) backwards; }
+
+.exit_left,
+.exit_right { pointer-events: none; }
+
+@keyframes exitLeft { to { transform: translateX(-100%); opacity: 0; } }
+@keyframes exitRight { to { transform: translateX(100%); opacity: 0; } }
+@keyframes enterRight { from { transform: translateX(100%); opacity: 0; } }
+@keyframes enterLeft { from { transform: translateX(-100%); opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .exit_left, .exit_right, .enter_left, .enter_right { animation: none; }
+}

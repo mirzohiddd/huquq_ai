@@ -6,6 +6,7 @@ import { useLang } from "../../context/LangContext";
 import Seo from "../../components/Seo";
 import BrandLogo from "../../components/brand/BrandLogo";
 import AuthShell from "./AuthShell";
+import { AuthSwitchLink } from "./AuthSwitch";
 import Field from "./Field";
 import GoogleButton from "./GoogleButton";
 import OTPVerify from "./OTPVerify";
@@ -75,7 +76,7 @@ export default function LoginPage() {
   const set = (k) => (e) => setForm((p) => ({ ...p, [k]: e.target.value }));
 
   return (
-    <AuthShell switchTo={{ to: "/register", text: t.login_no_account, link: t.login_register_link }}>
+    <AuthShell>
       {/* Shaxsiy sahifa — qidiruv tizimlarida indekslanmaydi */}
       <Seo title={t.seo_login_title} noindex />
       <Link to="/" className={s.cardLogo} aria-label="HuquqTech">
@@ -127,7 +128,7 @@ export default function LoginPage() {
       </p>
       <p className={s.foot}>
         {t.login_no_account}
-        <Link to="/register">{t.login_register_link}</Link>
+        <AuthSwitchLink to="/register">{t.login_register_link}</AuthSwitchLink>
       </p>
       {showSupport && <ForgotPasswordModal onClose={() => setShowSupport(false)} />}
     </AuthShell>

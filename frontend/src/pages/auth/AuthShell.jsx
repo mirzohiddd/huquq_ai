@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
-import { ChevronRight, GraduationCap, FileText, SquareCheckBig, Sparkles } from "lucide-react";
+import { GraduationCap, FileText, SquareCheckBig, Sparkles } from "lucide-react";
 import { useLang } from "../../context/LangContext";
 import LangSwitcher from "../../components/LangSwitcher";
 import BrandLogo from "../../components/brand/BrandLogo";
+import { AuthSwitchProvider, useAuthTransition } from "./AuthSwitch";
 import s from "./AuthShell.module.css";
+import m from "./AuthMotion.module.css";
 
 const FEATURES = [
   [GraduationCap, "auth_f1_title", "auth_f1_text"],
@@ -15,12 +17,16 @@ const FEATURES = [
 /**
  * Kirish / ro'yxatdan o'tish / OTP / Telegram ekranlari uchun umumiy
  * tuzilma: chapda brend va platforma imkoniyatlari, o'ngda karta.
- * `switchTo` — yuqori o'ngdagi "Hisobingiz bormi? Kirish ›" havolasi.
+ * Kirish ⇄ ro'yxatdan o'tish almashishi animatsiyali (AuthSwitch.jsx).
  */
-export default function AuthShell({ children, switchTo = null }) {
+export default function AuthShell({ children }) {
   const { t } = useLang();
+  const { exit, enter, go } = useAuthTransition();
+  const motion = exit ? m[`exit_${exit}`] : enter ? m[`enter_${enter}`] : "";
   return (
-    <div className={s.page}>
+    <AuthSwitchProvider go={go}>
+    <div className={m.viewport}>
+    <div className={`${s.page} ${motion}`}>
       <aside className={s.showcase}>
         <Link to="/" className={s.brandLink} aria-label="HuquqTech">
           <BrandLogo size="lg" sub />
@@ -52,16 +58,12 @@ export default function AuthShell({ children, switchTo = null }) {
 
       <main className={s.side}>
         <div className={s.topbar}>
-          {switchTo && (
-            <Link to={switchTo.to} className={s.switchLink}>
-              {switchTo.text} <b>{switchTo.link}</b>
-              <ChevronRight size={17} aria-hidden="true" />
-            </Link>
-          )}
           <LangSwitcher />
         </div>
         <div className={s.card}>{children}</div>
       </main>
     </div>
+    </div>
+    </AuthSwitchProvider>
   );
 }
