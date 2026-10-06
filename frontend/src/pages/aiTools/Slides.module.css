@@ -272,14 +272,7 @@
   width: 100%;
 }
 
-.stageInner > .slide {
-  animation: slideIn 0.28s ease-out;
-}
-
-@keyframes slideIn {
-  from { opacity: 0; transform: translateX(1.5%); }
-  to { opacity: 1; transform: none; }
-}
+/* Slayd almashish animatsiyasi — SlideMotion.module.css (2026-10-05) */
 
 .nav {
   display: flex;
@@ -433,10 +426,4 @@
   .stageInner .note { padding: 0.75rem 0.85rem; }
   .stageInner .ref { font-size: 0.78rem; }
   .stageInner .foot { font-size: 0.7rem; left: 1.1rem; right: 1.1rem; bottom: 0.8rem; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .stageInner > .slide {
-    animation: none;
-  }
 }

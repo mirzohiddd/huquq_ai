@@ -1,0 +1,132 @@
+/* ══════════════════════════════════════════════════════════════
+   SLAYD ANIMATSIYALARI (2026-10-05)
+
+   Uslub — Keynote/PowerPoint'dagi "Fade + Move": qisqa, yumshoq, kichik
+   masofa. Sakrash, aylanish, kattalashib-kichrayish ATAYLAB yo'q —
+   taqdimot sinfda ko'rsatiladi, animatsiya mazmunga e'tibor qaratsin,
+   o'zini ko'rsatmasin.
+
+   1) Natija paydo bo'lganda: sahna ko'tarilib chiqadi, eskizlar ketma-ket.
+   2) Slayd almashganda: yo'nalishga qarab (oldinga/orqaga) siljib almashadi.
+   3) Slayd ichida: sarlavha → matn → bandlar navbat bilan "quriladi".
+
+   Faqat KATTA sahnada ishlaydi. Eskizlar va PDF (chop etish) statik —
+   u yerda animatsiya ma'nosiz va chop etishda element ko'rinmay qolardi.
+   ══════════════════════════════════════════════════════════════ */
+
+/* ⚠️ fill-mode `backwards` (both EMAS): animatsiya tugagach transform
+   bo'shatiladi — aks holda eskizning hover'dagi ko'tarilishi ishlamasdi. */
+.view {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1); /* "easeOutQuint" — tez boshlanib, ohista to'xtaydi */
+}
+
+/* ── 1. Natija paydo bo'lishi ── */
+.stageIn {
+  animation: stageIn 0.6s var(--ease) backwards;
+}
+
+@keyframes stageIn {
+  from { opacity: 0; transform: translateY(16px) scale(0.985); }
+  to { opacity: 1; transform: none; }
+}
+
+.thumbIn {
+  animation: thumbIn 0.45s var(--ease) backwards;
+  /* Ketma-ket, lekin 12-dan keyingilari kutmaydi — 20 slaydda ham tez */
+  animation-delay: calc(0.25s + min(var(--t, 0), 12) * 45ms);
+}
+
+@keyframes thumbIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ── 2. Slayd almashishi (yo'nalishli) ── */
+.enter {
+  animation: slideEnter 0.5s var(--ease) backwards;
+}
+
+@keyframes slideEnter {
+  from { opacity: 0; transform: translateX(calc(var(--dir, 1) * 3%)); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ── 3. Slayd ichidagi elementlar navbat bilan ── */
+.rise {
+  animation: rise 0.55s var(--ease) backwards;
+  animation-delay: calc(0.12s + min(var(--d, 0), 10) * 75ms);
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(0.9cqw); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Yon blok (misol, qonun havolasi) — o'ngdan */
+.riseSide {
+  animation: riseSide 0.6s var(--ease) backwards;
+  animation-delay: calc(0.12s + min(var(--d, 0), 10) * 75ms);
+}
+
+@keyframes riseSide {
+  from { opacity: 0; transform: translateX(1.4cqw); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Slayd tepasidagi oltin chiziq (Slides.module.css → .slide::before) chapdan "chiziladi" */
+.drawTop::before {
+  transform-origin: left center;
+  animation: drawLine 0.8s var(--ease) 0.05s backwards;
+}
+
+@keyframes drawLine {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* ── Jarayon chizig'i (sahna ostida, joriy slayd) ── */
+.progress {
+  height: 3px;
+  margin: 0 0.9rem;
+  border-radius: 3px;
+  background: var(--gray-100);
+  overflow: hidden;
+}
+
+.progress span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  transform-origin: left center;
+  transition: transform 0.5s var(--ease);
+}
+
+/* Taqdimot rejimida ekran pastida, juda ingichka */
+.presentingProgress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+  height: 3px;
+  border-radius: 0;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ── Harakatni kamaytirish sozlamasi: hamma narsa darhol ko'rinadi ── */
+@media (prefers-reduced-motion: reduce) {
+  .stageIn,
+  .thumbIn,
+  .enter,
+  .rise,
+  .riseSide,
+  .drawTop::before {
+    animation: none;
+  }
+  .progress span { transition: none; }
+}
+
+@media print {
+  .stageIn, .thumbIn, .enter, .rise, .riseSide, .drawTop::before { animation: none; }
+}
