@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { CheckCircle2, AlertCircle, Send, Star, Scale, X, User, Lock, LogOut, Check, Zap, Gem, MessageSquare, Sparkles, CalendarClock } from "lucide-react";
+import { CheckCircle2, AlertCircle, Send, Star, X, User, Lock, LogOut, Check, Zap, Gem, MessageSquare, Sparkles, CalendarClock } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { useLang } from "../context/LangContext";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,7 @@ import { formatPhoneInput } from "../utils/phone";
 import api from "../utils/api";
 import PaymentMethodModal from "./PaymentMethodModal";
 import CancelPlanModal from "./CancelPlanModal";
+import { BrandMark } from "./brand/BrandLogo";
 
 export default function ProfileModal({ onClose, initialTab = "profile" }) {
   const { user, logout } = useAuth();
@@ -238,7 +239,7 @@ export default function ProfileModal({ onClose, initialTab = "profile" }) {
           borderRadius: "16px 16px 0 0",
         }}>
           <span style={{ display: "flex", alignItems: "center", gap: "7px", fontWeight: 700, fontSize: "1rem", color: "var(--navy,#1a1a2e)" }}>
-            <Scale size={17} /> Profil
+            <BrandMark size={19} /> Profil
           </span>
           <button
             onClick={onClose}

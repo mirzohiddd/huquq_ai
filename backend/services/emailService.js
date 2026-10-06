@@ -33,6 +33,8 @@ const BREVO_API_URL = "https://api.brevo.com/v3/smtp/email";
 const DEFAULT_SENDER_EMAIL = "acd052001@smtp-brevo.com";
 const SENDER_EMAIL = process.env.BREVO_SENDER_EMAIL || DEFAULT_SENDER_EMAIL;
 const SENDER_NAME = "HuquqTech";
+// Email sarlavhasidagi HuquqTech kitob logotipi (eski ⚖ belgisi o'rniga)
+const EMAIL_LOGO = `${(process.env.PUBLIC_SITE_URL || "https://huquq-ai-teal.vercel.app").replace(/\/+$/, "")}/logo-96.png`;
 
 /* ⚠️ `Math.random()` kriptografik jihatdan xavfsiz EMAS — uning holatini
    bir nechta chiqishdan tiklab, keyingi kodlarni oldindan aytish mumkin.
@@ -679,7 +681,7 @@ async function sendOTPEmail(toEmail, otp, fullName = "") {
 <body>
   <div class="container">
     <div class="header">
-      <h1>⚖ HuquqTech</h1>
+      <h1><img src="${EMAIL_LOGO}" width="28" height="28" alt="" style="vertical-align:middle;border-radius:7px;margin-right:8px;border:0">HuquqTech</h1>
       <p>O'zbekiston huquqiy maslahat platformasi</p>
     </div>
     <div class="body">
@@ -726,7 +728,7 @@ async function sendPasswordResetEmail(
 </head>
 <body style="font-family:Arial,sans-serif;background:#f5f3ef;padding:20px;">
   <div style="max-width:500px;margin:auto;background:#fff;border-radius:12px;padding:30px;">
-    <h2>⚖ HuquqTech</h2>
+    <h2><img src="${EMAIL_LOGO}" width="28" height="28" alt="" style="vertical-align:middle;border-radius:7px;margin-right:8px;border:0">HuquqTech</h2>
 
     <p>Assalomu alaykum, <strong>${name}</strong>!</p>
 

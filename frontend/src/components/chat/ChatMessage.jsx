@@ -1,11 +1,12 @@
 import React, { memo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { Scale, AlertCircle, Copy, Check, RotateCcw, ThumbsUp, ThumbsDown } from "lucide-react";
+import { AlertCircle, Copy, Check, RotateCcw, ThumbsUp, ThumbsDown } from "lucide-react";
 import SpeakButton from "../SpeakButton";
 import { useChatText } from "./chatText";
 import d from "../ChatDrawer.module.css";
 import s from "./ChatTools.module.css";
+import { BrandMark } from "../brand/BrandLogo";
 
 const MD = {
   p: (p) => <p className={d.mdP} {...p} />,
@@ -92,7 +93,7 @@ function ChatMessage({ m, i, isLast, busy, avatarLetter, onRegenerate, onFeedbac
     return (
       <div className={`${d.msg} ${d.assistant}`} style={{ animationDelay: `${Math.min(i, 8) * 0.04}s` }}>
         <div className={d.avatar}>
-          <Scale size={16} />
+          <BrandMark size={18} />
         </div>
         <div className={d.bubbleWrap}>
           <div className={`${d.bubble} ${m.isError ? d.errBubble : ""}`}>

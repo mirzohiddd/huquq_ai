@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useLang } from "../context/LangContext";
 import { useChatPanel } from "../context/ChatPanelContext";
-import { Lock, AlertTriangle, Scale } from "lucide-react";
+import { Lock, AlertTriangle } from "lucide-react";
 import ChatHeader from "./chat/ChatHeader";
 import ChatMessage from "./chat/ChatMessage";
 import ChatComposer from "./chat/ChatComposer";
@@ -14,6 +14,7 @@ import useMobileViewport from "./chat/useMobileViewport";
 import { useChatText } from "./chat/chatText";
 import s from "./ChatDrawer.module.css";
 import x from "./chat/ChatTools.module.css";
+import { BrandMark } from "./brand/BrandLogo";
 
 /**
  * AI chat oynasi. Mantiq bo'laklarga ajratilgan (200 qator qoidasi):
@@ -132,7 +133,7 @@ export default function ChatDrawer() {
               {loading && (
                 <div className={`${s.msg} ${s.assistant}`}>
                   <div className={s.avatar}>
-                    <Scale size={16} />
+                    <BrandMark size={18} />
                   </div>
                   <div className={s.bubble}>
                     <div className={s.typing}>
