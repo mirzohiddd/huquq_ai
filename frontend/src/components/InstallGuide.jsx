@@ -53,7 +53,7 @@ export default function InstallGuide({ platform, onClose }) {
         </button>
 
         <div className={s.head}>
-          <img src="/logo-96.png" alt="" width="56" height="56" />
+          <img src="/logo-96.png?v=2" alt="" width="56" height="56" />
           <div>
             <h3 id="install-guide-title">{t.install_guide_title}</h3>
             <p>{t[`install_sub_${platform}`] || t.install_guide_sub}</p>

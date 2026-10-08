@@ -102,7 +102,7 @@ export default function ChatDrawer() {
               {messages.length === 0 && !loading && (
                 <div className={s.welcome}>
                   <div className={s.wIcon}>
-                    <img width={40} height={40} src="/logo-96.png" alt="" />
+                    <img width={40} height={40} src="/logo-96.png?v=2" alt="" />
                   </div>
                   <h3>
                     {t.chat_welcome_title}

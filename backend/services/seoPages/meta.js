@@ -21,8 +21,8 @@ const SITE_URL = (
 ).replace(/\/$/, "");
 
 const SITE_NAME = "HuquqTech";
-const LOGO = `${SITE_URL}/logo-96.png`;
-const OG_IMAGE = { uz: `${SITE_URL}/og-image.jpg`, ru: `${SITE_URL}/og-image-ru.jpg` };
+const LOGO = `${SITE_URL}/logo-96.png?v=2`;
+const OG_IMAGE = { uz: `${SITE_URL}/og-image.jpg?v=2`, ru: `${SITE_URL}/og-image-ru.jpg?v=2` };
 
 const LANGS = ["uz", "ru"];
 const HREFLANG = { uz: "uz-UZ", ru: "ru-UZ" };

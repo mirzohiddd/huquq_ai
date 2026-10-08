@@ -24,7 +24,7 @@ export default function ChatHeader({ user, usage, view, onToggleView, onClose })
     <header className={s.header}>
       <div className={s.headerLeft}>
         <a href="/" className={s.headerIcon}>
-          <img width={30} height={30} src="/logo-96.png" alt="" />
+          <img width={30} height={30} src="/logo-96.png?v=2" alt="" />
         </a>
       </div>
       <div className={s.headerRight}>

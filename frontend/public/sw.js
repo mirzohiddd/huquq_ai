@@ -7,14 +7,14 @@
    bo'lmagandagina oflayn sahifa ko'rsatiladi. Qolgan barcha so'rovlar
    (API, rasm, /qonun rewrite'lari) SW'ga umuman tegmaydi. */
 
-const CACHE = "huquq-offline-v2"; // v2: HuquqTech logosi (eski kesh tozalanadi)
+const CACHE = "huquq-offline-v3"; // v3: logo havolalari ?v=2 (eski tanga logosi keshi tozalanadi)
 const OFFLINE_URL = "/offline.html";
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches
       .open(CACHE)
-      .then((c) => c.addAll([OFFLINE_URL, "/logo-192.png"]))
+      .then((c) => c.addAll([OFFLINE_URL, "/logo-192.png?v=2"]))
       .then(() => self.skipWaiting()),
   );
 });

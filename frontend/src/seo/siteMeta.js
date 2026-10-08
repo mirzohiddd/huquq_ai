@@ -38,14 +38,14 @@ export const CONTACT = {
  * o'z varianti bor — ruscha havola ulashilganda o'zbekcha matnli rasm
  * chiqmasligi kerak.
  */
-export const OG_IMAGE = `${SITE_URL}/og-image.jpg`;
+export const OG_IMAGE = `${SITE_URL}/og-image.jpg?v=2`;
 export const OG_IMAGE_BY_LANG = {
-  uz: `${SITE_URL}/og-image.jpg`,
-  ru: `${SITE_URL}/og-image-ru.jpg`,
+  uz: `${SITE_URL}/og-image.jpg?v=2`,
+  ru: `${SITE_URL}/og-image-ru.jpg?v=2`,
 };
 export const OG_IMAGE_W = 1200;
 export const OG_IMAGE_H = 630;
-export const LOGO_URL = `${SITE_URL}/logo.png`;
+export const LOGO_URL = `${SITE_URL}/logo.png?v=2`;
 
 /** Qo'llab-quvvatlanadigan tillar (ingliz tili 2026-08-07 da olib tashlangan). */
 export const LOCALES = ["uz", "ru"];

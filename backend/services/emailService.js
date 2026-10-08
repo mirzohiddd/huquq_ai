@@ -34,7 +34,7 @@ const DEFAULT_SENDER_EMAIL = "acd052001@smtp-brevo.com";
 const SENDER_EMAIL = process.env.BREVO_SENDER_EMAIL || DEFAULT_SENDER_EMAIL;
 const SENDER_NAME = "HuquqTech";
 // Email sarlavhasidagi HuquqTech kitob logotipi (eski ⚖ belgisi o'rniga)
-const EMAIL_LOGO = `${(process.env.PUBLIC_SITE_URL || "https://huquq-ai-teal.vercel.app").replace(/\/+$/, "")}/logo-96.png`;
+const EMAIL_LOGO = `${(process.env.PUBLIC_SITE_URL || "https://huquq-ai-teal.vercel.app").replace(/\/+$/, "")}/logo-96.png?v=2`;
 
 /* ⚠️ `Math.random()` kriptografik jihatdan xavfsiz EMAS — uning holatini
    bir nechta chiqishdan tiklab, keyingi kodlarni oldindan aytish mumkin.
