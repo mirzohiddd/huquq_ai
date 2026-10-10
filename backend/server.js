@@ -22,6 +22,7 @@ const { isHosted, hostingName, selfPublicUrl } = require("./utils/hosting");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+
 /* ───── TRUST PROXY ───── */
 app.set("trust proxy", 1);
 
