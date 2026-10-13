@@ -86,7 +86,8 @@ const defaultOrigins = [
   "https://www.huquqtech.uz",
   "https://huquq-ai-user.vercel.app", // Vercel manzili (zaxira)
   "https://huquq-ai-7v7a.onrender.com", // backendning o'zi (Render)
-  "https://huquq-ai-admin.vercel.app", // admin paneli
+  "https://admin.huquqtech.uz", // admin paneli (asosiy domen)
+  "https://huquq-ai-admin.vercel.app", // admin paneli (Vercel)
 ];
 const frontendUrl = process.env.FRONTEND_URL;
 
