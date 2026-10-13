@@ -1,3 +1,4 @@
+import { Search, X, ChevronLeft, ChevronRight } from "lucide-react";
 import React from "react";
 import s from "./Shared.module.css";
 
@@ -56,9 +57,9 @@ export function Pagination({ page, pages, onChange }) {
   if (pages <= 1) return null;
   return (
     <div className={s.pagination}>
-      <button disabled={page <= 1} onClick={() => onChange(page - 1)}>← Oldingi</button>
+      <button disabled={page <= 1} onClick={() => onChange(page - 1)}><ChevronLeft size={14} /> Oldingi</button>
       <span>{page} / {pages}</span>
-      <button disabled={page >= pages} onClick={() => onChange(page + 1)}>Keyingi →</button>
+      <button disabled={page >= pages} onClick={() => onChange(page + 1)}>Keyingi <ChevronRight size={14} /></button>
     </div>
   );
 }
@@ -66,14 +67,14 @@ export function Pagination({ page, pages, onChange }) {
 export function SearchBar({ value, onChange, placeholder = "Qidirish..." }) {
   return (
     <div className={s.searchWrap}>
-      <span className={s.searchIcon}>🔍</span>
+      <span className={s.searchIcon}><Search size={14} /></span>
       <input
         className={s.searchInput}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
       />
-      {value && <button className={s.searchClear} onClick={() => onChange("")}>✕</button>}
+      {value && <button className={s.searchClear} onClick={() => onChange("")} aria-label="Tozalash"><X size={14} /></button>}
     </div>
   );
 }

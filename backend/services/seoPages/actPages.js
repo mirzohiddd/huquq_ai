@@ -57,7 +57,7 @@ function actPage({ act, text, related }) {
       <span class="eyebrow">${esc(label)}${act.date ? ` · ${esc(act.date)}` : ""}</span>
       <h1>${esc(act.title)}</h1>
       <div class="meta">
-        ${active ? `<span class="chip">✓ Amalda</span>` : ""}
+        ${active ? `<span class="chip"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-1px;margin-right:4px"><path d="M20 6 9 17l-5-5"/></svg>Amalda</span>` : ""}
         <a class="chip" href="${esc(docUrl)}" target="_blank" rel="noopener">${esc(t.source)}</a>
         <a class="chip" href="https://lex.uz/uz/pdfs/${esc(act.docId)}" target="_blank" rel="noopener">PDF</a>
       </div>

@@ -239,7 +239,7 @@ const uz = {
   lesson_quiz_cancelled_title: "Urinish bekor qilindi",
   lesson_quiz_cancelled_sub:
     "Siz test davomida sahifadan chiqdingiz. Halollik uchun urinish bekor qilindi — yangi savollar bilan qaytadan boshlashingiz mumkin.",
-  lesson_pass_title: "Ajoyib! Dars tugallandi 🎉",
+  lesson_pass_title: "Ajoyib! Dars tugallandi",
   lesson_pass_sub:
     "Barcha savollarga to'g'ri javob berdingiz. +10 XP hisobingizga qo'shildi.",
   lesson_fail_title: "Hali biroz mashq kerak",
@@ -365,22 +365,18 @@ const uz = {
   hero_cta: "Bepul konsultatsiya",
   features: [
     {
-      icon: "💬",
       title: "Huquqiy maslahat",
       desc: "Muammongizni tahlil qilib, qonuniy yo'l ko'rsatamiz",
     },
     {
-      icon: "📄",
       title: "Hujjatlar tayyorlash",
       desc: "Ariza, shartnoma va boshqa huquqiy hujjatlar",
     },
     {
-      icon: "👥",
       title: "Vakillik qilish",
       desc: "Sud va davlat organlarida vakillik",
     },
     {
-      icon: "🏛️",
       title: "Huquqiy tahlil",
       desc: "Shartnoma va hujjatlarni chuqur tahlil",
     },
@@ -389,14 +385,13 @@ const uz = {
   about_text:
     "Biz O'zbekiston fuqarolarining huquqlarini himoya qilish va qonuniy maslahat berish maqsadida tashkil etilgan huquqiy xizmat ko'rsatuvchi jamoa. Tajribali mutaxassislar va zamonaviy AI texnologiyasi yordamida har bir mijozga individual yondashuv taqdim etamiz.",
   stats: [
-    { icon: "📅", value: "10+", label: "Yillik tajriba" },
-    { icon: "✅", value: "500+", label: "Muvaffaqiyatli ishlar" },
-    { icon: "😊", value: "1000+", label: "Mamnun mijozlar" },
+    { value: "10+", label: "Yillik tajriba" },
+    { value: "500+", label: "Muvaffaqiyatli ishlar" },
+    { value: "1000+", label: "Mamnun mijozlar" },
   ],
   services_title: "Xizmatlarimiz",
   services: [
     {
-      icon: "💬",
       title: "Huquqiy maslahat",
       desc: "Barcha huquq sohalarida professional maslahat",
       long: "Kundalik hayotda uchraydigan har qanday huquqiy savolga tushunarli tilda javob olasiz. AI yordamchi savolingizni tahlil qiladi, O'zbekiston qonunchiligidan tegishli normalarni topadi va nima qilish kerakligini bosqichma-bosqich tushuntiradi.",
@@ -414,7 +409,6 @@ const uz = {
       ],
     },
     {
-      icon: "📄",
       title: "Hujjatlar tayyorlash",
       desc: "Ariza, shartnoma, da'vo arizalari tayyorlash",
       long: "Ariza, shikoyat, da'vo arizasi va shartnoma loyihalarini tayyorlashda yordam beradi. AI kerakli hujjat turini aniqlaydi, uning tuzilishini ko'rsatadi va sizning holatingizga moslashtirilgan matnni tayyorlab beradi.",
@@ -432,7 +426,6 @@ const uz = {
       ],
     },
     {
-      icon: "⚖️",
       title: "Sudda vakillik",
       desc: "Fuqarolik, jinoyat va ma'muriy ishlar",
       long: "Sud jarayoniga tayyorgarlik ko'rishda yordam beradi: qaysi sudga murojaat qilish, qanday hujjat to'plash, dalillarni qanday rasmiylashtirish va majlisda o'zingizni qanday tutish kerakligini tushuntiradi.",
@@ -450,7 +443,6 @@ const uz = {
       ],
     },
     {
-      icon: "🏢",
       title: "Korporativ huquq",
       desc: "Tadbirkorlik va kompaniya masalalari",
       long: "Tadbirkorlik faoliyati bilan bog'liq masalalar: biznesni ro'yxatdan o'tkazish, ta'sis hujjatlari, kontragentlar bilan shartnomalar, litsenziya va ruxsatnomalar hamda tadbirkorlar o'rtasidagi nizolar.",
@@ -468,7 +460,6 @@ const uz = {
       ],
     },
     {
-      icon: "👨‍👩‍👧",
       title: "Oila huquqi",
       desc: "Ajralish, aliment, bola egaligi",
       long: "Nikoh, ajralish, bolalar va oilaviy mulk bilan bog'liq masalalar. AI vaziyatingizni tahlil qilib, jarayon qanday kechishini, qanday hujjat kerakligini va qaysi organga murojaat qilish lozimligini tushuntiradi.",
@@ -486,7 +477,6 @@ const uz = {
       ],
     },
     {
-      icon: "💼",
       title: "Mehnat huquqi",
       desc: "Ish haqi, bo'shatish, mehnat nizolari",
       long: "Ish beruvchi bilan munosabatlarda huquqlaringizni aniq bilib olasiz: shartnoma shartlari, ish haqi, ta'til, ish vaqti va ishdan bo'shatish tartibi.",
@@ -504,7 +494,6 @@ const uz = {
       ],
     },
     {
-      icon: "🏠",
       title: "Ko'chmas mulk",
       desc: "Uy-joy, yer, ijara masalalari",
       long: "Uy-joy, yer uchastkasi va ijara bilan bog'liq bitimlar. Xarid qilishdan oldin nimani tekshirish kerakligi, huquqni qanday rasmiylashtirish va nizo chiqqanda qanday harakat qilish.",
@@ -522,7 +511,6 @@ const uz = {
       ],
     },
     {
-      icon: "💰",
       title: "Qarz masalalari",
       desc: "Qarz undirish va moliyaviy nizolar",
       long: "Qarz berish va undirish, tilxatni to'g'ri rasmiylashtirish, kredit va moliyaviy nizolar. Qarz berilganini qanday isbotlash va qaytarishni qanday talab qilish kerakligi.",
@@ -738,32 +726,26 @@ const uz = {
   section_cats_title: "Qaysi sohalarda yordam beraman?",
   cats: [
     {
-      icon: "💼",
       title: "Mehnat huquqi",
       desc: "Maosh, ishdan bo'shatish, mehnat shartnomasi",
     },
     {
-      icon: "👨‍👩‍👧",
       title: "Oila huquqi",
       desc: "Aliment, ajralish, bola egaligi",
     },
     {
-      icon: "🏠",
       title: "Meros va mulk",
       desc: "Vasiyat, meros bo'linishi, notarius",
     },
     {
-      icon: "🌾",
       title: "Yer masalalari",
       desc: "Uchastka, kadastr, noqonuniy tortib olish",
     },
     {
-      icon: "🛒",
       title: "Iste'molchi",
       desc: "Sifatsiz tovar, qaytarish, kafolat",
     },
     {
-      icon: "⚖️",
       title: "Jinoyat huquqi",
       desc: "Firibgarlik, shikoyat, prokuratura",
     },
@@ -780,7 +762,7 @@ const uz = {
   ],
   cta_title: "Huquqingizni bilish — kuchingiz",
   cta_desc: "Bepul, 24/7, o'zbek tilida",
-  cta_btn: "Hozir boshlash →",
+  cta_btn: "Hozir boshlash",
   footer_desc: "O'zbekiston huquqiy AI maslahatchi",
   footer_warn:
     "Umumiy ma'lumot beradi. Murakkab ishlarda advokat bilan maslahatlashing.",
@@ -909,7 +891,7 @@ const uz = {
     "\"HuquqTech\" — O'zbekiston Respublikasi qonunchiligi bo'yicha AI huquqiy maslahatchi. Ko'pchilik fuqarolar o'z huquqlarini bilmaydi va advokatga murojaat imkoni yo'q — bu xizmat shu bo'shliqni to'ldiradi.",
   about_laws_title: "Qonunlar bazasi",
   about_warn:
-    "⚠️ Bu xizmat umumiy huquqiy ma'lumot beradi va professional advokat maslahati o'rnini bosa olmaydi.",
+    "Bu xizmat umumiy huquqiy ma'lumot beradi va professional advokat maslahati o'rnini bosa olmaydi.",
 
   /* ── "Biz haqimizda" ALOHIDA SAHIFA ──
      Landing Page'dan olib chiqilib, /about manziliga ko'chirildi. */
@@ -1320,16 +1302,16 @@ const uz = {
 
   telegram_connected: "Telegram bog'langan",
   telegram_connected_desc:
-    "Endi Telegram botdan ham foydalanishingiz mumkin ✓",
+    "Endi Telegram botdan ham foydalanishingiz mumkin",
   telegram_link_title: "Telegram bot bilan bog'lash:",
   telegram_link_step1: "Quyidagi tugmani bosing",
   telegram_link_step2: "Telegram ilovasida bot ochiladi",
   telegram_link_step3: "Botga /start tugmasini bosing",
-  telegram_link_step4: "Hisobingiz avtomatik bog'lanadi ✅",
+  telegram_link_step4: "Hisobingiz avtomatik bog'lanadi",
 
   telegram_loading: "Yuklanmoqda…",
   hero_cta_login: "Kirish va maslahat olish",
-  hero_note: "🔒 AI maslahatdan foydalanish uchun ro'yxatdan o'ting",
+  hero_note: "AI maslahatdan foydalanish uchun ro'yxatdan o'ting",
   laws_labor: "Mehnat Kodeksi",
   laws_labor_items: [
     "Ish haqi (100-102)",
@@ -1373,17 +1355,17 @@ const uz = {
   divider_or_email: "yoki email bilan",
   otp_title: "Emailni tasdiqlang",
   otp_sent: "manziliga 6 xonali kod yuborildi",
-  otp_resent: "✅ Yangi kod yuborildi!",
+  otp_resent: "Yangi kod yuborildi!",
   otp_timer: "Qayta yuborish",
   otp_resend: "Kodni qayta yuborish",
-  otp_back: "← Orqaga",
+  otp_back: "Orqaga",
   otp_verify: "Tasdiqlash",
   otp_verifying: "Tekshirilmoqda...",
   otp_error: "Tasdiqlash xatosi",
   otp_send_error: "Yuborishda xato",
   otp_length_error: "6 xonali kodni kiriting",
   otp_dev_console:
-    "⚠️ Test rejimi: email xizmati sozlanmagani uchun kod pochtaga YUBORILMADI — u backend ishlab turgan terminalga yozildi.",
+    "Test rejimi: email xizmati sozlanmagani uchun kod pochtaga YUBORILMADI — u backend ishlab turgan terminalga yozildi.",
 
   support_email_required: "Email kiritish shart",
   login_username_ph: "username yoki email",
@@ -1392,10 +1374,10 @@ const uz = {
   register_success_title: "Ro'yxatdan o'tdingiz!",
   register_tg_desc:
     "Telegram botni ulang — AI maslahatdan Telegram orqali ham foydalaning",
-  register_tg_btn: "Telegram botni ulash →",
-  register_tg_skip: "Keyinroq ulash →",
+  register_tg_btn: "Telegram botni ulash",
+  register_tg_skip: "Keyinroq ulash",
 
-  drawer_limit_reached: "⚠️ Kunlik limit tugadi ({n} ta savol). Ertaga qayta foydalanishingiz mumkin.",
+  drawer_limit_reached: "Kunlik limit tugadi ({n} ta savol). Ertaga qayta foydalanishingiz mumkin.",
   chat_image_size_error: "Rasm hajmi 5MB dan oshmasligi kerak",
   chat_upload_image: "Rasm yuklash",
   telegram_saved_msg: "Username saqlandi! Endi botga o'ting va /start bosing.",

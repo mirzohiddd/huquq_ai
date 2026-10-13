@@ -12,6 +12,9 @@
  *      shuning uchun qonun tahriri o'zgarsa ham eskirmaydi.
  */
 
+import { createElement } from "react";
+import { Briefcase, Users, ScrollText, House, ShoppingCart, Scale, BookOpen } from "lucide-react";
+
 /* ── Mavzuni dars sarlavhasi bo'yicha aniqlash ── */
 const TOPIC_RULES = [
   { id: "labor", re: /mehnat|trud|labou?r/i },
@@ -140,13 +143,18 @@ export const CAUTIONS = {
     "Qonun moddalarining tahriri o'zgarib turadi. Muhim qaror qabul qilishdan oldin joriy tahrirni Qonunlar kutubxonasidan tekshiring yoki yuristga murojaat qiling.",
 };
 
-/* ── Mavzu ikonasi uchun kalit (Lessons.jsx da lucide ikonaga bog'lanadi) ── */
-export const TOPIC_EMOJI = {
-  labor: "💼",
-  family: "👨‍👩‍👧",
-  inheritance: "📜",
-  land: "🏡",
-  consumer: "🛒",
-  criminal: "⚖️",
-  general: "📚",
+/* ── Mavzu ikonasi (emoji emas — lucide ikonka) ── */
+const TOPIC_ICONS = {
+  labor: Briefcase,
+  family: Users,
+  inheritance: ScrollText,
+  land: House,
+  consumer: ShoppingCart,
+  criminal: Scale,
+  general: BookOpen,
 };
+
+export function topicIcon(topic, size = 22) {
+  const Icon = TOPIC_ICONS[topic] || TOPIC_ICONS.general;
+  return createElement(Icon, { size, strokeWidth: 1.9, "aria-hidden": true });
+}

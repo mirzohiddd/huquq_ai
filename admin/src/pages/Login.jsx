@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAdmin } from "../context/AdminContext";
 import s from "./Login.module.css";
 import BrandMark from "../components/BrandMark";
+import { LockKeyhole, TriangleAlert, Eye, EyeOff, ArrowRight } from "lucide-react";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -36,11 +37,11 @@ export default function Login() {
           </div>
         </div>
 
-        <div className={s.lockIcon}>🔐</div>
+        <div className={s.lockIcon}><LockKeyhole size={24} strokeWidth={1.8} /></div>
         <h1 className={s.title}>Kirish</h1>
         <p className={s.sub}>Faqat vakolatli adminlar uchun</p>
 
-        {err && <div className={s.error}><span>⚠️</span> {err}</div>}
+        {err && <div className={s.error}><TriangleAlert size={16} /> {err}</div>}
 
         <form className={s.form} onSubmit={submit} noValidate>
           <div className={s.field}>
@@ -74,13 +75,14 @@ export default function Login() {
                   position: "absolute", right: 12, top: "50%",
                   transform: "translateY(-50%)",
                   color: "var(--text3)", fontSize: 15,
-                  transition: "color .2s",
+                  transition: "color .2s", display: "flex",
                 }}
-              >{showPass ? "🙈" : "👁"}</button>
+                aria-label={showPass ? "Parolni yashirish" : "Parolni ko'rsatish"}
+              >{showPass ? <EyeOff size={17} /> : <Eye size={17} />}</button>
             </div>
           </div>
           <button className={s.btn} disabled={busy || !username.trim() || !password}>
-            {busy ? <><span className={s.spinner} /> Kirilmoqda...</> : "Kirish →"}
+            {busy ? <><span className={s.spinner} /> Kirilmoqda...</> : <>Kirish <ArrowRight size={16} /></>}
           </button>
         </form>
 

@@ -25,6 +25,7 @@ const ProfileModal = lazy(() => import("./ProfileModal"));
 import api from "../utils/api";
 import s from "./SiteLayout.module.css";
 import { API_BASE } from "../utils/apiBase";
+import { stripEmojiDeep } from "../utils/stripEmoji";
 import { BrandMark, BrandWord } from "./brand/BrandLogo";
 
 // public/ ichidagi fayllar import qilinmaydi — ular / ildiz manzilida
@@ -176,7 +177,7 @@ export default function SiteLayout() {
           `${API_BASE}/site/content?lang=${encodeURIComponent(lang)}`,
         );
         const data = await response.json();
-        setSiteContent(data);
+        setSiteContent(stripEmojiDeep(data));
       } catch (error) {
         console.error("Error fetching site content:", error);
       }

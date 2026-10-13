@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import api from "../utils/api";
 import { Badge, Btn, Loader } from "../components/Shared";
 import s from "./ChatDetail.module.css";
-import { Smartphone, Globe } from "lucide-react";
+import { Smartphone, Globe, Send, ArrowLeft, UserRound, Calendar, MessageSquare, Trash2 } from "lucide-react";
 
 
 const CAT_LABELS = {
@@ -43,18 +43,18 @@ export default function ChatDetail() {
   return (
     <div className={s.page}>
       <div className={s.header}>
-        <button className={s.back} onClick={() => nav(-1)}>← Orqaga</button>
+        <button className={s.back} onClick={() => nav(-1)}><ArrowLeft size={14} /> Orqaga</button>
         <div className={s.headerInfo}>
           <h1 className={s.title}>Suhbat tafsiloti</h1>
           <div className={s.meta}>
-            <Badge type={chat.source}>{chat.source === "web" ? <><Globe size={12} /> Web</> : chat.source === "mobile" ? <><Smartphone size={12} /> Mobile</> : <><Smartphone size={12} /> Telegram</>}</Badge>
+            <Badge type={chat.source}>{chat.source === "web" ? <><Globe size={12} /> Web</> : chat.source === "mobile" ? <><Smartphone size={12} /> Mobile</> : <><Send size={12} /> Telegram</>}</Badge>
             <Badge type={chat.category}>{CAT_LABELS[chat.category] || chat.category}</Badge>
-            <span className={s.metaItem}>👤 {chat.userId?.username || chat.telegramUsername || "anonim"}</span>
-            <span className={s.metaItem}>📅 {fmtDate(chat.createdAt)}</span>
-            <span className={s.metaItem}>💬 {chat.messages.length} xabar</span>
+            <span className={s.metaItem}><UserRound size={13} /> {chat.userId?.username || chat.telegramUsername || "anonim"}</span>
+            <span className={s.metaItem}><Calendar size={13} /> {fmtDate(chat.createdAt)}</span>
+            <span className={s.metaItem}><MessageSquare size={13} /> {chat.messages.length} xabar</span>
           </div>
         </div>
-        <Btn variant="danger" small onClick={remove}>🗑 O'chirish</Btn>
+        <Btn variant="danger" small onClick={remove}><Trash2 size={14} /> O'chirish</Btn>
       </div>
 
       <div className={s.messages}>

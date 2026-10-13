@@ -31,6 +31,7 @@ import {
   MessageCircleQuestion,
   Lightbulb,
   ListChecks,
+  Lock,
 } from "lucide-react";
 import Reveal from "../components/Reveal";
 import Seo from "../components/Seo";
@@ -58,6 +59,7 @@ import servicesS from "./Services.module.css";
 import articlesS from "./Articles.module.css";
 import contactS from "./Contact.module.css";
 import { API_BASE } from "../utils/apiBase";
+import { stripEmojiDeep } from "../utils/stripEmoji";
 
 // Emoji o'rniga ishlatiladigan ikonalar — matn massivlari (translations.js)
 // bilan TARTIB bo'yicha mos keladi (tillararo bir xil, tarjima qilinmaydi).
@@ -148,7 +150,7 @@ export default function Home() {
           `${API_BASE}/site/content?lang=${encodeURIComponent(lang)}`,
         );
         const data = await response.json();
-        setSiteContent(data);
+        setSiteContent(stripEmojiDeep(data));
       } catch (error) {
         console.error("Error fetching site content:", error);
       }
@@ -328,7 +330,7 @@ export default function Home() {
                 className={`${s.heroNote} animate-fade-up`}
                 style={{ animationDelay: "0.45s" }}
               >
-                {t.hero_note}
+                <Lock size={13} aria-hidden="true" /> {t.hero_note}
               </p>
             )}
           </div>
@@ -654,7 +656,7 @@ export default function Home() {
               className={s.ctaButton}
               onClick={handleAiClick}
             >
-              {t.cta_btn}
+              {t.cta_btn} <ArrowRight size={18} aria-hidden="true" />
             </button>
             {/* SMO — sahifani ijtimoiy tarmoqda ulashish */}
             <ShareBar title={t.seo_home_title} />

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { CheckCircle2, AlertCircle, Send, Star, X, User, Lock, LogOut, Check, Zap, Gem, MessageSquare, Sparkles, CalendarClock } from "lucide-react";
+import { CheckCircle2, AlertCircle, Send, Star, X, User, Lock, LogOut, Check, Zap, Gem, MessageSquare, Sparkles, CalendarClock, Hourglass } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { useLang } from "../context/LangContext";
 import { useNavigate } from "react-router-dom";
@@ -502,7 +502,7 @@ export default function ProfileModal({ onClose, initialTab = "profile" }) {
                   </div>
                   {telegramStatus?.pendingTelegramUsername && !telegramStatus?.telegramVerified && (
                     <div style={{ background: "#fffbeb", border: "1px solid #fde68a", borderRadius: 8, padding: "0.6rem 0.9rem", fontSize: "0.82rem", color: "#92400e" }}>
-                      ⏳ <b>@{telegramStatus.pendingTelegramUsername}</b> username kutilmoqda. Botga o'tib /start bosing.
+                      <Hourglass size={14} style={{ verticalAlign: "-2px", marginRight: 4 }} /><b>@{telegramStatus.pendingTelegramUsername}</b> username kutilmoqda. Botga o'tib /start bosing.
                     </div>
                   )}
                   <Field label={t.telegram_username_label || "Telegram username"}>

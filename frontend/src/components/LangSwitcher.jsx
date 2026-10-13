@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useLang } from "../context/LangContext";
 import { Check } from "lucide-react";
+import FlagIcon from "./FlagIcon";
 import s from "./LangSwitcher.module.css";
 
 const LANGS = [
-  { code: "uz", flag: "🇺🇿", name: "O'zbek", short: "UZ" },
-  { code: "ru", flag: "🇷🇺", name: "Русский", short: "RU" },
+  { code: "uz", name: "O'zbek", short: "UZ" },
+  { code: "ru", name: "Русский", short: "RU" },
 ];
 
 export default function LangSwitcher({ dark = false, compact = false, dropUp = false, className = "" }) {
@@ -53,7 +54,7 @@ export default function LangSwitcher({ dark = false, compact = false, dropUp = f
            boshqaruv va AI agentlar tugmani shu matn bilan topadi */
         aria-label={`${current.short} — Til / Язык`}
       >
-        <span className={s.triggerFlag}>{current.flag}</span>
+        <span className={s.triggerFlag}><FlagIcon code={current.code} /></span>
         <span className={s.triggerLabel}>{current.short}</span>
         <span className={s.chevron} aria-hidden="true" />
       </button>
@@ -68,7 +69,7 @@ export default function LangSwitcher({ dark = false, compact = false, dropUp = f
                   style={{ animationDelay: `${i * 0.05}s` }}
                   onClick={() => select(l.code)}
                 >
-                  <span className={s.optionFlag}>{l.flag}</span>
+                  <span className={s.optionFlag}><FlagIcon code={l.code} /></span>
                   <span className={s.optionText}>
                     <span className={s.optionName}>{l.name}</span>
                     <span className={s.optionCode}>{l.short}</span>

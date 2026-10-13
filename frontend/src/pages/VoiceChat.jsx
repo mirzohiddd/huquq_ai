@@ -4,6 +4,7 @@ import { useLang } from "../context/LangContext";
 import { ArrowLeft, Volume2, VolumeX, RotateCcw } from "lucide-react";
 
 import { API_BASE } from "../utils/apiBase";
+import { stripEmoji } from "../utils/stripEmoji";
 
 const T = {
   uz: {
@@ -342,9 +343,9 @@ export default function VoiceChat() {
         }
         const ct = res.headers.get("Content-Type") || "";
         const uText = decodeURIComponent(res.headers.get("X-User-Text") || "");
-        const aiText = decodeURIComponent(
+        const aiText = stripEmoji(decodeURIComponent(
           res.headers.get("X-Text-Answer") || "",
-        );
+        ));
         if (uText) histRef.current.push({ role: "user", content: uText });
         if (aiText)
           histRef.current.push({ role: "assistant", content: aiText });

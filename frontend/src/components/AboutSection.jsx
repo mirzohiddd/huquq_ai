@@ -19,6 +19,7 @@ import {
   TrendingUp,
   Trophy,
   Check,
+  TriangleAlert,
 } from "lucide-react";
 import { useLang } from "../context/LangContext";
 import Reveal from "./Reveal";
@@ -27,6 +28,7 @@ import AboutMore from "./AboutMore";
 import shared from "../styles/site.module.css";
 import s from "./AboutSection.module.css";
 import { API_BASE } from "../utils/apiBase";
+import { stripEmojiDeep } from "../utils/stripEmoji";
 
 /**
  * ═══════════════════════════════════════════════════════════════════
@@ -86,7 +88,7 @@ export default function AboutSection() {
        SiteLayout.jsx dagi bilan bir xil yondashuv). */
     fetch(`${API_BASE}/site/content?lang=${encodeURIComponent(lang)}`)
       .then((r) => (r.ok ? r.json() : null))
-      .then((d) => alive && setSiteContent(d))
+      .then((d) => alive && setSiteContent(stripEmojiDeep(d)))
       .catch(() => {});
     return () => {
       alive = false;
@@ -310,7 +312,7 @@ export default function AboutSection() {
                   </div>
                 ))}
               </div>
-              <p className={s.warn}>{t.about_warn}</p>
+              <p className={s.warn}><TriangleAlert size={16} aria-hidden="true" /> {t.about_warn}</p>
             </section>
           </Reveal>
       </div>

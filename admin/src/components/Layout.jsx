@@ -5,18 +5,23 @@ import axios from "axios";
 import s from "./Layout.module.css";
 import { API_BASE } from "../utils/apiBase";
 import BrandMark from "./BrandMark";
+import {
+  LayoutDashboard, MessagesSquare, Users, CreditCard, ShoppingBag, BookOpen,
+  ClipboardCheck, Scale, LifeBuoy, Settings, ChevronLeft, ChevronRight,
+  LogOut, UserRound,
+} from "lucide-react";
 
 const NAV = [
-  { to: "/",             icon: "◈",  label: "Dashboard"            },
-  { to: "/chats",        icon: "◉",  label: "Suhbatlar"            },
-  { to: "/users",        icon: "⬡",  label: "Foydalanuvchilar"     },
-  { to: "/payments",     icon: "◆",  label: "To'lovlar"            },
-  { to: "/orders",       icon: "◇",  label: "Buyurtmalar"          },
-  { to: "/lessons",      icon: "▤",  label: "Darslar"              },
-  { to: "/tests",        icon: "▥",  label: "Testlar"              },
-  { to: "/laws",         icon: "§",  label: "Qonunlar"             },
-  { to: "/support",      icon: "✉",  label: "Texnik yordam"       },
-  { to: "/settings",     icon: "◬",  label: "Sozlamalar"           },
+  { to: "/",         icon: LayoutDashboard, label: "Dashboard"        },
+  { to: "/chats",    icon: MessagesSquare,  label: "Suhbatlar"        },
+  { to: "/users",    icon: Users,           label: "Foydalanuvchilar" },
+  { to: "/payments", icon: CreditCard,      label: "To'lovlar"        },
+  { to: "/orders",   icon: ShoppingBag,     label: "Buyurtmalar"      },
+  { to: "/lessons",  icon: BookOpen,        label: "Darslar"          },
+  { to: "/tests",    icon: ClipboardCheck,  label: "Testlar"          },
+  { to: "/laws",     icon: Scale,           label: "Qonunlar"         },
+  { to: "/support",  icon: LifeBuoy,        label: "Texnik yordam"    },
+  { to: "/settings", icon: Settings,        label: "Sozlamalar"       },
 ];
 
 function Clock() {
@@ -92,7 +97,7 @@ export default function Layout() {
               className={({ isActive }) => `${s.link} ${isActive ? s.active : ""}`}
               title={collapsed ? item.label : undefined}
             >
-              <span className={s.linkIcon}>{item.icon}</span>
+              <span className={s.linkIcon}><item.icon size={18} strokeWidth={2} /></span>
               {!collapsed && <span className={s.linkLabel}>{item.label}</span>}
               {item.to === "/support" && pendingCount > 0 && (
                 <span className={s.badge}>{pendingCount}</span>
@@ -103,7 +108,7 @@ export default function Layout() {
 
         <div className={s.sideBottom}>
           <button className={s.collapseBtn} onClick={() => setCollapsed((p) => !p)} title="Kichraytirish">
-            {collapsed ? "▶" : "◀"}
+            {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
           </button>
           <div className={s.userRow}>
             <div className={s.userAvatar}>{admin?.username?.[0]?.toUpperCase()}</div>
@@ -111,7 +116,7 @@ export default function Layout() {
               <div className={s.userInfo}>
                 <span className={s.userName}>{admin?.username}</span>
                 <span className={s.userRole}>Administrator</span>
-                <button className={s.logoutBtn} onClick={handleLogout}>Chiqish →</button>
+                <button className={s.logoutBtn} onClick={handleLogout}>Chiqish <LogOut size={12} /></button>
               </div>
             )}
           </div>
@@ -127,8 +132,8 @@ export default function Layout() {
           </div>
           <div className={s.topRight}>
             <Clock />
-            <span className={s.topAdmin}>👤 {admin?.username}</span>
-            <button className={s.topLogout} onClick={handleLogout}>Chiqish →</button>
+            <span className={s.topAdmin}><UserRound size={15} /> {admin?.username}</span>
+            <button className={s.topLogout} onClick={handleLogout}><LogOut size={13} /> Chiqish</button>
           </div>
         </header>
         <main className={s.content}>

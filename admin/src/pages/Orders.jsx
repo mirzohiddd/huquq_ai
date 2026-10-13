@@ -82,7 +82,11 @@ export default function Orders() {
           <AlertTriangle size={16} />
           <span>
             Telegram xabarnomasi sozlanmagan — yangi buyurtmalar faqat shu yerda ko'rinadi.
-            Botga <b>/myid</b> yozib ID'ingizni oling va serverda{" "}
+            Telegramda{" "}
+            <a href="https://t.me/mening_huquqlarim_bot" target="_blank" rel="noreferrer">
+              @mening_huquqlarim_bot
+            </a>{" "}
+            ga <b>/myid</b> yozib ID'ingizni oling va Render → Environment'da{" "}
             <code>ADMIN_TELEGRAM_IDS</code> ga qo'shing.
           </span>
         </div>

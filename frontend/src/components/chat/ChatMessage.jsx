@@ -1,5 +1,6 @@
 import React, { memo, useState } from "react";
 import ReactMarkdown from "react-markdown";
+import { stripEmoji } from "../../utils/stripEmoji";
 import remarkGfm from "remark-gfm";
 import { AlertCircle, Copy, Check, RotateCcw, ThumbsUp, ThumbsDown } from "lucide-react";
 import SpeakButton from "../SpeakButton";
@@ -99,7 +100,7 @@ function ChatMessage({ m, i, isLast, busy, avatarLetter, onRegenerate, onFeedbac
           <div className={`${d.bubble} ${m.isError ? d.errBubble : ""}`}>
             {m.isError && <AlertCircle size={14} className={s.errIcon} />}
             <ReactMarkdown remarkPlugins={[remarkGfm]} components={MD}>
-              {m.content}
+              {stripEmoji(m.content)}
             </ReactMarkdown>
           </div>
           {!m.isError && m.content?.trim() && (
@@ -113,7 +114,7 @@ function ChatMessage({ m, i, isLast, busy, avatarLetter, onRegenerate, onFeedbac
     <div className={`${d.msg} ${d.user}`} style={{ animationDelay: `${Math.min(i, 8) * 0.04}s` }}>
       <div className={d.bubble}>
         {m.imagePreview && <img src={m.imagePreview} alt="" className={s.sentImg} />}
-        <p>{m.content}</p>
+        <p>{stripEmoji(m.content)}</p>
       </div>
       <div className={d.avatarU}>{avatarLetter}</div>
     </div>

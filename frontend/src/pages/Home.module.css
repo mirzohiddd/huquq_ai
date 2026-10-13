@@ -686,3 +686,7 @@
     width: 100%;
   }
 }
+
+/* Emoji o'rnidagi lucide ikonkalar matn chizig'iga tekislanadi */
+.heroNote > svg { vertical-align: -2px; margin-right: 3px; }
+.ctaButton > svg { vertical-align: -4px; margin-left: 4px; }

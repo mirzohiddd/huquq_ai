@@ -1,6 +1,7 @@
 import axios from "axios";
 import { API_BASE } from "./apiBase";
 import { getDeviceId } from "./deviceId";
+import { stripEmojiDeep } from "./stripEmoji";
 
 const api = axios.create({
   baseURL: API_BASE,
@@ -26,7 +27,14 @@ api.interceptors.request.use((config) => {
 });
 
 api.interceptors.response.use(
-  (r) => r,
+  // Saytda emoji ko'rsatilmaydi (o'rniga ikonkalar) — serverdan kelgan
+  // dars/AI matnlaridagi emojilar shu yerda bir marta tozalanadi.
+  (r) => {
+    if (r.data && typeof r.data === "object" && !(r.data instanceof Blob)) {
+      r.data = stripEmojiDeep(r.data);
+    }
+    return r;
+  },
   (err) => {
     if (!err.response) {
       err.response = {

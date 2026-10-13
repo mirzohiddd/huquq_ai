@@ -54,7 +54,7 @@ export async function exportPptx(deck, labels) {
       sl.addText(runs, { x: 0.6, y: 1.4, w: 7.6, h: 5.4, valign: "top", fontFace: FONT, fit: "shrink" });
       const side = [];
       if (s.note) side.push({ text: `${labels.example}\n`, options: { bold: true, color: "B4690E", fontSize: 14 } }, { text: s.note, options: { fontSize: 13, color: INK, breakLine: true } });
-      (s.refs || []).forEach((r) => side.push({ text: `\n⚖ ${refText(r, ru)}`, options: { fontSize: 12, color: NAVY, bold: true } }));
+      (s.refs || []).forEach((r) => side.push({ text: `\n${refText(r, ru)}`, options: { fontSize: 12, color: NAVY, bold: true } }));
       if (side.length) {
         sl.addShape("roundRect", { x: 8.5, y: 1.4, w: 4.25, h: 5.4, fill: { color: "FDF5E6" }, line: { color: "EBD6AE" }, rectRadius: 0.12 });
         sl.addText(side, { x: 8.7, y: 1.55, w: 3.85, h: 5.1, valign: "top", fontFace: FONT, fit: "shrink" });

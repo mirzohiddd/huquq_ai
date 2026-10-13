@@ -81,7 +81,7 @@ export default function useChatActions({ session, isGuest, lang, t, c, setShowRe
       try {
         if (att) {
           const label = att.kind === "image" ? c.img : c.doc;
-          setMessages((p) => [...p, { role: "user", content: `📎 ${label}: ${att.name}`, imagePreview: att.preview || undefined, fileName: att.name }]);
+          setMessages((p) => [...p, { role: "user", content: `${label}: ${att.name}`, imagePreview: att.preview || undefined, fileName: att.name }]);
           sid = await analyze(att, sid);
         }
         if (text) {

@@ -107,7 +107,7 @@
 .foot a:hover, .inlineLink:hover { text-decoration: underline; }
 .legal { margin-top: 0.85rem; text-align: center; font-size: 12.5px; line-height: 1.5; color: #8a909c; }
 .legal a { color: var(--gold-text); text-decoration: underline; text-underline-offset: 2px; }
-.warm { margin-top: -0.2rem; text-align: center; font-size: 12px; color: #888; }
+.warm { margin-top: -0.2rem; display: flex; align-items: center; justify-content: center; gap: 5px; text-align: center; font-size: 12px; color: #888; }
 
 .error { margin-top: 1rem; padding: 0.75rem 1rem; border: 1px solid #fecaca; border-radius: 9px; background: var(--red-bg); color: var(--red); font-size: 13.5px; }
 .notice { margin-top: 1rem; padding: 0.75rem 1rem; border: 1px solid #fde68a; border-radius: 9px; background: #fffbeb; color: #92400e; font-size: 13.5px; }
@@ -153,3 +153,7 @@
   .divider { margin: 0.55rem 0; }
   .foot { margin-top: 0.55rem; }
 }
+
+/* Emoji o'rnidagi ikonkalar */
+.notice > svg, .success > svg { vertical-align: -3px; margin-right: 4px; }
+.linkBtn { display: inline-flex; align-items: center; gap: 5px; }

@@ -409,6 +409,7 @@
 }
 
 .cardEmoji {
+  color: var(--primary);
   width: 52px;
   height: 52px;
   display: grid;
@@ -575,6 +576,7 @@
 }
 
 .heroEmoji {
+  color: var(--primary);
   flex-shrink: 0;
   width: 60px;
   height: 60px;
@@ -1505,6 +1507,7 @@
 }
 
 .relEmoji {
+  color: var(--primary);
   flex-shrink: 0;
   width: 36px;
   height: 36px;

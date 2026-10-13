@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { KeyRound, Check, X } from "lucide-react";
 import s from "./Table.module.css";
 import { API_BASE } from "../utils/apiBase";
 
@@ -216,7 +217,7 @@ export default function SupportMessages() {
             onClick={() => setFilter("password_reset")}
             style={filterBtnStyle("password_reset")}
           >
-            🔑 Parol tiklash ({resetCount})
+            <KeyRound size={14} style={{ verticalAlign: "-2px", marginRight: 5 }} />Parol tiklash ({resetCount})
           </button>
           <button
             onClick={() => setFilter("resolved")}
@@ -298,7 +299,7 @@ export default function SupportMessages() {
                           verticalAlign: "middle",
                         }}
                       >
-                        🔑 Parolni tiklash
+                        <KeyRound size={12} style={{ verticalAlign: "-2px", marginRight: 4 }} />Parolni tiklash
                       </span>
                     )}
                   </div>
@@ -378,7 +379,7 @@ export default function SupportMessages() {
                         marginBottom: "0.75rem",
                       }}
                     >
-                      ✓ Parol yangilangan:{" "}
+                      <Check size={14} style={{ verticalAlign: "-2px", marginRight: 4 }} />Parol yangilangan:{" "}
                       {new Date(msg.passwordResetAt).toLocaleString("uz-UZ")}
                     </div>
                   )}
@@ -393,7 +394,7 @@ export default function SupportMessages() {
                             : "#b91c1c",
                       }}
                     >
-                      {resetResult[msg._id].type === "ok" ? "✓ " : "✕ "}
+                      {resetResult[msg._id].type === "ok" ? <Check size={14} style={{ verticalAlign: "-2px", marginRight: 4 }} /> : <X size={14} style={{ verticalAlign: "-2px", marginRight: 4 }} />}
                       {resetResult[msg._id].text}
                     </div>
                   )}
@@ -443,7 +444,7 @@ export default function SupportMessages() {
                     >
                       {resettingId === msg._id
                         ? "Yuborilmoqda..."
-                        : "🔑 Yangi parol yuborish"}
+                        : <><KeyRound size={14} style={{ verticalAlign: "-2px", marginRight: 5 }} />Yangi parol yuborish</>}
                     </button>
                   </div>
                 </div>

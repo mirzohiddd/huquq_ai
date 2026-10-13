@@ -10,6 +10,11 @@ import {
   EyeOff,
   AlertTriangle,
   Check,
+  Phone,
+  Save,
+  Globe,
+  Send,
+  Smartphone,
 } from "lucide-react";
 import api from "../utils/api";
 import {
@@ -126,7 +131,7 @@ function ResetPasswordModal({ user, onClose }) {
       );
       let emailMsg = "";
       if (data.emailSent) {
-        emailMsg = ` ✉️ ${data.emailAddress} ga xabar yuborildi`;
+        emailMsg = ` ${data.emailAddress} ga xabar yuborildi`;
       } else if (user.email) {
         emailMsg = ` (email yuborishda xato${data.emailError ? ": " + data.emailError : ""})`;
       } else {
@@ -161,7 +166,7 @@ function ResetPasswordModal({ user, onClose }) {
               {user.fullName || user.username}
             </div>
             <div className={ms.userCardEmail}>{user.email || "Email yo'q"}</div>
-            {user.phone && <div className={ms.userCardEmail}>📞 {user.phone}</div>}
+            {user.phone && <div className={ms.userCardEmail} style={{ display: "flex", alignItems: "center", gap: 5 }}><Phone size={12} /> {user.phone}</div>}
           </div>
         </div>
 
@@ -230,7 +235,7 @@ function ResetPasswordModal({ user, onClose }) {
               <span className={ms.spinner} /> Saqlanmoqda...
             </>
           ) : (
-            "💾 Saqlash"
+            <><Save size={15} /> Saqlash</>
           )}
         </button>
       </div>
@@ -240,7 +245,7 @@ function ResetPasswordModal({ user, onClose }) {
 
 // Tarif nomlari — limit endi qo'lda emas, backend/config/plans.js dagi
 // tarifga qarab AVTOMATIK qo'llanadi. Admin faqat tarifni tanlaydi.
-const TIER_LABELS = { free: "Bepul", basic: "Basic", pro: "⭐ Pro", premium: "💎 Premium" };
+const TIER_LABELS = { free: "Bepul", basic: "Basic", pro: "Pro", premium: "Premium" };
 
 /* ── Asosiy komponent ── */
 export default function Users() {
@@ -364,18 +369,18 @@ export default function Users() {
                     <span className={s.username}>@{u.username}</span>
                     <span className={s.fullname}>
                       {u.authProvider === "google" && (
-                        <span style={{ color: "#4285f4", marginRight: 4 }}>
-                          🔵
+                        <span title="Google" style={{ color: "#4285f4", marginRight: 4, display: "inline-flex", verticalAlign: "middle" }}>
+                          <Globe size={13} />
                         </span>
                       )}
                       {u.telegramVerified && (
-                        <span style={{ color: "#06b6d4", marginRight: 4 }}>
-                          ✈️
+                        <span title="Telegram" style={{ color: "#06b6d4", marginRight: 4, display: "inline-flex", verticalAlign: "middle" }}>
+                          <Send size={13} />
                         </span>
                       )}
                       {u.lastLoginSource === "mobile" && (
-                        <span style={{ color: "#10b981", marginRight: 4 }}>
-                          📱
+                        <span title="Mobil ilova" style={{ color: "#10b981", marginRight: 4, display: "inline-flex", verticalAlign: "middle" }}>
+                          <Smartphone size={13} />
                         </span>
                       )}
                     </span>
@@ -405,10 +410,11 @@ export default function Users() {
                         style={{
                           marginLeft: 5,
                           color: "var(--green)",
-                          fontSize: 11,
+                          display: "inline-flex",
+                          verticalAlign: "middle",
                         }}
                       >
-                        ✓
+                        <Check size={13} />
                       </span>
                     ) : (
                       <span
@@ -416,10 +422,11 @@ export default function Users() {
                         style={{
                           marginLeft: 5,
                           color: "var(--red)",
-                          fontSize: 11,
+                          display: "inline-flex",
+                          verticalAlign: "middle",
                         }}
                       >
-                        ✗
+                        <X size={13} />
                       </span>
                     )}
                   </td>

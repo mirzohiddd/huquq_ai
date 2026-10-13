@@ -28,6 +28,8 @@ import {
   XCircle,
   Search,
   Lock,
+  PenLine,
+  CircleCheck,
 } from "lucide-react";
 import { useLang } from "../context/LangContext";
 import { useChatPanel } from "../context/ChatPanelContext";
@@ -46,7 +48,7 @@ import {
   splitInsights,
   DID_YOU_KNOW,
   CAUTIONS,
-  TOPIC_EMOJI,
+  topicIcon,
 } from "./lessonContent";
 import { groupByModule, moduleOf } from "./lessonModules";
 import {
@@ -330,7 +332,7 @@ export default function Lessons() {
       law: detectLaw(allText, topic),
       minutes: readingMinutes(allText),
       difficulty: difficultyOf(allText.length),
-      emoji: TOPIC_EMOJI[topic] || TOPIC_EMOJI.general,
+      emoji: topicIcon(topic, 28),
       fact: DID_YOU_KNOW[topic] || DID_YOU_KNOW.general,
       caution: CAUTIONS[topic] || CAUTIONS.general,
     };
@@ -557,7 +559,7 @@ export default function Lessons() {
       >
         <div className={s.cardTop}>
           <span className={s.cardEmoji} aria-hidden="true">
-            {TOPIC_EMOJI[topic] || TOPIC_EMOJI.general}
+            {topicIcon(topic, 24)}
           </span>
           {locked ? (
             <span className={s.lockBadge}>
@@ -914,12 +916,12 @@ export default function Lessons() {
               <span className={s.progressFill} style={{ width: `${percent}%` }} />
             </div>
 
-            {/* 📖 → 📝 → ✅ bosqichlari */}
+            {/* O'qish → test → tugallandi bosqichlari */}
             <ol className={s.stepper}>
               {[
-                { n: 1, icon: "📖", label: t.lesson_step_read },
-                { n: 2, icon: "📝", label: t.lesson_step_quiz },
-                { n: 3, icon: "✅", label: t.lesson_step_done },
+                { n: 1, icon: <BookOpen size={14} />, label: t.lesson_step_read },
+                { n: 2, icon: <PenLine size={14} />, label: t.lesson_step_quiz },
+                { n: 3, icon: <CircleCheck size={14} />, label: t.lesson_step_done },
               ].map((x) => (
                 <li
                   key={x.n}
@@ -1388,7 +1390,7 @@ export default function Lessons() {
                     <li key={l._id}>
                       <button type="button" onClick={() => openLesson(l)}>
                         <span className={s.relEmoji} aria-hidden="true">
-                          {TOPIC_EMOJI[detectTopic(l.title)] || TOPIC_EMOJI.general}
+                          {topicIcon(detectTopic(l.title), 17)}
                         </span>
                         <span className={s.relText}>
                           <strong>{l.title}</strong>

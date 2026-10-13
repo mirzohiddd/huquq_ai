@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowRight, AtSign, Lock, Mail, Phone, User } from "lucide-react";
+import { ArrowRight, AtSign, Hourglass, Lock, Mail, Phone, User } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import { useLang } from "../../context/LangContext";
 import Seo from "../../components/Seo";
@@ -149,7 +149,7 @@ export default function RegisterPage() {
           {busy ? t.register_loading : t.register_title}
           {!busy && <ArrowRight size={19} aria-hidden="true" />}
         </button>
-        {warming && <p className={s.warm}>⏳ {t.auth_warming}</p>}
+        {warming && <p className={s.warm}><Hourglass size={13} aria-hidden="true" /> {t.auth_warming}</p>}
       </form>
 
       <div className={s.divider}>{t.divider_or}</div>

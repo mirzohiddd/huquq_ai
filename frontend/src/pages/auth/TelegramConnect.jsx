@@ -1,4 +1,4 @@
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, ArrowRight } from "lucide-react";
 import { useLang } from "../../context/LangContext";
 import AuthShell from "./AuthShell";
 import { TelegramIcon } from "./icons";
@@ -21,10 +21,10 @@ export default function TelegramConnect({ botUrl, onSkip }) {
         </p>
         <a href={botUrl} target="_blank" rel="noreferrer" className={`${s.btn} ${s.tgBtn}`}>
           <TelegramIcon />
-          {t.register_tg_btn || "Telegram botni ulash →"}
+          {t.register_tg_btn || "Telegram botni ulash"} <ArrowRight size={17} aria-hidden="true" />
         </a>
         <button type="button" className={s.linkBtn} onClick={onSkip}>
-          {t.register_tg_skip || "Keyinroq ulash →"}
+          {t.register_tg_skip || "Keyinroq ulash"} <ArrowRight size={15} aria-hidden="true" />
         </button>
       </div>
     </AuthShell>

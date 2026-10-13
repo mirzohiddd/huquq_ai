@@ -113,14 +113,14 @@ router.post("/analyze", optionalUserGuard, uploadSingle, webLimitGuard, async (r
     let chat = await Chat.findOne(isGuest ? { sessionId, userId: { $exists: false } } : { sessionId, userId });
     if (!chat) chat = new Chat({ sessionId, userId, source: "web", messages: [] });
     const label = extracted.kind === "image" ? (lang === "ru" ? "Анализ изображения" : "Rasm tahlili") : lang === "ru" ? "Анализ документа" : "Hujjat tahlili";
-    chat.messages.push({ role: "user", content: `📎 ${label}: ${fileName}`, attachment: fileName });
+    chat.messages.push({ role: "user", content: `${label}: ${fileName}`, attachment: fileName });
     chat.messages.push({ role: "assistant", content: answer });
     if (chat.messages.length > 200) chat.messages = chat.messages.slice(-200);
     await chat.save();
     recordStat("web", "boshqa", extracted.kind === "image" ? "gemini" : "local").catch(() => {});
 
     const usage = isGuest ? await getGuestUsageStats(getClientIp(req)) : await getUsageStats(req.authUser.id);
-    return res.json({ answer, sessionId: chat.sessionId, data, usage, userContent: `📎 ${label}: ${fileName}` });
+    return res.json({ answer, sessionId: chat.sessionId, data, usage, userContent: `${label}: ${fileName}` });
   } catch (err) {
     console.error("ai-tools/analyze xatosi:", err.message);
     return res.status(500).json({ error: FILE_ERR.FAILED[lang] });

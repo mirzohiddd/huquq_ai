@@ -780,3 +780,6 @@
     transform: none;
   }
 }
+
+/* Ogohlantirish ikonkasi (avval matn boshida ⚠️ emoji edi) */
+.warn > svg { vertical-align: -3px; margin-right: 4px; color: var(--gold-text, #8b6419); }

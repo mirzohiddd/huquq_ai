@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Mail } from "lucide-react";
+import { Mail, TriangleAlert, CircleCheck, ArrowLeft } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import { useLang } from "../../context/LangContext";
 import AuthShell from "./AuthShell";
@@ -69,9 +69,9 @@ export default function OTPVerify({ email, onSuccess, onBack, devCodeInConsole =
       </p>
       {/* Test rejimi: kod pochtaga emas, server konsoliga yozilgan. Buni
           aytmaslik foydalanuvchini pochtasini bekorga kutishga majbur qilardi. */}
-      {devCodeInConsole && <div className={s.notice}>{t.otp_dev_console}</div>}
+      {devCodeInConsole && <div className={s.notice}><TriangleAlert size={15} aria-hidden="true" /> {t.otp_dev_console}</div>}
       {err && <div className={s.error}>{err}</div>}
-      {resent && <div className={s.success}>{t.otp_resent}</div>}
+      {resent && <div className={s.success}><CircleCheck size={15} aria-hidden="true" /> {t.otp_resent}</div>}
       <form className={s.form} onSubmit={handleVerify}>
         <input
           className={`${s.input} ${s.otpInput}`}
@@ -101,7 +101,7 @@ export default function OTPVerify({ email, onSuccess, onBack, devCodeInConsole =
           </button>
         )}
         <button type="button" className={s.linkBtn} onClick={onBack}>
-          {t.otp_back}
+          <ArrowLeft size={15} aria-hidden="true" /> {t.otp_back}
         </button>
       </div>
     </AuthShell>

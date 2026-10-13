@@ -4,6 +4,7 @@ import { API_ORIGIN } from "../utils/apiBase";
 import { PageHeader, Card, Btn } from "../components/Shared";
 import { useAdmin } from "../context/AdminContext";
 import s from "./Settings.module.css";
+import { Globe, Activity, ArrowRight } from "lucide-react";
 
 export default function Settings() {
   const { admin } = useAdmin();
@@ -36,7 +37,7 @@ export default function Settings() {
         currentPassword: form.currentPassword,
         newPassword: form.newPassword,
       });
-      setMsg({ text: "Parol muvaffaqiyatli o'zgartirildi ✅", type: "ok" });
+      setMsg({ text: "Parol muvaffaqiyatli o'zgartirildi", type: "ok" });
       setForm({ currentPassword: "", newPassword: "", confirm: "" });
     } catch (ex) {
       setMsg({
@@ -50,7 +51,7 @@ export default function Settings() {
 
   return (
     <div>
-      <PageHeader title="⚙️ Sozlamalar" />
+      <PageHeader title="Sozlamalar" />
 
       <div
         style={{
@@ -129,7 +130,7 @@ export default function Settings() {
               rel="noreferrer"
               className={s.link}
             >
-              🌐 Asosiy sayt →
+              <Globe size={15} /> Asosiy sayt <ArrowRight size={14} />
             </a>
             {/* Manzil apiBase'dan olinadi — hosting almashganda (Render →
                 Railway, 2026-08-22) bu havola qo'lda yozilgani uchun eskirib
@@ -140,7 +141,7 @@ export default function Settings() {
               rel="noreferrer"
               className={s.link}
             >
-              ❤️ API holati →
+              <Activity size={15} /> API holati <ArrowRight size={14} />
             </a>
           </div>
         </Card>

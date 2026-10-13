@@ -180,7 +180,7 @@ async function notifyLimitReached(userId, timeLeft) {
 
     await sendPushNotification(
       user.pushToken,
-      "⚠️ Kunlik limit tugadi",
+      "Kunlik limit tugadi",
       `Bugungi ${timeLeft} dan so'ng AI maslahatdan foydalanishingiz mumkin.`,
       { type: "limit_reached", timeLeft }
     );
@@ -200,7 +200,7 @@ async function notifyLimitReset(userId) {
 
     await sendPushNotification(
       user.pushToken,
-      "✅ Limit yangilandi!",
+      "Limit yangilandi!",
       "Bugungi savollaringiz qayta tiklandi. Huquqiy maslahat olishingiz mumkin!",
       { type: "limit_reset" }
     );
