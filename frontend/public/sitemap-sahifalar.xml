@@ -29,41 +29,41 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
   <url>
-    <loc>https://huquq-ai-teal.vercel.app/</loc>
-    <xhtml:link rel="alternate" hreflang="uz-UZ" href="https://huquq-ai-teal.vercel.app/"/>
-    <xhtml:link rel="alternate" hreflang="ru-UZ" href="https://huquq-ai-teal.vercel.app/?lang=ru"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://huquq-ai-teal.vercel.app/"/>
+    <loc>https://huquqtech.uz/</loc>
+    <xhtml:link rel="alternate" hreflang="uz-UZ" href="https://huquqtech.uz/"/>
+    <xhtml:link rel="alternate" hreflang="ru-UZ" href="https://huquqtech.uz/?lang=ru"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://huquqtech.uz/"/>
     <lastmod>2026-10-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 
   <url>
-    <loc>https://huquq-ai-teal.vercel.app/?lang=ru</loc>
-    <xhtml:link rel="alternate" hreflang="uz-UZ" href="https://huquq-ai-teal.vercel.app/"/>
-    <xhtml:link rel="alternate" hreflang="ru-UZ" href="https://huquq-ai-teal.vercel.app/?lang=ru"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://huquq-ai-teal.vercel.app/"/>
+    <loc>https://huquqtech.uz/?lang=ru</loc>
+    <xhtml:link rel="alternate" hreflang="uz-UZ" href="https://huquqtech.uz/"/>
+    <xhtml:link rel="alternate" hreflang="ru-UZ" href="https://huquqtech.uz/?lang=ru"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://huquqtech.uz/"/>
     <lastmod>2026-08-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://huquq-ai-teal.vercel.app/terms</loc>
+    <loc>https://huquqtech.uz/terms</loc>
     <lastmod>2026-08-18</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 
   <url>
-    <loc>https://huquq-ai-teal.vercel.app/privacy</loc>
+    <loc>https://huquqtech.uz/privacy</loc>
     <lastmod>2026-08-18</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 
   <url>
-    <loc>https://huquq-ai-teal.vercel.app/disclaimer</loc>
+    <loc>https://huquqtech.uz/disclaimer</loc>
     <lastmod>2026-08-18</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>

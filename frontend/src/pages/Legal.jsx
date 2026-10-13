@@ -225,7 +225,7 @@ export function Terms() {
       <section id="terms-15">
         <h2>15. Bog'lanish</h2>
         <p>
-          Email: <a href="mailto:support@huquqai.uz">support@huquqai.uz</a>
+          Email: <a href="mailto:support@huquqtech.uz">support@huquqtech.uz</a>
         </p>
       </section>
     </LegalPage>
@@ -367,7 +367,7 @@ export function Privacy() {
       <section id="privacy-14">
         <h2>14. Bog'lanish</h2>
         <p>
-          <a href="mailto:privacy@huquqai.uz">privacy@huquqai.uz</a>
+          <a href="mailto:privacy@huquqtech.uz">privacy@huquqtech.uz</a>
         </p>
       </section>
 

@@ -124,7 +124,7 @@ export default function Settings() {
         <Card title="Murojaatlar">
           <div className={s.links}>
             <a
-              href="https://huquq-ai-teal.vercel.app/"
+              href="https://huquqtech.uz/"
               target="_blank"
               rel="noreferrer"
               className={s.link}

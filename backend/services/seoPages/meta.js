@@ -17,7 +17,7 @@
 
 /** Foydalanuvchi ko'radigan asosiy domen (canonical shu yerga ishora qiladi). */
 const SITE_URL = (
-  process.env.PUBLIC_SITE_URL || "https://huquq-ai-teal.vercel.app"
+  process.env.PUBLIC_SITE_URL || "https://huquqtech.uz"
 ).replace(/\/$/, "");
 
 const SITE_NAME = "HuquqTech";

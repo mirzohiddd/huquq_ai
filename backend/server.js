@@ -57,7 +57,7 @@ app.use(securityHeaders);
    BUG FIX (2026-08-04): bu ro'yxatda faqat ESKI, allaqachon o'chirilgan
    manzillar (huquq-ai-rose.vercel.app, huquq-ai-fpa2.onrender.com)
    turgan edi. Vercel/Render har safar yangi deploy'da yangi subdomen
-   beradi, natijada jonli frontend (huquq-ai-teal.vercel.app) backendga
+   beradi, natijada jonli frontend (huquq-ai-user.vercel.app) backendga
    murojaat qilganda brauzer HAMMA so'rovni "No Access-Control-Allow-Origin"
    deb bloklardi — sayt umuman ma'lumot ololmasdi.
 
@@ -82,9 +82,11 @@ const defaultOrigins = [
   "http://localhost:5173",
   "http://localhost:5174",
   "http://127.0.0.1:5173",
-  "https://huquq-ai-teal.vercel.app", // joriy frontend
+  "https://huquqtech.uz", // asosiy domen
+  "https://www.huquqtech.uz",
+  "https://huquq-ai-user.vercel.app", // Vercel manzili (zaxira)
   "https://huquq-ai-7v7a.onrender.com", // backendning o'zi (Render)
-  "https://huquq-ai-yalg.vercel.app", // admin paneli
+  "https://huquq-ai-admin.vercel.app", // admin paneli
 ];
 const frontendUrl = process.env.FRONTEND_URL;
 

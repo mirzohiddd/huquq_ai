@@ -10,11 +10,11 @@
 -->
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap>
-    <loc>https://huquq-ai-teal.vercel.app/sitemap-sahifalar.xml</loc>
+    <loc>https://huquqtech.uz/sitemap-sahifalar.xml</loc>
     <lastmod>2026-08-18</lastmod>
   </sitemap>
   <sitemap>
-    <loc>https://huquq-ai-teal.vercel.app/sitemap-qonunlar.xml</loc>
+    <loc>https://huquqtech.uz/sitemap-qonunlar.xml</loc>
   </sitemap>
   <!--
     Savol-javob markazi (AEO) + Metodologiya sahifasi. Ham bazadan
@@ -23,13 +23,13 @@
     qo'shilganda xarita unutilib qolardi.
   -->
   <sitemap>
-    <loc>https://huquq-ai-teal.vercel.app/sitemap-savollar.xml</loc>
+    <loc>https://huquqtech.uz/sitemap-savollar.xml</loc>
   </sitemap>
   <!--
     Prezident farmonlari, qarorlari va farmoyishlari (~5 600 ta) —
     backend `routes/publicActs.js` (2026-10-03).
   -->
   <sitemap>
-    <loc>https://huquq-ai-teal.vercel.app/sitemap-hujjatlar.xml</loc>
+    <loc>https://huquqtech.uz/sitemap-hujjatlar.xml</loc>
   </sitemap>
 </sitemapindex>

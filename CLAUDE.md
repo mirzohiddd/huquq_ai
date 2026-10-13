@@ -73,7 +73,7 @@ ishlatiladigan standalone admin dashboard · `backend/` — Express + MongoDB AP
 
 Jonli manzillar (2026-09-13): backend — **Render**
 `https://huquq-ai-7v7a.onrender.com` (Railway manzili o'chgan, 404) · frontend —
-`https://huquq-ai-teal.vercel.app` · admin — `https://huquq-ai-yalg.vercel.app`.
+`https://huquqtech.uz` (zaxira: `https://huquq-ai-user.vercel.app`) · admin — `https://huquq-ai-admin.vercel.app`.
 
 ## ⚠️ Muhim tuzoqlar (har doim amal qiling)
 
