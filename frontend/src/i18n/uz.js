@@ -299,7 +299,8 @@ const uz = {
   cancel_plan_error: "Xatolik yuz berdi, qayta urinib ko'ring",
   // ── To'lov usulini tanlash oynasi (PaymentMethodModal) ──
   order_desc: "Ma'lumotlaringizni tasdiqlang — admin siz bilan Telegram orqali bog'lanib, to'lov tartibini tushuntiradi.",
-  order_tg_label: "Telegram username (ixtiyoriy)",
+  order_tg_label: "Telegram username",
+  order_tg_invalid: "Telegram username'ni to'g'ri kiriting (masalan: @username)",
   order_submit: "Buyurtma berish",
   order_sending: "Yuborilmoqda...",
   order_note: "Ma'lumotlaringiz faqat siz bilan bog'lanish uchun ishlatiladi",
@@ -340,9 +341,9 @@ const uz = {
   brand_sub: "Huquqiy ta'lim platformasi",
   nav_logo: "HuquqTech",
   // ── SEO (components/Seo.jsx orqali <title>/<meta> ga yoziladi) ──
-  seo_home_title: "O'zbekiston qonunchiligi bo'yicha AI huquqiy maslahatchi",
+  seo_home_title: "Huquq darsliklari, huquqiy testlar va AI huquqiy maslahatchi",
   seo_home_desc:
-    "Mehnat, oila, meros, yer va jinoyat huquqi bo'yicha savollaringizga O'zbekiston qonun moddalariga asoslangan aniq javob oling. Bepul boshlang — ro'yxatdan o'tish 1 daqiqa.",
+    "O'zbekiston qonunchiligi bo'yicha 130 ta huquq darsi, javoblari bilan huquqiy testlar va AI maslahatchi. Mehnat, oila, meros, yer va jinoyat huquqi bo'yicha savolingizga qonun moddasiga tayangan javob oling. Bepul boshlang.",
   seo_login_title: "Hisobga kirish",
   seo_register_title: "Ro'yxatdan o'tish",
   seo_lessons_title: "Huquqiy darslar",
@@ -352,7 +353,7 @@ const uz = {
   seo_legal_desc:
     "HuquqTech platformasidan foydalanish qoidalari, maxfiylik siyosati va sun'iy intellekt javoblariga oid rasmiy bildirishnoma.",
   seo_home_keywords:
-    "HuquqTech, yuridik maslahat O'zbekiston, onlayn yurist, O'zbekiston qonunchiligi, mehnat kodeksi, oila kodeksi, meros huquqi, iste'molchi huquqlari, huquqiy yordam onlayn, sun'iy intellekt yurist",
+    "HuquqTech, huquq darslik, huquq darslari, huquqiy ta'lim, huquq bo'yicha test, huquqiy test javoblari bilan, yuridik maslahat O'zbekiston, onlayn yurist, O'zbekiston qonunchiligi, mehnat kodeksi, oila kodeksi, meros huquqi, iste'molchi huquqlari, huquqiy yordam onlayn, sun'iy intellekt yurist",
 
   // ── SMO: ulashish paneli (components/ShareBar.jsx) ──
   share_label: "Ulashish:",
@@ -776,6 +777,8 @@ const uz = {
   footer_public_laws: "Qonunlar matni",
   footer_public_acts: "Prezident hujjatlari",
   footer_qa: "Savol-javob",
+  footer_public_lessons: "Huquq darslari",
+  footer_public_tests: "Huquqiy testlar",
   footer_method: "Metodologiya",
   footer_ssl: "SSL himoyalangan",
   footer_made_in: "O'zbekistonda ishlab chiqilgan",
@@ -1168,7 +1171,7 @@ const uz = {
 
   pricing_feature_daily: "Kuniga {n} ta savol",
   pricing_feature_ai_standard: "Standart AI",
-  pricing_feature_ai_premium: "Premium AI (Claude) — chuqurroq, professional javoblar",
+  pricing_feature_ai_premium: "Premium AI — chuqurroq, professional javoblar",
   /* ⚠️ Bu ro'yxatlar backendda HAQIQATDA majburlanadigan imkoniyatlarni
      aks ettiradi (`backend/config/plans.js`). Amalga oshirilmagan
      narsani ("reklama", "suhbat tarixi muddati", "xatolar tahlili")
@@ -1191,14 +1194,14 @@ const uz = {
     "Kuniga 200 ta AI savoli",
     "30 ta dars ochiladi",
     "BARCHA amaliy testlar — cheklovsiz",
-    "Premium AI (Claude) — chuqurroq javoblar",
+    "Premium AI — chuqurroq va aniqroq javoblar",
     "Kuniga 15 ta ovozli savol",
   ],
   pricing_features_premium: [
     "Kuniga 500 ta AI savoli",
     "BARCHA darslar — cheklovsiz",
     "BARCHA amaliy testlar — cheklovsiz",
-    "Premium AI (Claude) — chuqurroq javoblar",
+    "Premium AI — chuqurroq va aniqroq javoblar",
     "Kuniga 30 ta ovozli savol",
   ],
 
@@ -1239,7 +1242,7 @@ const uz = {
   whyus_title: "Nima uchun aynan HuquqTech",
   whyus_subtitle: "Oddiy qidiruv yoki umumiy chatbotlardan farqli — biz aniq muammoingizga mos yechim beramiz.",
   whyus_1_title: "Mutaxassis darajasidagi tahlil",
-  whyus_1_desc: "Pro tarifda so'rovlaringiz Claude — dunyodagi eng ilg'or AI modellaridan biriga yo'naltiriladi.",
+  whyus_1_desc: "Pro va Premium tariflarda savollaringiz chuqurroq tahlil qilinadi — javob O'zbekiston qonunchiligining rasmiy matniga tayanadi.",
   whyus_2_title: "To'liq maxfiylik",
   whyus_2_desc: "Suhbatlaringiz shaxsiy va himoyalangan — uchinchi shaxslarga oshkor qilinmaydi.",
   whyus_3_title: "Tabiiy o'zbek tili",
@@ -1249,17 +1252,28 @@ const uz = {
 
   // ── Foydalanuvchilar fikrlari (placeholder) ──
   testimonials_title: "Foydalanuvchilar fikri",
-  testimonials_subtitle: "HuquqTech'dan foydalanganlar shunday deydi",
-  testimonials_note: "* Namunaviy fikrlar — loyiha rivojlanishi bilan haqiqiy sharhlar bilan almashtiriladi",
-  test_1_name: "Dilnoza R.",
-  test_1_role: "Tadbirkor",
-  test_1_text: "Shartnomamdagi noaniq bandni bir necha daqiqada tushuntirib berdi. Advokatga borishdan oldin juda foydali bo'ldi.",
-  test_2_name: "Jasur T.",
-  test_2_role: "Xodim",
-  test_2_text: "Ishdan noqonuniy bo'shatilganimda nima qilishni bilmasdim. AI aniq qadamlarni ko'rsatdi, huquqlarimni himoya qildim.",
-  test_3_name: "Malika A.",
-  test_3_role: "Talaba",
-  test_3_text: "Kechqurun kech bo'lsa ham javob oldim. Oddiy tilda tushuntirgani juda yoqdi.",
+  testimonials_subtitle: "HuquqTech'dan foydalangan haqiqiy foydalanuvchilarning sharhlari",
+  reviews_avg: "{avg} / 5 · {n} ta sharh",
+  reviews_empty_title: "Hozircha sharhlar yo'q",
+  reviews_empty_text: "HuquqTech sizga yordam berdimi? Birinchi bo'lib fikringizni qoldiring — sharh moderatsiyadan so'ng shu yerda chiqadi.",
+  reviews_cta: "Fikr qoldirish",
+  reviews_cta_guest: "Kirib, fikr qoldirish",
+  reviews_edit: "Sharhimni tahrirlash",
+  reviews_more: "Barcha sharhlar",
+  reviews_pending: "Sharhingiz moderatsiyada — admin tasdiqlagach saytda chiqadi",
+  reviews_rejected: "Sharhingiz tasdiqlanmadi — tahrirlab qayta yuborishingiz mumkin",
+  review_modal_title: "Fikringizni qoldiring",
+  review_modal_lead: "Sharhingiz admin tekshiruvidan so'ng saytda ko'rinadi.",
+  review_rating: "Baho",
+  review_text_label: "Sharh",
+  review_text_ph: "HuquqTech sizga qanday yordam berdi?",
+  review_role_label: "Kasbingiz (ixtiyoriy)",
+  review_role_ph: "Masalan: Tadbirkor, Talaba",
+  review_submit: "Sharhni yuborish",
+  review_min: "Sharh kamida 20 ta belgidan iborat bo'lsin",
+  review_note: "Saytda ismingiz va familiyangizning bosh harfi ko'rsatiladi",
+  review_success_title: "Rahmat!",
+  review_success_text: "Sharhingiz qabul qilindi. Admin tasdiqlagandan so'ng u saytda ko'rinadi.",
 
   // ── FAQ ──
   faq_title: "Ko'p beriladigan savollar",
@@ -1269,7 +1283,7 @@ const uz = {
   faq_2_q: "Ma'lumotlarim maxfiymi?",
   faq_2_a: "Ha. Suhbatlaringiz shaxsiy hisobingizga bog'liq va uchinchi shaxslarga oshkor qilinmaydi.",
   faq_3_q: "Pro tarifda oddiy tarifdan nima farq qiladi?",
-  faq_3_a: "Pro va Premium tariflarda so'rovlaringiz kuchliroq AI modeliga (Claude) yo'naltiriladi — bu chuqurroq, aniqroq va professionalroq javoblar degani. Shuningdek kunlik savol limiti ham ancha yuqori.",
+  faq_3_a: "Pro va Premium tariflarda so'rovlaringiz kuchliroq AI tahliliga yo'naltiriladi — bu chuqurroq, aniqroq va professionalroq javoblar degani. Shuningdek kunlik savol limiti ham ancha yuqori.",
   faq_4_q: "To'lovni qanday amalga oshiraman?",
   faq_4_a: "Narxlar bo'limida tarifni tanlab «Sotib olish» tugmasini bosing va ism hamda telefon raqamingizni qoldiring — admin siz bilan Telegram orqali bog'lanib, to'lov tartibini tushuntiradi. To'lovdan so'ng tarifingiz yoqiladi.",
   faq_5_q: "Bepul tarifda nima beriladi?",

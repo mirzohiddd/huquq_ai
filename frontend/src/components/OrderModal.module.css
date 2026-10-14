@@ -26,6 +26,12 @@
   min-width: 0;
 }
 
+/* Majburiy maydon belgisi — yorliqning chap tomonida */
+.req {
+  color: #dc2626;
+  margin-right: 3px;
+}
+
 .input {
   width: 100%;
   min-width: 0;

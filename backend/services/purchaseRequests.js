@@ -53,6 +53,15 @@ function adminKeyboard(r) {
 /**
  * @returns {Promise<{ok:true, request, duplicate?:boolean} | {ok:false, status:number, error:string, field?:string}>}
  */
+// Telegram username: 5–32 belgi, lotin harf, raqam va "_"
+const TG_USERNAME_RE = /^[A-Za-z0-9_]{5,32}$/;
+const normalizeTgUsername = (v) =>
+  String(v || "")
+    .trim()
+    .replace(/^(https?:\/\/)?(t\.me|telegram\.me)\//i, "")
+    .replace(/^@/, "")
+    .slice(0, 64);
+
 async function createPurchaseRequest({
   userId,
   tier,
@@ -73,6 +82,12 @@ async function createPurchaseRequest({
   if (!ln && source !== "telegram")
     return { ok: false, status: 400, field: "lastName", error: "Familiyangizni to'g'ri kiriting" };
   if (!ph) return { ok: false, status: 400, field: "phone", error: "Telefon raqamini to'g'ri kiriting (masalan: +998 90 123 45 67)" };
+  /* Saytdan buyurtmada Telegram username MAJBURIY (2026-10-14) — admin
+     mijozga aynan Telegram orqali yozadi. Botdan kelganda shart emas:
+     u yerda `telegramId` bor va admin chatni ID orqali ochadi. */
+  const tg = normalizeTgUsername(telegramUsername);
+  if (source !== "telegram" && !TG_USERNAME_RE.test(tg))
+    return { ok: false, status: 400, field: "telegramUsername", error: "Telegram username'ni to'g'ri kiriting (masalan: @username)" };
 
   const user = userId ? await User.findById(userId) : null;
 
@@ -102,9 +117,7 @@ async function createPurchaseRequest({
     firstName: fn,
     lastName: ln,
     phone: ph,
-    telegramUsername: String(telegramUsername || user?.telegramUsername || "")
-      .replace(/^@/, "")
-      .slice(0, 64),
+    telegramUsername: tg || normalizeTgUsername(user?.telegramUsername),
     telegramId: String(telegramId || user?.telegramId || ""),
     source,
     note: String(note || "").trim().slice(0, 500),

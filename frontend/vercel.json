@@ -55,6 +55,34 @@
       "destination": "https://huquq-ai-7v7a.onrender.com/public/sitemap-hujjatlar.xml"
     },
     {
+      "source": "/darslar.md",
+      "destination": "https://huquq-ai-7v7a.onrender.com/public/darslar.md"
+    },
+    {
+      "source": "/darslar",
+      "destination": "https://huquq-ai-7v7a.onrender.com/public/darslar"
+    },
+    {
+      "source": "/dars/:path*",
+      "destination": "https://huquq-ai-7v7a.onrender.com/public/dars/:path*"
+    },
+    {
+      "source": "/testlar.md",
+      "destination": "https://huquq-ai-7v7a.onrender.com/public/testlar.md"
+    },
+    {
+      "source": "/testlar",
+      "destination": "https://huquq-ai-7v7a.onrender.com/public/testlar"
+    },
+    {
+      "source": "/test/:path*",
+      "destination": "https://huquq-ai-7v7a.onrender.com/public/test/:path*"
+    },
+    {
+      "source": "/sitemap-darslar.xml",
+      "destination": "https://huquq-ai-7v7a.onrender.com/public/sitemap-darslar.xml"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

@@ -32,6 +32,13 @@ const ChatSchema = new mongoose.Schema(
     telegramUserId: { type: String, default: null },
     telegramUsername: { type: String, default: null },
     messages: [MessageSchema],
+    /* Oxirgi yuklangan hujjat matni (2026-10-14) — "shu hujjatdagi testga
+       javob ber" kabi davom savollari uchun (services/aiTools/docChat.js). */
+    docContext: {
+      name: { type: String, default: "" },
+      text: { type: String, default: "" },
+      at: { type: Date, default: null },
+    },
   },
   { timestamps: true },
 );

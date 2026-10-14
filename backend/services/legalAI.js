@@ -159,6 +159,11 @@ const LEGAL_SIGNALS = [
   // Modda/kodeks/hujjat atamalari — foydalanuvchi qonun matniga
   // to'g'ridan-to'g'ri ishora qilganda (masalan "35 modda nima haqida")
   /\bmodda|kodeks\w*|\bband\b|qonunchilik|normativ|huquqiy\s*hujjat/i,
+  /* (2026-10-14) Huquqiy atamalar — "Jinoiy javobgarlik umumiy qoidaga
+     ko'ra necha yoshdan boshlanadi?" kabi aniq huquqiy savol rad etilardi:
+     ro'yxatda "jinoyat" bor edi, "jinoiy"/"javobgarlik" yo'q edi. */
+  /jinoiy|javobgarlik|ma.muriy|konstitutsiya|fuqarolik\s*(kodeks|huquq|holat)|vorislik|merosxo.r|da.vo|ayblan|gumon\s*qilin|sudlan|hukm|tergov|prokuror|himoyachi|muomala\s*layoqat|vasiy|homiy|nafaqa|kafolat/i,
+  /уголовн|ответственност|конституци|наследств|истец|ответчик|обвиня|подозрева|приговор|следств|прокурор|адвокат|опек|пособи/i,
   // Notarial/bitim — ko'chmas mulk, meros va boshqa rasmiylashtirish
   /notarial|notarius|bitim|ro.yxatdan\s*o.t|reyestr|guvohnoma/i,
   // Iste'molchi huquqi — xarid, buyurtma, mahsulot bilan bog'liq nizolar
@@ -1403,6 +1408,15 @@ async function getLegalAdvice(
     hasImage: !!imageBase64,
     // "Qayta generatsiya" — boshqa manbadan muqobil javob (localAI/index.js)
     variant: opts.variant || 0,
+    /* Suhbat qatlami uchun (localAI/dialog.js, 2026-10-14): "qisqa javob
+       ber" qaysi savolga tegishli ekanini topish va oldingi javobni
+       so'zma-so'z takrorlamaslik uchun. */
+    userTurns: inDialog
+      ? history.filter((m) => m.role === "user").slice(-6).map((m) => String(m.content || ""))
+      : [],
+    prevAnswer: inDialog
+      ? String([...history].reverse().find((m) => m.role === "assistant")?.content || "")
+      : "",
   });
 }
 

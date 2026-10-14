@@ -35,6 +35,8 @@ const T = {
     home: "Bosh sahifa",
     laws: "Qonunlar",
     acts: "Prezident hujjatlari",
+    lessons: "Darslar",
+    tests: "Testlar",
     lawsTitle: "O'zbekiston qonunlari va kodekslari",
     lawsDesc:
       "O'zbekiston Respublikasining amaldagi kodekslari va qonunlari — " +
@@ -89,6 +91,8 @@ const T = {
     home: "Главная",
     laws: "Законы",
     acts: "Документы Президента",
+    lessons: "Уроки",
+    tests: "Тесты",
     lawsTitle: "Законы и кодексы Узбекистана",
     lawsDesc:
       "Действующие кодексы и законы Республики Узбекистан — полный " +
@@ -158,6 +162,11 @@ const path = {
   /* Prezident farmonlari, qarorlari, farmoyishlari (2026-10-03) */
   acts: (q = "") => `/hujjatlar${q}`,
   act: (docId) => `/hujjat/${encodeURIComponent(docId)}`,
+  /* Ochiq darslar va testlar (2026-10-14) */
+  lessons: () => "/darslar",
+  lesson: (slug) => `/dars/${encodeURIComponent(slug)}`,
+  tests: () => "/testlar",
+  test: (slug) => `/test/${encodeURIComponent(slug)}`,
 };
 
 module.exports = {

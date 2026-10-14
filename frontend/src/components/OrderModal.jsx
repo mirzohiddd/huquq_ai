@@ -7,6 +7,10 @@ import { formatPhoneInput, isPhoneComplete } from "../utils/phone";
 import m from "./PaymentMethodModal.module.css";
 import s from "./OrderModal.module.css";
 
+const TG_RE = /^[A-Za-z0-9_]{5,32}$/;
+// "@user", "t.me/user" yoki "https://t.me/user" — hammasi "user" ga
+const tgName = (v) => v.trim().replace(/^(https?:\/\/)?(t\.me|telegram\.me)\//i, "").replace(/^@/, "");
+
 /**
  * TARIF BUYURTMASI (2026-10-03).
  *
@@ -22,7 +26,7 @@ function initialForm(user) {
     firstName: user?.firstName || first,
     lastName: user?.lastName || rest.join(" "),
     phone: formatPhoneInput(user?.phone || "+998"),
-    telegramUsername: "",
+    telegramUsername: user?.telegramUsername ? `@${String(user.telegramUsername).replace(/^@/, "")}` : "",
   };
 }
 
@@ -48,6 +52,12 @@ export default function OrderModal({ tier, planLabel, priceUzs, onlinePayment, o
     if (!isPhoneComplete(form.phone)) {
       setErrField("phone");
       setErr(t.order_phone_invalid);
+      return;
+    }
+    // Admin mijozga Telegram orqali yozadi — username majburiy
+    if (!TG_RE.test(tgName(form.telegramUsername))) {
+      setErrField("telegramUsername");
+      setErr(t.order_tg_invalid);
       return;
     }
     setBusy(true);
@@ -121,9 +131,12 @@ export default function OrderModal({ tier, planLabel, priceUzs, onlinePayment, o
                 onChange={set("phone")} placeholder="+998 90 123 45 67" autoComplete="tel" required />
             </label>
             <label className={s.label}>
-              {t.order_tg_label}
-              <input className={s.input} value={form.telegramUsername} onChange={set("telegramUsername")}
-                placeholder="@username" autoComplete="off" />
+              <span>
+                <span className={s.req} aria-hidden="true">*</span>
+                {t.order_tg_label}
+              </span>
+              <input className={cls("telegramUsername")} value={form.telegramUsername}
+                onChange={set("telegramUsername")} placeholder="@username" autoComplete="off" required />
             </label>
 
             {err && <div className={m.err}>{err}</div>}

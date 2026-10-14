@@ -57,6 +57,19 @@ qonun matnini beradi. Manzil tuzilishi barqaror:
 - Rus tilidagi variant: manzil oxiriga `?lang=ru` qo'shiladi
 - Sayt xaritasi: https://huquqtech.uz/sitemap-qonunlar.xml
 
+## Huquq darslari va testlar (login shart emas)
+
+O'zbekiston qonunchiligi bo'yicha 130 ta dars (1 300+ mavzu) va izohli
+testlar: mehnat, oila, meros, uy-joy va yer, iste'molchi, soliq, ma'muriy,
+jinoyat huquqi, sud va himoya, Konstitutsiya. Har bir mavzu sodda tilda,
+hayotiy misol bilan va amaldagi kodeks moddasiga havola bilan.
+
+- [Barcha darslar](https://huquqtech.uz/darslar) · Markdown: `/darslar.md`
+- Bitta dars: `https://huquqtech.uz/dars/{slug}`
+- [Barcha testlar](https://huquqtech.uz/testlar) · Markdown: `/testlar.md`
+- Bitta test: `https://huquqtech.uz/test/{slug}` (namunaviy savollar javoblari bilan)
+- Sayt xaritasi: https://huquqtech.uz/sitemap-darslar.xml
+
 ## Prezident hujjatlari — farmon, qaror, farmoyish (login shart emas)
 
 O'zbekiston Respublikasi Prezidentining ~5 600 ta farmoni, qarori va

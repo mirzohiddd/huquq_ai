@@ -22,7 +22,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.0.0",
     "morgan": "^1.10.1",
-    "msedge-tts": "^2.0.5",
+    "msedge-tts": "^2.1.0",
     "multer": "^1.4.5-lts.1",
     "node-telegram-bot-api": "^0.67.0",
     "nodemailer": "^8.0.7",

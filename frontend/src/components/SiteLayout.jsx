@@ -632,6 +632,12 @@ export default function SiteLayout() {
                 <a href="/savollar">{t.footer_qa}</a>
               </li>
               <li>
+                <a href="/darslar">{t.footer_public_lessons}</a>
+              </li>
+              <li>
+                <a href="/testlar">{t.footer_public_tests}</a>
+              </li>
+              <li>
                 <Link to="/#articles">{t.nav_articles}</Link>
               </li>
               <li>

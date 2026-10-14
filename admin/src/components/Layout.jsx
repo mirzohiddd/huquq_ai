@@ -8,7 +8,7 @@ import BrandMark from "./BrandMark";
 import {
   LayoutDashboard, MessagesSquare, Users, CreditCard, ShoppingBag, BookOpen,
   ClipboardCheck, Scale, LifeBuoy, Settings, ChevronLeft, ChevronRight,
-  LogOut, UserRound,
+  LogOut, UserRound, MessageSquareQuote,
 } from "lucide-react";
 
 const NAV = [
@@ -17,6 +17,7 @@ const NAV = [
   { to: "/users",    icon: Users,           label: "Foydalanuvchilar" },
   { to: "/payments", icon: CreditCard,      label: "To'lovlar"        },
   { to: "/orders",   icon: ShoppingBag,     label: "Buyurtmalar"      },
+  { to: "/reviews",  icon: MessageSquareQuote, label: "Sharhlar"       },
   { to: "/lessons",  icon: BookOpen,        label: "Darslar"          },
   { to: "/tests",    icon: ClipboardCheck,  label: "Testlar"          },
   { to: "/laws",     icon: Scale,           label: "Qonunlar"         },

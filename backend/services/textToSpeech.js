@@ -9,6 +9,7 @@
  */
 
 const https = require("https");
+const { prepareSpeech } = require("./voiceText");
 
 const GOOGLE_VOICES = {
   uz: { languageCode: "uz-UZ", name: "uz-UZ-Standard-A", ssmlGender: "MALE" },
@@ -194,6 +195,10 @@ async function tryEdgeTTS(clean, lang) {
     throw new Error("msedge-tts paketi o'rnatilmagan");
   }
   const { MsEdgeTTS: TTS, OUTPUT_FORMAT } = MsEdgeTTS;
+  /* ⚠️ msedge-tts ≥ 2.1.0 SHART (2026-10-14): Microsoft ulanishga
+     yangi sarlavhalar talab qila boshladi va 2.0.5 har so'rovda 403
+     olardi — natijada BARCHA provayderlar yiqilib, "Eshitish" 503
+     qaytarardi. */
   const tts = new TTS();
   await tts.setMetadata(voice, OUTPUT_FORMAT.AUDIO_24KHZ_48KBITRATE_MONO_MP3);
   return new Promise((resolve, reject) => {
@@ -377,7 +382,8 @@ function orderProviders(providers, raw) {
 }
 
 async function textToSpeech(text, lang = "uz") {
-  const clean = cleanText(text);
+  // Talaffuz uchun tayyorlash (apostroflar, tartib sonlar, pauzalar) — voiceText.js
+  const clean = cleanText(prepareSpeech(text, lang));
   if (!clean) return null;
 
   /* ⚠️ TARTIB O'ZGARTIRILDI (2026-08-15) — har bir provayder HAQIQIY
@@ -398,7 +404,16 @@ async function textToSpeech(text, lang = "uz") {
        · HuggingFace MMS — `api-inference.huggingface.co` endi mavjud emas (DNS)
        · StreamElements  — endi avtorizatsiya talab qiladi (401) */
   const providers = [
-    { name: "Microsoft Edge TTS", fn: () => tryEdgeTTS(clean, lang) },
+    /* ⚠️ (2026-10-14) Edge ulanishi ba'zan sintez tugamasdan uziladi
+       ("no turn.end received") — ikkinchi urinish deyarli doim o'tadi.
+       Shu sababli 503 ga tushishdan oldin bir marta qayta uriniladi. */
+    {
+      name: "Microsoft Edge TTS",
+      fn: () =>
+        tryEdgeTTS(clean, lang)
+          .catch(() => tryEdgeTTS(clean, lang))
+          .catch(() => tryEdgeTTS(clean, lang)),
+    },
     { name: "Google Cloud TTS", fn: () => tryGoogleCloud(clean, lang) },
     {
       name: "Gemini 2.5 Flash",
@@ -418,7 +433,16 @@ async function textToSpeech(text, lang = "uz") {
      `EMAIL_PROVIDER_ORDER` bilan bir xil naqsh. Kvotalar kundan kunga
      o'zgargani uchun tartibni kodga tegmasdan almashtira olish kerak.
      Ro'yxatda ko'rsatilmagan provayderlar oxirida qoladi. */
-  const ordered = orderProviders(providers, process.env.TTS_PROVIDER_ORDER);
+  /* ⚠️ O'zbek tilida Gemini ISHLATILMAYDI (2026-10-14): u o'zbekchani turk/
+     ozarbayjon talaffuzida o'qiydi ("tuziladi" → "tüzülədi") — foydalanuvchi
+     buni "tili chuchuk, kasal odamdek" deb ta'rifladi. Edge 403 bilan
+     yiqilganda zanjir aynan shunga tushardi. Yomon ovozdan ko'ra aniq xato
+     yaxshiroq. Kerak bo'lsa: TTS_ALLOW_GEMINI_UZ=true. */
+  const usable =
+    lang === "uz" && process.env.TTS_ALLOW_GEMINI_UZ !== "true"
+      ? providers.filter((p) => !p.name.startsWith("Gemini"))
+      : providers;
+  const ordered = orderProviders(usable, process.env.TTS_PROVIDER_ORDER);
 
   for (const p of ordered) {
     try {

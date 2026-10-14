@@ -9,6 +9,7 @@ import ChatDetail       from "./pages/ChatDetail";
 import Users            from "./pages/Users";
 import Payments         from "./pages/Payments";
 import Orders           from "./pages/Orders";
+import Reviews          from "./pages/Reviews";
 import Settings         from "./pages/Settings";
 import SupportMessages  from "./pages/SupportMessages";
 import Lessons          from "./pages/Lessons";
@@ -36,6 +37,7 @@ export default function App() {
         <Route path="users"            element={<Users />} />
         <Route path="payments"         element={<Payments />} />
         <Route path="orders"           element={<Orders />} />
+        <Route path="reviews"          element={<Reviews />} />
         <Route path="lessons"          element={<Lessons />} />
         <Route path="tests"            element={<Tests />} />
         <Route path="laws"             element={<Laws />} />

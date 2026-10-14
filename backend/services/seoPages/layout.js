@@ -152,8 +152,10 @@ function page({
           ${SITE_NAME}
         </a>
         <span class="nav-sp"></span>
+        <a class="navlink" href="${P.lessons()}">${esc(t.lessons)}</a>
+        <a class="navlink" href="${P.tests()}">${esc(t.tests)}</a>
         <a class="navlink" href="${P.laws()}">${esc(t.laws)}</a>
-        <a class="navlink" href="${P.acts()}">${esc(t.acts)}</a>
+        <a class="navlink opt" href="${P.acts()}">${esc(t.acts)}</a>
         <a class="navlink" href="${P.qaIndex()}">${esc(t.qa)}</a>
         ${altLangs ? `<a class="navlink" href="${esc(altLangUrl(lang === "uz" ? "ru" : "uz"))}" rel="alternate">${esc(t.lang)}</a>` : ""}
         <a class="cta" href="${SITE_URL}/#pricing">${esc(t.ctaBtn)}</a>
@@ -163,6 +165,8 @@ function page({
     <footer>
       <div class="wrap">
         <a href="${SITE_URL}/">${esc(t.home)}</a>
+        <a href="${P.lessons()}">${esc(t.lessons)}</a>
+        <a href="${P.tests()}">${esc(t.tests)}</a>
         <a href="${P.laws()}">${esc(t.laws)}</a>
         <a href="${P.acts()}">${esc(t.acts)}</a>
         <a href="${P.qaIndex()}">${esc(t.qa)}</a>

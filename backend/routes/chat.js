@@ -15,6 +15,7 @@ const {
 const { getClientIp } = require("../middleware/security");
 const { notifyLimitReached } = require("./notifications");
 const mongoose = require("mongoose");
+const { docAnswer } = require("../services/aiTools/docChat");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
@@ -137,14 +138,25 @@ router.post(
         : await User.findById(userId).select("plan planExpiresAt").lean();
       const isPro = isUserPro(authUserDoc);
 
-      const { answer, category, provider } = await getLegalAdvice(
-        trimmed,
-        chat.messages,
-        imageBase64,
-        imageMimeType,
-        lang,
-        isPro,
-      );
+      /* Suhbatda yuklangan hujjat bo'lsa va savol unga ishora qilsa
+         ("shu hujjatdagi testga javob ber") — javob hujjat matnidan
+         (services/aiTools/docChat.js, 2026-10-14). */
+      const docReply = imageBase64
+        ? null
+        : await docAnswer(chat, trimmed, lang).catch((e) => {
+            console.warn("docAnswer xato:", e.message);
+            return null;
+          });
+      const { answer, category, provider } = docReply
+        ? { answer: docReply, category: "boshqa", provider: "local" }
+        : await getLegalAdvice(
+            trimmed,
+            chat.messages,
+            imageBase64,
+            imageMimeType,
+            lang,
+            isPro,
+          );
 
       const userContent = req.file ? `[Rasm] ${trimmed}` : trimmed;
       const userMsg = { role: "user", content: userContent };
@@ -249,14 +261,11 @@ router.post("/send", optionalUserGuard, mobileLimitGuard, async (req, res) => {
       isPro = isUserPro(authUserDoc);
     }
 
-    const { answer, category, provider } = await getLegalAdvice(
-      trimmed,
-      chat.messages,
-      null,
-      null,
-      lang,
-      isPro,
-    );
+    // Yuklangan hujjatga oid savol — hujjat matnidan (docChat.js)
+    const docReply = await docAnswer(chat, trimmed, lang).catch(() => null);
+    const { answer, category, provider } = docReply
+      ? { answer: docReply, category: "boshqa", provider: "local" }
+      : await getLegalAdvice(trimmed, chat.messages, null, null, lang, isPro);
 
     chat.messages.push({ role: "user", content: trimmed });
     chat.messages.push({ role: "assistant", content: answer });

@@ -72,6 +72,8 @@ const STOP = new Set(
     "etgan etilgan etilishi etsa qilinadi qilingan qilindi boladimi " +
     "modda moddasi moddasiga kodeks kodeksi kodeksiga respublikasi " +
     "ozbekiston ozbekistonda davlat bugun ertaga kecha hozir " +
+    // Test savollaridagi umumiy iboralar ("umumiy qoidaga ko'ra … boshlanadi") — 2026-10-14
+    "kora qoidaga boshlanadi boshlanadimi hisoblanadi belgilangan belgilanadi " +
     "и или но а для с со на в во по из у к о об от до за при мне меня мой " +
     "вы вас ваш мы нам это этот тут здесь там очень ещё еще только нужно " +
     "можно пожалуйста скажите подскажите про что какой какая какие как кто " +

@@ -2,7 +2,16 @@
 const { cleanText } = require("./textToSpeech");
 
 function formatForVoice(text) {
-  let r = cleanText(text);
+  /* Izoh/manba satrlari ("📖 Moddalarning to'liq matni…", "_Javob faqat…_",
+     "…") ovozda o'qilmaydi — ular faqat ekran uchun. Qatorlar hali
+     birlashtirilmasdan OLDIN olib tashlanadi (2026-10-14). */
+  const body = String(text)
+    .split("\n")
+    .filter((l) => !/^\s*(📖|_.*_\s*$|…\s*$)/u.test(l))
+    // Sarlavha/band oxirida tinish belgisi yo'q — pauza uchun nuqta
+    .map((l) => (l.trim() && !/[.!?:;,]\**\s*$/.test(l) ? `${l.replace(/\s+$/, "")}.` : l))
+    .join("\n");
+  let r = cleanText(body);
   r = r.replace(/^\d+\.\s+/gm, "");
   return r;
 }

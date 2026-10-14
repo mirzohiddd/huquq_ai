@@ -1,0 +1,65 @@
+/* Sharh oynasi — qobiq PaymentMethodModal.module.css dan,
+   maydonlar OrderModal.module.css dan; bu yerda faqat qo'shimchalar. */
+
+.card {
+  max-width: 460px;
+  max-height: calc(100dvh - 2.5rem);
+  overflow-y: auto;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--navy);
+  text-align: center;
+  margin: 0 0 0.4rem;
+}
+
+.stars {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  margin: 0 0 1.1rem;
+}
+
+.starBtn {
+  padding: 4px;
+  border-radius: 8px;
+  line-height: 0;
+  transition: transform 0.15s ease;
+}
+.starBtn:hover {
+  transform: scale(1.12);
+}
+.starBtn:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.starOn {
+  color: var(--gold);
+  fill: var(--gold);
+}
+.starOff {
+  color: var(--gray-200);
+  fill: transparent;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 110px;
+  line-height: 1.6;
+}
+
+.counter {
+  align-self: flex-end;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--gray-400);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .starBtn {
+    transition: none;
+  }
+}

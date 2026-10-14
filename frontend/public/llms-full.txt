@@ -79,6 +79,10 @@ Shaharsozlik, Soliq, Budjet, Bojxona, Havo, Saylov kodekslari va
 - **AI baholovchi topshiriqlar** — yozma javob, savol-javob, moddani
   yodlash, amaliy vaziyat va og'zaki (mikrofon orqali) javob.
 - **Testlar** — har bir savolga izoh bilan.
+- **Ochiq sahifalar (login shart emas):** darslar katalogi
+  https://huquqtech.uz/darslar (har darsning maqsadlari, to'liq mundarijasi
+  va birinchi mavzulari) va testlar https://huquqtech.uz/testlar
+  (namunaviy savollar to'g'ri javob va izohi bilan).
 
 --------------------------------------------------------------------------
 ## 5. Tariflar
@@ -90,8 +94,8 @@ Platformada to'rtta tarif bor: **Bepul**, **Basic**, **Pro**, **Premium**.
   yo'naltiriladi — chuqurroq va aniqroq javoblar.
 - Limit **avtomatik**, tarifga bog'liq: foydalanuvchi tarifni sotib
   olganda tegishli limit o'zi beriladi.
-- Sotib olish: Narxlar bo'limida «Sotib olish» → ism va telefon
-  qoldiriladi → admin Telegram orqali bog'lanib, to'lovni tushuntiradi.
+- Sotib olish: Narxlar bo'limida «Sotib olish» → ism, telefon va Telegram
+  username qoldiriladi → admin Telegram orqali bog'lanib, to'lovni tushuntiradi.
 - Bepul tarifda bank kartasi talab qilinmaydi.
 
 Joriy narxlar va limitlar: https://huquqtech.uz/#pricing

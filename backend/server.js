@@ -305,6 +305,9 @@ app.use("/api/voice", require("./routes/voice"));
 // Buyurtmalar — admin qismi `/api/admin` dan OLDIN ulanadi (aniq yo'l)
 app.use("/api/orders", require("./routes/orders").router);
 app.use("/api/admin/orders", require("./routes/orders").adminRouter);
+// Sharhlar — admin qismi ham `/api/admin` dan OLDIN (aniq yo'l)
+app.use("/api/reviews", require("./routes/reviews").router);
+app.use("/api/admin/reviews", require("./routes/reviews").adminRouter);
 app.use("/api/admin", require("./routes/admin"));
 app.use("/api/visitor", require("./routes/visitor"));
 app.use("/api/site", require("./routes/site"));
@@ -341,6 +344,8 @@ app.use("/public", require("./routes/publicSeo"));
 app.use("/public", require("./routes/publicQa"));
 // Prezident farmon/qaror/farmoyishlari — ochiq SEO sahifalar (2026-10-03)
 app.use("/public", require("./routes/publicActs"));
+// Ochiq darslar va testlar — "huquq darslik/test" qidiruvlari uchun (2026-10-14)
+app.use("/public", require("./routes/publicLearn"));
 
 /* ⚠️ Backend domenining O'ZI (up.railway.app) indekslanmasligi kerak —
    aks holda bir xil sahifa ikki manzilda turib, "duplicate content"

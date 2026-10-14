@@ -9,6 +9,7 @@
  */
 const { detectType, facts, riskClauses, summary, keywords, TYPE_CODES } = require("./docFacts");
 const { lawState, clip } = require("./material");
+const { answerSheet, parseQuestions, isTestLike } = require("./docQA");
 const { searchLaws } = require("../localAI/search");
 const { detectSituation, pinnedDocs } = require("../localAI/situations");
 const { parseArticleNumbers, parseLawCodes } = require("../articleLookup");
@@ -92,6 +93,17 @@ async function analyzeDocument({ text = "", lang = "uz", kind = "pdf", pages, fi
   if (clean.length < 20) {
     const body = kind === "image" ? `${L.imgNoText}${description ? `\n\n${L.imgSeen}: ${description}` : ""}` : L.empty;
     return { answer: `${title}\n\n${body}`, data: { empty: true } };
+  }
+
+  /* TEST HUJJATI (2026-10-14): raqamlangan savollar va A)/B) variantlar
+     topilsa — bu shartnoma emas, test. Avval u "Mehnat shartnomasi" deb
+     turlanardi. Foydalanuvchiga darhol javoblar varaqasi beriladi. */
+  const qs = parseQuestions(clean);
+  // Shartnomadagi "1. … a) … b)" bandlari test emas — savollarning ko'pi "?" bilan tugaydi
+  if (qs.length >= 3 && isTestLike(qs)) {
+    const sheet = await answerSheet(clean, fileName, lang);
+    const typeLine = lang === "ru" ? `**${L.type}:** тест (${qs.length} вопросов)` : `**${L.type}:** test (${qs.length} ta savol)`;
+    return { answer: [title, typeLine, sheet].join("\n\n"), data: { type: "test", questions: qs.length } };
   }
 
   const state = await lawState();

@@ -65,6 +65,12 @@ Allow: /metodologiya
 # ochiq ma'lumot. Ilova ichidagi /legislation (qidiruv) — login bilan.
 Allow: /hujjatlar
 Allow: /hujjat/
+# Ochiq darslar va testlar (2026-10-14) — /lessons va /tests (login) dan
+# FARQLI manzillar: kirish qismi va namunaviy savollar ochiq.
+Allow: /darslar
+Allow: /dars/
+Allow: /testlar
+Allow: /test/
 
 # LLM uchun toza matn nusxalari (`.md`). Ular HTML sahifaning AYNAN
 # o'zi, faqat navigatsiya va uslubsiz — takroriy kontent emas, chunki

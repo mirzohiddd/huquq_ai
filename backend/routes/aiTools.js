@@ -24,6 +24,7 @@ const { buildQuiz } = require("../services/aiTools/quiz");
 const { buildLessonPlan } = require("../services/aiTools/lessonPlan");
 const { extractText } = require("../services/aiTools/extract");
 const { analyzeDocument } = require("../services/aiTools/docAnalysis");
+const { attachDoc } = require("../services/aiTools/docChat");
 const { topicToUz } = require("../services/aiTools/audience");
 
 const ALLOWED = ["application/pdf", "text/plain", "text/markdown", "image/jpeg", "image/png", "image/webp"];
@@ -114,6 +115,8 @@ router.post("/analyze", optionalUserGuard, uploadSingle, webLimitGuard, async (r
     if (!chat) chat = new Chat({ sessionId, userId, source: "web", messages: [] });
     const label = extracted.kind === "image" ? (lang === "ru" ? "Анализ изображения" : "Rasm tahlili") : lang === "ru" ? "Анализ документа" : "Hujjat tahlili";
     chat.messages.push({ role: "user", content: `${label}: ${fileName}`, attachment: fileName });
+    // Hujjat matni suhbatga bog'lanadi — keyingi savollar unga tayanadi (docChat.js)
+    attachDoc(chat, extracted, fileName);
     chat.messages.push({ role: "assistant", content: answer });
     if (chat.messages.length > 200) chat.messages = chat.messages.slice(-200);
     await chat.save();

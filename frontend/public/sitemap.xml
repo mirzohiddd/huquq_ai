@@ -32,4 +32,8 @@
   <sitemap>
     <loc>https://huquqtech.uz/sitemap-hujjatlar.xml</loc>
   </sitemap>
+  <!-- Ochiq darslar (130) va testlar — backend `routes/publicLearn.js` (2026-10-14) -->
+  <sitemap>
+    <loc>https://huquqtech.uz/sitemap-darslar.xml</loc>
+  </sitemap>
 </sitemapindex>

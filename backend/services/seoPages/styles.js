@@ -153,6 +153,21 @@ footer a:hover{color:var(--gold-soft)}
 .srOnly{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);
   white-space:nowrap}
 
+/* ── Ochiq darslar va testlar (learnPages.js, quizPages.js) ── */
+.card h3{font-size:15px;margin:18px 0 8px}
+.card ul,.card ol{margin:0;padding-left:22px}
+.card li{margin:4px 0}
+ol.toc li{color:var(--muted)}
+ol.toc a{color:var(--ink);font-weight:500}
+ol.opts{list-style:none;padding:0}
+ol.opts li{border:1px solid var(--line);border-radius:10px;padding:9px 13px;margin:7px 0}
+ol.opts b{color:var(--gold);margin-right:6px}
+details{margin-top:12px;background:#fffdf6;border:1px solid rgba(197,139,28,.35);
+  border-radius:10px;padding:10px 14px}
+summary{cursor:pointer;font-weight:600;color:#a06f0c}
+details p{margin:8px 0 0}
+@media(max-width:1020px){.nav a.navlink.opt{display:none}}
+
 @media(max-width:640px){
   .nav .wrap{height:56px;gap:10px}
   .nav a.navlink{display:none}

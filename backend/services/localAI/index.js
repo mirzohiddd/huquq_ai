@@ -86,7 +86,7 @@ async function alternative({ query, uz, exact, lang, codes, strict, skipTopics, 
  *           strict?: boolean }} p
  * @returns {Promise<{ answer: string, category: string, provider: string, found: boolean }>}
  */
-async function localLegalAnswer({
+async function baseLegalAnswer({
   msg,
   prevUserText = "",
   lang = "uz",
@@ -179,5 +179,9 @@ async function localLegalAnswer({
     return { answer: L.notFound, category, provider: "local", found: false };
   }
 }
+
+// Uslub buyruqlari ("qisqa javob ber") va takror javoblar — dialog.js
+const { withDialog } = require("./dialog");
+const localLegalAnswer = withDialog(baseLegalAnswer);
 
 module.exports = { localLegalAnswer, warmLawIndex };
