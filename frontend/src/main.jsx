@@ -5,6 +5,8 @@ import App from "./App";
 import "./styles/global.css";
 // PWA: `beforeinstallprompt` ni React chizilishidan OLDIN ushlash uchun
 import "./utils/pwaInstall";
+// Yangi deploy'dan keyin eski lazy bo'lak topilmasa — bir marta yangilash
+import "./utils/chunkReload";
 import { loadLang } from "./i18n/translations";
 import { readStoredLang } from "./context/LangContext";
 
