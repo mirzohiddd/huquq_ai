@@ -1,9 +1,9 @@
 "use strict";
 /**
  * Voice Routes
- * POST /api/voice/chat       — audio → STT → AI → TTS → audio
+ * POST /api/voice/chat       — audio → STT → AI → matn javob
  * POST /api/voice/transcribe — audio → matn
- * POST /api/voice/speak      — matn → audio
+ * POST /api/voice/speak      — O'CHIRILGAN (410), sun'iy ovoz yo'q
  */
 
 const router = require("express").Router();
@@ -13,14 +13,10 @@ const fs = require("fs");
 const os = require("os");
 
 const { speechToText } = require("../services/speechToText");
-const { textToSpeech } = require("../services/textToSpeech");
-const { formatResponse } = require("../services/responseFormatter");
-const { getLegalAdvice, detectLanguage } = require("../services/legalAI");
+const { getLegalAdvice } = require("../services/legalAI");
 const { repairTranscript } = require("../services/voiceTranscript");
-const { getCached, setCached, takeToken } = require("../services/ttsCache");
 const { optionalUserGuard, userGuard } = require("../middleware/auth");
 const { voiceLimitGuard } = require("../middleware/usageLimit");
-const { getClientIp } = require("../middleware/security");
 
 // ── Multer storage ────────────────────────────────────────────
 const storage = multer.diskStorage({
@@ -103,50 +99,14 @@ router.post(
         { fromVoice: true },
       );
 
-      // 4. TTS — javob → audio
-      const voiceText = formatResponse(answer, "voice");
-      console.log(
-        "TTS boshlandi, lang:",
-        detectedLang || lang,
-        "EL key:",
-        !!process.env.ELEVENLABS_API_KEY,
-      );
-      const ttsResult = await textToSpeech(
-        voiceText,
-        detectedLang || lang,
-        voiceId,
-      );
-      console.log(
-        "TTS natija:",
-        ttsResult ? "buffer " + ttsResult.buffer?.length + " bytes" : "null",
-      );
-
-      if (ttsResult?.buffer) {
-        res.set({
-          "Content-Type": ttsResult.contentType || "audio/mpeg",
-          "Content-Length": ttsResult.buffer.length,
-          "X-User-Text": encodeURIComponent(userText.slice(0, 300)),
-          "X-Text-Answer": encodeURIComponent(answer.slice(0, 500)),
-          "X-Language": detectedLang || lang,
-          "X-Category": category || "",
-          "Access-Control-Expose-Headers":
-            "X-User-Text, X-Text-Answer, X-Language, X-Category",
-        });
-        return res.send(ttsResult.buffer);
-      }
-
-      // TTS ishlamadi — sababi bilan qaytarish
-      console.warn(
-        "TTS null qaytardi — ELEVENLABS_API_KEY:",
-        process.env.ELEVENLABS_API_KEY ? "bor" : "YO'Q",
-      );
+      /* Sun'iy ovoz (TTS) O'CHIRILGAN (2026-10-15) — ovoz robotga
+         o'xshardi. Javob faqat MATN bo'lib qaytadi. */
       res.json({
         text: answer,
         userText,
         language: detectedLang || lang,
         category,
         audioUrl: null,
-        ttsError: "TTS provider ishlamadi. ELEVENLABS_API_KEY tekshiring.",
       });
     } catch (err) {
       console.error("Voice chat xato:", err.message);
@@ -189,69 +149,11 @@ router.post(
    aniqlanadi — interfeys tilidan EMAS. Sabab: foydalanuvchi interfeysi
    o'zbekcha bo'lsa-yu savolni ruscha bersa, AI ruscha javob beradi va
    uni o'zbek ovozi o'qishi mumkin emas. */
-router.post("/speak", optionalUserGuard, async (req, res) => {
-  const { text, voiceId = null } = req.body;
-  if (!text?.trim()) return res.status(400).json({ error: "Matn bo'sh" });
-
-  const asked = String(req.body.lang || "auto");
-  const lang =
-    asked === "auto" || !["uz", "ru"].includes(asked)
-      ? detectLanguage(text)
-      : asked;
-
-  try {
-    const voiceText = formatResponse(text, "voice");
-    if (!voiceText.trim())
-      return res.status(400).json({ error: "O'qish uchun matn qolmadi" });
-
-    // 1. Kesh — bir javobni qayta tinglash bepul va bir zumda
-    const hit = getCached(voiceText, lang);
-    if (hit) {
-      res.set({
-        "Content-Type": hit.contentType,
-        "Content-Length": hit.buffer.length,
-        "X-Language": lang,
-        "X-Cache": "hit",
-        "Access-Control-Expose-Headers": "X-Language, X-Cache",
-      });
-      return res.send(hit.buffer);
-    }
-
-    // 2. Suiiste'mol chegarasi — faqat YANGI sintez hisoblanadi
-    const identity =
-      req.authUser?.id ||
-      `${getClientIp(req)}|${String(req.headers["x-device-id"] || "").slice(0, 64)}`;
-    if (!takeToken(identity)) {
-      return res.status(429).json({
-        error: {
-          uz: "Juda ko'p ovoz so'rovi yuborildi. Bir ozdan keyin urinib ko'ring.",
-          ru: "Слишком много голосовых запросов. Попробуйте чуть позже.",
-        },
-      });
-    }
-
-    const result = await textToSpeech(voiceText, lang, voiceId);
-    if (!result)
-      return res.status(503).json({ error: "TTS provider sozlanmagan" });
-
-    setCached(voiceText, lang, result.buffer, result.contentType);
-
-    /* ⚠️ `Content-Type` NATIJADAN olinadi. Avval bu yerda "audio/mpeg"
-       QATTIQ yozilgan edi, lekin provayderlarning bir qismi WAV
-       qaytaradi (Gemini, HuggingFace) — sinovda tasdiqlangan. Noto'g'ri
-       MIME bilan brauzer audioni ijro eta olmasligi mumkin edi. */
-    res.set({
-      "Content-Type": result.contentType || "audio/mpeg",
-      "Content-Length": result.buffer.length,
-      "X-Language": lang,
-      "X-Cache": "miss",
-      "Access-Control-Expose-Headers": "X-Language, X-Cache",
-    });
-    res.send(result.buffer);
-  } catch (err) {
-    console.error("TTS speak xato:", err.message);
-    res.status(500).json({ error: "Ovozni qayta ishlashda xatolik. Qayta urinib ko'ring." });
-  }
+/* ⚠️ O'CHIRILGAN (2026-10-15): AI javobini ovozga aylantirish olib
+   tashlandi — sun'iy ovoz robotga o'xshardi. Eski mijozlar uchun aniq
+   javob qaytadi. */
+router.post("/speak", (req, res) => {
+  res.status(410).json({ error: "Ovozli javob o'chirilgan" });
 });
 
 module.exports = router;

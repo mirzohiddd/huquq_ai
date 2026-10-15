@@ -185,7 +185,18 @@ async function tryGemini(clean, model) {
 }
 
 // 4. Microsoft Edge TTS — API key shart emas, bepul, cheksiz
-async function tryEdgeTTS(clean, lang) {
+/* Microsoft Neural — ZAXIRA ovoz (2026-10-15). Bir xil ohang "robot"
+   taassurotini berardi: endi his-tuyg'uga qarab tezlik/ohang biroz
+   o'zgaradi (xursand — jonliroq, xafa — sekinroq va pastroq). */
+const EDGE_PROSODY = {
+  happy: { rate: "+4%", pitch: "+6Hz" },
+  sad: { rate: "-8%", pitch: "-5Hz" },
+  angry: { rate: "+2%", pitch: "-2Hz" },
+  confused: { rate: "-3%", pitch: "+3Hz" },
+  neutral: { rate: "-2%", pitch: "+0Hz" },
+};
+
+async function tryEdgeTTS(clean, lang, emotion = "neutral") {
   const voice = EDGE_VOICES[lang] || EDGE_VOICES.ru;
   // Edge TTS WebSocket orqali ishlaydi — msedge-tts paketi kerak
   let MsEdgeTTS;
@@ -209,7 +220,7 @@ async function tryEdgeTTS(clean, lang) {
        HECH QACHON ishlamasdi (sinovda tasdiqlangan). msedge-tts 2.x da
        `toStream()` oqimning O'ZINI emas, `{audioStream, metadataStream}`
        obyektini qaytaradi. */
-    const { audioStream } = tts.toStream(clean);
+    const { audioStream } = tts.toStream(clean, EDGE_PROSODY[emotion] || EDGE_PROSODY.neutral);
     audioStream.on("data", (c) => chunks.push(c));
     audioStream.on("end", () => {
       const buffer = Buffer.concat(chunks);
@@ -261,30 +272,64 @@ async function tryGroq(clean) {
    2) O'zbek tili ElevenLabs'ning rasmiy ro'yxatida YO'Q (rus tili bor).
       Ovoz chiqadi, lekin talaffuz sifatini tekshirish kerak.
    Tartibni `TTS_PROVIDER_ORDER` orqali kodga tegmasdan o'zgartirasiz. */
-async function tryElevenLabs(clean, lang) {
+/* ⚠️ (2026-10-15) ElevenLabs endi ASOSIY ovoz: odamga o'xshash intonatsiya.
+   Model `eleven_flash_v2_5` — Whisper bilan qaytarib o'lchandi, o'zbekchani
+   eng to'g'ri talaffuz qildi va eng tez (≈1,5 s); `eleven_v3` turkcha
+   talaffuz berdi, Edge Neural ovozlari esa eng ko'p buzildi.
+   His-tuyg'u `voice_settings` orqali: past stability = jonliroq ohang.
+   Kvota/kalit xatosida 30 daqiqa chetlab o'tiladi — har so'rovda behuda
+   kutish bo'lmasin (zaxira: Microsoft Neural). */
+const ELEVEN_MOOD = {
+  happy: { stability: 0.4, style: 0.4 },
+  sad: { stability: 0.55, style: 0.3 },
+  angry: { stability: 0.4, style: 0.4 },
+  confused: { stability: 0.45, style: 0.25 },
+  neutral: { stability: 0.45, style: 0.2 },
+  steady: { stability: 0.7, style: 0 },
+};
+let elevenPausedUntil = 0;
+
+/* ⚠️ Past stability'da model ba'zan "gallyutsinatsiya" qiladi: 140 belgilik
+   matnga 77 soniyalik audio qaytgani kuzatildi (2026-10-15). 64 kbit/s da
+   1 s ≈ 8 KB; o'zbek nutqi ≈ 14 belgi/s. Audio kutilganidan ancha uzun
+   bo'lsa — barqarorroq sozlama bilan bir marta qayta so'raladi. */
+const tooLong = (bytes, chars) => bytes > (chars / 8 + 5) * 8000;
+
+async function tryElevenLabs(clean, lang, emotion = "neutral") {
+  const first = await elevenOnce(clean, emotion);
+  if (!tooLong(first.buffer.length, clean.length)) return first;
+  console.warn("ElevenLabs: audio haddan uzun — barqaror sozlama bilan qayta");
+  const second = await elevenOnce(clean, "steady");
+  if (tooLong(second.buffer.length, clean.length)) throw new Error("ElevenLabs: buzilgan audio");
+  return second;
+}
+
+async function elevenOnce(clean, emotion) {
   const apiKey = process.env.ELEVENLABS_API_KEY;
   if (!apiKey) throw new Error("ELEVENLABS_API_KEY yo'q");
+  if (Date.now() < elevenPausedUntil) throw new Error("ElevenLabs vaqtincha o'chiq (kvota)");
   const voiceId = process.env.ELEVENLABS_VOICE_ID || "CwhRBWXzGAHq8TQ4Fs17";
+  const mood = ELEVEN_MOOD[emotion] || ELEVEN_MOOD.neutral;
   const body = Buffer.from(
     JSON.stringify({
       text: clean,
-      model_id: process.env.ELEVENLABS_MODEL || "eleven_multilingual_v2",
+      model_id: process.env.ELEVENLABS_MODEL || "eleven_flash_v2_5",
+      voice_settings: { ...mood, similarity_boost: 0.8, use_speaker_boost: true },
     }),
   );
-  const res = await httpsPost(
-    "api.elevenlabs.io",
-    `/v1/text-to-speech/${voiceId}`,
-    {
-      "xi-api-key": apiKey,
-      "Content-Type": "application/json",
-      "Content-Length": body.length,
-    },
-    body,
-  );
-  if (res.status !== 200)
-    throw new Error(
-      `ElevenLabs ${res.status}: ${String(res.body).slice(0, 100)}`,
-    );
+  const res = await Promise.race([
+    httpsPost(
+      "api.elevenlabs.io",
+      `/v1/text-to-speech/${voiceId}?output_format=mp3_44100_64`,
+      { "xi-api-key": apiKey, "Content-Type": "application/json", "Content-Length": body.length },
+      body,
+    ),
+    new Promise((_, rej) => setTimeout(() => rej(new Error("ElevenLabs timeout")), 9000)),
+  ]);
+  if (res.status !== 200) {
+    if ([401, 402, 429].includes(res.status)) elevenPausedUntil = Date.now() + 30 * 60 * 1000;
+    throw new Error(`ElevenLabs ${res.status}: ${String(res.body).slice(0, 100)}`);
+  }
   return { buffer: res.body, contentType: "audio/mpeg" };
 }
 
@@ -381,7 +426,9 @@ function orderProviders(providers, raw) {
   return [...picked, ...providers.filter((p) => !picked.includes(p))];
 }
 
-async function textToSpeech(text, lang = "uz") {
+async function textToSpeech(text, lang = "uz", opts = {}) {
+  // Eski chaqiruvlar uchinchi argument sifatida voiceId (satr) beradi
+  const emotion = (opts && typeof opts === "object" && opts.emotion) || "neutral";
   // Talaffuz uchun tayyorlash (apostroflar, tartib sonlar, pauzalar) — voiceText.js
   const clean = cleanText(prepareSpeech(text, lang));
   if (!clean) return null;
@@ -404,15 +451,17 @@ async function textToSpeech(text, lang = "uz") {
        · HuggingFace MMS — `api-inference.huggingface.co` endi mavjud emas (DNS)
        · StreamElements  — endi avtorizatsiya talab qiladi (401) */
   const providers = [
+    // Asosiy — odamga o'xshash ovoz (kalit bo'lsa)
+    { name: "ElevenLabs", fn: () => tryElevenLabs(clean, lang, emotion) },
     /* ⚠️ (2026-10-14) Edge ulanishi ba'zan sintez tugamasdan uziladi
        ("no turn.end received") — ikkinchi urinish deyarli doim o'tadi.
        Shu sababli 503 ga tushishdan oldin bir marta qayta uriniladi. */
     {
       name: "Microsoft Edge TTS",
       fn: () =>
-        tryEdgeTTS(clean, lang)
-          .catch(() => tryEdgeTTS(clean, lang))
-          .catch(() => tryEdgeTTS(clean, lang)),
+        tryEdgeTTS(clean, lang, emotion)
+          .catch(() => tryEdgeTTS(clean, lang, emotion))
+          .catch(() => tryEdgeTTS(clean, lang, emotion)),
     },
     { name: "Google Cloud TTS", fn: () => tryGoogleCloud(clean, lang) },
     {
@@ -423,7 +472,6 @@ async function textToSpeech(text, lang = "uz") {
       name: "Gemini 2.0 Flash",
       fn: () => tryGemini(clean, "gemini-2.0-flash"),
     },
-    { name: "ElevenLabs", fn: () => tryElevenLabs(clean, lang) },
     { name: "Groq PlayAI", fn: () => tryGroq(clean) },
     { name: "HuggingFace MMS", fn: () => tryHuggingFace(clean, lang) },
     { name: "StreamElements", fn: () => tryStreamElements(clean, lang) },

@@ -13,6 +13,8 @@ const { formatResponse } = require("./services/responseFormatter");
 const { detectLanguage } = require("./services/legalAI");
 const { getCached, setCached } = require("./services/ttsCache");
 
+const VOICE_DISABLED = true;
+
 const LABELS = {
   uz: {
     listen: "🔊 Eshitish",
@@ -20,6 +22,7 @@ const LABELS = {
     expired: "Bu javob eskirdi — yangi savol bering",
     failed: "Ovoz tayyorlanmadi, keyinroq urinib ko'ring",
     caption: "🔊 Javobning ovozli varianti",
+    disabled: "Ovozli javob o'chirilgan — javob matn ko'rinishida.",
   },
   ru: {
     listen: "🔊 Прослушать",
@@ -27,6 +30,7 @@ const LABELS = {
     expired: "Этот ответ устарел — задайте новый вопрос",
     failed: "Не удалось озвучить, попробуйте позже",
     caption: "🔊 Голосовая версия ответа",
+    disabled: "Озвучка отключена — ответ доступен текстом.",
   },
 };
 
@@ -71,6 +75,15 @@ function registerVoiceReply({ bot, safeSend }) {
     if (!entry) {
       await bot
         .answerCallbackQuery(query.id, { text: L.expired, show_alert: true })
+        .catch(() => {});
+      return true;
+    }
+
+    /* Sun'iy ovoz O'CHIRILGAN (2026-10-15) — eski xabarlardagi tugma
+       bosilsa ovoz yaratilmaydi, faqat qisqa izoh chiqadi. */
+    if (VOICE_DISABLED) {
+      await bot
+        .answerCallbackQuery(query.id, { text: L.disabled, show_alert: true })
         .catch(() => {});
       return true;
     }

@@ -5,6 +5,7 @@ import { LangProvider } from "./context/LangContext";
 import { ChatPanelProvider } from "./context/ChatPanelContext";
 import SiteLayout from "./components/SiteLayout";
 import TelegramLinkIntent from "./components/TelegramLinkIntent";
+import { usePageTracking } from "./utils/analytics";
 import Home from "./pages/Home";
 
 /* TEZLIK: avval hamma sahifa bitta bundle'ga qo'shilardi (677 KB) va
@@ -13,7 +14,7 @@ import Home from "./pages/Home";
    va faqat kerak bo'lganda yuklanadi. Bosh sahifa va SiteLayout esa
    birinchi ko'rinish uchun darhol kerak — ular ataylab lazy QILINMADI. */
 const AuthPages = lazy(() => import("./pages/AuthPages"));
-const VoiceChat = lazy(() => import("./pages/VoiceChat"));
+const VoiceAssistant = lazy(() => import("./pages/voice/VoiceAssistant"));
 const Library = lazy(() => import("./pages/Library"));
 const Constitution = lazy(() => import("./pages/Constitution"));
 const Legislation = lazy(() => import("./pages/Legislation"));
@@ -63,6 +64,7 @@ function RequireAuth({ children }) {
 }
 
 function AppRoutes() {
+  usePageTracking(); // admin "Analitika" uchun — utils/analytics.js
   return (
     // Sahifa bo'lagi yuklanayotgan paytda bo'sh ekran — spinner emas,
     // chunki yuklanish odatda 100ms dan kam (mahalliy keshdan).
@@ -191,7 +193,7 @@ function AppRoutes() {
           </RequireGuest>
         }
       />
-      <Route path="/voice" element={<VoiceChat />} />
+      <Route path="/voice" element={<VoiceAssistant />} />
       {/* Eslatma: asosiy saytdagi eski admin panel olib tashlandi —
           haqiqiy admin paneli alohida `admin/` ilovasi. */}
       <Route path="*" element={<Navigate to="/" replace />} />

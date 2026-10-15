@@ -301,6 +301,7 @@ app.use("/api/auth", require("./routes/auth"));
 app.use("/api/chat", require("./routes/chatExtras"));
 app.use("/api/chat", require("./routes/chat"));
 app.use("/api/ai-tools", require("./routes/aiTools"));
+app.use("/api/voice", require("./routes/voiceTalk")); // robot yordamchi
 app.use("/api/voice", require("./routes/voice"));
 // Buyurtmalar — admin qismi `/api/admin` dan OLDIN ulanadi (aniq yo'l)
 app.use("/api/orders", require("./routes/orders").router);
@@ -310,6 +311,7 @@ app.use("/api/reviews", require("./routes/reviews").router);
 app.use("/api/admin/reviews", require("./routes/reviews").adminRouter);
 app.use("/api/admin", require("./routes/admin"));
 app.use("/api/visitor", require("./routes/visitor"));
+app.use("/api/analytics", require("./routes/analytics"));
 app.use("/api/site", require("./routes/site"));
 app.use("/api/notifications", require("./routes/notifications"));
 app.use("/api/support", require("./routes/support"));

@@ -15,6 +15,7 @@ import SupportMessages  from "./pages/SupportMessages";
 import Lessons          from "./pages/Lessons";
 import Tests            from "./pages/Tests";
 import Laws             from "./pages/Laws";
+import Analytics        from "./pages/analytics/Analytics";
 
 function Guard({ children }) {
   const { admin, loading } = useAdmin();
@@ -32,6 +33,7 @@ export default function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/" element={<Guard><Layout /></Guard>}>
         <Route index                   element={<Dashboard />} />
+        <Route path="analytics"        element={<Analytics />} />
         <Route path="chats"            element={<Chats />} />
         <Route path="chats/:sessionId" element={<ChatDetail />} />
         <Route path="users"            element={<Users />} />

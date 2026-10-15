@@ -58,7 +58,7 @@ function getMimeType(ext) {
 }
 
 // Bitta Groq so'rovi. FormData qo'lda quriladi (form-data paketi kerak emas).
-function requestGroq(apiKey, fileBuffer, filename, mimeType, model, language) {
+function requestGroq(apiKey, fileBuffer, filename, mimeType, model, language, prompt = "") {
   const boundary = `----FormBoundary${Date.now()}`;
 
   let body = "";
@@ -74,6 +74,11 @@ function requestGroq(apiKey, fileBuffer, filename, mimeType, model, language) {
   body += `--${boundary}\r\n`;
   body += `Content-Disposition: form-data; name="language"\r\n\r\n`;
   body += `${language}\r\n`;
+  if (prompt) {
+    body += `--${boundary}\r\n`;
+    body += `Content-Disposition: form-data; name="prompt"\r\n\r\n`;
+    body += `${prompt}\r\n`;
+  }
   body += `--${boundary}\r\n`;
   body += `Content-Disposition: form-data; name="file"; filename="${filename}"\r\n`;
   body += `Content-Type: ${mimeType}\r\n\r\n`;
@@ -122,7 +127,16 @@ function requestGroq(apiKey, fileBuffer, filename, mimeType, model, language) {
   });
 }
 
-async function speechToText(filePath, language = null) {
+/* YO'NALTIRUVCHI MATN (Whisper `prompt`, 2026-10-15) — model yozuv va
+   lug'atni shundan oladi. Usiz o'zbek nutqi buzilib yozilardi (o'lchandi):
+   "Ajrashsak bolam kim bilan qoladi?" → "Acirasek, balam kim blan kaladi."
+   Faqat `opts.prompt` berilganda ishlatiladi (ovozli yordamchi). */
+const UZ_LEGAL_PROMPT =
+  "Assalomu alaykum. O'zbek tilida huquqiy savol: ajrashsak bolam kim bilan qoladi? Ish haqim, oyligim, maoshim berilmayapti, nima qilay? Ishdan bo'shatishdi. Erim meni urdi. Aliment, meros, vasiyatnoma, mehnat shartnomasi, nikoh, qarz, ijara, uy-joy, sudga ariza, qonun, kodeks, modda, jarima. Javob: A, B, C, D. Keyingi, qaytar, to'xta.";
+const RU_LEGAL_PROMPT =
+  "Здравствуйте. Правовой вопрос: не платят зарплату, что делать? Развод, алименты, наследство, трудовой договор, суд, закон, статья, штраф. Ответ: А, Б, В, Г. Дальше, повтори, стоп.";
+
+async function speechToText(filePath, language = null, opts = {}) {
   const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) throw new Error("GROQ_API_KEY sozlanmagan");
 
@@ -153,6 +167,7 @@ async function speechToText(filePath, language = null) {
         mimeType,
         model,
         lang,
+        opts.prompt ? (lang === "ru" ? RU_LEGAL_PROMPT : UZ_LEGAL_PROMPT) : "",
       );
     } catch (err) {
       lastErr = err;

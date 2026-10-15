@@ -10,7 +10,8 @@
    shakllari tushib qolardi. Matn normallashtirilgan (apostrofsiz). */
 const SALARY = /ish haq|oylig|oylik|maosh|zarplat|зарплат|заработн/;
 const NOT_PAID =
-  /bermay|bermad|bermag|bermas|berilma|tolamay|tolamad|tolamag|tolanma|kechik|(?<!dan )ushlab|ololmay|olmayap|не плат|не выплач|не выда|не дают|задерж|не получ/;
+  // "berishmayapti", "to'lashmayapti" (ko'plik) — 2026-10-15, ovozli savolda topildi
+  /bermay|bermad|bermag|bermas|berilma|berishma|tolashma|tolamay|tolamad|tolamag|tolanma|kechik|(?<!dan )ushlab|ololmay|olmayap|не плат|не выплач|не выда|не дают|задерж|не получ/;
 
 module.exports = [
   {

@@ -3,7 +3,6 @@ import ReactMarkdown from "react-markdown";
 import { stripEmoji } from "../../utils/stripEmoji";
 import remarkGfm from "remark-gfm";
 import { AlertCircle, Copy, Check, RotateCcw, ThumbsUp, ThumbsDown } from "lucide-react";
-import SpeakButton from "../SpeakButton";
 import { useChatText } from "./chatText";
 import d from "../ChatDrawer.module.css";
 import s from "./ChatTools.module.css";
@@ -55,7 +54,6 @@ function Actions({ m, isLast, busy, onRegenerate, onFeedback }) {
   const fb = m.feedback || null;
   return (
     <div className={s.actions}>
-      <SpeakButton text={m.content} />
       <button type="button" className={s.act} onClick={copy} title={copied ? c.copied : c.copy} aria-label={c.copy}>
         {copied ? <Check size={14} /> : <Copy size={14} />}
       </button>

@@ -22,7 +22,7 @@ const uz = {
   micUnsupported: "Brauzeringiz ovoz yozishni qo'llab-quvvatlamaydi.",
   sttFail: "Ovozni tanib bo'lmadi. Qayta urinib ko'ring.",
   analyzing: "Fayl tahlil qilinmoqda…", fileTooBig: "Fayl hajmi 10 MB dan oshmasligi kerak.",
-  remove: "Olib tashlash", voiceMode: "Ovozli suhbat rejimi",
+  remove: "Olib tashlash", voiceMode: "Ovozli yordamchi",
   imgHint: "Rasm biriktirildi — «Yuborish» bosilsa matni o'qiladi va tahlil qilinadi.",
 };
 
@@ -42,7 +42,7 @@ const ru = {
   micUnsupported: "Ваш браузер не поддерживает запись звука.",
   sttFail: "Не удалось распознать речь. Попробуйте ещё раз.",
   analyzing: "Анализируем файл…", fileTooBig: "Размер файла не должен превышать 10 МБ.",
-  remove: "Удалить", voiceMode: "Режим голосового диалога",
+  remove: "Удалить", voiceMode: "Голосовой помощник",
   imgHint: "Изображение прикреплено — после «Отправить» текст будет распознан и проанализирован.",
 };
 
