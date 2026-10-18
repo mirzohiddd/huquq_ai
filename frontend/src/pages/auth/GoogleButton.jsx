@@ -5,6 +5,13 @@ import s from "./AuthForm.module.css";
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
 
+/* GSI `initialize()` sahifada FAQAT BIR MARTA chaqiriladi (2026-10-18).
+   Avval har remount'da (Kirish ⇄ Ro'yxatdan o'tish) qayta chaqirilib,
+   konsolga "initialize() is called multiple times" yozilardi. Joriy
+   tugmaning callback'i shu o'zgaruvchi orqali beriladi. */
+let gsiInitialized = false;
+let activeCallback = null;
+
 /* ───────── Google Button ─────────
    (AuthPages.jsx dan o'zgarishsiz mantiq bilan ko'chirildi, 2026-10-05.)
    BUG FIX: agar joriy manzil (origin) Google Cloud Console'dagi OAuth
@@ -60,12 +67,16 @@ export default function GoogleButton({ labelKey, onCredential, disabled }) {
 
     function initGoogle() {
       if (cancelled || !window.google?.accounts?.id) return;
-      window.google.accounts.id.initialize({
-        client_id: GOOGLE_CLIENT_ID,
-        callback: (res) => onCredential(res.credential),
-        auto_select: false,
-        cancel_on_tap_outside: true,
-      });
+      activeCallback = onCredential;
+      if (!gsiInitialized) {
+        window.google.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          callback: (res) => activeCallback?.(res.credential),
+          auto_select: false,
+          cancel_on_tap_outside: true,
+        });
+        gsiInitialized = true;
+      }
       renderRealButton();
     }
 

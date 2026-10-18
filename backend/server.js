@@ -48,6 +48,11 @@ app.use(
       },
     },
     crossOriginEmbedderPolicy: false,
+    /* API boshqa domendan (huquqtech.uz) chaqiriladi. Standart
+       "same-origin" CORP sendBeacon (no-cors) javobini bloklab,
+       konsolga ERR_BLOCKED_BY_RESPONSE.NotSameOrigin yozardi.
+       O'qish huquqini baribir CORS boshqaradi. */
+    crossOriginResourcePolicy: { policy: "cross-origin" },
   }),
 );
 
