@@ -1,0 +1,63 @@
+/* "Eshitish" tugmasi — AI javobi ostida, ataylab kichik va sokin:
+   javobning O'ZI asosiy narsa, tugma unga raqobat qilmasligi kerak. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 7px;
+  padding: 4px 10px;
+  border: 1px solid var(--gray-100, #e5e7eb);
+  border-radius: 20px;
+  background: transparent;
+  color: var(--gray-600, #64748b);
+  font-size: 11.5px;
+  font-weight: 600;
+  font-family: inherit;
+  line-height: 1.4;
+  cursor: pointer;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--gold, #c58b1c);
+  border-color: var(--gold, #c58b1c);
+  color: #fff;
+}
+
+.btn:disabled {
+  cursor: default;
+  opacity: 0.75;
+}
+
+/* Ijro paytida — to'ldirilgan oltin holat, ya'ni "hozir gapiryapti" */
+.active,
+.active:hover:not(:disabled) {
+  background: var(--gold, #c58b1c);
+  border-color: var(--gold, #c58b1c);
+  color: #fff;
+}
+
+.err {
+  border-color: #fecaca;
+  color: var(--red, #dc2626);
+}
+
+.spin {
+  animation: speakSpin 0.9s linear infinite;
+}
+
+@keyframes speakSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Animatsiyani o'chirgan foydalanuvchilar uchun */
+@media (prefers-reduced-motion: reduce) {
+  .spin {
+    animation: none;
+  }
+}

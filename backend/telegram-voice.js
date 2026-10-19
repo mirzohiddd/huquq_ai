@@ -13,7 +13,8 @@ const { formatResponse } = require("./services/responseFormatter");
 const { detectLanguage } = require("./services/legalAI");
 const { getCached, setCached } = require("./services/ttsCache");
 
-const VOICE_DISABLED = true;
+/* Ovoz QAYTA YOQILDI (2026-10-19) — ona tilidagi neyron ovoz. */
+const VOICE_DISABLED = false;
 
 const LABELS = {
   uz: {

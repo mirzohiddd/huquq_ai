@@ -3,7 +3,7 @@
  * Voice Routes
  * POST /api/voice/chat       — audio → STT → AI → matn javob
  * POST /api/voice/transcribe — audio → matn
- * POST /api/voice/speak      — O'CHIRILGAN (410), sun'iy ovoz yo'q
+ * POST /api/voice/speak      — matn → audio ("Eshitish" tugmasi, sayt + Telegram)
  */
 
 const router = require("express").Router();
@@ -13,7 +13,11 @@ const fs = require("fs");
 const os = require("os");
 
 const { speechToText } = require("../services/speechToText");
-const { getLegalAdvice } = require("../services/legalAI");
+const { getLegalAdvice, detectLanguage } = require("../services/legalAI");
+const { textToSpeech } = require("../services/textToSpeech");
+const { formatResponse } = require("../services/responseFormatter");
+const { getCached, setCached, takeToken } = require("../services/ttsCache");
+const { getClientIp } = require("../middleware/security");
 const { repairTranscript } = require("../services/voiceTranscript");
 const { optionalUserGuard, userGuard } = require("../middleware/auth");
 const { voiceLimitGuard } = require("../middleware/usageLimit");
@@ -149,12 +153,73 @@ router.post(
    aniqlanadi — interfeys tilidan EMAS. Sabab: foydalanuvchi interfeysi
    o'zbekcha bo'lsa-yu savolni ruscha bersa, AI ruscha javob beradi va
    uni o'zbek ovozi o'qishi mumkin emas. */
-/* ⚠️ O'CHIRILGAN (2026-10-15): AI javobini ovozga aylantirish olib
-   tashlandi — sun'iy ovoz robotga o'xshardi. Eski mijozlar uchun aniq
-   javob qaytadi. */
-router.post("/speak", (req, res) => {
-  res.status(410).json({ error: "Ovozli javob o'chirilgan" });
+/* QAYTA YOQILDI (2026-10-19): ovoz endi ona tilidagi neyron ovoz
+   (textToSpeech.js → Microsoft Neural birinchi). */
+router.post("/speak", optionalUserGuard, async (req, res) => {
+  const { text, voiceId = null } = req.body;
+  if (!text?.trim()) return res.status(400).json({ error: "Matn bo'sh" });
+
+  const asked = String(req.body.lang || "auto");
+  const lang =
+    asked === "auto" || !["uz", "ru"].includes(asked)
+      ? detectLanguage(text)
+      : asked;
+
+  try {
+    const voiceText = formatResponse(text, "voice");
+    if (!voiceText.trim())
+      return res.status(400).json({ error: "O'qish uchun matn qolmadi" });
+
+    // 1. Kesh — bir javobni qayta tinglash bepul va bir zumda
+    const hit = getCached(voiceText, lang);
+    if (hit) {
+      res.set({
+        "Content-Type": hit.contentType,
+        "Content-Length": hit.buffer.length,
+        "X-Language": lang,
+        "X-Cache": "hit",
+        "Access-Control-Expose-Headers": "X-Language, X-Cache",
+      });
+      return res.send(hit.buffer);
+    }
+
+    // 2. Suiiste'mol chegarasi — faqat YANGI sintez hisoblanadi
+    const identity =
+      req.authUser?.id ||
+      `${getClientIp(req)}|${String(req.headers["x-device-id"] || "").slice(0, 64)}`;
+    if (!takeToken(identity)) {
+      return res.status(429).json({
+        error: {
+          uz: "Juda ko'p ovoz so'rovi yuborildi. Bir ozdan keyin urinib ko'ring.",
+          ru: "Слишком много голосовых запросов. Попробуйте чуть позже.",
+        },
+      });
+    }
+
+    const result = await textToSpeech(voiceText, lang, voiceId);
+    if (!result)
+      return res.status(503).json({ error: "TTS provider sozlanmagan" });
+
+    setCached(voiceText, lang, result.buffer, result.contentType);
+
+    /* ⚠️ `Content-Type` NATIJADAN olinadi. Avval bu yerda "audio/mpeg"
+       QATTIQ yozilgan edi, lekin provayderlarning bir qismi WAV
+       qaytaradi (Gemini, HuggingFace) — sinovda tasdiqlangan. Noto'g'ri
+       MIME bilan brauzer audioni ijro eta olmasligi mumkin edi. */
+    res.set({
+      "Content-Type": result.contentType || "audio/mpeg",
+      "Content-Length": result.buffer.length,
+      "X-Language": lang,
+      "X-Cache": "miss",
+      "Access-Control-Expose-Headers": "X-Language, X-Cache",
+    });
+    res.send(result.buffer);
+  } catch (err) {
+    console.error("TTS speak xato:", err.message);
+    res.status(500).json({ error: "Ovozni qayta ishlashda xatolik. Qayta urinib ko'ring." });
+  }
 });
+
 
 module.exports = router;
 

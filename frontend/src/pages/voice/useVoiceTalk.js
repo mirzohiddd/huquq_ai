@@ -9,8 +9,9 @@ const NEW_TUTOR = { area: "", pos: 0, qid: "", streak: 0, correct: 0, total: 0 }
 /**
  * Ovozli yordamchi holati va server bilan aloqa (`/api/voice/*`).
  * Server stateless — suhbat tarixi, aniqlashtirish va dars holati shu yerda.
- * Suhbat uzluksiz: javob tugagach mikrofon o'zi yana yoqiladi; foydalanuvchi
- * jim qolsa (useRecorder → null) to'xtaydi.
+ * Bir bosish = bir savol (2026-10-19): bosiladi → tinglaydi → (yana bosish
+ * yoki jimlik) → javob beradi → kutadi. O'ylayotgan/gapirayotganda bosilsa
+ * hammasi to'xtaydi va kech kelgan javob ijro etilmaydi (`turnId`).
  */
 export function useVoiceTalk(lang) {
   const [status, setStatus] = useState("idle"); // idle | listening | thinking | speaking
@@ -32,7 +33,7 @@ export function useVoiceTalk(lang) {
   mutedRef.current = muted;
   const modeRef = useRef(mode);
   modeRef.current = mode;
-  const listenRef = useRef(null); // apply → listen (eski yopilma qolmasin)
+  const turnId = useRef(0); // to'xtatilgan so'rovning javobi e'tiborsiz qoldiriladi
 
   useEffect(() => () => {
     live.current = false;
@@ -53,7 +54,7 @@ export function useVoiceTalk(lang) {
   }, [lang]);
 
   // Javobni qo'llash: holat, tarix, dars, ovoz
-  const apply = useCallback(async (r, { listenAfter } = {}) => {
+  const apply = useCallback(async (r) => {
     setEmotion(r.emotion || "neutral");
     setTurn(r);
     if (r.userText && r.kind !== "lesson") {
@@ -78,8 +79,8 @@ export function useVoiceTalk(lang) {
         /* dekodlanmadi — matn baribir ko'rinadi */
       }
     }
+    live.current = false;
     setStatus("idle");
-    if (listenAfter && live.current) listenRef.current?.();
   }, [play]);
 
   const listen = useCallback(async () => {
@@ -104,6 +105,7 @@ export function useVoiceTalk(lang) {
       return;
     }
     setStatus("thinking");
+    const id = ++turnId.current;
     const fd = new FormData();
     fd.append("audio", blob, blob.type.includes("mp4") ? "talk.m4a" : "talk.webm");
     fd.append("lang", lang);
@@ -111,12 +113,12 @@ export function useVoiceTalk(lang) {
     fd.append("state", JSON.stringify({ history: hist.current, clarifyOf: clarify.current, tutor: modeRef.current === "tutor" ? tutorRef.current : null }));
     try {
       const { data } = await api.post("/voice/talk", fd, { timeout: 90000 });
-      await apply(data, { listenAfter: true });
+      if (id !== turnId.current) return; // foydalanuvchi to'xtatgan
+      await apply(data);
     } catch (err) {
-      fail(err);
+      if (id === turnId.current) fail(err);
     }
   }, [record, lang, apply, fail]);
-  listenRef.current = listen;
 
   // Mikrofon tugmasi: boshlash / gapni yakunlash / to'xtatish
   const toggle = useCallback(() => {
@@ -124,6 +126,7 @@ export function useVoiceTalk(lang) {
     if (status === "listening") return stopRec(); // gap tugadi — yuborish
     if (status === "speaking" || live.current) {
       live.current = false;
+      turnId.current += 1;
       stopPlay();
       stopRec();
       setStatus("idle");

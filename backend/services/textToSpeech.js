@@ -26,9 +26,11 @@ const GOOGLE_VOICES = {
    RUS ovoziga o'qitardi — talaffuz buzilardi.
    ⚠️ `ur-PK-UzmaNeural` — bu URDU ovozi, nomida "Uz" borligi uchun
    qidiruvda chiqadi; ATAYLAB ishlatilmaydi. */
+/* ⚠️ (2026-10-19) O'zbekcha uchun MadinaNeural — ona tilidagi tabiiy
+   ovoz. `.env` dan almashtirish: EDGE_VOICE_UZ / EDGE_VOICE_RU. */
 const EDGE_VOICES = {
-  uz: "uz-UZ-SardorNeural",
-  ru: "ru-RU-DmitryNeural",
+  uz: process.env.EDGE_VOICE_UZ || "uz-UZ-MadinaNeural",
+  ru: process.env.EDGE_VOICE_RU || "ru-RU-SvetlanaNeural",
   en: "en-US-GuyNeural",
 };
 
@@ -188,13 +190,41 @@ async function tryGemini(clean, model) {
 /* Microsoft Neural — ZAXIRA ovoz (2026-10-15). Bir xil ohang "robot"
    taassurotini berardi: endi his-tuyg'uga qarab tezlik/ohang biroz
    o'zgaradi (xursand — jonliroq, xafa — sekinroq va pastroq). */
+/* ⚠️ (2026-10-19) Ohang (pitch) endi O'ZGARTIRILMAYDI: neyron ovozda
+   balandlikni sun'iy surish metall, "robot" tembr beradi. Faqat tezlik
+   biroz o'zgaradi — ovoz tabiiy qoladi. */
 const EDGE_PROSODY = {
-  happy: { rate: "+4%", pitch: "+6Hz" },
-  sad: { rate: "-8%", pitch: "-5Hz" },
-  angry: { rate: "+2%", pitch: "-2Hz" },
-  confused: { rate: "-3%", pitch: "+3Hz" },
-  neutral: { rate: "-2%", pitch: "+0Hz" },
+  happy: { rate: "+3%" },
+  sad: { rate: "-6%" },
+  angry: { rate: "+0%" },
+  confused: { rate: "-3%" },
+  neutral: { rate: "+0%" },
 };
+
+/* Matnni ~180 belgilik jumla guruhlariga bo'lib, PARALLEL sintez qiladi:
+   har bir Edge so'rovi ~1-2 s, ketma-ket emas bir vaqtda — javob tezroq.
+   MP3 bo'laklari bir xil formatda, shuning uchun ular shunchaki ulanadi. */
+function speechChunks(text, max = 180) {
+  const parts = String(text).match(/[^.!?\n]+[.!?]*\s*/g) || [text];
+  const out = [];
+  let cur = "";
+  for (const p of parts) {
+    if (cur && (cur + p).length > max) {
+      out.push(cur.trim());
+      cur = "";
+    }
+    cur += p;
+  }
+  if (cur.trim()) out.push(cur.trim());
+  return out.slice(0, 8);
+}
+
+async function edgeSpeak(clean, lang, emotion) {
+  const once = (t) => tryEdgeTTS(t, lang, emotion).catch(() => tryEdgeTTS(t, lang, emotion)).catch(() => tryEdgeTTS(t, lang, emotion));
+  const chunks = speechChunks(clean);
+  const results = await Promise.all(chunks.map(once));
+  return { buffer: Buffer.concat(results.map((r) => r.buffer)), contentType: "audio/mpeg" };
+}
 
 async function tryEdgeTTS(clean, lang, emotion = "neutral") {
   const voice = EDGE_VOICES[lang] || EDGE_VOICES.ru;
@@ -450,19 +480,17 @@ async function textToSpeech(text, lang = "uz", opts = {}) {
        · Groq PlayAI     — `playai-tts` modeli BUTUNLAY bekor qilingan (400)
        · HuggingFace MMS — `api-inference.huggingface.co` endi mavjud emas (DNS)
        · StreamElements  — endi avtorizatsiya talab qiladi (401) */
+  /* ⚠️ (2026-10-19) Microsoft Neural endi BIRINCHI. ElevenLabs'dagi
+     standart ovoz (Roger) — INGLIZ ovozi: o'zbekchani ingliz aksentida
+     o'qirdi ("javobgar" → "zhavobgar", "keyin" → "keyen"), foydalanuvchi
+     "robotdek, hech nimani tushunib bo'lmaydi" dedi. Edge'da esa ona
+     tilidagi o'zbek ovozi bor, bepul va cheksiz. ElevenLabs zaxirada. */
   const providers = [
-    // Asosiy — odamga o'xshash ovoz (kalit bo'lsa)
+    { name: "Microsoft Edge TTS", fn: () => edgeSpeak(clean, lang, emotion) },
     { name: "ElevenLabs", fn: () => tryElevenLabs(clean, lang, emotion) },
     /* ⚠️ (2026-10-14) Edge ulanishi ba'zan sintez tugamasdan uziladi
        ("no turn.end received") — ikkinchi urinish deyarli doim o'tadi.
        Shu sababli 503 ga tushishdan oldin bir marta qayta uriniladi. */
-    {
-      name: "Microsoft Edge TTS",
-      fn: () =>
-        tryEdgeTTS(clean, lang, emotion)
-          .catch(() => tryEdgeTTS(clean, lang, emotion))
-          .catch(() => tryEdgeTTS(clean, lang, emotion)),
-    },
     { name: "Google Cloud TTS", fn: () => tryGoogleCloud(clean, lang) },
     {
       name: "Gemini 2.5 Flash",

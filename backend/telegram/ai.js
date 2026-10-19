@@ -130,10 +130,14 @@ function createAi({ bot, safeSend, getLang, mainMenu, voiceReply }) {
       recordStat("telegram", res?.category).catch(() => {});
       await dropLoader();
 
-      /* AI javobi faqat MATN — «🔊 Eshitish» (sun'iy ovoz) olib tashlandi
-         (2026-10-15): ovoz robotga o'xshardi. */
-      for (const part of splitMessage(reply)) {
-        await safeSend(chatId, mdToHtml(part), {});
+      /* «🔊 Eshitish» tugmasi oxirgi bo'lakka (2026-10-19 qayta yoqildi).
+         Ovoz tili javobning O'ZIDAN aniqlanadi (ruscha javobni rus ovozi o'qisin). */
+      const voiceLang = voiceReply.detectLanguage(reply);
+      const answerId = voiceReply.remember(reply, voiceLang);
+      const parts = splitMessage(reply);
+      for (let i = 0; i < parts.length; i++) {
+        const last = i === parts.length - 1;
+        await safeSend(chatId, mdToHtml(parts[i]), last ? voiceReply.listenKeyboard(answerId, voiceLang) : {});
       }
     } catch (err) {
       console.error("Telegram AI error:", err);

@@ -1,0 +1,132 @@
+/* Ovozli yordamchi roboti — holatlar `data-state` orqali:
+   idle | listening | thinking | speaking. `--lv` (0..1) — ovoz balandligi. */
+.wrap {
+  --lv: 0;
+  --led: #6ee7ff;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  color: var(--led);
+}
+.svg {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.bot {
+  animation: float 4.2s ease-in-out infinite;
+}
+.shadow {
+  fill: rgba(4, 18, 70, 0.42);
+  transform-origin: 200px 482px;
+  animation: shadow 4.2s ease-in-out infinite;
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+@keyframes shadow {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(0.84); opacity: 0.7; }
+}
+
+/* Qo'l silkitish — kutish holatida vaqti-vaqti bilan */
+.forearm {
+  transform-origin: 82px 304px;
+  animation: wave 6s ease-in-out infinite;
+}
+@keyframes wave {
+  0%, 62%, 100% { transform: rotate(0deg); }
+  68% { transform: rotate(-14deg); }
+  74% { transform: rotate(10deg); }
+  80% { transform: rotate(-12deg); }
+  86% { transform: rotate(6deg); }
+}
+
+.head {
+  transform-origin: 200px 214px;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ai {
+  font: 800 66px/1 "Poppins", system-ui, sans-serif;
+  fill: #2563eb;
+  letter-spacing: -1px;
+}
+.band {
+  fill: #60a5fa;
+  filter: drop-shadow(0 0 6px #60a5fa);
+}
+.earLight {
+  fill: #93c5fd;
+  opacity: calc(0.55 + var(--lv) * 0.45);
+  transition: fill 0.3s;
+}
+
+/* LED yuz */
+.face {
+  color: var(--led);
+}
+.eye,
+.mouth {
+  fill: currentColor;
+}
+.eyes {
+  transform-origin: 200px 118px;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.eye {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: blink 4.6s infinite;
+}
+@keyframes blink {
+  0%, 92%, 100% { transform: scaleY(1); }
+  95% { transform: scaleY(0.12); }
+}
+
+/* Halqa — tinglayotganda ovoz bilan "nafas oladi" */
+.halo {
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  width: 78%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  background: radial-gradient(circle, rgba(147, 197, 253, 0.34) 0%, rgba(147, 197, 253, 0) 68%);
+  opacity: 0;
+  transition: opacity 0.4s, transform 0.12s linear;
+  pointer-events: none;
+}
+
+.wrap[data-state="listening"] .halo {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(calc(0.95 + var(--lv) * 0.35));
+}
+.wrap[data-state="listening"] .earLight { fill: #34d399; }
+.wrap[data-state="listening"] .head { transform: rotate(-3deg); }
+.wrap[data-state="listening"] .forearm,
+.wrap[data-state="thinking"] .forearm,
+.wrap[data-state="speaking"] .forearm { animation: none; }
+
+.wrap[data-state="thinking"] .eyes { transform: translate(8px, -7px); }
+.wrap[data-state="thinking"] .earLight { animation: think 0.9s ease-in-out infinite; }
+@keyframes think {
+  50% { opacity: 0.25; }
+}
+
+.wrap[data-state="speaking"] .halo {
+  opacity: 0.8;
+  transform: translate(-50%, -50%) scale(calc(0.95 + var(--lv) * 0.2));
+}
+.wrap[data-state="speaking"] .head { transform: rotate(1.5deg); }
+
+.wrap[data-emotion="sad"] .eyes { transform: translateY(5px) scaleY(0.8); }
+.wrap[data-emotion="angry"] { --led: #fca5a5; }
+
+@media (prefers-reduced-motion: reduce) {
+  .bot, .shadow, .forearm, .eye, .earLight { animation: none !important; }
+}

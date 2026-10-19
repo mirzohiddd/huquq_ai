@@ -1,100 +1,79 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, Mic, Square, Send, Volume2, VolumeX, GraduationCap } from "lucide-react";
-import ReactMarkdown from "react-markdown";
+import { ArrowLeft } from "lucide-react";
 import { useLang } from "../../context/LangContext";
-import api from "../../utils/api";
 import Seo from "../../components/Seo";
-import RobotHead from "./RobotHead";
-import LessonPanel from "./LessonPanel";
+import Robot from "./Robot";
 import { useVoiceTalk } from "./useVoiceTalk";
 import { voiceText } from "./voiceText";
-import { EMOTION_LABEL } from "./robotFace";
 import s from "./VoiceAssistant.module.css";
 
 /**
- * OVOZLI YORDAMCHI (robot) — /voice. Savol-javob va dars rejimi.
- * Mantiq: useVoiceTalk.js · yuz: RobotHead.jsx · server: routes/voiceTalk.js.
+ * OVOZLI YORDAMCHI — /voice (2026-10-19 qayta dizayn).
+ * Sahifada faqat bitta robot, markazda. Robotni bosish yoki Space:
+ * kutish → tinglaydi; tinglayotganda → gapni yuboradi (jim qolsangiz
+ * o'zi ham yuboradi); o'ylayotganda/gapirayotganda → to'xtaydi.
+ * Mantiq: useVoiceTalk.js · server: routes/voiceTalk.js.
  */
 export default function VoiceAssistant() {
   const { lang } = useLang();
   const t = voiceText(lang);
   const nav = useNavigate();
   const v = useVoiceTalk(lang);
-  const [areas, setAreas] = useState([]);
-  const busy = v.status === "thinking";
+  const { toggle } = v;
 
   useEffect(() => {
-    api.get("/voice/tutor/areas").then((r) => setAreas(r.data.areas || [])).catch(() => {});
-  }, []);
+    const onKey = (e) => {
+      if (e.code !== "Space" || e.repeat) return;
+      const tag = e.target?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA" || e.target?.isContentEditable) return;
+      e.preventDefault(); // sahifa scroll bo'lmasin, fokusdagi tugma ikki marta bosilmasin
+      toggle();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [toggle]);
 
-  const MicIcon = v.status === "listening" ? Send : v.status === "speaking" || busy ? Square : Mic;
-  const micLabel = v.status === "listening" ? t.send : v.status === "idle" ? t.start : t.stop;
   const err = v.error && (t[v.error.text] || v.error.text || t.error);
-  const turn = v.turn;
+  const label = v.status === "listening" ? t.send : v.status === "idle" ? t.start : t.stop;
 
   return (
     <div className={s.page}>
       <Seo title={t.title} noindex />
-      <header className={s.top}>
-        <button type="button" className={s.iconBtn} onClick={() => nav(-1)} aria-label={t.back}>
-          <ArrowLeft size={20} />
-        </button>
-        <div className={s.tabs} role="tablist">
-          {[["qa", t.modeQa], ["tutor", t.modeTutor]].map(([m, label]) => (
-            <button key={m} type="button" role="tab" aria-selected={v.mode === m} className={v.mode === m ? s.tabOn : s.tab} onClick={() => v.switchMode(m)}>
-              {label}
-            </button>
-          ))}
-        </div>
-        <button type="button" className={s.iconBtn} onClick={v.toggleMute} aria-label={v.muted ? t.unmute : t.mute} title={v.muted ? t.unmute : t.mute}>
-          {v.muted ? <VolumeX size={20} /> : <Volume2 size={20} />}
-        </button>
-      </header>
+      <button type="button" className={s.back} onClick={() => nav(-1)} aria-label={t.back}>
+        <ArrowLeft size={20} />
+      </button>
 
-      <main className={s.main}>
-        <section className={s.stage}>
-          <RobotHead emotion={v.emotion} state={v.status} levelRef={v.levelRef} micRef={v.micRef} size={260} />
-          <p className={s.mood}>{EMOTION_LABEL[lang]?.[v.emotion] || ""}</p>
-          <p className={s.status} aria-live="polite">{t[v.status]}</p>
-          <button type="button" className={`${s.mic} ${v.status !== "idle" ? s.micOn : ""}`} onClick={v.toggle} aria-label={micLabel}>
-            <MicIcon size={28} />
-          </button>
-          <span className={s.micLabel}>{micLabel}</span>
-          {err && (
-            <p className={s.error} role="alert">
-              {err}
-              {v.error.register && <Link to="/register" className={s.errLink}>{t.register}</Link>}
-            </p>
-          )}
-        </section>
+      <main className={s.stage}>
+        <button
+          type="button"
+          className={s.robotBtn}
+          onClick={toggle}
+          onKeyDown={(e) => e.code === "Space" && e.preventDefault()}
+          aria-label={label}
+          aria-pressed={v.status !== "idle"}
+        >
+          <Robot state={v.status} emotion={v.emotion} levelRef={v.levelRef} micRef={v.micRef} />
+        </button>
 
-        <section className={s.panel}>
-          {v.mode === "tutor" ? (
-            <LessonPanel v={v} t={t} lang={lang} areas={areas} busy={busy} />
-          ) : turn ? (
-            <div className={s.card}>
-              {turn.userText && (
-                <p className={s.you}><b>{t.you}:</b> {turn.userText}</p>
-              )}
-              <div className={s.answer}>
-                <b className={s.who}>{t.robot}</b>
-                <ReactMarkdown>{turn.answer || turn.speech || ""}</ReactMarkdown>
-              </div>
-              {turn.quizArea && (
-                <button type="button" className={s.primary} disabled={busy} onClick={() => v.startLesson(turn.quizArea)}>
-                  <GraduationCap size={16} /> {t.quizOffer}
-                </button>
-              )}
-            </div>
-          ) : (
-            <div className={s.card}>
-              <h1 className={s.cardTitle}>{t.title}</h1>
-              <p className={s.text}>{t.sub}</p>
-              <p className={s.hint}>{t.hint}</p>
-            </div>
-          )}
-        </section>
+        <p className={s.status} data-state={v.status} aria-live="polite">
+          <span className={s.dot} aria-hidden="true" />
+          {t[v.status]}
+        </p>
+        {v.status === "idle" && !err && (
+          <p className={s.hint}>
+            {t.tapHint}
+            <span className={s.keyHint}>
+              {" "}{t.orKey} <kbd>Space</kbd>
+            </span>
+          </p>
+        )}
+        {err && (
+          <p className={s.error} role="alert">
+            {err}
+            {v.error.register && <Link to="/register" className={s.errLink}>{t.register}</Link>}
+          </p>
+        )}
       </main>
     </div>
   );
