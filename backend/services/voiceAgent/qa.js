@@ -11,11 +11,12 @@
  * javobda `clarifyOf` qaytadi, keyingi ovozli javob unga qo'shilib
  * (asl savol + aniqlashtirish) yana tahlil qilinadi.
  */
-const { getLegalAdvice } = require("../legalAI");
+const { getLegalAdvice, isLegalQuestion } = require("../legalAI");
 const { repairTranscript } = require("../voiceTranscript");
 const { detectEmotion, isInsult, isGreeting, isThanks } = require("./emotion");
 const { speechSummary, opener, clarifyText, T } = require("./speech");
 const { isUzCyrillic, uzCyrToLatin } = require("../localAI/text");
+const { smallTalk, offTopicReply } = require("./smalltalk");
 
 const REPAIR_WAIT_MS = 3500; // ovozda uzoq kutish yo'q — keyin aniqlashtiramiz
 const race = (p, ms) => Promise.race([p, new Promise((r) => setTimeout(() => r(null), ms))]);
@@ -57,9 +58,26 @@ async function answerQuestion({ text, lang = "uz", history = [], clarifyOf = "" 
     return { kind: "answer", emotion: "happy", answer: L.thanks, speech: L.thanks };
   }
 
-  // Aniqlashtirish javobi — asl savol bilan birga tahlil qilinadi
-  const query = clarifyOf ? `${clarifyOf} ${raw}`.slice(-500) : raw;
+  // Oddiy suhbat ("Sen kimsan?", "Qalaysan?", "Nima qila olasan?") — qidiruvsiz
+  const chat = smallTalk(raw, lang);
+  if (chat) {
+    return { kind: "answer", emotion: chat.key === "bye" || chat.key === "howareyou" ? "happy" : "neutral", answer: chat.text, speech: chat.text };
+  }
+
+  /* ⚠️ (2026-10-19) Aniqlashtirishdan keyingi gap avval O'ZI tahlil
+     qilinadi. Avval u har doim oldingi tushunilmagan gapga QO'SHIB
+     tahlil qilinardi — bir marta "tushunmadim" degan robot keyingi har
+     qanday aniq savolda ham shu javobda qotib qolardi. */
+  let query = raw;
   let r = await ask(query, history, lang);
+  if (clarifyOf && !understood(r)) {
+    const joined = `${clarifyOf} ${raw}`.slice(-500);
+    const rj = await ask(joined, history, lang);
+    if (understood(rj)) {
+      r = rj;
+      query = joined;
+    }
+  }
   let used = query;
 
   if (!understood(r)) {
@@ -71,6 +89,14 @@ async function answerQuestion({ text, lang = "uz", history = [], clarifyOf = "" 
         used = fixed.text;
       }
     }
+  }
+
+  // Mavzudan tashqari (ob-havo, futbol…) — "tushunmadim" emas, aniq yo'naltirish
+  /* Ovoz rejimida mavzu filtri ataylab yumshoq (Whisper xatolari) — javob
+     topilmagandagina qat'iy filtr bilan qayta tekshiriladi. */
+  if (!understood(r) && (r?.category === "off_topic" || !isLegalQuestion(raw, false))) {
+    const speech = offTopicReply(lang);
+    return { kind: "answer", emotion: "neutral", answer: speech, speech, userText: used };
   }
 
   if (!understood(r)) {

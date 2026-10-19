@@ -219,8 +219,40 @@ function speechChunks(text, max = 180) {
   return out.slice(0, 8);
 }
 
+/* ⚠️ Microsoft bir vaqtdagi ko'p ulanishga 429 qaytaradi (2026-10-19 sinovda
+   ko'rildi) — shunda zanjir ElevenLabs'ning ingliz ovoziga tushib qolardi.
+   Butun server bo'yicha bir vaqtda ko'pi bilan EDGE_MAX ta ulanish, xatodan
+   keyin esa kutib qayta urinish. */
+const EDGE_MAX = 3;
+let edgeActive = 0;
+const edgeQueue = [];
+async function edgeSlot(fn) {
+  if (edgeActive >= EDGE_MAX) await new Promise((r) => edgeQueue.push(r));
+  edgeActive += 1;
+  try {
+    return await fn();
+  } finally {
+    edgeActive -= 1;
+    edgeQueue.shift()?.();
+  }
+}
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+
+async function edgeOnce(text, lang, emotion) {
+  let last;
+  for (const delay of [0, 400, 1200]) {
+    if (delay) await wait(delay);
+    try {
+      return await edgeSlot(() => tryEdgeTTS(text, lang, emotion));
+    } catch (e) {
+      last = e;
+    }
+  }
+  throw last;
+}
+
 async function edgeSpeak(clean, lang, emotion) {
-  const once = (t) => tryEdgeTTS(t, lang, emotion).catch(() => tryEdgeTTS(t, lang, emotion)).catch(() => tryEdgeTTS(t, lang, emotion));
+  const once = (t) => edgeOnce(t, lang, emotion);
   const chunks = speechChunks(clean);
   const results = await Promise.all(chunks.map(once));
   return { buffer: Buffer.concat(results.map((r) => r.buffer)), contentType: "audio/mpeg" };

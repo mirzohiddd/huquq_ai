@@ -88,9 +88,9 @@ export default function Robot({ state, emotion, levelRef, micRef }) {
             <circle cx="312" cy="314" r="13" fill="#d6deeb" stroke="#9fb0c9" strokeWidth="2" />
             <line x1="312" y1="314" x2="318" y2="378" stroke="url(#rbShell)" strokeWidth="27" strokeLinecap="round" />
             <line x1="317" y1="366" x2="318" y2="382" stroke="#3b82f6" strokeWidth="27" strokeLinecap="round" />
-            <rect x="305" y="386" width="28" height="22" rx="8" fill="#3a4354" />
+            <rect x="305" y="386" width="28" height="22" rx="8" fill="#6b7689" />
             {[[309, 406, 307, 428], [319, 408, 319, 432], [329, 406, 333, 427]].map(([a, b, c, d]) => (
-              <line key={a} x1={a} y1={b} x2={c} y2={d} stroke="#2a3140" strokeWidth="7" strokeLinecap="round" />
+              <line key={a} x1={a} y1={b} x2={c} y2={d} stroke="#576276" strokeWidth="7" strokeLinecap="round" />
             ))}
           </g>
 
@@ -109,11 +109,11 @@ export default function Robot({ state, emotion, levelRef, micRef }) {
             <g className={s.forearm}>
               <line x1="82" y1="304" x2="74" y2="236" stroke="url(#rbShell)" strokeWidth="27" strokeLinecap="round" />
               <line x1="75" y1="246" x2="74" y2="232" stroke="#3b82f6" strokeWidth="27" strokeLinecap="round" />
-              <rect x="58" y="196" width="32" height="28" rx="10" fill="#3a4354" />
+              <rect x="58" y="196" width="32" height="28" rx="10" fill="#6b7689" />
               {[[62, 198, 55, 172], [70, 196, 67, 164], [78, 196, 80, 165], [86, 199, 92, 175]].map(([a, b, c, d]) => (
-                <line key={a} x1={a} y1={b} x2={c} y2={d} stroke="#2a3140" strokeWidth="7.5" strokeLinecap="round" />
+                <line key={a} x1={a} y1={b} x2={c} y2={d} stroke="#576276" strokeWidth="7.5" strokeLinecap="round" />
               ))}
-              <line x1="89" y1="214" x2="102" y2="202" stroke="#2a3140" strokeWidth="7.5" strokeLinecap="round" />
+              <line x1="89" y1="214" x2="102" y2="202" stroke="#576276" strokeWidth="7.5" strokeLinecap="round" />
             </g>
           </g>
           <circle cx="118" cy="262" r="14" fill="#e7edf6" stroke="#b7c5da" strokeWidth="2" />

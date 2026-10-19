@@ -99,7 +99,17 @@ function speechSummary(answer, lang = "uz") {
     if (/^(•|📖|_)/u.test(l)) continue;
     body.push(plain(l));
   }
-  const main = takeSentences(body.join(" "), 210);
+  let main = takeSentences(body.join(" "), 210);
+  /* Ro'yxat ko'rinishidagi javob ("…quyidagilar topildi:") — mazmunsiz
+     qolmasin: birinchi topilgan modda sarlavhasi va matnidan bir jumla. */
+  if (/:\s*$/.test(main)) {
+    const i = lines.findIndex((l) => /^\*\*\d+\./.test(l));
+    if (i >= 0) {
+      const head = plain(lines[i]).replace(/^\d+\.\s*/, "").replace(/^[^,]+,\s*/, "");
+      const next = lines.slice(i + 1).find((l) => l && !/^\*\*/.test(l));
+      main = `${main} ${head}.${next ? ` ${takeSentences(plain(next), 160)}` : ""}`;
+    }
+  }
   const parts = [title && !main.startsWith(title) ? `${title}.` : "", main];
   if (step) parts.push(`${T(lang).firstStep} ${takeSentences(step, 120)}`);
   const text = parts.filter(Boolean).join(" ").replace(/\.\./g, ".");
