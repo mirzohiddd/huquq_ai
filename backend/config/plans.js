@@ -87,8 +87,29 @@ const PLANS = {
 const PLAN_DAYS = 30; // obuna muddati (kun)
 const PAID_TIERS = ["basic", "pro", "premium"];
 
+/* Admin panelidan (AI sozlamalari) berilgan TARIF darajasidagi limitlar —
+   services/aiBilling/settings.js o'rnatadi. Faqat `dailyLimit` va
+   `voiceDailyLimit`; narx va kontent cheklovlari bu yo'l bilan
+   o'zgarmaydi. `null` — yuqoridagi standart qiymat qoladi. Bu foydalanuvchi
+   boshiga QO'LDA limit EMAS: tarifdagi hamma uchun bir xil. */
+let planOverrides = {};
+const OVERRIDABLE = ["dailyLimit", "voiceDailyLimit"];
+
+function setPlanOverrides(map) {
+  const next = {};
+  for (const [tier, o] of Object.entries(map || {})) {
+    if (!PLANS[tier]) continue;
+    next[tier] = {};
+    for (const k of OVERRIDABLE) {
+      if (Number.isFinite(o?.[k]) && o[k] >= 0) next[tier][k] = o[k];
+    }
+  }
+  planOverrides = next;
+}
+
 function getPlanConfig(tier) {
-  return PLANS[tier] || PLANS.free;
+  const id = PLANS[tier] ? tier : "free";
+  return { ...PLANS[id], ...(planOverrides[id] || {}) };
 }
 
 function isPaidTier(tier) {
@@ -140,6 +161,7 @@ module.exports = {
   PLAN_DAYS,
   PAID_TIERS,
   getPlanConfig,
+  setPlanOverrides,
   isPaidTier,
   isWithinLimit,
   nextTierFor,

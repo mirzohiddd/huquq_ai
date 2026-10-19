@@ -16,6 +16,8 @@ import Lessons          from "./pages/Lessons";
 import Tests            from "./pages/Tests";
 import Laws             from "./pages/Laws";
 import Analytics        from "./pages/analytics/Analytics";
+import AiFinance        from "./pages/ai/AiFinance";
+import AiSettings       from "./pages/ai/AiSettings";
 
 function Guard({ children }) {
   const { admin, loading } = useAdmin();
@@ -38,6 +40,8 @@ export default function App() {
         <Route path="chats/:sessionId" element={<ChatDetail />} />
         <Route path="users"            element={<Users />} />
         <Route path="payments"         element={<Payments />} />
+        <Route path="ai-finance"       element={<AiFinance />} />
+        <Route path="ai-settings"      element={<AiSettings />} />
         <Route path="orders"           element={<Orders />} />
         <Route path="reviews"          element={<Reviews />} />
         <Route path="lessons"          element={<Lessons />} />

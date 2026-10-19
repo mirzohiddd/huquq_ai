@@ -36,7 +36,7 @@ function registerPlans({ bot, safeSend, getLang, contactMenu, SITE_URL }) {
     const user = userId ? await User.findById(userId).select("plan planExpiresAt").lean() : null;
     const tier = getUserTier(user);
     const lines = PAID_TIERS.map((t) => {
-      const c = PLANS[t];
+      const c = getPlanConfig(t); // admin limitlari ham ko'rinsin
       return `${ICON[t]} <b>${c.label}</b> — ${price(c.priceUzs)} ${X.perMonth}\n<i>${featureLine(c, X)}</i>`;
     });
     const text = [X.title, fill(X.current, { plan: getPlanConfig(tier).label }), "", lines.join("\n\n"), "", X.pick].join("\n");

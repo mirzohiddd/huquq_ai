@@ -16,6 +16,7 @@ const { getClientIp } = require("../middleware/security");
 const { notifyLimitReached } = require("./notifications");
 const mongoose = require("mongoose");
 const { docAnswer } = require("../services/aiTools/docChat");
+const { docReplyFor } = require("../services/llm/docLlm");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
@@ -141,11 +142,13 @@ router.post(
       /* Suhbatda yuklangan hujjat bo'lsa va savol unga ishora qilsa
          ("shu hujjatdagi testga javob ber") — javob hujjat matnidan
          (services/aiTools/docChat.js, 2026-10-14). */
+      /* 2026-10-19: tarifda hujjat tahlili yoqilgan bo'lsa (Pro/Premium) —
+         LLM bilan; aks holda avvalgi lokal javob (docReplyFor ichida). */
       const docReply = imageBase64
         ? null
-        : await docAnswer(chat, trimmed, lang).catch((e) => {
-            console.warn("docAnswer xato:", e.message);
-            return null;
+        : await docReplyFor(chat, trimmed, lang).catch((e) => {
+            console.warn("docReplyFor xato:", e.message);
+            return docAnswer(chat, trimmed, lang).catch(() => null);
           });
       const { answer, category, provider } = docReply
         ? { answer: docReply, category: "boshqa", provider: "local" }
@@ -262,7 +265,7 @@ router.post("/send", optionalUserGuard, mobileLimitGuard, async (req, res) => {
     }
 
     // Yuklangan hujjatga oid savol — hujjat matnidan (docChat.js)
-    const docReply = await docAnswer(chat, trimmed, lang).catch(() => null);
+    const docReply = await docReplyFor(chat, trimmed, lang).catch(() => docAnswer(chat, trimmed, lang).catch(() => null));
     const { answer, category, provider } = docReply
       ? { answer: docReply, category: "boshqa", provider: "local" }
       : await getLegalAdvice(trimmed, chat.messages, null, null, lang, isPro);

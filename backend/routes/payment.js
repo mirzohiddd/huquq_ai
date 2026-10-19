@@ -109,6 +109,8 @@ async function activatePlan(userId, tier) {
   user.plan = tier;
   user.planExpiresAt = new Date(base + PLAN_DAYS * 24 * 60 * 60 * 1000);
   await user.save();
+  // Tarif AI modeli/limitlari keyingi xabardanoq ochilsin (budget.js keshi)
+  require("../services/aiBilling/budget").forgetTier(user._id);
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -117,7 +119,8 @@ async function activatePlan(userId, tier) {
 router.get("/plans", async (req, res) => {
   try {
     res.json({
-      plans: Object.entries(PLANS).map(([id, cfg]) => ({ id, ...cfg })),
+      // getPlanConfig — admin panelidagi tarif limitlari ham hisobga olinsin
+      plans: Object.keys(PLANS).map((id) => ({ id, ...getPlanConfig(id) })),
       /* Onlayn to'lov (Click/Payme/Uzum yoki test rejimi) ishlaydimi.
          `false` bo'lsa Narxlar bo'limi faqat buyurtma oynasini ko'rsatadi —
          avval to'lov oynasi ochilib, har doim "ulanmagan" xatosi chiqardi. */
@@ -350,6 +353,7 @@ router.post("/cancel", userGuard, async (req, res) => {
     user.plan = "free";
     user.planExpiresAt = null;
     await user.save();
+    require("../services/aiBilling/budget").forgetTier(user._id);
     res.json({ success: true, plan: "free" });
   } catch (err) {
     console.error("payment/cancel xato:", err.message);

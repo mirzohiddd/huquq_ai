@@ -6,6 +6,7 @@
  * faqat Telegram tomonini bajaradi: limit, suhbat tarixi, bazaga
  * saqlash va javobni chiroyli ko'rinishda yuborish.
  */
+const { runWith } = require("../services/aiBilling/context");
 const fs = require("fs");
 const os = require("os");
 const path = require("path");
@@ -121,7 +122,10 @@ function createAi({ bot, safeSend, getLang, mainMenu, voiceReply }) {
     const sess = getSession(tgId);
 
     try {
-      const res = await getLegalAdvice(question, sess.messages, null, "image/jpeg", lang);
+      // Kontekst: AI xarajati va tarif (Pro/Premium modeli) shu foydalanuvchiga tegishli
+      const res = await runWith({ userId: userId ? String(userId) : null, channel: "telegram", kind: "chat" }, () =>
+        getLegalAdvice(question, sess.messages, null, "image/jpeg", lang),
+      );
       const reply = String(res?.answer || "").trim() || T[lang].error;
       sess.messages.push({ role: "user", content: question }, { role: "assistant", content: reply });
       if (sess.messages.length > HISTORY_MAX) sess.messages = sess.messages.slice(-HISTORY_MAX);
@@ -151,7 +155,9 @@ function createAi({ bot, safeSend, getLang, mainMenu, voiceReply }) {
     const chatId = msg.chat.id;
     const lang = getLang(msg.from.id);
     const wait = await safeSend(chatId, T[lang].voice_processing);
-    const text = await transcribe(msg, lang);
+    const text = await runWith({ userId: userId ? String(userId) : null, channel: "telegram", kind: "voice" }, () =>
+      transcribe(msg, lang),
+    );
     if (wait?.message_id) bot.deleteMessage(chatId, wait.message_id).catch(() => {});
     if (!text) return safeSend(chatId, T[lang].voice_error);
     await safeSend(chatId, `${T[lang].voice_recognized} <i>${esc(text)}</i>`);

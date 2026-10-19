@@ -129,6 +129,8 @@ app.use(
 /* ───── BODY LIMIT ───── */
 app.use(express.json({ limit: "100kb" }));
 app.use(express.urlencoded({ extended: true, limit: "100kb" }));
+// AI xarajati kimga tegishli — so'rov konteksti (services/aiBilling/context.js)
+app.use(require("./services/aiBilling/context").contextMiddleware);
 
 /* ───── HEALTH (CORS keyin — frontend ping uchun) ───── */
 app.get("/health", (_, res) =>
@@ -314,6 +316,8 @@ app.use("/api/admin/orders", require("./routes/orders").adminRouter);
 // Sharhlar — admin qismi ham `/api/admin` dan OLDIN (aniq yo'l)
 app.use("/api/reviews", require("./routes/reviews").router);
 app.use("/api/admin/reviews", require("./routes/reviews").adminRouter);
+// AI sozlamalari va xarajatlar — `/api/admin` dan OLDIN (aniq yo'l)
+app.use("/api/admin/ai", require("./routes/adminAi"));
 app.use("/api/admin", require("./routes/admin"));
 app.use("/api/visitor", require("./routes/visitor"));
 app.use("/api/analytics", require("./routes/analytics"));
@@ -487,6 +491,8 @@ mongoose
     /* Lokal AI (API'siz) qidiruv indeksini fonda tayyorlash — birinchi
        savol berilganda foydalanuvchi indeks qurilishini kutmasligi uchun. */
     require("./services/localAI").warmLawIndex();
+    // Tarif AI sozlamalari (admin o'zgartirgan) — xotiraga
+    require("./services/aiBilling/settings").loadSettings();
 
     /* "Qonunchilik hujjatlari": lex.uz rekvizitlari, tuzilmasi (bo'lim/bob)
        va modda o'zgarishlari — fonda, 2 daqiqadan keyin va har 24 soatda. */

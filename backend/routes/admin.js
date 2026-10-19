@@ -927,6 +927,8 @@ router.patch("/users/:id/plan", adminGuard, async (req, res) => {
       new: true,
     }).select("username plan planExpiresAt");
     if (!user) return res.status(404).json({ error: "User topilmadi" });
+    // Yangi tarifning AI modeli/limiti darhol (60 s keshni kutmasdan) ishlasin
+    require("../services/aiBilling/budget").forgetTier(user._id);
     return res.json(user);
   } catch (err) {
     console.error("admin plan update:", err.message);

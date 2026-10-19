@@ -1,4 +1,5 @@
 "use strict";
+const { recordUsage } = require("./aiBilling/usage");
 /**
  * TTS fallback zanjiri (5 ta provider):
  * 1. Google Cloud TTS  — GOOGLE_TTS_KEY (to'lovli, eng yaxshi)
@@ -488,6 +489,14 @@ function orderProviders(providers, raw) {
   return [...picked, ...providers.filter((p) => !picked.includes(p))];
 }
 
+/* AI xarajati jurnali uchun provayder kaliti — narxi admin panelidagi
+   `audio` jadvalida (Edge bepul, ElevenLabs belgilar bo'yicha). */
+function ttsBillingKey(name) {
+  if (name === "Microsoft Edge TTS") return { provider: "edge", model: "neural" };
+  if (name === "ElevenLabs") return { provider: "elevenlabs", model: process.env.ELEVENLABS_MODEL || "eleven_flash_v2_5" };
+  return { provider: name.toLowerCase().replace(/\s+/g, "-"), model: "" };
+}
+
 async function textToSpeech(text, lang = "uz", opts = {}) {
   // Eski chaqiruvlar uchinchi argument sifatida voiceId (satr) beradi
   const emotion = (opts && typeof opts === "object" && opts.emotion) || "neutral";
@@ -557,6 +566,7 @@ async function textToSpeech(text, lang = "uz", opts = {}) {
       console.log(`TTS urinish: ${p.name}`);
       const result = await p.fn();
       console.log(`TTS OK: ${p.name}, ${result.buffer.length} bytes`);
+      recordUsage({ kind: "tts", ...ttsBillingKey(p.name), chars: clean.length }).catch(() => {});
       return result;
     } catch (e) {
       console.warn(`TTS ${p.name} xato: ${e.message}`);

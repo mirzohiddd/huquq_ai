@@ -50,6 +50,13 @@ function searchInDoc(text, msg, lang) {
 /**
  * @returns {Promise<string|null>} hujjatga oid javob yoki null (oddiy AI'ga o'tadi)
  */
+/** Savol yuklangan (yangi) hujjatga ishora qiladimi — services/llm/docLlm.js uchun. */
+function isDocQuestion(chat, msg) {
+  const ctx = chat?.docContext;
+  if (!ctx?.text || !DOC_REF.test(msg)) return false;
+  return !(ctx.at && Date.now() - new Date(ctx.at).getTime() > FRESH_MS);
+}
+
 async function docAnswer(chat, msg, lang = "uz") {
   const ctx = chat?.docContext;
   if (!ctx?.text || !DOC_REF.test(msg)) return null;
@@ -77,4 +84,4 @@ async function docAnswer(chat, msg, lang = "uz") {
   return searchInDoc(ctx.text, msg, lang);
 }
 
-module.exports = { attachDoc, docAnswer };
+module.exports = { attachDoc, docAnswer, isDocQuestion };

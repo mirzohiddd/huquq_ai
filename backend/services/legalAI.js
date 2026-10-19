@@ -11,6 +11,7 @@ const Anthropic = require("@anthropic-ai/sdk");
 const https = require("https");
 const { searchWeb, formatSearchContext } = require("./webSearch");
 const { localLegalAnswer } = require("./localAI");
+const { tieredAnswer } = require("./llm/tiered"); // tarifga qarab AI (2026-10-19)
 const {
   isFileRequest,
   fileRequestReply,
@@ -1399,7 +1400,12 @@ async function getLegalAdvice(
   // `AI_MODE` almashtirgichi OLIB TASHLANDI — chat hech qanday tashqi API
   // chaqirmaydi. Quyidagi provayder funksiyalari faqat `askStructured`
   // (dars topshiriqlarini baholash) uchun qoldi.
-  return localLegalAnswer({
+  //
+  // 2026-10-19: TARIFGA QARAB AI. Lokal javob HAR DOIM tayyorlanadi (bepul
+  // tarif uchun yakuniy javob, pullik tarif uchun RAG asosi va zaxira).
+  // Pullik tarifda tieredAnswer() uni OpenAI bilan, faqat Lex.uz bazasidagi
+  // moddalarga tayangan holda yaxshilaydi (services/llm/tiered.js).
+  const local = await localLegalAnswer({
     msg,
     prevUserText,
     lang: detectedLang,
@@ -1417,6 +1423,19 @@ async function getLegalAdvice(
     prevAnswer: inDialog
       ? String([...history].reverse().find((m) => m.role === "assistant")?.content || "")
       : "",
+  });
+  // Qisqa davom savoli ("buning uchun qanday hujjatlar kerak?") — RAG qidiruvi oldingi savol bilan
+  const shortFollowUp = prevUserText && msg.split(/\s+/).length < 7;
+  return tieredAnswer({
+    msg,
+    history: inDialog ? history : [],
+    lang: detectedLang,
+    local,
+    codes: CATEGORY_TO_LAWCODE[category] || null,
+    query: shortFollowUp ? `${prevUserText} ${msg}`.slice(-800) : msg,
+    image: imageBase64 ? { base64: imageBase64, mime: imageMimeType || "image/jpeg" } : null,
+    voice: opts.fromVoice === true,
+    docText: opts.docText || null,
   });
 }
 

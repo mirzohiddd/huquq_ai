@@ -7,6 +7,7 @@
 const fs = require("fs");
 const path = require("path");
 const https = require("https");
+const { recordUsage } = require("./aiBilling/usage");
 
 const SUPPORTED_FORMATS = [".mp3", ".wav", ".webm", ".ogg", ".m4a", ".flac"];
 const MAX_SIZE = 25 * 1024 * 1024; // 25MB
@@ -67,7 +68,9 @@ function requestGroq(apiKey, fileBuffer, filename, mimeType, model, language, pr
   body += `${model}\r\n`;
   body += `--${boundary}\r\n`;
   body += `Content-Disposition: form-data; name="response_format"\r\n\r\n`;
-  body += `json\r\n`;
+  // verbose_json — audio DAVOMIYLIGI uchun (AI xarajati hisobi, 2026-10-19).
+  // Qaytariladigan `text`/`language` avvalgidek: til har doim so'rovdan olinadi.
+  body += `verbose_json\r\n`;
   body += `--${boundary}\r\n`;
   body += `Content-Disposition: form-data; name="temperature"\r\n\r\n`;
   body += `0\r\n`;
@@ -113,7 +116,10 @@ function requestGroq(apiKey, fileBuffer, filename, mimeType, model, language, pr
               return reject(new Error(json.error.message || "STT xato"));
             resolve({
               text: json.text?.trim() || "",
-              language: json.language || language,
+              // verbose_json tilni to'liq nom bilan beradi ("uzbek") — chaqiruvchilar
+              // "uz"/"ru" kutadi, shuning uchun so'ralgan til qaytariladi (avval ham shunday edi)
+              language,
+              duration: Number(json.duration) || 0,
             });
           } catch {
             reject(new Error("STT parse xatosi: " + data.slice(0, 200)));
@@ -160,7 +166,7 @@ async function speechToText(filePath, language = null, opts = {}) {
   let lastErr = null;
   for (const model of models) {
     try {
-      return await requestGroq(
+      const out = await requestGroq(
         apiKey,
         fileBuffer,
         filename,
@@ -169,6 +175,9 @@ async function speechToText(filePath, language = null, opts = {}) {
         lang,
         opts.prompt ? (lang === "ru" ? RU_LEGAL_PROMPT : UZ_LEGAL_PROMPT) : "",
       );
+      // Groq har so'rovni kamida 10 soniya deb hisoblaydi
+      recordUsage({ kind: "stt", provider: "groq", model, seconds: Math.max(10, out.duration || 0) }).catch(() => {});
+      return out;
     } catch (err) {
       lastErr = err;
       console.warn(`STT ${model} xatosi: ${err.message}`);
