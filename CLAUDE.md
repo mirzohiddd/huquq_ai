@@ -73,7 +73,7 @@ ishlatiladigan standalone admin dashboard · `backend/` — Express + MongoDB AP
 
 Jonli manzillar (2026-09-13): backend — **Render**
 `https://huquq-ai-7v7a.onrender.com` (Railway manzili o'chgan, 404) · frontend —
-`https://huquqtech.uz` (zaxira: `https://huquq-ai-user.vercel.app`) · admin — `https://huquq-ai-admin.vercel.app`.
+`https://www.huquqtech.uz` (apex `huquqtech.uz` 308 bilan www'ga yo'naltiriladi; zaxira: `https://huquq-ai-user.vercel.app`) · admin — `https://huquq-ai-admin.vercel.app`.
 
 ## ⚠️ Muhim tuzoqlar (har doim amal qiling)
 
@@ -106,4 +106,7 @@ Bular haqiqiy xatolardan olingan — har biri bir marta ishlab turgan narsani bu
   jim yoqilib qoladi va foydalanuvchi tasdiqlash kodini hech qachon olmaydi.
 - **Backend manzili `.env` da `https://` bilan yozilsin** — protokolsiz manzil
   nisbiy yo'lga aylanib, barcha so'rovlar backend o'rniga frontendga ketadi.
+- **Canonical/sitemap/llms manzillari faqat `https://www.huquqtech.uz`** — `huquqtech.uz`
+  (www'siz) 308 qaytaradi va Google yo'naltiriladigan canonical'li sahifani
+  indekslamaydi (2026-10-20 da aynan shu sabab sayt Google'da chiqmasdi).
 - **Kod har faylda maksimum 200 qator** — oshsa alohida fayllarga bo'linsin.

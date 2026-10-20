@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   GraduationCap,
   ArrowLeft,
@@ -231,6 +231,20 @@ export default function Lessons() {
     },
     [goToPricing],
   );
+
+  /* ── `/lessons?dars=<id>` — testdan keyingi dars tavsiyasi havolasi ──
+     Dars ro'yxat yuklangach ochiladi. ⚠️ Qulflangan dars OCHILMAYDI:
+     `openLesson` tariflarga yo'naltiradi, server esa `GET /lessons/:id`
+     da tarifni baribir alohida tekshiradi. Parametr o'qilgach URL'dan
+     olib tashlanadi — orqaga qaytilganda dars qayta ochilib qolmasin. */
+  const location = useLocation();
+  useEffect(() => {
+    const id = new URLSearchParams(location.search).get("dars");
+    if (!id || !lessons) return;
+    const lesson = lessons.find((x) => x._id === id);
+    navigate("/lessons", { replace: true });
+    if (lesson) openLesson(lesson);
+  }, [location.search, lessons, navigate, openLesson]);
 
   /* To'liq (tarjima qilingan) dars matnini olib kelish.
      Dars ochilganda VA til o'zgarganda ishlaydi — shuning uchun ochiq
@@ -1482,8 +1496,20 @@ function FinishLesson({ t, bank, state, nextLesson, onPassed, onBurn, onOpenNext
     };
   }, [phase]);
 
-  function checkAnswers() {
-    const wrong = questions.filter((q, i) => answers[i] !== q.correct).length;
+  /* Javoblar SERVERDA tekshiriladi — to'g'ri javob brauzerga yuborilmaydi.
+     Tekshirib bo'lmasa (tarmoq) urinish "muvaffaqiyatsiz" emas, shunchaki
+     qayta bosish mumkin bo'ladi. */
+  async function checkAnswers() {
+    let results;
+    try {
+      const { data } = await api.post("/tests/check", {
+        items: questions.map((q, i) => ({ quizId: q.quizId, i: q.i, choice: answers[i] })),
+      });
+      results = data.results || [];
+    } catch {
+      return;
+    }
+    const wrong = questions.filter((_, i) => !results[i]?.correct).length;
     setWrongCount(wrong);
     if (wrong === 0) {
       setPhase("passed");

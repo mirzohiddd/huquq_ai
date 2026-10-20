@@ -135,6 +135,8 @@ function TestEditor({ test, onClose, onSaved }) {
       options: q.options.map((o) => o.trim()).filter(Boolean),
       correct: Number(q.correct) || 0,
       explain: q.explain.trim(),
+      // Hayotiy test vaziyati — tashlab yuborilsa tahrirlashda yo'qolib qolardi.
+      situation: (q.situation || "").trim(),
     }));
     if (cleanQuestions.some((q) => !q.q)) {
       return setErr("Har bir savol matni to'ldirilishi kerak");
@@ -299,6 +301,14 @@ function TestEditor({ test, onClose, onSaved }) {
                     </button>
                   )}
                 </div>
+
+                <textarea
+                  className={es.textarea}
+                  style={{ minHeight: 44 }}
+                  value={q.situation || ""}
+                  onChange={(e) => updateQ(qi, "situation", e.target.value)}
+                  placeholder="Vaziyat (hayotiy test uchun, ixtiyoriy) — savoldan oldin ko'rsatiladi"
+                />
 
                 <textarea
                   className={es.textarea}

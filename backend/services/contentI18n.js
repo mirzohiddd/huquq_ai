@@ -164,6 +164,7 @@ async function translateQuiz(quiz, targetLang, opts = {}) {
 
   out.questions.forEach((q) => {
     c.add(q.q, (v) => (q.q = v));
+    c.add(q.situation, (v) => (q.situation = v));
     c.add(q.explain, (v) => (q.explain = v));
     q.options.forEach((opt, oi) => {
       c.add(opt, (v) => (q.options[oi] = v));
@@ -200,6 +201,7 @@ async function translateQuizList(quizzes, targetLang, opts = {}) {
     c.add(quiz.desc, (v) => (quiz.desc = v));
     quiz.questions.forEach((q) => {
       c.add(q.q, (v) => (q.q = v));
+      c.add(q.situation, (v) => (q.situation = v));
       c.add(q.explain, (v) => (q.explain = v));
       q.options.forEach((opt, oi) => {
         c.add(opt, (v) => (q.options[oi] = v));

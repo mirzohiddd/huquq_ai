@@ -83,11 +83,29 @@
       "destination": "https://huquq-ai-7v7a.onrender.com/public/sitemap-darslar.xml"
     },
     {
+      "source": "/huquqni-organish.md",
+      "destination": "https://huquq-ai-7v7a.onrender.com/public/huquqni-organish.md"
+    },
+    {
+      "source": "/huquqni-organish",
+      "destination": "https://huquq-ai-7v7a.onrender.com/public/huquqni-organish"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
   ],
   "headers": [
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "(?<sub>.*)\\.vercel\\.app" }],
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex"
+        }
+      ]
+    },
     {
       "source": "/(.*)",
       "headers": [

@@ -232,11 +232,14 @@ export function buildQuestionBank(quizzes, topicOf, lessonTopic) {
   (quizzes || []).forEach((quiz) => {
     (quiz.questions || []).forEach((q, i) => {
       if (!q?.q || !Array.isArray(q.options) || q.options.length < 2) return;
+      /* ⚠️ `correct` serverdan KELMAYDI (2026-10-20) — javob `POST /tests/check`
+         da `quizId` + asl indeks `i` bo'yicha tekshiriladi. */
       const item = {
         key: questionKey(quiz._id, i),
+        quizId: quiz._id,
+        i: q.i ?? i,
         q: q.q,
         options: q.options,
-        correct: q.correct,
         explain: q.explain || "",
         source: quiz.title,
       };

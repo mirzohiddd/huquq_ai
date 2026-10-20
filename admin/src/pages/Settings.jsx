@@ -125,7 +125,7 @@ export default function Settings() {
         <Card title="Murojaatlar">
           <div className={s.links}>
             <a
-              href="https://huquqtech.uz/"
+              href="https://www.huquqtech.uz/"
               target="_blank"
               rel="noreferrer"
               className={s.link}

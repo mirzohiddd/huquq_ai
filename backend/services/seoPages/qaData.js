@@ -47,7 +47,7 @@ async function attachQuotes(refs, lang) {
     const found = await LegalChunk.find({
       $or: need.map((n) => ({ lawCode: n.code, articleNumber: n.article })),
     })
-      .select("lawCode articleNumber title titleRu text textRu -_id")
+      .select("lawCode articleNumber title titleRu text textRu lastCheckedAt -_id")
       .lean();
 
     const byKey = new Map(
@@ -73,6 +73,9 @@ async function attachQuotes(refs, lang) {
         article: d.articleNumber,
         title: (ru && d.titleRu) || d.title || "",
         text: trim((ru && d.textRu) || d.text),
+        // lex.uz bilan oxirgi solishtirish (har kungi yangilanish) — sahifada
+        // "tekshirilgan sana" bo'lib chiqadi (E-E-A-T / yangilik signali).
+        checkedAt: d.lastCheckedAt || null,
       };
     })
     .filter(Boolean);

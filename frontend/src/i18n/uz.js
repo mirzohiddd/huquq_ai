@@ -341,9 +341,9 @@ const uz = {
   brand_sub: "Huquqiy ta'lim platformasi",
   nav_logo: "HuquqTech",
   // ── SEO (components/Seo.jsx orqali <title>/<meta> ga yoziladi) ──
-  seo_home_title: "Huquq darsliklari, huquqiy testlar va AI huquqiy maslahatchi",
+  seo_home_title: "Huquqni onlayn o'rganish — huquq darslari, testlar va AI yordamchi",
   seo_home_desc:
-    "O'zbekiston qonunchiligi bo'yicha 130 ta huquq darsi, javoblari bilan huquqiy testlar va AI maslahatchi. Mehnat, oila, meros, yer va jinoyat huquqi bo'yicha savolingizga qonun moddasiga tayangan javob oling. Bepul boshlang.",
+    "Huquqni onlayn o'rganing: O'zbekiston qonunchiligi bo'yicha 130 ta huquq darsi, javoblari bilan huquqiy testlar, kodekslar matni va AI yordamchi. Mehnat, oila, meros, yer va jinoyat huquqi bo'yicha savolingizga qonun moddasiga tayangan javob oling. Bepul boshlang.",
   seo_login_title: "Hisobga kirish",
   seo_register_title: "Ro'yxatdan o'tish",
   seo_lessons_title: "Huquqiy darslar",
@@ -353,7 +353,7 @@ const uz = {
   seo_legal_desc:
     "HuquqTech platformasidan foydalanish qoidalari, maxfiylik siyosati va sun'iy intellekt javoblariga oid rasmiy bildirishnoma.",
   seo_home_keywords:
-    "HuquqTech, huquq darslik, huquq darslari, huquqiy ta'lim, huquq bo'yicha test, huquqiy test javoblari bilan, yuridik maslahat O'zbekiston, onlayn yurist, O'zbekiston qonunchiligi, mehnat kodeksi, oila kodeksi, meros huquqi, iste'molchi huquqlari, huquqiy yordam onlayn, sun'iy intellekt yurist",
+    "HuquqTech, huquqni o'rganish, huquqni onlayn o'rganish, huquq kursi, huquq darslik, huquq darslari, huquqiy ta'lim, huquq bo'yicha test, huquqiy test javoblari bilan, yuridik maslahat O'zbekiston, onlayn yurist, O'zbekiston qonunchiligi, mehnat kodeksi, oila kodeksi, meros huquqi, iste'molchi huquqlari, huquqiy yordam onlayn, sun'iy intellekt yurist",
 
   // ── SMO: ulashish paneli (components/ShareBar.jsx) ──
   share_label: "Ulashish:",
@@ -774,6 +774,7 @@ const uz = {
   footer_col_company: "Kompaniya",
   // Footer'dagi ochiq qonun sahifalariga havola (server tomonda
   // chiziladi — SEO uchun muhim ichki havola)
+  footer_guide: "Huquqni o'rganish",
   footer_public_laws: "Qonunlar matni",
   footer_public_acts: "Prezident hujjatlari",
   footer_qa: "Savol-javob",

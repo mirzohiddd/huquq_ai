@@ -78,6 +78,7 @@ function testsIndexPage({ quizzes }) {
 function questionHtml(q, i) {
   const right = q.options[q.correct];
   return `<article class="card qz" id="savol-${i + 1}">
+      ${q.situation ? `<p class="sub">${esc(q.situation)}</p>` : ""}
       <h2>${i + 1}. ${esc(q.q)}</h2>
       <ol class="opts">${q.options.map((o, k) => `<li><b>${LETTERS[k] || k + 1}</b> ${esc(o)}</li>`).join("")}</ol>
       <details><summary>To'g'ri javobni ko'rish</summary>
@@ -143,7 +144,8 @@ function testPage({ quiz, others }) {
           eduQuestionType: "Multiple choice",
           learningResourceType: "Practice problem",
           name: q.q,
-          text: q.q,
+          // Hayotiy testda savol vaziyatsiz tushunarsiz — matnga qo'shiladi.
+          text: q.situation ? `${q.situation} ${q.q}` : q.q,
           acceptedAnswer: { "@type": "Answer", text: q.options[q.correct], ...(q.explain ? { answerExplanation: { "@type": "Comment", text: q.explain } } : {}) },
           suggestedAnswer: q.options.filter((_, k) => k !== q.correct).map((o) => ({ "@type": "Answer", text: o })),
         })),

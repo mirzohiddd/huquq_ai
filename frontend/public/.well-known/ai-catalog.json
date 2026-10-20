@@ -2,8 +2,8 @@
   "specVersion": "1.0",
   "host": {
     "displayName": "HuquqTech",
-    "documentationUrl": "https://huquqtech.uz/metodologiya",
-    "logoUrl": "https://huquqtech.uz/logo-512.png"
+    "documentationUrl": "https://www.huquqtech.uz/metodologiya",
+    "logoUrl": "https://www.huquqtech.uz/logo-512.png"
   },
   "entries": [
     {
@@ -13,8 +13,8 @@
       "data": {
         "name": "HuquqTech",
         "description": "O'zbekiston Respublikasi qonunchiligi (Konstitutsiya va 20 ta kodeks, lex.uz rasmiy matnlari) asosida huquqiy savollarga javob beradigan yordamchi. Javoblar faqat saytdagi rasmiy qonun matnlari va darslardan olinadi.",
-        "url": "https://huquqtech.uz/",
-        "provider": { "organization": "HuquqTech", "url": "https://huquqtech.uz/" },
+        "url": "https://www.huquqtech.uz/",
+        "provider": { "organization": "HuquqTech", "url": "https://www.huquqtech.uz/" },
         "defaultInputModes": ["text/plain"],
         "defaultOutputModes": ["text/markdown"],
         "languages": ["uz", "ru"]
@@ -34,7 +34,7 @@
       "identifier": "urn:air:huquqtech.uz:legal:law-library",
       "displayName": "Qonunchilik kutubxonasi — llms.txt",
       "type": "text/markdown; profile=\"urn:air:agent-skills\"",
-      "url": "https://huquqtech.uz/llms.txt",
+      "url": "https://www.huquqtech.uz/llms.txt",
       "description": "Saytning ochiq bo'limlari xaritasi: qonun moddalari (/qonun/{KOD}/{MODDA}), savol-javoblar (/savol/{slug}), metodologiya va ularning Markdown nusxalari.",
       "tags": ["legal", "llms-txt", "markdown"],
       "representativeQueries": [

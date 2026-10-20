@@ -5,7 +5,7 @@
  * ⚠️ BU SAHIFA AEO (Answer Engine Optimization) O'ZAGI. Modda sahifasi
  * ("MK 106-modda") raqam bo'yicha qidiruvga javob beradi; bu sahifa esa
  * odam va AI tizimi HAQIQATDA yozadigan savolga ("mehnat shartnomasi
- * yozma bo'lishi shartmi?") javob beradi. `QAPage` sxemasi tufayli
+ * yozma bo'lishi shartmi?") javob beradi. `FAQPage` sxemasi tufayli
  * javob mashinalari uchun tayyor, manbasi ko'rsatilgan javob bo'ladi.
  *
  * ⚠️ Qonun matni SAHIFAGA yozilmagan — `qaData.attachQuotes` orqali
@@ -33,6 +33,20 @@ function qaPage({ lang, item, quotes, related }) {
   // lekin qonun iqtibosi kirmaydi — u sahifada ko'rinadigan, manbasi
   // ko'rsatilgan alohida blok.
   const answerText = [short, ...paras].join("\n\n");
+
+  /* E-E-A-T / yangilik signali: kim tayyorlagan va qonun matni lex.uz bilan
+     qachon solishtirilgan. AI tizimlari va Google manba tanlashda ko'rinadigan
+     sana va mas'ul tomonni hisobga oladi. Sana — iqtiboslarning eng yangi
+     `lastCheckedAt` qiymati (bazadan, qattiq yozilmagan). */
+  const checked = quotes.map((q) => q.checkedAt).filter(Boolean).map((d) => new Date(d));
+  const checkedAt = checked.length ? new Date(Math.max(...checked)) : null;
+  const checkedIso = checkedAt ? checkedAt.toISOString().slice(0, 10) : null;
+  const ru = lang === "ru";
+  const byline = `<p class="byline">${ru ? "Подготовлено редакцией HuquqTech" : "HuquqTech tahririyati tayyorlagan"}${
+    checkedAt
+      ? ` · ${ru ? "текст закона сверен с lex.uz" : "qonun matni lex.uz bilan solishtirilgan"}: <time datetime="${checkedIso}">${checkedAt.toLocaleDateString(ru ? "ru-RU" : "uz-UZ")}</time>`
+      : ""
+  } · <a href="${esc(path.method())}">${esc(t.method)}</a></p>`;
 
   const quoteHtml = quotes.length
     ? `<section class="card"><h2>${esc(t.qaBasis)}</h2>
@@ -71,6 +85,7 @@ function qaPage({ lang, item, quotes, related }) {
         <span class="lbl">${esc(t.qaAnswer)}</span>
         <p>${esc(short)}</p>
       </div>
+      ${byline}
       <article class="card">${paras.map((p) => `<p>${esc(p)}</p>`).join("")}</article>
       ${quoteHtml}
       ${relatedHtml}
@@ -92,15 +107,20 @@ function qaPage({ lang, item, quotes, related }) {
     schema: [
       {
         "@context": "https://schema.org",
-        "@type": "QAPage",
+        /* ⚠️ FAQPage, QAPage EMAS: Google qoidasiga ko'ra QAPage — foydalanuvchilar
+           javob yozadigan forumlar uchun; sayt tahririyati yozgan bitta javob
+           uchun to'g'ri tur FAQPage (noto'g'ri tur sxemani e'tiborsiz qoldiradi). */
+        "@type": "FAQPage",
         "@id": `${SITE_URL}${path.qa(item.slug)}#qa`,
         inLanguage: lang,
         publisher: { "@id": ORG_ID },
-        mainEntity: {
+        author: { "@id": ORG_ID },
+        reviewedBy: { "@id": ORG_ID },
+        ...(checkedIso ? { lastReviewed: checkedIso, dateModified: checkedIso } : {}),
+        mainEntity: [{
           "@type": "Question",
           name: question,
           text: question,
-          answerCount: 1,
           acceptedAnswer: {
             "@type": "Answer",
             text: answerText,
@@ -112,7 +132,7 @@ function qaPage({ lang, item, quotes, related }) {
               url: `${SITE_URL}${path.article(q.code, q.article)}`,
             })),
           },
-        },
+        }],
         // AEO: ovozli yordamchi savol va qisqa javobni o'qiydi.
         speakable: {
           "@type": "SpeakableSpecification",

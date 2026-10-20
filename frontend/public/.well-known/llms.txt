@@ -5,13 +5,13 @@ Ba'zi AI tizimlari faylni ildizda, ba'zilari `.well-known/` da qidiradi
 — ikkala manzil ham ishlashi uchun nusxa saqlanadi.
 
 To'liq va yangilanadigan versiya:
-https://huquqtech.uz/llms.txt
+https://www.huquqtech.uz/llms.txt
 
 Batafsil ma'lumot fayli:
-https://huquqtech.uz/llms-full.txt
+https://www.huquqtech.uz/llms-full.txt
 
 Metodologiya va tahririy siyosat (manba, tekshiruv, cheklovlar):
-https://huquqtech.uz/metodologiya
+https://www.huquqtech.uz/metodologiya
 
 Qisqacha: HuquqTech — O'zbekiston qonunchiligiga asoslangan sun'iy
 intellekt huquqiy maslahat va ta'lim platformasi. Har bir javob lex.uz

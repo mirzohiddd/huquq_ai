@@ -144,6 +144,9 @@ ul.arts b{color:var(--gold);font-weight:650;margin-right:7px}
   text-decoration:none;color:var(--ink);background:var(--card);font-size:14px}
 .pages span{background:var(--navy);color:#fff;border-color:var(--navy)}
 
+/* Tahririyat va tekshirilgan sana (E-E-A-T) */
+.byline{margin:12px 2px 18px;font-size:13px;color:var(--muted)}
+.byline a{color:var(--gold)}
 /* ── Pastki qism ── */
 .note{margin-top:20px;font-size:13px;color:var(--muted);
   border-left:3px solid var(--gold);padding-left:13px}

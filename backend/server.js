@@ -357,6 +357,8 @@ app.use("/public", require("./routes/publicQa"));
 app.use("/public", require("./routes/publicActs"));
 // Ochiq darslar va testlar — "huquq darslik/test" qidiruvlari uchun (2026-10-14)
 app.use("/public", require("./routes/publicLearn"));
+// "Huquqni onlayn o'rganish" qo'llanmasi — "huquqni o'rganish" qidiruvi va AI tavsiyalari uchun (2026-10-20)
+app.use("/public", require("./routes/publicGuide"));
 
 /* ⚠️ Backend domenining O'ZI (up.railway.app) indekslanmasligi kerak —
    aks holda bir xil sahifa ikki manzilda turib, "duplicate content"

@@ -90,7 +90,10 @@ function qaIndexMd({ lang, groups, areaName, pick }) {
   for (const g of groups) {
     out += line(`## ${areaName(g.area, lang)}`) + line("");
     for (const q of g.items) {
-      out += line(`- [${pick(q.q, lang)}](${abs(path.qa(q.slug))})`);
+      // Qisqa javob ham qo'shiladi: LLM butun javoblar to'plamini BITTA
+      // faylda oladi va iqtibos uchun har birining manzilini biladi.
+      out += line(`### [${pick(q.q, lang)}](${abs(path.qa(q.slug))})`) + line("");
+      out += line(pick(q.short, lang)) + line("");
     }
     out += line("");
   }

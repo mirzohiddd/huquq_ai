@@ -31,7 +31,7 @@ const { registerPlans } = require("./telegram/plans");
 const { createFlows } = require("./telegram/flows");
 
 // Oxiridagi "/" olib tashlanadi — avval havolalar "...//register" bo'lib qolardi
-const SITE_URL = (process.env.SITE_URL || "https://huquqtech.uz").replace(/\/+$/, "");
+const SITE_URL = (process.env.SITE_URL || "https://www.huquqtech.uz").replace(/\/+$/, "");
 
 const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
 const safeSend = ui.makeSafeSend(bot);

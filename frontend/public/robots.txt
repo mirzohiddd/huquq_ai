@@ -59,6 +59,8 @@ Allow: /qonun/
 Allow: /savollar
 Allow: /savol/
 Allow: /metodologiya
+# "Huquqni onlayn o'rganish" qo'llanmasi (2026-10-20)
+Allow: /huquqni-organish
 
 # ⚠️ Prezident hujjatlari (farmon, qaror, farmoyish) — server tomonda
 # chiziladi va ATAYLAB ochiq (2026-10-03). Matn lex.uz dagi rasmiy
@@ -159,7 +161,7 @@ Allow: /
 # ── Sayt xaritasi va AI uchun qisqacha ma'lumot ──
 # Bu — sayt xaritalari RO'YXATI (index): ichida statik sahifalar va
 # ~7 100 ta qonun moddasi xaritasi bor.
-Sitemap: https://huquqtech.uz/sitemap.xml
+Sitemap: https://www.huquqtech.uz/sitemap.xml
 
 # LLM'lar uchun sayt xulosasi (llmstxt.org standarti):
-# https://huquqtech.uz/llms.txt
+# https://www.huquqtech.uz/llms.txt

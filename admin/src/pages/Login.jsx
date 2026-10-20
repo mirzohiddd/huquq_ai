@@ -87,7 +87,7 @@ export default function Login() {
         </form>
 
         <p className={s.note}>
-          Asosiy sayt: <a href="https://huquqtech.uz/" target="_blank" rel="noreferrer">mening-huquqim</a>
+          Asosiy sayt: <a href="https://www.huquqtech.uz/" target="_blank" rel="noreferrer">mening-huquqim</a>
         </p>
       </div>
     </div>

@@ -15,10 +15,16 @@
  * ro'yxatdan o'tishni talab qiladi va bu sahifalarda BERILMAYDI.
  */
 
-/** Foydalanuvchi ko'radigan asosiy domen (canonical shu yerga ishora qiladi). */
+/**
+ * Foydalanuvchi ko'radigan asosiy domen (canonical shu yerga ishora qiladi).
+ * ⚠️ Vercel `huquqtech.uz` ni 308 bilan `www.huquqtech.uz` ga yo'naltiradi.
+ * Canonical yo'naltiriladigan manzilga ishora qilsa Google sahifani
+ * "Page with redirect" deb indekslamaydi — shuning uchun env'da eski
+ * (www'siz) qiymat qolgan bo'lsa ham `www` ga keltiriladi.
+ */
 const SITE_URL = (
-  process.env.PUBLIC_SITE_URL || "https://huquqtech.uz"
-).replace(/\/$/, "");
+  process.env.PUBLIC_SITE_URL || "https://www.huquqtech.uz"
+).replace(/\/$/, "").replace("://huquqtech.uz", "://www.huquqtech.uz");
 
 const SITE_NAME = "HuquqTech";
 const LOGO = `${SITE_URL}/logo-96.png?v=2`;

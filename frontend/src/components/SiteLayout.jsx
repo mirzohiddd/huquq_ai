@@ -623,6 +623,9 @@ export default function SiteLayout() {
                   ham muhim — qidiruv roboti ochiq sahifalarga aynan shu
                   yerdan yo'l topadi. */}
               <li>
+                <a href="/huquqni-organish">{t.footer_guide}</a>
+              </li>
+              <li>
                 <a href="/qonunlar">{t.footer_public_laws}</a>
               </li>
               <li>

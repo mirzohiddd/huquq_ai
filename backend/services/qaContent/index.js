@@ -43,6 +43,10 @@ const FILES = [
   "soliq",
   "konstitutsiya-a",
   "konstitutsiya-b",
+  // Kundalik tildagi savollar — odam Google'ga aynan shunday yozadi (2026-10-20)
+  "kundalik-a",
+  "kundalik-b",
+  "kundalik-c",
 ];
 
 const QUESTIONS = FILES.flatMap((f) => require(`./${f}`));

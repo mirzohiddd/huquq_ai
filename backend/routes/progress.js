@@ -70,22 +70,12 @@ router.post("/practice", userGuard, async (req, res) => {
   }
 });
 
-/* POST /api/progress/quiz — Testlar bo'limidagi natija */
-router.post("/quiz", userGuard, async (req, res) => {
-  try {
-    const { quizId, title, score, total } = req.body || {};
-    const saved = await progress.recordQuizResult(req.authUser.id, {
-      quizId: quizId || undefined,
-      title,
-      score: Number(score) || 0,
-      total: Number(total) || 0,
-      source: "web",
-    });
-    res.json({ result: saved });
-  } catch (err) {
-    console.error("progress quiz xato:", err.message);
-    res.status(500).json({ error: "Server xatosi" });
-  }
-});
+/* POST /api/progress/quiz — ESKI yo'l (2026-10-20 dan o'chirilgan).
+   ⚠️ Natijani MIJOZ yuborardi, ya'ni istalgan "score" yozish mumkin edi.
+   Endi natija `POST /api/tests/:id/submit` da SERVERDA hisoblanib saqlanadi.
+   Eski keshlangan frontend chaqirsa — 410 (xato jim, test natijasi ekranda qoladi). */
+router.post("/quiz", userGuard, (req, res) =>
+  res.status(410).json({ error: "Natija endi /api/tests/:id/submit orqali saqlanadi" }),
+);
 
 module.exports = router;

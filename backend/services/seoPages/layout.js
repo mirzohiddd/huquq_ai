@@ -170,6 +170,7 @@ function page({
         <a href="${P.laws()}">${esc(t.laws)}</a>
         <a href="${P.acts()}">${esc(t.acts)}</a>
         <a href="${P.qaIndex()}">${esc(t.qa)}</a>
+        <a href="/huquqni-organish${lang === "ru" ? "?lang=ru" : ""}">${lang === "ru" ? "Изучение права" : "Huquqni o'rganish"}</a>
         <a href="${P.method()}">${esc(t.method)}</a>
         <a href="${SITE_URL}/terms">${lang === "ru" ? "Условия" : "Shartlar"}</a>
         <a href="${SITE_URL}/privacy">${lang === "ru" ? "Конфиденциальность" : "Maxfiylik"}</a>

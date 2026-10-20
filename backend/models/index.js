@@ -639,6 +639,8 @@ const QuizQuestionSchema = new mongoose.Schema(
     },
     correct: { type: Number, required: true, min: 0 },
     explain: { type: String, default: "", trim: true },
+    // Hayotiy test: savoldan OLDIN ko'rsatiladigan vaziyat matni (ixtiyoriy).
+    situation: { type: String, default: "", trim: true },
   },
   { _id: false },
 );
@@ -646,6 +648,12 @@ const QuizSchema = new mongoose.Schema(
   {
     title: { type: String, required: true, trim: true },
     desc: { type: String, default: "", trim: true },
+    // Dars moduli (Lesson.category bilan bir xil kalit: labor, family…) —
+    // natija 80% dan past bo'lsa SHU moduldagi darslar tavsiya qilinadi.
+    // Bo'sh bo'lsa sarlavhadan aniqlanadi (services/quizGrading.js).
+    category: { type: String, default: "", trim: true },
+    // "life" — vaziyatli (hayotiy) test: savollar vaziyat kartasi bilan chiqadi.
+    kind: { type: String, enum: ["standard", "life"], default: "standard" },
     questions: { type: [QuizQuestionSchema], default: [] },
     order: { type: Number, default: 0 },
     published: { type: Boolean, default: true },

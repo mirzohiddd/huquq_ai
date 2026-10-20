@@ -12,7 +12,7 @@
  */
 
 export const SITE_URL = (
-  import.meta.env?.VITE_SITE_URL || "https://huquqtech.uz"
+  import.meta.env?.VITE_SITE_URL || "https://www.huquqtech.uz"
 ).replace(/\/$/, "");
 
 export const SITE_NAME = "HuquqTech";

@@ -538,7 +538,13 @@ function registerLearning({ bot, safeSend, getLang, findOrLinkUser, sendNotRegis
     const q = st.questions[st.index];
     if (!q) return;
 
-    const text = `<i>${fill(T.q_of, { n: st.index + 1, total: st.questions.length })}</i>\n\n<b>${esc(q.q)}</b>`;
+    /* Hayotiy testlarda savoldan oldin vaziyat; variantlar matnda TO'LIQ
+       (tugma matni 60 belgida qirqiladi — uzun variant o'qib bo'lmay qolardi). */
+    const situation = q.situation ? `${esc(q.situation)}\n\n` : "";
+    const longOpts = q.options.some((o) => o.length > 57)
+      ? `\n\n${q.options.map((o, i) => `${i + 1}. ${esc(o)}`).join("\n")}`
+      : "";
+    const text = `<i>${fill(T.q_of, { n: st.index + 1, total: st.questions.length })}</i>\n\n${situation}<b>${esc(q.q)}</b>${longOpts}`;
     const rows = q.options.map((opt, i) => [
       { text: `${i + 1}. ${opt}`.slice(0, 60), callback_data: `qa:${i}` },
     ]);
@@ -676,6 +682,7 @@ function registerLearning({ bot, safeSend, getLang, findOrLinkUser, sendNotRegis
       const order = shuffle(q.options.map((_, i) => i));
       return {
         q: q.q,
+        situation: q.situation || "",
         options: order.map((i) => q.options[i]),
         correct: order.indexOf(q.correct),
         explain: q.explain || "",
