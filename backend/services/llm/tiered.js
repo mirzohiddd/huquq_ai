@@ -8,6 +8,8 @@
  *      standart holatda shunday ishlaydi, ya'ni avvalgi xatti-harakat);
  *   3. ruxsat bo'lsa — RAG manbalari bilan OpenAI'dan javob oladi, modda
  *      raqamlarini tekshiradi, keshga yozadi.
+ * 2026-10-28: ruxsat bo'lmasa yoki OpenAI xato bersa — yozma chat avval
+ * Gemini'ga (llm/freeAi.js), so'ng lokal javobga tushadi.
  * Har qanday xatoda (tarmoq, kvota, tekshiruvdan o'tmagan javob) foydalanuvchi
  * baribir LOKAL javobni oladi — pullik AI chatni hech qachon "sindirmaydi".
  *
@@ -25,6 +27,14 @@ const { recordUsage } = require("../aiBilling/usage");
 const { chat } = require("./openai");
 const { gatherSources, unverifiedCitations, sourcesBlock } = require("./grounded");
 const { buildMessages, fixMessage, noteFor } = require("./prompts");
+const { freeAiAnswer, canUseFreeAi } = require("./freeAi");
+
+/* Pullik AI ishlatilmaganda (bepul tarif, budjet/kalit yo'q, OpenAI xatosi)
+   YOZMA chat Gemini'dan javob oladi; u ham bo'lmasa — lokal javob. */
+async function fallback(p, tier) {
+  if (!canUseFreeAi(p)) return null;
+  return freeAiAnswer(p, tier);
+}
 
 const DEEP_HINT = /tahlil|batafsil|chuqur|solishtir|taqqosla|xavf|shartnoma(ni|dagi)|анализ|подробн|сравн|риск|договор/i;
 
@@ -62,6 +72,8 @@ async function tieredAnswer(p) {
   const local = p.local;
 
   if (!access.ok) {
+    const free = await fallback(p, access.tier);
+    if (free) return free;
     const note = noteFor(access.reason, p.lang);
     return note && access.tier !== "free" ? { ...local, answer: `${local.answer}\n\n${note}` } : local;
   }
@@ -123,8 +135,8 @@ async function tieredAnswer(p) {
     }
     return { ...local, answer: out.text, provider: "openai", model: out.model, found: true };
   } catch (err) {
-    console.warn(`[AI] ${access.tier}/${model} xato — lokal javob: ${err.message}`);
-    return local;
+    console.warn(`[AI] ${access.tier}/${model} xato — zaxira javob: ${err.message}`);
+    return (await fallback(p, access.tier)) || local;
   }
 }
 

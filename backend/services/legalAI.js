@@ -12,6 +12,7 @@ const https = require("https");
 const { searchWeb, formatSearchContext } = require("./webSearch");
 const { localLegalAnswer } = require("./localAI");
 const { tieredAnswer } = require("./llm/tiered"); // tarifga qarab AI (2026-10-19)
+const { siteHelp } = require("./localAI/siteHelp"); // "Testlar ber" kabi so'rovlar
 const {
   isFileRequest,
   fileRequestReply,
@@ -1346,6 +1347,13 @@ async function getLegalAdvice(
       category: "boshqa",
       provider: null,
     };
+  }
+
+  // 2b. Sayt bo'limi so'ralgan ("Testlar ber", "dars ber") — bo'limga havola
+  //     (localAI/siteHelp.js; avval "modda topilmadi" qaytardi)
+  if (!imageBase64 && !opts.fromVoice) {
+    const site = siteHelp(msg, detectedLang);
+    if (site) return { ...site, provider: "local" };
   }
 
   // 3. Huquqiy savol emas?
