@@ -23,6 +23,9 @@ const { normalize, uzCyrToLatin, isUzCyrillic } = require("./text");
 const SITUATIONS = [
   ...require("./situationsFamily"),
   ...require("./situationsSexual"),
+  // Deepfake, begona nomga kredit, onlayn do'kon — qarz/tovar/firibgarlik/tuhmatdan OLDIN
+  ...require("./situationsOnline"),
+  ...require("./situationsEveryday"),
   ...require("./situationsWork"),
   // Ijara qarzi ("ijara haqini to'lamayapti") — umumiy qarzdan OLDIN
   ...require("./situationsHousing"),

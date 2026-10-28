@@ -68,9 +68,9 @@
          ishlayveradi (beforeinstallprompt manifest topilgach keladi). -->
     <script>
       // "Ilovani yuklash" hodisasi asosiy JS'dan oldin kelsa — saqlab qo'yiladi
-      // (utils/pwaInstall.js uni `window.__bip` dan oladi)
+      // (utils/pwaInstall.js uni `window.__bip` dan oladi).
+      // preventDefault() ATAYLAB yo'q — konsolda "Banner not shown" xabari chiqardi
       addEventListener("beforeinstallprompt", function (e) {
-        e.preventDefault();
         window.__bip = e;
       });
       addEventListener("load", function () {

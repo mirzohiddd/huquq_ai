@@ -49,6 +49,46 @@ module.exports = [
     },
   },
   {
+    /* Ijarachini muddatidan oldin chiqarish — umumiy "rent" dan OLDIN.
+       ⚠️ 2026-10-28: "Uy egasi ijara tugamasdan «chiqib ket» deyapti" umumiy
+       ijara qolipiga tushib, 1-qadam "shartnomani yozma tuzing" bo'lardi —
+       ijarachi uchun bu savolga javob emas. */
+    id: "early_eviction",
+    match: (t) =>
+      /((uy|kvartira|xonadon) egasi|arendodatel|арендодат|хозя\S* (квартир|дом|жиль))\S*.{0,70}(chiqib ket|chiqarmoqchi|chiqaryapti|haydayapti|haydamoqchi|bosh(at|ating)|muddatidan oldin|tugamasdan|выселя|выгоня|съезжа|освобод)/.test(t) ||
+      /ijara\S* (muddati )?(tugamasdan|tugamay|muddatidan oldin)|до окончания (срока )?аренд/.test(t),
+    title: { uz: "Uy egasi ijara muddati tugamasdan chiqib ketishni talab qilyapti", ru: "Арендодатель выселяет до окончания срока аренды" },
+    summary: {
+      uz:
+        "Muddatli ijara shartnomasini ijaraga beruvchi o'z xohishi bilan muddatidan oldin bekor qila olmaydi: bu faqat " +
+        "SUD orqali va qonunda sanab o'tilgan asoslarda — ijarachi mulkdan shartnomaga zid foydalansa, uni jiddiy " +
+        "yomonlashtirsa, to'lovni bir necha marta kechiktirsa — mumkin. Muddat belgilanmagan shartnomadan esa yozma " +
+        "oldindan ogohlantirish bilan voz kechish mumkin. Ikkala holatda ham ijarachini kuch bilan chiqarib bo'lmaydi.",
+      ru:
+        "Арендодатель не может по своему желанию досрочно расторгнуть срочный договор аренды: это возможно только " +
+        "ЧЕРЕЗ СУД и по основаниям закона — если арендатор использует имущество с нарушением договора, существенно " +
+        "его ухудшает, неоднократно просрочивает оплату. От договора без срока можно отказаться с письменным " +
+        "предупреждением заранее. В обоих случаях выселить арендатора силой нельзя.",
+    },
+    pins: [["FK2", "551"], ["FK2", "540"], ["FK2", "539"], ["FK2", "554"]],
+    codes: ["FK2", "UJK"],
+    terms: "mulk ijarasi shartnomasini muddatidan oldin bekor qilish",
+    steps: {
+      uz: [
+        "Shartnomangizni tekshiring: unda muddat yozilganmi (masalan bir yilga) va muddatidan oldin bekor qilish haqida qanday shart bor. Shartnoma og'zaki bo'lsa — to'lov cheklari, o'tkazmalar va yozishmalar ijarani isbotlaydi.",
+        "Uy egasidan talabini va sababini yozma ravishda so'rang. To'lovni kechiktirmagan va uyni buzmagan bo'lsangiz — buni ham yozma javobingizda ko'rsating.",
+        "Kelishuvga erishsangiz — chiqish sanasi, kafolat puli (depozit) va oldindan to'langan oylar qaytarilishini yozma rasmiylashtiring.",
+        "Sizni kuch bilan chiqarishsa, narsalaringizni olib qo'yishsa yoki qulfni almashtirishsa — 102 raqamiga xabar bering. Nizo davom etsa — masalani sud hal qiladi; muddatidan oldin chiqishga majbur bo'lsangiz, zararni qoplashni talab qilishingiz mumkin.",
+      ],
+      ru: [
+        "Проверьте договор: указан ли срок (например, год) и какие условия досрочного расторжения. Если договор устный — аренду подтверждают чеки, переводы и переписка.",
+        "Попросите арендодателя изложить требование и причину письменно. Если вы не задерживали оплату и не портили жильё — укажите это в письменном ответе.",
+        "Если договорились — оформите письменно дату выезда, возврат залога (депозита) и предоплаченных месяцев.",
+        "Если вас выселяют силой, забирают вещи или меняют замок — звоните 102. Если спор продолжается, его решает суд; если вас вынудили съехать досрочно, можно требовать возмещения убытков.",
+      ],
+    },
+  },
+  {
     id: "rent",
     match: (t) =>
       /ijara|ijarach|kvartirant|arenda|(uy|kvartira|xonadon) egasi|аренд|квартирант|съ[её]м|сдаю квартир|сдал квартир|арендодат|наним/.test(t) &&

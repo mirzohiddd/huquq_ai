@@ -54,15 +54,16 @@ export default function ChatDrawer() {
   }, [messages, loading, isOpen, view]);
 
   // Tashqaridan tayyor savol bilan ochilgan bo'lsa (darsdagi "Bu joyni
-  // tushuntirib ber") — sessiya tayyor bo'lishi bilan avtomatik yuboriladi.
+  // tushuntirib ber") — sessiya TIKLANIB BO'LGACH avtomatik yuboriladi
+  // (`ready`; aks holda tiklangan ro'yxat savolni o'chirib yuborardi).
   useEffect(() => {
-    if (!isOpen || !pendingMessage || !sessionId || loading) return;
+    if (!isOpen || !pendingMessage || !sessionId || !session.ready || loading) return;
     const text = pendingMessage;
     clearPending();
     setView("chat");
     act.send(text);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen, pendingMessage, sessionId]);
+  }, [isOpen, pendingMessage, sessionId, session.ready, loading]);
 
   const showNotice = useCallback((msg) => {
     setNotice(msg);

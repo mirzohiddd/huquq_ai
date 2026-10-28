@@ -111,8 +111,13 @@ if (typeof window !== "undefined") {
     deferred = window.__bip;
     window.__bip = null;
   }
+  /* ⚠️ preventDefault() ATAYLAB chaqirilmaydi (2026-10-28): u chaqirilib,
+     keyin prompt() chaqirilmasa (foydalanuvchi tugmani bosmasa) Chrome har
+     sahifada konsolga "Banner not shown: beforeinstallpromptevent.
+     preventDefault() called…" yozardi. Hodisani saqlab, tugma bosilganda
+     prompt() chaqirish usiz ham ishlaydi; brauzer o'z mini-bannerini
+     ko'rsatishi esa o'rnatishga xalaqit bermaydi. */
   window.addEventListener("beforeinstallprompt", (e) => {
-    e.preventDefault(); // brauzerning o'z mini-bannerini emas, bizning tugmani ishlatamiz
     deferred = e;
     emit();
   });

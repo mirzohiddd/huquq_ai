@@ -30,7 +30,16 @@ export default function useChatSession({ user, active, noTitle }) {
   const [sessionId, setSessionId] = useState(null);
   const [historyList, setHistoryList] = useState([]);
   const [usage, setUsage] = useState(null);
-  const initializedRef = useRef(false);
+  /* `ready` — sessiya tiklanib bo'ldi (tashqaridan kelgan tayyor savolni
+     faqat shundan keyin yuborish mumkin, aks holda serverdan kelgan
+     ro'yxat uni ustidan yozib yuboradi — ChatDrawer.jsx). */
+  const [ready, setReady] = useState(false);
+  /* Qaysi hisob uchun ishga tushirilgan (uid yoki "guest"). ⚠️ 2026-10-28:
+     avval chat YOPILGANDA ham tozalanardi va har ochilishda sessiya qayta
+     tiklanardi — darsdagi "Bu joyni tushuntirib ber" savoli shu tiklash
+     tugamasdan yuborilib, so'ng `setMessages` bilan o'chib ketardi. */
+  const initializedRef = useRef(null);
+  const restoreSeqRef = useRef(0);
   const saveTimerRef = useRef(null);
 
   const refreshHistory = useCallback(async () => {
@@ -72,7 +81,9 @@ export default function useChatSession({ user, active, noTitle }) {
   const restoreSession = useCallback(
     async (sid) => {
       if (!sid || !user) return;
+      const seq = ++restoreSeqRef.current;
       setLoading(true);
+      setReady(false);
       setView("chat");
       setSessionId(sid);
       setActiveSessionId(sid, uid);
@@ -80,45 +91,55 @@ export default function useChatSession({ user, active, noTitle }) {
       if (stored?.messages?.length) {
         setMessages(stored.messages);
         setLoading(false);
+        setReady(true);
         return;
       }
       try {
         const { data } = await api.get(`/chat/${sid}`);
+        if (seq !== restoreSeqRef.current) return; // shu orada boshqa suhbat ochildi
         setMessages(data.messages || []);
         upsertSession({ sessionId: sid, messages: data.messages || [], userId: uid });
       } catch {
-        setMessages([]);
+        if (seq === restoreSeqRef.current) setMessages([]);
       } finally {
-        setLoading(false);
+        if (seq === restoreSeqRef.current) {
+          setLoading(false);
+          setReady(true);
+        }
       }
     },
     [user, uid],
   );
 
   useEffect(() => {
-    if (!active) {
-      initializedRef.current = false;
-      return;
-    }
+    if (!active) return;
     if (user) {
       clearGuestData();
       refreshHistory();
     }
     refreshUsage();
-    if (initializedRef.current) return;
-    initializedRef.current = true;
+    // Komponent mount bo'lib qoladi — joriy suhbat xotirada. Qayta tiklash
+    // faqat birinchi ochilishda yoki hisob almashganda kerak.
+    const key = uid || "guest";
+    if (initializedRef.current === key) return;
+    initializedRef.current = key;
     const act = getActiveSessionId(uid);
     if (act) {
       const stored = getStoredSession(act, uid);
       if (stored?.messages?.length) {
+        restoreSeqRef.current++;
         setSessionId(act);
         setMessages(stored.messages);
         setView("chat");
+        setReady(true);
       } else restoreSession(act);
     } else {
+      restoreSeqRef.current++;
       const id = newUserSessionId(uid);
+      setMessages([]);
       setSessionId(id);
       setActiveSessionId(id, uid);
+      setReady(true);
     }
   }, [active, user, uid, refreshHistory, refreshUsage, restoreSession]);
 
@@ -136,6 +157,9 @@ export default function useChatSession({ user, active, noTitle }) {
   }, [messages, sessionId, uid, refreshHistory]);
 
   const startNew = useCallback(() => {
+    restoreSeqRef.current++; // kechikkan tiklash yangi suhbatni bosib ketmasin
+    setLoading(false);
+    setReady(true);
     setMessages([]);
     setView("chat");
     const id = newUserSessionId(uid);
@@ -159,7 +183,7 @@ export default function useChatSession({ user, active, noTitle }) {
   );
 
   return {
-    uid, view, setView, messages, setMessages, loading, setLoading, sessionId, setSessionId,
+    uid, view, setView, messages, setMessages, loading, setLoading, sessionId, setSessionId, ready,
     historyList, usage, setUsage, refreshHistory, restoreSession, startNew, deleteHistoryItem,
   };
 }

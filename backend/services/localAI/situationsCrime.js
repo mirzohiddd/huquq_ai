@@ -70,7 +70,8 @@ module.exports = [
   },
   {
     id: "fraud",
-    match: (t) => /(aldab|aldadi|aldash|aldov|firib|мошенн|обман)/.test(t),
+    // "olib qochdi" — "Hamkorim pulimni olib qochdi" avval rad etilardi (2026-10-28)
+    match: (t) => /(aldab|aldadi|aldash|aldov|firib|(pul|mol)\S* olib qoch|мошенн|обман)/.test(t),
     title: { uz: "Firibgarlik", ru: "Мошенничество" },
     summary: {
       uz: "Aldash yoki ishonchni suiiste'mol qilish yo'li bilan mulkni egallash — firibgarlik jinoyati.",
