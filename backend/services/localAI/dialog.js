@@ -15,6 +15,7 @@
  */
 const { detectStyle, applyStyle, sameAnswer } = require("./answerStyle");
 const { words } = require("./text");
+const { parseExplain } = require("./lessonExplain");
 
 const T = {
   uz: {
@@ -49,7 +50,8 @@ const ACTION = /nima qil(ay|ish|amiz|sam)|qayerga (murojaat|boray)|что (мн�
 function withDialog(base) {
   return async function localLegalAnswer(p) {
     const { msg, userTurns = [], prevAnswer = "", hasImage } = p;
-    const st = hasImage ? null : detectStyle(msg);
+    // Darsdagi "tushuntirib ber" so'rovi uslub buyrug'i emas — o'z mavzusi bor
+    const st = hasImage || parseExplain(msg) ? null : detectStyle(msg);
     const own = !!st && words(st.rest).length >= 2;
     const L = T[p.lang] || T.uz;
 

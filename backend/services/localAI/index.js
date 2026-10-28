@@ -28,6 +28,7 @@ const { detectSituation, pinnedDocs } = require("./situations");
 const { matchIntent } = require("./intents");
 const { searchTopics } = require("./lessonTopics");
 const { composeTopic } = require("./composeTopic");
+const { parseExplain, findExplainTopic } = require("./lessonExplain");
 const { tokenize, isUzCyrillic, uzCyrToLatin } = require("./text");
 const { warmLawIndex, getIndex } = require("./lawIndex");
 const { parseArticleNumbers, parseLawCodes } = require("../articleLookup");
@@ -132,6 +133,14 @@ async function baseLegalAnswer({
     if (v > 0) {
       const alt = await alternative({ query, uz, exact, lang, codes, strict, skipTopics: v === 2, done });
       if (alt) return alt;
+    }
+
+    // 0. Darsdagi "Bu joyni tushuntirib ber" — aynan o'sha dars mavzusi
+    const explain = !exact && parseExplain(msg);
+    if (explain) {
+      const topic = await findExplainTopic(msg);
+      if (topic) return done(composeTopic({ topic, state, lang }));
+      query = colloquial(`${explain.heading} ${explain.body.slice(0, 300)}`); // uzun ko'rsatma qidiruvni chalg'itmasin
     }
 
     // 1–2. Hayotiy vaziyat yoki ko'p so'raladigan savol (kuratorlik qilingan)
