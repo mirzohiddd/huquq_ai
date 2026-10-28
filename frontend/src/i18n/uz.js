@@ -882,13 +882,14 @@ const uz = {
   chat_placeholder: "Huquqiy muammoingizni yozing...",
 
   chat_error: "Xatolik yuz berdi. Qayta urinib ko'ring.",
+  quick_questions_title: "Shunday vaziyatga tushsangiz, nima qilardingiz?",
   quick_questions: [
-    "Maosh 2 oy berilmadi, nima qilaman?",
-    "Aliment miqdori qancha bo'lishi kerak?",
-    "Nohaq ishdan bo'shatilsam nima qilaman?",
-    "Meros 6 oy ichida olinmasa nima bo'ladi?",
-    "Sifatsiz tovarni qaytarish mumkinmi?",
-    "Yer uchastkamni qanday rasmiylashtiraman?",
+    "Nomimga begona odam kredit olgan. Endi men to‘laymanmi?",
+    "Internetdan olgan buyumim boshqa chiqdi. Pulimni qanday qaytaraman?",
+    "AI orqali yuzim bilan soxta video qilishdi. Nima qilaman?",
+    "Uy egasi ijara tugamasdan «chiqib ket» deyapti. Nima qilaman?",
+    "Instagram do‘koniga pul to‘ladim, meni bloklashdi. Nima qilaman?",
+    "«Sinov muddati» deb bir oy bepul ishlatishdi. Bu qonuniymi?",
   ],
 
   about_lead:

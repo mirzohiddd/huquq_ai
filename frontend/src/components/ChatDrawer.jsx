@@ -109,8 +109,9 @@ export default function ChatDrawer() {
                     {user ? `, ${user.fullName || user.username}` : ""}!
                   </h3>
                   <p>{t.chat_welcome_desc}</p>
+                  {t.quick_questions_title && <div className={s.quickTitle}>{t.quick_questions_title}</div>}
                   <div className={s.quickGrid}>
-                    {(t.quick_questions || []).slice(0, 4).map((q) => (
+                    {(t.quick_questions || []).map((q) => (
                       <button key={q} type="button" className={s.quickBtn} onClick={() => act.send(q)}>
                         {q}
                       </button>
