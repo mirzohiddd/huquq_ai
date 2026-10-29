@@ -17,6 +17,7 @@ const BASE = "https://generativelanguage.googleapis.com/v1beta/models";
 const TIMEOUT_MS = 30 * 1000;
 const COOLDOWN_429 = 10 * 60 * 1000;
 const COOLDOWN_KEY = 30 * 60 * 1000;
+const THINKING = 512; // 1024 da javob 15–20 s kelardi
 const pausedUntil = new Map(); // model (yoki "*") → vaqt
 
 const models = () =>
@@ -73,7 +74,7 @@ async function geminiChat({ messages, maxOutputTokens = 1200, tier = "free" }) {
     contents,
     // Past temperatura — huquqiy javobda "ijodkorlik" kerak emas.
     // Kichik "o'ylash" byudjeti: mantiq yaxshilanadi, javob sekinlashmaydi.
-    generationConfig: { temperature: 0.3, maxOutputTokens: maxOutputTokens + 1024, thinkingConfig: { thinkingBudget: 1024 } },
+    generationConfig: { temperature: 0.3, maxOutputTokens: maxOutputTokens + THINKING, thinkingConfig: { thinkingBudget: THINKING } },
   };
   let lastErr = new Error("Gemini mavjud emas");
   for (const model of models()) {

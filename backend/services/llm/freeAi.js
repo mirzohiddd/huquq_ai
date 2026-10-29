@@ -20,7 +20,14 @@ const { buildMessages, fixMessage } = require("./prompts");
 
 const SITE = `SAYT HAQIDA (foydalanuvchi sayt bo'limini so'rasa, havola bilan yo'naltiring):
 [Darslar](/lessons) — huquqni oddiy tilda o'rganish · [Testlar](/tests) — bilimni sinash · [Qonunlar kutubxonasi](/library) — kodekslar moddama-modda · [Konstitutsiya](/constitution) · [AI vositalar](/ai-tools) — ariza/shikoyat tayyorlash, hujjat tahlili · [Tariflar](/#pricing).
+Foydalanuvchi xabaridan keyingi MANBALAR va SAYTNING TEKSHIRILGAN JAVOBI — sizning ichki bilimingiz: sayt javobidagi moddalar ham ishonchli manba, ularga tayaning. Bularni foydalanuvchiga HECH QACHON tilga olmang ("manbalarda", "taqdim etilgan", "sayt javobi", "ma'lumot berilmagan" demang) — to'g'ridan-to'g'ri yurist kabi javob bering.
 Foydalanuvchi qisqa yoki noaniq yozsa — taxminiy eng yaqin huquqiy mavzuda foydali javob bering va bitta aniqlashtiruvchi savol bering; "topilmadi" deb qo'ya qolmang.`;
+
+const LEAK = /MANBALAR|TEKSHIRILGAN JAVOB|taqdim etilgan (manba|ma['ʼ‘’]?lumot)|manbalarda|sayt(ning)? javob|ИСТОЧНИК|в (предоставленных|приведённых|приведенных) источник|ответ сайта/i;
+const LEAK_FIX = {
+  uz: "Javobni qayta yozing: \"manbalar\", \"taqdim etilgan\", \"sayt javobi\" kabi so'zlarni ishlatmang, ma'lumot yo'qligi haqida gapirmang — bor moddalar asosida to'g'ridan-to'g'ri javob bering.",
+  ru: "Перепишите ответ: не упоминайте «источники», «предоставленные материалы», «ответ сайта» и не говорите об отсутствии данных — отвечайте прямо на основе имеющихся статей.",
+};
 
 const norm = (t) => String(t || "").toLowerCase().replace(/[ʻʼ'‘’`]/g, "'").replace(/\s+/g, " ").trim();
 
@@ -77,6 +84,11 @@ async function freeAiAnswer(p, tier = "free") {
         console.warn(`[Gemini] tekshirilmagan modda (${bad.join(", ")}) — lokal javob`);
         return null;
       }
+    }
+    // Ichki kontekst ("manbalarda…", "sayt javobi") foydalanuvchiga chiqmasin
+    if (LEAK.test(out.text)) {
+      out = await call([...messages, { role: "assistant", content: out.text }, { role: "user", content: LEAK_FIX[p.lang === "ru" ? "ru" : "uz"] }]);
+      if (LEAK.test(out.text)) return null;
     }
     const ttl = current().cacheTtlHours;
     if (key && ttl > 0) {
