@@ -33,6 +33,16 @@ api.interceptors.request.use((cfg) => {
   return cfg;
 });
 
+/* Mobil internet bir lahza uzilsa — o'qish (GET) so'rovi 2 marta qayta yuboriladi.
+   POST takrorlanmaydi: javob/XP ikki marta yozilib qolmasin. */
+api.interceptors.response.use(undefined, async (err) => {
+  const cfg = err.config;
+  if (!cfg || err.response || cfg.method !== "get" || (cfg._retry || 0) >= 2) throw err;
+  cfg._retry = (cfg._retry || 0) + 1;
+  await new Promise((r) => setTimeout(r, 1500 * cfg._retry));
+  return api(cfg);
+});
+
 export const mini = {
   auth: (initData) => api.post("/auth", { initData }).then((r) => r.data),
   path: () => api.get("/path").then((r) => r.data),
