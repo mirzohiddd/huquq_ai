@@ -1,0 +1,125 @@
+"use strict";
+/** 6-BO'LIM · Qarz va shartnomalar (juda qiyin): bir nechta "deyarli to'g'ri" variant. */
+module.exports = [
+  {
+    id: "loan-receipt", icon: "HandCoins",
+    ask: "Do'stimga katta miqdorda qarz berdim, tilxat yozdirish shartmi?",
+    title: "Tilxatsiz qarz",
+    story: "Do'stingizga katta miqdorda qarz berdingiz. U «ishonmaysanmi?» deb tilxat yozishdan bosh tortdi. Pulni naqd berdingiz, guvoh — faqat uning akasi.",
+    choice: {
+      q: "Sudda qarzni isbotlash bo'yicha eng aniq fikr qaysi?",
+      options: [
+        { t: "Guvohning ko'rsatuvi yetarli — u ham qarindosh, yolg'on gapirmaydi", ok: false, why: "Xato. Qonunda belgilangan miqdordan ortiq qarz shartnomasi yozma tuzilishi kerak; yozma shakl buzilsa, shartnomani guvohlik bilan isbotlash huquqi yo'qoladi." },
+        { t: "Yozma shakl talab etilgan qarzni tilxat yoki boshqa yozma dalil bilan isbotlash kerak — guvohga tayanib bo'lmaydi", ok: true, why: "To'g'ri. Oddiy yozma shaklga rioya qilinmasa, tomonlar bitimni guvohlar ko'rsatuvi bilan isbotlay olmaydi, lekin yozma va boshqa dalillar (SMS, o'tkazma, audio) keltirishi mumkin." },
+        { t: "Yozma shakl bo'lmasa, qarz shartnomasi umuman haqiqiy emas", ok: false, why: "Xato. Oddiy yozma shaklga rioya qilmaslik, odatda, bitimni haqiqiy emas qilmaydi — faqat guvohlik bilan isbotlash taqiqlanadi." },
+        { t: "Faqat notarial shartnoma bo'lsagina sudga murojaat qilish mumkin", ok: false, why: "Xato. Qarz shartnomasi uchun notarial tasdiq majburiy emas; oddiy tilxat ham yozma shakl hisoblanadi." },
+      ],
+    },
+    game: {
+      type: "spot",
+      prompt: "Qaysi dalil sudda eng kuchli?",
+      title: "QARZ DALILLARI",
+      lines: ["Akasining og'zaki ko'rsatuvi", "Qarz oluvchining o'z qo'li bilan yozgan va imzolagan tilxati", "«Pulni oldim» degan smaylik", "Kafe kamerasidagi tasvir"],
+      answer: 1,
+      why: "Summa, muddat va imzo bor tilxat — qarz shartnomasining yozma shakli. Qolganlari yordamchi dalil bo'lishi mumkin.",
+    },
+    takeaway: "Katta qarzni faqat tilxat bilan bering: summa, muddat, ikki tomonning to'liq ma'lumoti va imzo.",
+    refs: [{ code: "FK2", article: "732" }, { code: "FK2", article: "733" }, { code: "FK", article: "109" }],
+  },
+  {
+    id: "loan-return", icon: "Clock",
+    ask: "Qarz qaytarish muddati kelishilmagan bo'lsa, qarzdor qachon qaytarishi kerak?",
+    title: "Muddatsiz qarz",
+    story: "Tilxatda summa bor, lekin qaytarish sanasi yozilmagan. Bir yil o'tdi, qarzdor «muddat yozilmagan — xohlagan paytda qaytaraman» demoqda.",
+    choice: {
+      q: "Qonun bo'yicha qaysi javob to'g'ri?",
+      options: [
+        { t: "Muddat yozilmagan bo'lsa, qarzdor o'zi xohlagan paytda qaytaradi", ok: false, why: "Xato. Muddat kelishilmagan bo'lsa, qarz beruvchi talab qilgan kundan boshlab qonunda belgilangan muddat ichida qaytarilishi shart." },
+        { t: "Muddat yozilmagan qarzni talab qilib bo'lmaydi", ok: false, why: "Xato. Muddatning yo'qligi qarzni talab qilish huquqini yo'qotmaydi." },
+        { t: "Qarz beruvchi yozma talab yuboradi; qarzdor talabdan keyin qonunda belgilangan muddatda qaytarishi shart, kechiksa javobgar bo'ladi", ok: true, why: "To'g'ri. Yozma talab — muddatni boshlab beradi. Kechiktirilsa, qarzdor qonun yoki shartnoma bo'yicha javobgarlikka tortiladi." },
+        { t: "Bir yil o'tgach, qarz avtomatik kechiriladi", ok: false, why: "Xato. Bunday qoida yo'q. Faqat da'vo muddati masalasi bor va u talab huquqi buzilgan paytdan hisoblanadi." },
+      ],
+    },
+    game: {
+      type: "order",
+      prompt: "Qarzni undirish bosqichlari",
+      items: ["Qarzdorga yozma talab yuboraman (yetkazilganini isbotlab)", "Qonuniy muddat o'tishini kutaman", "Javob bo'lmasa, sudga da'vo arizasi beraman", "Sud qarorini ijroga qaratish uchun ijro organiga murojaat qilaman"],
+      why: "Yozma talab — eng muhim qadam: u muddatni boshlaydi va sudda talab qilinganini isbotlaydi.",
+    },
+    takeaway: "Muddatsiz qarz yozma talabdan keyin qaytarilishi shart. Talabni yetkazilganini isbotlaydigan usulda yuboring.",
+    refs: [{ code: "FK2", article: "735" }, { code: "FK2", article: "736" }],
+  },
+  {
+    id: "guarantor", icon: "UserCheck",
+    ask: "Do'stimga bankdan kredit olishda kafil bo'ldim, u to'lamasa men javob beramanmi?",
+    title: "Kafil bo'lish xavfi",
+    story: "Do'stingiz bankdan kredit olayotganda sizdan kafil bo'lishni so'radi. «Shunchaki imzo, sen hech narsa to'lamaysan» dedi.",
+    choice: {
+      q: "Kafilning javobgarligi haqida qaysi gap to'g'ri?",
+      options: [
+        { t: "Kafil faqat qarzdorning mol-mulki tugagandan keyin javob beradi", ok: false, why: "Xato. Bu subsidiar javobgarlik — u shartnomada alohida kelishilgan bo'lsagina qo'llanadi." },
+        { t: "Kafillik og'zaki ham tuzilishi mumkin, imzo shart emas", ok: false, why: "Xato. Kafillik shartnomasi yozma shaklda tuzilishi shart, aks holda u haqiqiy emas." },
+        { t: "Shartnomada boshqacha belgilanmagan bo'lsa, kafil qarzdor bilan solidar javob beradi — bank to'g'ridan-to'g'ri kafildan undirishi mumkin", ok: true, why: "To'g'ri. Kafil, odatda, asosiy qarz, foizlar, sud xarajatlari va kechiktirish oqibatlari uchun qarzdor bilan bir xil hajmda javob beradi." },
+        { t: "Kafil faqat asosiy qarzni to'laydi, foiz va jarimalarni emas", ok: false, why: "Xato. Agar shartnomada boshqacha yozilmagan bo'lsa, kafil qarzdor bilan bir xil hajmda — foizlar va zararlar bilan birga javob beradi." },
+      ],
+    },
+    game: {
+      type: "spot",
+      prompt: "Kafil uchun eng xavfli band qaysi?",
+      title: "KAFILLIK SHARTNOMASI",
+      lines: ["Kafil: Aliyev B.", "Asosiy qarzdor: Karimov D.", "Kafil qarzdor bilan solidar ravishda, to'liq hajmda javob beradi", "Shartnoma ikki nusxada tuzildi"],
+      answer: 2,
+      why: "Solidar javobgarlik — bank qarzdorni chetlab o'tib, butun summani darhol sizdan talab qilishi mumkin degani.",
+    },
+    takeaway: "Kafil — «shunchaki imzo» emas. Odatda u qarzdor bilan teng javob beradi: asosiy qarz, foiz va jarimalar bilan birga.",
+    refs: [{ code: "FK", article: "292" }, { code: "FK", article: "293" }],
+  },
+  {
+    id: "limitation", icon: "Hourglass",
+    ask: "Da'vo muddati qachondan boshlanadi va o'tib ketsa sud da'voni rad etadimi?",
+    title: "Da'vo muddati tuzog'i",
+    story: "Qarz qaytarilishi kerak bo'lgan kundan ancha vaqt o'tdi. Siz sudga murojaat qilmoqchisiz, lekin «muddat o'tib ketgan, sud qabul qilmaydi» deyishdi.",
+    choice: {
+      q: "Eng aniq huquqiy javob qaysi?",
+      options: [
+        { t: "Muddat o'tgan bo'lsa, sud da'vo arizasini qabul qilmaydi", ok: false, why: "Xato. Da'vo talabini qabul qilish muddat o'tganidan qat'i nazar amalga oshiriladi." },
+        { t: "Sud da'vo muddatini o'z tashabbusi bilan qo'llaydi va rad etadi", ok: false, why: "Xato. Da'vo muddati sud tomonidan faqat nizodagi taraf arz qilgandagina qo'llanadi." },
+        { t: "Sud arizani qabul qiladi; muddat faqat javobgar arz qilsa qo'llanadi, muddat esa huquq buzilganini bilgan yoki bilishi lozim bo'lgan kundan boshlanadi", ok: true, why: "To'g'ri. Bu — ikki nozik qoida: muddatni javobgar so'rashi kerak va u huquq buzilganini bilgan (bilishi lozim bo'lgan) kundan hisoblanadi. Qarzdor qarzni yozma tan olsa, muddat uziladi." },
+        { t: "Da'vo muddati qarz berilgan kundan boshlanadi", ok: false, why: "Xato. Muddatli majburiyatda u bajarish muddati tugagan kundan, ya'ni huquq buzilgan paytdan boshlanadi." },
+      ],
+    },
+    game: {
+      type: "spot",
+      prompt: "Qaysi holat da'vo muddatini uzadi (qaytadan boshlaydi)?",
+      title: "QARZDOR HARAKATLARI",
+      lines: ["Qarzdor telefon qilmay qo'ydi", "Qarzdor yozma ravishda qarzni tan olib, qisman to'ladi", "Qarzdor boshqa shaharga ko'chdi", "Qarzdor ijtimoiy tarmoqda sizni bloklab qo'ydi"],
+      answer: 1,
+      why: "Qarzni tan olishga dalolat qiluvchi harakat (qisman to'lash, yozma tan olish) da'vo muddatini uzadi — u qaytadan hisoblanadi.",
+    },
+    takeaway: "Da'vo muddati o'tgan bo'lsa ham sudga borish mumkin: muddatni faqat javobgar so'rashi kerak. Qarzni tan olish muddatni yangilaydi.",
+    refs: [{ code: "FK", article: "150" }, { code: "FK", article: "153" }, { code: "FK", article: "154" }, { code: "FK", article: "157" }],
+  },
+  {
+    id: "house-sale", icon: "KeyRound",
+    ask: "Uy sotib olishda pulni berib, notarial shartnomasiz kalitni oldim, uy meniki bo'ldimi?",
+    title: "Kalit bor, uy yo'q",
+    story: "Uy uchun to'liq pul berdingiz, sotuvchi kalitni va oddiy qo'lyozma tilxatni berdi. Notarius va davlat ro'yxatidan o'tkazish «keyinroq» qilinadigan bo'ldi.",
+    choice: {
+      q: "Mulk huquqi haqida qaysi fikr to'g'ri?",
+      options: [
+        { t: "Pul to'langan va kalit berilgan — uy endi meniki", ok: false, why: "Xato. Ko'chmas mulkka bo'lgan mulk huquqi xaridorga davlat ro'yxatidan o'tkazilgan paytdan o'tadi." },
+        { t: "Tilxat yetarli, notarial tasdiq faqat soliq uchun kerak", ok: false, why: "Xato. Ko'chmas mulkni sotish shartnomasi uchun qonunda belgilangan shakl va ro'yxatdan o'tkazish talabi bor; unga rioya qilmaslik jiddiy oqibatlarga olib keladi." },
+        { t: "Faqat kadastr pasportida ismim yozilsa, notarius shart emas", ok: false, why: "Xato. Kadastr ma'lumoti o'zgarishi uchun avval qonuniy shakldagi shartnoma va ro'yxatdan o'tkazish kerak." },
+        { t: "Shartnoma qonuniy shaklda tuzilib, mulk huquqi davlat ro'yxatidan o'tkazilmaguncha uy rasman sotuvchiniki — u uni boshqaga ham sotishi mumkin", ok: true, why: "To'g'ri. Bu eng xavfli holat: ro'yxatdan o'tmaguncha sotuvchi hali ham mulkdor. Bitimning notarial shakliga rioya qilinmasa, u haqiqiy emas deb topilishi mumkin." },
+      ],
+    },
+    game: {
+      type: "order",
+      prompt: "Uy sotib olishning xavfsiz tartibi",
+      items: ["Uy hujjatlari va taqiq yo'qligini tekshiraman", "Notarial shakldagi oldi-sotdi shartnomasini tuzamiz", "To'lovni hujjatli usulda amalga oshiraman", "Mulk huquqini davlat ro'yxatidan o'tkazaman", "Kalitni va uyni qabul qilib olaman"],
+      why: "Tekshiruv → notarial shartnoma → hujjatli to'lov → ro'yxatdan o'tkazish → topshirish. Tartib buzilsa, pul ham, uy ham xavf ostida.",
+    },
+    takeaway: "Ko'chmas mulk — kalit bilan emas, qonuniy shartnoma va davlat ro'yxati bilan sizniki bo'ladi.",
+    refs: [{ code: "FK2", article: "480" }, { code: "FK2", article: "481" }, { code: "FK", article: "112" }],
+  },
+];

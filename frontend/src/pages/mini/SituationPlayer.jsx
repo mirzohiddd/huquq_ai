@@ -1,13 +1,15 @@
 /**
- * VAZIYAT: voqea bosqichma-bosqich rivojlanadi, har qadamda foydalanuvchi
- * qanday yo'l tutishni tanlaydi. Oxirida natija va +10 XP (bir marta).
+ * VAZIYAT: voqea bosqichma-bosqich rivojlanadi — har qadamda savol ekrani,
+ * keyin natija (qalqon gapiradi). Oxirida natija va +10 XP (bir marta).
  */
 import React, { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { mini } from "./miniApi";
+import { sfx } from "./sound";
 import { Spinner } from "./Gate";
 import Hero from "./Hero";
-import ChoiceCard from "./ChoiceCard";
+import QuestionView from "./QuestionView";
+import ResultView from "./ResultView";
 import ExplainSheet from "./ExplainSheet";
 import FinishScreen from "./FinishScreen";
 import m from "./Mini.module.css";
@@ -19,9 +21,9 @@ export default function SituationPlayer({ id, ctx }) {
   const [err, setErr] = useState("");
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState([]); // har qadamdagi birinchi tanlov
+  const [res, setRes] = useState(null); // joriy qadam natijasi
   const [result, setResult] = useState(null);
-  const [busy, setBusy] = useState(false);
-  const [explain, setExplain] = useState(null);
+  const [sheet, setSheet] = useState(null);
 
   useEffect(() => {
     mini
@@ -30,27 +32,26 @@ export default function SituationPlayer({ id, ctx }) {
       .catch((e) => setErr(e?.response?.data?.error || t.error));
   }, [id, t.error]);
 
-  const answer = async (i) => {
+  const check = async (i) => {
     const r = await mini.step(id, step, i);
     setAnswers((a) => {
       const next = [...a];
       if (next[step] === undefined) next[step] = i;
       return next;
     });
-    return r;
+    setRes(r);
   };
 
   const next = async () => {
+    setRes(null);
     if (step + 1 < sit.steps.length) return setStep(step + 1);
-    setBusy(true);
     try {
       const r = await mini.finish(id, answers);
       setResult(r);
+      sfx("lesson");
       ctx.reloadPath();
     } catch (e) {
       setErr(e?.response?.data?.error || t.error);
-    } finally {
-      setBusy(false);
     }
   };
 
@@ -72,39 +73,41 @@ export default function SituationPlayer({ id, ctx }) {
 
   const cur = sit.steps[step];
   const total = sit.steps.length;
+  const last = step + 1 === total;
 
   return (
-    <div className={`${s.player} ${m.fadeIn}`} key={step}>
+    <div className={`${s.player} ${m.fadeIn}`} key={`${step}-${res ? 1 : 0}`}>
       <div className={s.topbar}>
         <button type="button" className={s.close} onClick={ctx.close} aria-label={t.toMap}><X /></button>
         <div className={s.progress} role="progressbar" aria-valuemin={0} aria-valuemax={total} aria-valuenow={step}>
-          <i style={{ width: `${((step + (answers[step] !== undefined ? 1 : 0.3)) / total) * 100}%` }} />
+          <i style={{ width: `${((step + (res ? 1 : 0.3)) / total) * 100}%` }} />
         </div>
       </div>
 
-      <div className={s.stepTag}>{t.tabs.sit} · {step + 1} / {total}</div>
-      <h2 className={s.title}>{sit.title}</h2>
+      {!res ? (
+        <QuestionView
+          icon={sit.icon}
+          tag={`${sit.title} · ${step + 1} / ${total}`}
+          text={cur.text}
+          question={cur.q}
+          options={cur.options}
+          onCheck={check}
+          t={t}
+        />
+      ) : (
+        <ResultView
+          res={res}
+          t={t}
+          nextLabel={last ? t.finishBtn : t.nextQuestion}
+          onNext={next}
+          onSource={() => setSheet("source")}
+          onExplain={() => setSheet("ai")}
+        />
+      )}
 
-      <div className={s.story}>
-        <Hero mood="think" size={76} />
-        <div className={s.bubble}><p>{cur.text}</p></div>
-      </div>
-
-      <ChoiceCard
-        q={cur.q}
-        options={cur.options}
-        onAnswer={answer}
-        onExplain={() => setExplain({ kind: "situation", id, step })}
-        t={t}
-      />
-
-      <div className={s.footer}>
-        <button type="button" className={`${m.btn} ${step + 1 === total ? m.btnGold : ""}`} disabled={answers[step] === undefined || busy} onClick={next}>
-          {t.continue}
-        </button>
-      </div>
-
-      {explain && <ExplainSheet req={explain} lang={lang} t={t} onClose={() => setExplain(null)} />}
+      {sheet && (
+        <ExplainSheet req={{ kind: "situation", id, step }} res={res} lang={lang} t={t} sourceOnly={sheet === "source"} onClose={() => setSheet(null)} />
+      )}
     </div>
   );
 }

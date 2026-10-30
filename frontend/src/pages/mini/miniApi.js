@@ -50,4 +50,9 @@ export const mini = {
   goal: (goal) => api.post("/goal", { goal }).then((r) => r.data),
   rating: () => api.get("/rating").then((r) => r.data),
   explain: (body) => api.post("/explain", body).then((r) => r.data),
+  // Qalqonning ovozi — saytning keshlangan TTS'i (o'zbekcha neyron ovoz)
+  speak: (text) =>
+    axios
+      .post(`${API_BASE}/voice/speak`, { text, lang: "uz" }, { responseType: "arraybuffer", timeout: 20000, headers: token ? { Authorization: `Bearer ${token}` } : {} })
+      .then((r) => r.data),
 };

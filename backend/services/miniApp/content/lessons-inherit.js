@@ -1,0 +1,125 @@
+"use strict";
+/** 8-BO'LIM · Meros (ekspert): eng nozik qoidalar, deyarli bir xil variantlar. */
+module.exports = [
+  {
+    id: "heirs-order", icon: "Network",
+    ask: "Qonun bo'yicha birinchi navbatdagi merosxo'rlar kimlar?",
+    title: "Merosxo'rlar navbati",
+    story: "Ota vasiyatnomasiz vafot etdi. Undan xotini, ikki farzandi, onasi va akasi qoldi. Akasi ham «meros menga ham tegishli» demoqda.",
+    choice: {
+      q: "Kimlar birinchi navbatda meros oladi?",
+      options: [
+        { t: "Faqat farzandlar — ular eng yaqin", ok: false, why: "Xato. Birinchi navbatga faqat farzandlar emas, er (xotin) va ota-ona ham kiradi." },
+        { t: "Farzandlar, xotini va onasi — teng ulushlarda; akasi ikkinchi navbatda", ok: true, why: "To'g'ri. Birinchi navbat: farzandlar (shu jumladan farzandlikka olinganlar), er-xotin va ota-ona. Aka-uka — ikkinchi navbat; birinchi navbatdagilar bo'lsa, ular meros olmaydi." },
+        { t: "Farzandlar, xotini, onasi va akasi — hammasi teng", ok: false, why: "Xato. Aka-uka ikkinchi navbatdagi vorislar. Birinchi navbatda merosxo'r bo'lsa, ikkinchi navbat chaqirilmaydi." },
+        { t: "Avval xotini yarmini oladi, qolganini farzandlar bo'lishadi", ok: false, why: "Xato. Xotin avval umumiy mulkdagi o'z ulushini oladi, lekin merosda u boshqa birinchi navbatdagi vorislar bilan teng." },
+      ],
+    },
+    game: {
+      type: "spot",
+      prompt: "Bu oilada birinchi navbatdagi merosxo'r BO'LMAGAN kim?",
+      title: "OILA A'ZOLARI",
+      lines: ["Xotini", "O'g'li", "Onasi", "Akasi", "Qizi"],
+      answer: 3,
+      why: "Aka-uka va opa-singillar — ikkinchi navbat. Birinchi navbatdagilar merosni qabul qilsa, ular meros olmaydi.",
+    },
+    takeaway: "Birinchi navbat: farzandlar, er-xotin va ota-ona — teng ulushlarda. Keyingi navbat oldingisi bo'lmaganda chaqiriladi.",
+    refs: [{ code: "FK2", article: "1135" }, { code: "FK2", article: "1136" }],
+  },
+  {
+    id: "will-form", icon: "ScrollText",
+    ask: "Vasiyatnoma qanday shaklda tuzilishi kerak, qo'lda yozilgani haqiqiymi?",
+    title: "Qo'lda yozilgan vasiyat",
+    story: "Buvangiz vafotidan oldin daftarga «uyim nevaram Akmalga qolsin» deb yozib imzolagan. Notarius yoki boshqa guvohlik yo'q.",
+    choice: {
+      q: "Bu vasiyatnoma haqida qaysi fikr eng to'g'ri?",
+      options: [
+        { t: "Imzo bor — demak, to'liq haqiqiy vasiyatnoma", ok: false, why: "Xato. Vasiyatnoma qonunda belgilangan shaklda — notarial tasdiqlangan yoki unga tenglashtirilgan tartibda tuzilishi kerak." },
+        { t: "Qonun talab qilgan shakl (notarial tasdiq yoki unga tenglashtirilgan tartib) bo'lmasa, vasiyatnoma haqiqiy emas — meros qonun bo'yicha taqsimlanadi", ok: true, why: "To'g'ri. Shaklga rioya qilmaslik vasiyatnomani haqiqiy emas qiladi. Shunda meros vasiyat bo'lmaganidek — qonun bo'yicha navbatlar asosida o'tadi." },
+        { t: "Oila a'zolari rozi bo'lsa, notarius shart emas — vasiyat amal qiladi", ok: false, why: "Xato. Merosxo'rlar ixtiyoriy ravishda kelishib, ulushlarni qayta taqsimlashi mumkin, lekin bu vasiyatnomani haqiqiy qilmaydi." },
+        { t: "Faqat ikki guvoh imzosi yetishmaydi, uni keyin qo'shish mumkin", ok: false, why: "Xato. Vasiyat qiluvchi vafotidan keyin uning vasiyatnomasining shaklini tuzatib bo'lmaydi." },
+      ],
+    },
+    game: {
+      type: "spot",
+      prompt: "Qaysi vasiyatnoma notarial vasiyatnomaga tenglashtiriladi?",
+      title: "VASIYATNOMALAR",
+      lines: ["Ijtimoiy tarmoqdagi ovozli xabar", "Shifoxonada davolanayotganda bosh shifokor tasdiqlagan vasiyatnoma", "Qo'shnining guvohligi bilan aytilgan gap", "Bankka yozilgan oddiy ariza"],
+      answer: 1,
+      why: "Qonun ayrim hollarda (shifoxona, harbiy qism va boshqalar) mansabdor shaxs tasdiqlagan vasiyatnomani notarial vasiyatnomaga tenglashtiradi.",
+    },
+    takeaway: "Vasiyatnoma — faqat qonuniy shaklda: notarial yoki unga tenglashtirilgan. Aks holda meros qonun bo'yicha bo'linadi.",
+    refs: [{ code: "FK2", article: "1124" }, { code: "FK2", article: "1125" }, { code: "FK2", article: "1126" }],
+  },
+  {
+    id: "forced-share", icon: "ShieldCheck",
+    ask: "Vasiyatnomada nomi yo'q bo'lsa ham kimlar merosdan majburiy ulush oladi?",
+    title: "Majburiy ulush",
+    story: "Ota butun mulkini vasiyatnoma bilan do'stiga qoldirdi. Uning voyaga yetmagan o'g'li va mehnatga qobiliyatsiz xotini vasiyatnomada tilga olinmagan.",
+    choice: {
+      q: "O'g'il va xotin meros oladimi?",
+      options: [
+        { t: "Yo'q — vasiyat qiluvchining irodasi mutlaq", ok: false, why: "Xato. Vasiyat erkinligi cheksiz emas: qonun ayrim yaqinlarni majburiy ulush bilan himoya qiladi." },
+        { t: "Ha — voyaga yetmagan yoki mehnatga qobiliyatsiz bolalar, mehnatga qobiliyatsiz er (xotin) va ota-ona vasiyatnomadan qat'i nazar qonunda belgilangan majburiy ulushni oladi", ok: true, why: "To'g'ri. Majburiy ulush — vasiyatnoma mazmunidan qat'i nazar beriladi va qonun bo'yicha tegishli ulushning belgilangan qismidan kam bo'lmaydi." },
+        { t: "Faqat o'g'il oladi, xotin olmaydi", ok: false, why: "Xato. Mehnatga qobiliyatsiz er (xotin) ham majburiy ulushga ega." },
+        { t: "Ular faqat do'st rozi bo'lsa meros oladi", ok: false, why: "Xato. Majburiy ulush — qonuniy huquq, vasiyat bo'yicha merosxo'rning roziligiga bog'liq emas." },
+      ],
+    },
+    game: {
+      type: "spot",
+      prompt: "Kim majburiy ulushga ega EMAS?",
+      title: "QARINDOSHLAR",
+      lines: ["Voyaga yetmagan o'g'li", "Mehnatga qobiliyatsiz xotini", "Mehnatga qobiliyatsiz onasi", "Mehnatga layoqatli, voyaga yetgan qizi"],
+      answer: 3,
+      why: "Mehnatga layoqatli voyaga yetgan farzand majburiy ulush olmaydi — vasiyatnoma bo'lsa, u vasiyatga bo'ysunadi.",
+    },
+    takeaway: "Vasiyat erkin, lekin voyaga yetmagan va mehnatga qobiliyatsiz yaqinlar majburiy ulush bilan himoyalangan.",
+    refs: [{ code: "FK2", article: "1142" }],
+  },
+  {
+    id: "renounce", icon: "Ban",
+    ask: "Merosdan voz kechish mumkinmi va keyin fikrimni o'zgartirsam bo'ladimi?",
+    title: "Merosdan voz kechish",
+    story: "Opangiz ota merosidan voz kechmoqchi, lekin «faqat uyni olaman, mashinadan voz kechaman» va «keyin xohlasam, qaytarib olaman» demoqda.",
+    choice: {
+      q: "Qaysi fikr qonunga mos?",
+      options: [
+        { t: "Merosning bir qismini olib, qolganidan voz kechish mumkin", ok: false, why: "Xato. Qonun merosning bir qismidan voz kechishga, odatda, yo'l qo'ymaydi: merosdan voz kechish to'liq bo'ladi." },
+        { t: "Voz kechishni keyinchalik istalgan paytda qaytarib olish mumkin", ok: false, why: "Xato. Merosdan voz kechish keyinchalik o'zgartirilishi yoki qaytarib olinishi mumkin emas." },
+        { t: "Voz kechish shartli bo'lishi mumkin («agar akam uyni olmasa…»)", ok: false, why: "Xato. Merosdan shartli yoki izohlar bilan voz kechishga yo'l qo'yilmaydi." },
+        { t: "Voz kechish to'liq va shartsiz bo'ladi, uni keyin qaytarib olib bo'lmaydi; boshqa merosxo'r foydasiga voz kechish mumkin", ok: true, why: "To'g'ri. Merosdan voz kechish — qaytarib bo'lmaydigan, shartsiz va to'liq harakat. Qonunda nazarda tutilgan doirada boshqa merosxo'r foydasiga voz kechish mumkin." },
+      ],
+    },
+    game: {
+      type: "order",
+      prompt: "Merosdan voz kechish tartibi",
+      items: ["Meros ochilgan joydagi notariusga boraman", "Qaysi merosxo'r foydasiga (yoki umumiy) voz kechishimni aniqlayman", "Belgilangan muddatda ariza beraman", "Arizaning oqibatlari — qaytarib bo'lmasligini tushunib imzolayman"],
+      why: "Voz kechish notarial tartibda, belgilangan muddatda rasmiylashtiriladi va uni qaytarib bo'lmaydi — shuning uchun oxirgi qadam eng muhim.",
+    },
+    takeaway: "Merosdan voz kechish — to'liq, shartsiz va qaytarib bo'lmaydi. Imzolashdan oldin yaxshilab o'ylang.",
+    refs: [{ code: "FK2", article: "1147" }, { code: "FK2", article: "1148" }],
+  },
+  {
+    id: "estate-debts", icon: "Landmark",
+    ask: "Meros bilan birga marhumning qarzlari ham o'tadimi, merosxo'r qancha javob beradi?",
+    title: "Meros bilan qarz",
+    story: "Marhum otangizdan uy qoldi, lekin bankdan olingan katta kreditlari ham bor ekan. Bank «barcha qarzni o'z cho'ntagingizdan to'laysiz» demoqda.",
+    choice: {
+      q: "Merosxo'r qarzlar uchun qanday javob beradi?",
+      options: [
+        { t: "Merosxo'rlar barcha qarzni to'liq, o'z mol-mulklari hisobidan to'laydi", ok: false, why: "Xato. Merosxo'r cheksiz javob bermaydi." },
+        { t: "Qarzlar meros bilan birga o'tmaydi — bank faqat marhumdan talab qilishi mumkin edi", ok: false, why: "Xato. Qarzlar ham meros tarkibiga kiradi; kreditorlar merosni qabul qilgan merosxo'rlarga talab qo'yishi mumkin." },
+        { t: "Merosni qabul qilgan har bir merosxo'r qarzlar uchun o'ziga o'tgan meros mol-mulkining qiymati doirasida solidar javob beradi", ok: true, why: "To'g'ri. Javobgarlik meros qiymati bilan cheklangan. Agar qarz merosdan katta bo'lsa — ortig'ini o'z mulkingizdan to'lamaysiz." },
+        { t: "Faqat eng katta merosxo'r javob beradi", ok: false, why: "Xato. Merosni qabul qilgan barcha merosxo'rlar meros qiymati doirasida solidar javob beradi." },
+      ],
+    },
+    game: {
+      type: "order",
+      prompt: "Qarzli merosda to'g'ri harakatlar",
+      items: ["Meros tarkibini va qiymatini aniqlayman", "Marhumning barcha qarzlarini ro'yxatlayman", "Qarz merosdan katta bo'lsa, voz kechishni o'ylab ko'raman", "Qabul qilsam, kreditorlarga faqat meros qiymati doirasida javob beraman"],
+      why: "Avval hisob-kitob, keyin qaror. Qarzlar merosdan oshsa, merosni qabul qilmaslik ham qonuniy yo'l.",
+    },
+    takeaway: "Meros bilan qarz ham keladi, lekin javobgarlik faqat sizga o'tgan meros qiymati doirasida.",
+    refs: [{ code: "FK2", article: "1156" }],
+  },
+];

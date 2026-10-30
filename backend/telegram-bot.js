@@ -80,6 +80,7 @@ async function onMenu(msg, action) {
   const tgId = msg.from.id;
   const X = tx(tgId);
   if (action === "lang") return safeSend(chatId, T.uz.lang_choose, ui.langKeyboard);
+  if (action === "app") return ((a) => safeSend(chatId, a.text, a.opts))(ui.appMessage(getLang(tgId)));
   if (action === "help") return safeSend(chatId, fill(X.help, { site: SITE_URL }), mainMenu(getLang(tgId)));
   const userId = await acc.findOrLinkUser(tgId, msg.from.username);
   if (action === "plans") return plans.showPlans(chatId, tgId, userId);

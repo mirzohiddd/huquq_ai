@@ -1,23 +1,36 @@
 /**
- * DARS YAKUNI: «Dars tugadi! +20 XP», qahramon bayrami (sakrash + konfetti),
+ * DARS YAKUNI: «Dars tugadi! +20 XP», qalqon bayrami (sakraydi va gapiradi),
  * asosiy xulosa va qonundan jonli iqtibos.
  */
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Zap, Flame, BookOpen, ChevronRight } from "lucide-react";
 import Hero from "./Hero";
+import { speak, stopVoice } from "./sound";
 import f from "./Finish.module.css";
 import m from "./Mini.module.css";
 
 export default function FinishScreen({ result, ctx, title, sub }) {
   const { t } = ctx;
   const xp = result?.xp || 0;
+  const [talking, setTalking] = useState(false);
+  const heading = result?.unitDone ? t.unitDone(result.unitTitle) : title || t.finishTitle;
+
+  // Fanfara tugagach qalqon tabriklaydi
+  useEffect(() => {
+    const line = `${heading} ${xp > 0 ? `Plyus ${xp} XP!` : ""} ${result?.takeaway || ""}`.trim();
+    const id = setTimeout(() => speak(line, setTalking), result?.unitDone ? 1700 : 900);
+    return () => {
+      clearTimeout(id);
+      stopVoice();
+    };
+  }, [heading, xp, result]);
 
   return (
     <div className={`${f.wrap} ${m.fadeIn}`}>
       <div className={f.hero}>
-        <Hero mood="cheer" size={150} />
+        <Hero mood="cheer" size={result?.unitDone ? 180 : 150} talking={talking} />
       </div>
-      <h2 className={f.title}>{title || t.finishTitle}</h2>
+      <h2 className={f.title}>{heading}</h2>
       {xp > 0 ? (
         <div className={f.xp}><Zap aria-hidden="true" /> +{xp} XP</div>
       ) : (

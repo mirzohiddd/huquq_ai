@@ -1,14 +1,14 @@
 /**
- * YUTUQLAR — daraja, XP, haftalik natija va nishonlar.
+ * YUTUQLAR — daraja, XP, haftalik natija, nishonlar va o'rganilgan mavzular.
  */
 import React, { useEffect, useState } from "react";
-import { Award, Medal, Crown, Star, Target, Sparkles, RotateCcw, Flame, Zap, Scale } from "lucide-react";
+import { Award, Medal, Crown, Footprints, Target, Sparkles, RotateCcw, Flame, Zap, Scale, Brain } from "lucide-react";
 import { mini } from "./miniApi";
 import { Spinner } from "./Gate";
 import m from "./Mini.module.css";
 import s from "./Tabs.module.css";
 
-const BADGE_ICON = { first: Star, unit: Medal, half: Award, all: Crown, sharp: Target, life: Scale, review: RotateCcw, streak3: Flame, streak7: Sparkles, xp500: Zap };
+const BADGE_ICON = { first: Footprints, ten: Brain, streak5: Flame, unit: Medal, half: Award, all: Crown, sharp: Target, life: Scale, review: RotateCcw, streak3: Flame, streak7: Sparkles, xp500: Zap };
 
 export default function AchievementsTab({ ctx }) {
   const { t } = ctx;
@@ -68,6 +68,19 @@ export default function AchievementsTab({ ctx }) {
             </div>
           );
         })}
+      </div>
+
+      <div className={s.sectionHead}>
+        <h3>{t.learned}</h3>
+      </div>
+      <div className={`${m.card} ${s.topics}`}>
+        {me.learned.length === 0 && <p className={m.screenSub} style={{ margin: 0 }}>{t.noLearned}</p>}
+        {me.learned.map((u) => (
+          <div key={u.title}>
+            <h4>{u.title}</h4>
+            <div className={s.chips}>{u.topics.map((x) => <span key={x}>{x}</span>)}</div>
+          </div>
+        ))}
       </div>
     </div>
   );

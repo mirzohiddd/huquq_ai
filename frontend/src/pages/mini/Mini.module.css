@@ -111,3 +111,6 @@
 @media (prefers-reduced-motion: reduce) { .fadeIn, .spin { animation: none; } }
 .centerSmall { display: grid; justify-items: center; gap: 10px; padding: 28px 12px; text-align: center; }
 .spinLabel { color: var(--muted, #6a6760); font-size: 13.5px; }
+
+/* «Animatsiya» o'chirilganda (Profil → Sozlamalar) */
+.noAnim *, .noAnim *::before, .noAnim *::after { animation: none !important; transition: none !important; }

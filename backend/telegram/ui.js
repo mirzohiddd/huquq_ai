@@ -11,6 +11,7 @@
 
 const MENU = {
   uz: {
+    app: "📱 HuquqTech ilovasi",
     lessons: "📚 Darslar",
     tests: "📝 Testlar",
     plans: "💎 Tariflar",
@@ -19,6 +20,7 @@ const MENU = {
     help: "ℹ️ Yordam",
   },
   ru: {
+    app: "📱 Приложение HuquqTech",
     lessons: "📚 Уроки",
     tests: "📝 Тесты",
     plans: "💎 Тарифы",
@@ -29,9 +31,19 @@ const MENU = {
 };
 // Ikki tilda BIR XIL — tilni tushunmagan odam ham taniydi
 const LANG_BTN = "🌐 Til / Язык";
-// Telegram Mini App (sayt `/tg`). `web_app` tugmasi matn YUBORMAYDI — menuAction'ga ta'sir qilmaydi
+/* Telegram Mini App (sayt `/tg`). ⚠️ Pastki (reply) menyudagi `web_app` tugmasi
+   ilovaga `initData` BERMAYDI — ilova foydalanuvchini taniy olmasdi. Shu sabab
+   menyu tugmasi oddiy matn, bot javobida INLINE `web_app` tugmasi yuboriladi. */
 const APP_URL = `${(process.env.SITE_URL || "https://www.huquqtech.uz").replace(/\/+$/, "")}/tg`;
-const APP_BTN = { uz: "📱 HuquqTech ilovasi", ru: "📱 Приложение HuquqTech" };
+const APP_TEXT = {
+  uz: "📱 <b>HuquqTech ilovasi</b> — darslar xaritasi, hayotiy vaziyatlar, XP va reyting. Quyidagi tugmani bosing:",
+  ru: "📱 <b>Приложение HuquqTech</b> — карта уроков, жизненные ситуации, XP и рейтинг. Нажмите кнопку ниже:",
+};
+const APP_OPEN = { uz: "🚀 Ilovani ochish", ru: "🚀 Открыть приложение" };
+function appMessage(lang) {
+  const l = APP_TEXT[lang] ? lang : "uz";
+  return { text: APP_TEXT[l], opts: { reply_markup: { inline_keyboard: [[{ text: APP_OPEN[l], web_app: { url: APP_URL } }]] } } };
+}
 
 /** Bosilgan menyu tugmasi qaysi amal? (eski yorliqlar ham taniladi) */
 const LEGACY = {
@@ -57,7 +69,7 @@ function mainMenu(lang) {
   return {
     reply_markup: {
       keyboard: [
-        [{ text: APP_BTN[lang] || APP_BTN.uz, web_app: { url: APP_URL } }],
+        [m.app],
         [m.lessons, m.tests],
         [m.plans, m.account],
         [m.new, m.help],
@@ -173,6 +185,7 @@ module.exports = {
   LANG_BTN,
   menuAction,
   mainMenu,
+  appMessage,
   contactMenu,
   langKeyboard,
   esc,

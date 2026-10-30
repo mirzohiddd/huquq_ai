@@ -13,6 +13,7 @@ import Seo from "../../components/Seo";
 import { loadTelegram, setupApp, backButton } from "./tg";
 import { mini, setToken, hasToken } from "./miniApi";
 import { textFor } from "./text";
+import { unlock, settings } from "./sound";
 import Gate, { Spinner } from "./Gate";
 import PathTab from "./PathTab";
 import s from "./Mini.module.css";
@@ -41,7 +42,15 @@ export default function MiniApp() {
   const [tab, setTab] = useState("path");
   const [overlay, setOverlay] = useState(null); // { kind: "lesson"|"situation", id }
   const [path, setPath] = useState(null);
+  const [anim, setAnim] = useState(settings.anim);
   const t = textFor(lang);
+
+  // Telegram WebView ovozni faqat birinchi bosishdan keyin ochadi
+  useEffect(() => {
+    const on = () => unlock();
+    window.addEventListener("pointerdown", on, { passive: true });
+    return () => window.removeEventListener("pointerdown", on);
+  }, []);
 
   const loadPath = useCallback(() => mini.path().then(setPath).catch(() => setPhase("error")), []);
 
@@ -104,11 +113,13 @@ export default function MiniApp() {
     openSituation: (id) => setOverlay({ kind: "situation", id }),
     openLessonNext: (id) => setOverlay(id ? { kind: "lesson", id } : null),
     close,
+    setTab,
+    setAnim,
   };
   const initial = (name || "H").trim()[0].toUpperCase();
 
   return (
-    <div className={s.app}>
+    <div className={`${s.app} ${anim ? "" : s.noAnim}`}>
       <Seo title="HuquqTech — Telegram ilova" noindex />
       <header className={s.header}>
         <div className={s.brand}>

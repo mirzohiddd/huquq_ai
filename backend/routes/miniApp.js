@@ -72,11 +72,13 @@ router.post("/lesson/:id/choice", userGuard, async (req, res) => {
   try {
     const o = await openLesson(req, res);
     if (!o) return;
-    const opt = o.l.choice.options[Number(req.body?.option)];
+    const view = content.optionView(content.lessonKey(o.l.id), o.l.choice.options);
+    const opt = view.pick(req.body?.option);
     if (!opt) return res.status(400).json({ error: "Variant noto'g'ri" });
-    if (!opt.ok && !o.doc.lessons?.[o.l.id]) await store.addMistake(req.authUser.id, `L:${o.l.id}`);
-    const correct = o.l.choice.options.findIndex((x) => x.ok);
-    res.json({ ok: opt.ok, why: opt.why, correct, rightWhy: o.l.choice.options[correct].why });
+    if (!opt.ok && !o.doc.lessons?.[o.l.id]) await store.addMistake(req.authUser.id, content.lessonKey(o.l.id));
+    const right = o.l.choice.options.find((x) => x.ok);
+    // `quotes` — «Manbani ko'rish» uchun darhol (xotiradagi korpusdan, AI'siz)
+    res.json({ ok: opt.ok, why: opt.why, correct: view.correct, rightText: right.t, rightWhy: right.why, quotes: await quotesOf(o.l.refs) });
   } catch (err) {
     fail(res, err, "choice");
   }
@@ -111,20 +113,25 @@ router.post("/lesson/:id/complete", userGuard, async (req, res) => {
     const { l } = o;
     const b = req.body || {};
     const solved = l.game.type === "order" ? orderOk(l, b.order) : Number(b.line) === l.game.answer;
-    const first = l.choice.options[Number(b.firstOption)];
+    const first = content.optionView(content.lessonKey(l.id), l.choice.options).pick(b.firstOption);
     if (!solved || !first) return res.status(400).json({ error: "Dars hali yakunlanmagan" });
     const xp = await store.finishOnce(req.authUser.id, "lessons", l.id, store.XP.lesson, { firstTry: !!first.ok });
     const doc = await store.getDoc(req.authUser.id);
     const s = store.summaryOf(doc);
     const idx = content.LESSONS.findIndex((x) => x.id === l.id);
+    const next = content.LESSONS[idx + 1];
+    // Bo'lim to'liq tugadimi — mini app katta bayram (ovoz + animatsiya) ko'rsatadi
+    const unitDone = xp > 0 && content.LESSONS.filter((x) => x.unit === l.unit).every((x) => doc.lessons?.[x.id]);
     res.json({
+      unitDone,
+      unitTitle: content.UNITS.find((u) => u.key === l.unit).title,
       xp,
       totalXp: s.xp,
       level: s.level,
       streak: s.streak,
       takeaway: l.takeaway,
       quotes: await quotesOf(l.refs),
-      next: content.LESSONS[idx + 1]?.id || null,
+      next: next?.id || null,
       newBadges: s.badges.filter((x) => x.earned).map((x) => x.id),
     });
   } catch (err) {

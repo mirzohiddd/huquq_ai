@@ -1,66 +1,94 @@
 /**
- * QAHRAMON — mini app maskoti (inline SVG, tashqi rasm yo'q).
- * mood: "wave" (salom), "think" (o'ylayapti), "happy", "cheer" (bayram — sakrash + konfetti).
+ * QAHRAMON — oltin qalqoncha (HuquqTech himoyachisi).
+ * mood: "cheer" (qo'llar tepada), "happy", "wave", "think", "sad".
+ * talking: og'iz qimirlaydi va atrofida oltin chiziqlar chaqnaydi.
  */
 import React from "react";
 import s from "./Hero.module.css";
 
-const CONFETTI = ["#c9953a", "#e0b060", "#1e2d4a", "#1a7a45", "#e86a5a", "#5b8def"];
+const NAVY = "#1b2a4a";
+const SHIELD = "M100 30 C84 40 66 44 50 44 C47.8 44 46 45.8 46 48 L46 98 C46 132 70 154 100 168 C130 154 154 132 154 98 L154 48 C154 45.8 152.2 44 150 44 C134 44 116 40 100 30 Z";
+const RIGHT_HALF = "M100 30 C116 40 134 44 150 44 C152.2 44 154 45.8 154 48 L154 98 C154 132 130 154 100 168 Z";
 
-export default function Hero({ mood = "happy", size = 140 }) {
-  const cheer = mood === "cheer";
+/* Qo'llar: [yelka→tirsak→musht] har kayfiyat uchun */
+const ARMS = {
+  cheer: ["M52 96 Q34 84 28 62", "M148 96 Q166 84 172 62"],
+  wave: ["M52 100 Q38 116 34 134", "M148 96 Q166 84 172 62"],
+  happy: ["M52 100 Q36 112 30 128", "M148 100 Q164 112 170 128"],
+  think: ["M52 100 Q38 116 34 134", "M148 100 Q160 120 128 118"],
+  sad: ["M54 104 Q44 122 44 140", "M146 104 Q156 122 156 140"],
+};
+const end = (d) => d.split(" ").slice(-2).map(Number);
+
+/* Atrofdagi oltin chiziqlar (rasmdagidek) */
+const RAYS = [[18, 44, 30, 54], [8, 92, 24, 94], [22, 140, 34, 132], [182, 44, 170, 54], [192, 92, 176, 94], [178, 140, 166, 132], [60, 14, 66, 26], [140, 14, 134, 26]];
+
+export default function Hero({ mood = "happy", size = 140, talking = false }) {
+  const arms = ARMS[mood] || ARMS.happy;
+  const closedEyes = mood === "cheer" || mood === "happy";
+  const showRays = talking || mood === "cheer";
   return (
-    <div className={`${s.wrap} ${s[mood] || ""}`} style={{ width: size, height: size }} aria-hidden="true">
-      {cheer && (
-        <div className={s.confetti}>
-          {Array.from({ length: 18 }, (_, i) => (
-            <i key={i} style={{ "--i": i, "--c": CONFETTI[i % CONFETTI.length] }} />
-          ))}
-        </div>
-      )}
-      <svg viewBox="0 0 160 160" className={s.svg}>
-        <ellipse cx="80" cy="150" rx="40" ry="6" className={s.shadow} />
-        <g className={s.body}>
-          {/* tana */}
-          <path d="M40 92c0-24 18-40 40-40s40 16 40 40v28c0 12-10 22-22 22H62c-12 0-22-10-22-22z" fill="#162035" />
-          <path d="M58 118h44v10a6 6 0 0 1-6 6H64a6 6 0 0 1-6-6z" fill="#c9953a" />
-          <path d="M66 124h28" stroke="#0b1322" strokeWidth="2" strokeLinecap="round" />
-          {/* yuz */}
-          <circle cx="80" cy="64" r="34" fill="#f3d9b6" />
-          <path d="M46 60c2-22 18-32 34-32s32 10 34 32c-10-8-22-12-34-12s-24 4-34 12z" fill="#0b1322" />
-          <path d="M60 30h40l-4 10H64z" fill="#c9953a" />
-          <g className={s.eyes}>
-            <circle cx="68" cy="66" r="4" fill="#0b1322" />
-            <circle cx="92" cy="66" r="4" fill="#0b1322" />
-            <circle cx="69.5" cy="64.5" r="1.3" fill="#fff" />
-            <circle cx="93.5" cy="64.5" r="1.3" fill="#fff" />
-          </g>
-          {mood === "think" ? (
-            <path d="M72 82h16" stroke="#8b4a2b" strokeWidth="3" strokeLinecap="round" />
-          ) : (
-            <path d="M70 79c5 6 15 6 20 0" stroke="#8b4a2b" strokeWidth="3" fill="none" strokeLinecap="round" />
-          )}
-          <circle cx="60" cy="76" r="4" fill="#f0a98e" opacity="0.6" />
-          <circle cx="100" cy="76" r="4" fill="#f0a98e" opacity="0.6" />
-          {/* qo'llar */}
-          <g className={s.armL}>
-            <path d="M42 96c-10 2-16 10-16 18" stroke="#162035" strokeWidth="10" strokeLinecap="round" fill="none" />
-            <circle cx="26" cy="116" r="7" fill="#f3d9b6" />
-          </g>
-          <g className={s.armR}>
-            <path d="M118 96c10-4 16-14 18-24" stroke="#162035" strokeWidth="10" strokeLinecap="round" fill="none" />
-            <circle cx="137" cy="70" r="7" fill="#f3d9b6" />
-          </g>
-          {/* kitob (brend belgisi) */}
-          <path d="M66 100l14 4 14-4v14l-14 4-14-4z" fill="#fdf5e6" stroke="#c9953a" strokeWidth="2" strokeLinejoin="round" />
-          <path d="M80 104v14" stroke="#c9953a" strokeWidth="2" />
-        </g>
-        {mood === "think" && (
-          <g className={s.bubble}>
-            <circle cx="128" cy="34" r="12" fill="#fff" stroke="#e0b060" strokeWidth="2" />
-            <text x="128" y="39" textAnchor="middle" fontSize="15" fontWeight="700" fill="#8b6419">?</text>
+    <div className={`${s.wrap} ${s[mood] || ""} ${talking ? s.talking : ""}`} style={{ width: size, height: size }} aria-hidden="true">
+      <svg viewBox="0 0 200 200" width={size} height={size}>
+        <ellipse cx="100" cy="190" rx="38" ry="5" fill="#0b1322" opacity="0.08" />
+        {showRays && (
+          <g className={s.rays} stroke="#f0b429" strokeWidth="6" strokeLinecap="round">
+            {RAYS.map(([x1, y1, x2, y2], i) => <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} style={{ animationDelay: `${i * 0.08}s` }} />)}
           </g>
         )}
+        <g className={s.body}>
+          {/* oyoqlar */}
+          <g stroke={NAVY} strokeWidth="8" strokeLinecap="round" fill={NAVY}>
+            <path d="M88 160 L86 178" />
+            <path d="M112 160 L114 178" />
+            <ellipse cx="82" cy="181" rx="9" ry="5" stroke="none" />
+            <ellipse cx="118" cy="181" rx="9" ry="5" stroke="none" />
+          </g>
+          {/* qo'llar */}
+          <g className={s.arms} stroke={NAVY} strokeWidth="9" strokeLinecap="round" fill="none">
+            {arms.map((d, i) => <path key={i} d={d} className={i ? s.armR : s.armL} />)}
+          </g>
+          <g fill={NAVY}>
+            {arms.map((d, i) => {
+              const [x, y] = end(d);
+              return <circle key={i} cx={x} cy={y} r="9" className={i ? s.armR : s.armL} />;
+            })}
+          </g>
+          {/* qalqon */}
+          <path d={SHIELD} fill="#f3c75f" />
+          <path d={RIGHT_HALF} fill="#e3ac3c" />
+          <path d={SHIELD} fill="none" stroke={NAVY} strokeWidth="7" strokeLinejoin="round" />
+          <path d="M100 34 L100 164" stroke="#c99232" strokeWidth="1.5" opacity="0.5" />
+          {/* yuz */}
+          <ellipse cx="72" cy="106" rx="8" ry="5" fill="#f28b82" opacity="0.45" />
+          <ellipse cx="128" cy="106" rx="8" ry="5" fill="#f28b82" opacity="0.45" />
+          {closedEyes ? (
+            <g stroke={NAVY} strokeWidth="5" strokeLinecap="round" fill="none">
+              <path d="M74 93 Q82 83 90 93" />
+              <path d="M110 93 Q118 83 126 93" />
+            </g>
+          ) : (
+            <g fill={NAVY}>
+              <ellipse cx="82" cy={mood === "sad" ? 94 : 90} rx="5.5" ry="7" />
+              <ellipse cx="118" cy={mood === "sad" ? 94 : 90} rx="5.5" ry="7" />
+              <circle cx="84" cy="87" r="1.8" fill="#fff" />
+              <circle cx="120" cy="87" r="1.8" fill="#fff" />
+              {mood === "think" && <path d="M110 76 L126 72" stroke={NAVY} strokeWidth="4" strokeLinecap="round" />}
+            </g>
+          )}
+          <g className={s.mouth}>
+            {mood === "sad" ? (
+              <path d="M88 118 Q100 108 112 118" stroke={NAVY} strokeWidth="5" strokeLinecap="round" fill="none" />
+            ) : mood === "think" ? (
+              <path d="M92 114 Q100 117 108 113" stroke={NAVY} strokeWidth="5" strokeLinecap="round" fill="none" />
+            ) : (
+              <>
+                <path d="M85 106 Q100 126 115 106 Q100 111 85 106 Z" fill="#7a2230" stroke={NAVY} strokeWidth="3" strokeLinejoin="round" />
+                <ellipse cx="100" cy="116" rx="6" ry="3.5" fill="#f2748a" />
+              </>
+            )}
+          </g>
+        </g>
       </svg>
     </div>
   );

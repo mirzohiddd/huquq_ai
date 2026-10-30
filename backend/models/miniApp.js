@@ -29,6 +29,16 @@ const MiniProgressSchema = new mongoose.Schema(
 );
 MiniProgressSchema.index({ xp: -1 });
 
+/* «Tushuntirib ber» keshi: har savolga AI so'rovi o'zgarmas (`ask`), shuning
+   uchun javob bir marta yaratiladi — keyingilari bir zumda (server qayta
+   ishga tushsa ham). 30 kundan keyin yangilanadi (qonun o'zgarishi mumkin). */
+const MiniExplainSchema = new mongoose.Schema({
+  key: { type: String, required: true, unique: true }, // "lesson:headphones:uz"
+  answer: { type: String, default: "" },
+  at: { type: Date, default: Date.now, expires: 60 * 60 * 24 * 30 },
+});
+
 module.exports = {
   MiniProgress: mongoose.models.MiniProgress || mongoose.model("MiniProgress", MiniProgressSchema),
+  MiniExplain: mongoose.models.MiniExplain || mongoose.model("MiniExplain", MiniExplainSchema),
 };

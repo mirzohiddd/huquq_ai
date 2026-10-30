@@ -65,13 +65,15 @@ function weeklyOf(days = {}) {
 }
 
 const BADGES = [
-  { id: "first", title: "Birinchi qadam", desc: "Birinchi darsni tugatish", test: (s) => s.lessons >= 1 },
+  { id: "first", title: "Ilk qadam", desc: "Birinchi darsni tugallash", test: (s) => s.lessons >= 1 },
   { id: "unit", title: "Bo'lim ustasi", desc: "Bitta bo'limni to'liq tugatish", test: (s) => s.fullUnits >= 1 },
+  { id: "ten", title: "Bilimdon", desc: "10 ta darsni tugallash", test: (s) => s.lessons >= 10 },
   { id: "half", title: "Yarim yo'l", desc: "Darslarning yarmini tugatish", test: (s) => s.lessons >= Math.ceil(s.totalLessons / 2) },
   { id: "all", title: "Yo'l oxiri", desc: "Barcha darslarni tugatish", test: (s) => s.lessons >= s.totalLessons },
   { id: "sharp", title: "Aniq nishon", desc: "5 ta darsda birinchi urinishda to'g'ri tanlov", test: (s) => s.firstTry >= 5 },
   { id: "life", title: "Hayot maktabi", desc: "5 ta vaziyatni yechish", test: (s) => s.situations >= 5 },
   { id: "review", title: "Xatodan saboq", desc: "5 ta xatoni takrorlab tuzatish", test: (s) => s.reviewed >= 5 },
+  { id: "streak5", title: "5 kun ketma-ket", desc: "Faol o'rganish odati", test: (s) => s.streak >= 5 },
   { id: "streak3", title: "Uch kun ketma-ket", desc: "3 kun ketma-ket o'qish", test: (s) => s.streak >= 3 },
   { id: "streak7", title: "Bir hafta", desc: "7 kun ketma-ket o'qish", test: (s) => s.streak >= 7 },
   { id: "xp500", title: "500 XP", desc: "500 XP to'plash", test: (s) => s.xp >= 500 },

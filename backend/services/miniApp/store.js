@@ -61,6 +61,8 @@ function pathOf(doc) {
   return content.UNITS.map((u) => ({
     key: u.key,
     title: u.title,
+    level: u.level,
+    icon: u.icon,
     lessons: content.LESSONS.filter((l) => l.unit === u.key).map((l) => {
       const done = !!doc.lessons?.[l.id];
       const status = done ? "done" : open ? "open" : "locked";
@@ -68,6 +70,15 @@ function pathOf(doc) {
       return { id: l.id, title: l.title, status };
     }),
   }));
+}
+
+/** Joriy hafta (dushanbadan): har kun faolmi. Takrorlash sahifasidagi nuqtalar. */
+function weekDots(doc) {
+  const today = (new Date(`${stats.dayKey()}T00:00:00Z`).getUTCDay() + 6) % 7; // 0 = dushanba
+  return [...Array(7).keys()].map((i) => {
+    const key = stats.dayKey(new Date(), i - today);
+    return { day: key, active: (doc.days?.[key] || 0) > 0, today: i === today, future: i > today };
+  });
 }
 
 function isUnlocked(doc, lessonId) {
@@ -86,7 +97,7 @@ function summaryOf(doc) {
     xp: doc.xp || 0,
     lessons: lessonsDone.length,
     totalLessons: content.LESSONS.length,
-    situations: Object.keys(doc.situations || {}).length,
+    situations: content.SITUATIONS.filter((x) => doc.situations?.[x.id]).length,
     totalSituations: content.SITUATIONS.length,
     firstTry: lessonsDone.filter((l) => doc.lessons[l.id].firstTry).length,
     reviewed: doc.reviewed || 0,
@@ -122,4 +133,4 @@ async function rating(userId) {
   };
 }
 
-module.exports = { XP, getDoc, touch, finishOnce, addMistake, fixMistake, setGoal, pathOf, isUnlocked, summaryOf, rating };
+module.exports = { XP, getDoc, touch, finishOnce, addMistake, fixMistake, setGoal, pathOf, weekDots, isUnlocked, summaryOf, rating };

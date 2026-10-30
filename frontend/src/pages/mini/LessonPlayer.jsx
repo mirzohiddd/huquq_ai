@@ -1,15 +1,17 @@
 /**
- * BITTA DARS: qisqa voqea → tanlov (3 javob + izoh) → o'yin (ketma-ketlik
- * yoki hujjatdan topish) → «Dars tugadi! +20 XP» va qahramon bayrami.
+ * BITTA DARS: savol («Siz nima qilardingiz?») → natija («To'g'ri javob!»,
+ * qalqon gapiradi) → o'yin (ketma-ketlik yoki hujjatdan topish) → yakun.
  * Javoblar serverda tekshiriladi; XP faqat birinchi yakunda beriladi.
+ * Bo'lim to'liq tugasa — katta fanfara (`unitDone`).
  */
 import React, { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { mini } from "./miniApi";
-import { haptic } from "./tg";
+import { sfx } from "./sound";
 import { Spinner } from "./Gate";
 import Hero from "./Hero";
-import ChoiceCard from "./ChoiceCard";
+import QuestionView from "./QuestionView";
+import ResultView from "./ResultView";
 import OrderGame from "./OrderGame";
 import SpotGame from "./SpotGame";
 import ExplainSheet from "./ExplainSheet";
@@ -17,19 +19,17 @@ import FinishScreen from "./FinishScreen";
 import m from "./Mini.module.css";
 import s from "./Lesson.module.css";
 
-const STEPS = ["story", "choice", "game", "finish"];
-
 export default function LessonPlayer({ id, ctx }) {
   const { t, lang } = ctx;
   const [lesson, setLesson] = useState(null);
   const [err, setErr] = useState("");
-  const [step, setStep] = useState(0);
+  const [phase, setPhase] = useState("question"); // question | result | game | finish
   const [first, setFirst] = useState(null); // birinchi tanlangan variant
-  const [answered, setAnswered] = useState(false);
-  const [solution, setSolution] = useState(null); // o'yin yechimi (order | line)
+  const [res, setRes] = useState(null);
+  const [solution, setSolution] = useState(null);
   const [result, setResult] = useState(null);
   const [busy, setBusy] = useState(false);
-  const [explain, setExplain] = useState(null);
+  const [sheet, setSheet] = useState(null); // "ai" | "source"
 
   useEffect(() => {
     mini
@@ -38,11 +38,11 @@ export default function LessonPlayer({ id, ctx }) {
       .catch((e) => setErr(e?.response?.data?.error || t.error));
   }, [id, t.error]);
 
-  const answer = async (i) => {
+  const check = async (i) => {
     const r = await mini.choice(id, i);
     if (first === null) setFirst(i);
-    setAnswered(true);
-    return r;
+    setRes(r);
+    setPhase("result");
   };
 
   const finish = async () => {
@@ -51,8 +51,8 @@ export default function LessonPlayer({ id, ctx }) {
       const body = { firstOption: first, ...(lesson.game.type === "order" ? { order: solution } : { line: solution }) };
       const r = await mini.complete(id, body);
       setResult(r);
-      setStep(3);
-      haptic("success");
+      setPhase("finish");
+      sfx(r.unitDone ? "unit" : "lesson");
       ctx.reloadPath();
     } catch (e) {
       setErr(e?.response?.data?.error || t.error);
@@ -73,56 +73,59 @@ export default function LessonPlayer({ id, ctx }) {
     );
   }
   if (!lesson) return <Spinner />;
-  if (step === 3) return <FinishScreen result={result} ctx={ctx} />;
+  if (phase === "finish") return <FinishScreen result={result} ctx={ctx} />;
 
-  const name = STEPS[step];
-  const canNext = name === "story" || (name === "choice" && answered) || (name === "game" && solution !== null);
   const GameView = lesson.game.type === "order" ? OrderGame : SpotGame;
-  const check = (body) => mini.game(id, body);
+  const prog = { question: 0.15, result: 1, game: solution !== null ? 3 : 1.6 }[phase];
 
   return (
-    <div className={`${s.player} ${m.fadeIn}`} key={step}>
+    <div className={`${s.player} ${m.fadeIn}`} key={phase}>
       <div className={s.topbar}>
         <button type="button" className={s.close} onClick={ctx.close} aria-label={t.toMap}><X /></button>
-        <div className={s.progress} role="progressbar" aria-valuemin={0} aria-valuemax={3} aria-valuenow={step}>
-          <i style={{ width: `${((step + (canNext ? 1 : 0.4)) / 3) * 100}%` }} />
+        <div className={s.progress} role="progressbar" aria-valuemin={0} aria-valuemax={3} aria-valuenow={Math.round(prog)}>
+          <i style={{ width: `${(prog / 3) * 100}%` }} />
         </div>
       </div>
 
-      <div className={s.stepTag}>{t[name]}</div>
-      <h2 className={s.title}>{lesson.title}</h2>
-
-      {name === "story" && (
-        <div className={s.story}>
-          <Hero mood="think" size={76} />
-          <div className={s.bubble}><p>{lesson.story}</p></div>
-        </div>
-      )}
-
-      {name === "choice" && (
-        <ChoiceCard
-          q={lesson.choice.q}
+      {phase === "question" && (
+        <QuestionView
+          icon={lesson.icon}
+          tag={lesson.title}
+          text={lesson.story}
+          question={lesson.choice.q}
           options={lesson.choice.options}
-          onAnswer={answer}
-          onExplain={() => setExplain({ kind: "lesson", id })}
+          onCheck={check}
           t={t}
         />
       )}
 
-      {name === "game" && <GameView game={lesson.game} check={check} onSolved={setSolution} t={t} />}
+      {phase === "result" && (
+        <ResultView
+          res={res}
+          t={t}
+          nextLabel={res.ok ? t.nextQuestion : t.tryAgain}
+          onNext={() => (res.ok ? setPhase("game") : setPhase("question"))}
+          onSource={() => setSheet("source")}
+          onExplain={() => setSheet("ai")}
+        />
+      )}
 
-      <div className={s.footer}>
-        <button
-          type="button"
-          className={`${m.btn} ${name === "game" && canNext ? m.btnGold : ""}`}
-          disabled={!canNext || busy}
-          onClick={() => (name === "game" ? finish() : setStep(step + 1))}
-        >
-          {t.continue}
-        </button>
-      </div>
+      {phase === "game" && (
+        <>
+          <div className={s.stepTag}>{t.game}</div>
+          <h2 className={s.title}>{lesson.title}</h2>
+          <GameView game={lesson.game} check={(body) => mini.game(id, body)} onSolved={setSolution} t={t} />
+          <div className={s.footer}>
+            <button type="button" className={`${m.btn} ${solution !== null ? m.btnGold : ""}`} disabled={solution === null || busy} onClick={finish}>
+              {t.continue}
+            </button>
+          </div>
+        </>
+      )}
 
-      {explain && <ExplainSheet req={explain} lang={lang} t={t} onClose={() => setExplain(null)} />}
+      {sheet && (
+        <ExplainSheet req={{ kind: "lesson", id }} res={res} lang={lang} t={t} sourceOnly={sheet === "source"} onClose={() => setSheet(null)} />
+      )}
     </div>
   );
 }

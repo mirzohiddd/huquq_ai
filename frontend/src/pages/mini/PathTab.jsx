@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { Check, Lock, Star, ShoppingBag, Briefcase, Heart, Shield, Target } from "lucide-react";
 import Hero from "./Hero";
 import { haptic } from "./tg";
+import { iconOf } from "./icons";
 import m from "./Mini.module.css";
 import s from "./Path.module.css";
 
@@ -54,7 +55,7 @@ export default function PathTab({ ctx }) {
       </section>
 
       {path.units.map((u) => {
-        const Icon = UNIT_ICON[u.key] || Star;
+        const Icon = UNIT_ICON[u.key] || iconOf(u.icon, Star);
         const doneCount = u.lessons.filter((l) => l.status === "done").length;
         return (
           <section key={u.key} className={s.unit}>
@@ -62,7 +63,7 @@ export default function PathTab({ ctx }) {
               <span className={s.unitIcon}><Icon aria-hidden="true" /></span>
               <div>
                 <h2>{u.title}</h2>
-                <small>{doneCount} / {u.lessons.length}</small>
+                <small>{doneCount} / {u.lessons.length}{u.level && <span className={s.level}>{u.level}</span>}</small>
               </div>
             </div>
             <ol className={s.road}>

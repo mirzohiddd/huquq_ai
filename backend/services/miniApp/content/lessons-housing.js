@@ -1,0 +1,125 @@
+"use strict";
+/** 5-BO'LIM · Uy-joy va ijara (qiyin): variantlar bir-biriga yaqin, nozik farqlar. */
+module.exports = [
+  {
+    id: "rent-contract", icon: "FileSignature",
+    ask: "Kvartirani ijaraga olishda shartnoma yozma tuzilishi shartmi?",
+    title: "Og'zaki kelishuv bilan ijara",
+    story: "Uy egasi: «Qog'ozning keragi yo'q, oyma-oy naqd berib turasan» dedi. Siz bir yilga kvartira ijaraga olmoqchisiz.",
+    choice: {
+      q: "Qaysi yondashuv huquqiy jihatdan eng ishonchli?",
+      options: [
+        { t: "Og'zaki kelishuv yetarli — guvohlar bo'lsa bo'ldi", ok: false, why: "Xato. Turar joyni ijaraga berish shartnomasi yozma shaklda tuziladi. Og'zaki kelishuvda nizo chiqsa, guvohlik bilan shartlarni isbotlash qiyin." },
+        { t: "Yozma shartnoma: muddat, ijara haqi, kommunal to'lovlar va tomonlar majburiyatlari ko'rsatiladi", ok: true, why: "To'g'ri. Yozma shartnoma — sizning asosiy himoyangiz. Ijara haqi, muddat va kim nimani to'lashi aniq yozilsa, nizolarning ko'pi oldi olinadi." },
+        { t: "Faqat to'lovlar uchun tilxat yetarli, shartnoma shart emas", ok: false, why: "Xato. Tilxat to'lovni isbotlaydi, ammo muddat, shartlar va bekor qilish tartibini belgilamaydi." },
+        { t: "Shartnoma faqat davlat uylari uchun kerak, xususiy kvartira uchun emas", ok: false, why: "Xato. Fuqaroga mulk huquqi asosida tegishli turar joyni ijaraga berish shartnomasi ham yozma tuziladi." },
+      ],
+    },
+    game: {
+      type: "spot",
+      prompt: "Shartnomadagi xavfli bandni toping",
+      title: "IJARA SHARTNOMASI",
+      lines: ["Ijara obyekti: 2 xonali kvartira", "Ijara haqi har oyning boshida to'lanadi", "Uy egasi ijarachini istalgan vaqtda ogohlantirmasdan chiqarib yuborishi mumkin", "Kommunal to'lovlarni ijarachi to'laydi"],
+      answer: 2,
+      why: "Ijarachini ogohlantirmasdan, asossiz chiqarish huquqi — ijarachi huquqlarini qonunga zid ravishda cheklovchi shart.",
+    },
+    takeaway: "Ijara — faqat yozma shartnoma bilan. Muddat, haq va bekor qilish tartibini aniq yozdiring.",
+    refs: [{ code: "UJK", article: "33" }, { code: "FK2", article: "539" }],
+  },
+  {
+    id: "rent-defect", icon: "Wrench",
+    ask: "Ijaraga olgan kvartiramda isitish ishlamaydi, uy egasi tuzatmayapti, nima qilaman?",
+    title: "Isitish ishlamaydi",
+    story: "Ijaraga olganingizdan keyin ma'lum bo'ldiki, isitish tizimi buzuq. Shartnomada bu haqda hech narsa yozilmagan, uy egasi esa «o'zing tuzat» demoqda.",
+    choice: {
+      q: "Ijarachi qaysi huquqqa ega?",
+      options: [
+        { t: "Hech qanday — kamchilikni ko'rmasdan olgan o'zi aybdor", ok: false, why: "Xato. Ijaraga beruvchi topshirishda aytilmagan va ko'zdan kechirishda sezilmagan kamchiliklar uchun javob beradi." },
+        { t: "Faqat shartnomani bekor qilishi mumkin, boshqa yo'l yo'q", ok: false, why: "Xato. Bekor qilish — mumkin bo'lgan choralardan faqat biri, eng birinchisi emas." },
+        { t: "Kamchilikni bartaraf etishni, ijara haqini kamaytirishni yoki o'zi tuzatib xarajatni ushlab qolishni talab qilishi mumkin", ok: true, why: "To'g'ri. Qonun ijarachiga bir nechta tanlov beradi: tuzattirish, haqni kamaytirish, xarajatni ushlab qolish (uy egasini xabardor qilib) yoki shartnomani bekor qilish." },
+        { t: "Ijara haqini to'lamay qo'yishi mumkin, toki tuzatilmaguncha", ok: false, why: "Xato. To'lovni o'zboshimchalik bilan to'xtatish sizni shartnomani buzgan tarafga aylantiradi. Avval yozma talab qo'ying." },
+      ],
+    },
+    game: {
+      type: "order",
+      prompt: "To'g'ri harakatlar ketma-ketligi",
+      items: ["Nosozlikni suratga olib, sanani qayd etaman", "Uy egasiga yozma talab yuboraman", "Javob bo'lmasa, ustaning hisob-fakturasini saqlab tuzattiraman", "Xarajatni ijara haqidan ushlab qolishni yozma bildiraman"],
+      why: "Har bir bosqich yozma va hujjatli bo'lishi shart — aks holda xarajatni ushlab qolish nizoga aylanadi.",
+    },
+    takeaway: "Ijaraga beruvchi yashirin kamchiliklar uchun javobgar. Talablarni faqat yozma va dalil bilan qo'ying.",
+    refs: [{ code: "FK2", article: "542" }, { code: "UJK", article: "49" }],
+  },
+  {
+    id: "rent-early", icon: "CalendarX",
+    ask: "Uy egasi ijara shartnomasi muddati tugamay meni uydan chiqarmoqchi, haqqi bormi?",
+    title: "Muddatidan oldin chiqarish",
+    story: "Shartnoma muddati hali yarim yil bor. Uy egasi: «Qarindoshim keladi, bir haftada bo'shat» dedi. Siz to'lovni o'z vaqtida qilib kelyapsiz.",
+    choice: {
+      q: "Eng to'g'ri javob qaysi?",
+      options: [
+        { t: "Uy egasi — mulkdor, xohlagan paytda chiqaradi", ok: false, why: "Xato. Mulkdor ijara shartnomasi bilan o'zini cheklagan. Muddatidan oldin bekor qilish faqat qonunda sanalgan asoslar bo'yicha." },
+        { t: "Bir haftalik ogohlantirish bersa, chiqishim shart", ok: false, why: "Xato. Ogohlantirish muddati o'z-o'zidan bekor qilishga asos bo'lmaydi — ijarachi shartnomani buzgan bo'lishi kerak." },
+        { t: "Ijarachi shartnomani jiddiy buzmagan bo'lsa, uy egasi uni faqat sud orqali va qonuniy asos bilan bekor qila oladi", ok: true, why: "To'g'ri. Ijaraga beruvchining talabi bilan muddatidan oldin bekor qilish sud tartibida va ijarachining buzilishlari asosida bo'ladi. «Qarindosh keladi» — asos emas." },
+        { t: "Faqat qolgan oylar uchun to'langan pulni qaytarsa, chiqishim kerak", ok: false, why: "Xato. Pulni qaytarish shartnomani bir tomonlama bekor qilish huquqini bermaydi." },
+      ],
+    },
+    game: {
+      type: "spot",
+      prompt: "Qaysi holat muddatidan oldin bekor qilishga asos bo'lishi mumkin?",
+      title: "UY EGASINING SABABLARI",
+      lines: ["Qarindoshim yashamoqchi", "Uyni qimmatroqqa berishim mumkin", "Ijarachi bir necha marta ijara haqini to'lamadi", "Ijarachi menga yoqmay qoldi"],
+      answer: 2,
+      why: "To'lovni muntazam to'lamaslik — ijarachi tomonidan shartnomaning buzilishi. Qolgan sabablar uy egasining shaxsiy xohishi.",
+    },
+    takeaway: "Ijara muddati — ikki tomon uchun ham majburiyat. Uy egasi asossiz va sudsiz ijarachini chiqarib yubora olmaydi.",
+    refs: [{ code: "FK2", article: "551" }, { code: "FK2", article: "552" }],
+  },
+  {
+    id: "relatives-move-in", icon: "Users",
+    ask: "Ijarachi uy egasining roziligisiz qarindoshlarini kvartiraga yashashga olib kelishi mumkinmi?",
+    title: "Ijaraga oluvchining mehmonlari",
+    story: "Siz ijarachisiz. Akangizning oilasi shaharga ko'chib keldi va bir necha oy siz bilan yashamoqchi. Uy egasiga aytmoqchi emassiz.",
+    choice: {
+      q: "Qaysi fikr to'g'ri?",
+      options: [
+        { t: "Ijarachi oila a'zolari va boshqa fuqarolarni ko'chirib kiritishda qonun va shartnomada belgilangan tartibga, jumladan uy egasi roziligiga rioya qilishi kerak", ok: true, why: "To'g'ri. Ijarachining odamlarni ko'chirib kiritish huquqi cheklangan: belgilangan tartib va kerakli roziliklar talab etiladi." },
+        { t: "Ijara haqi to'langan ekan, kim yashashi ijarachining ishi", ok: false, why: "Xato. To'lov ijarachiga turar joyni shartnoma doirasida ishlatish huquqini beradi, uni cheksiz boshqalarga berish huquqini emas." },
+        { t: "Qarindoshlarni olib kelish mumkin, boshqa odamlarni emas", ok: false, why: "Xato. Qarindoshlik o'z-o'zidan ruxsat emas — tartib ham oila a'zolariga, ham boshqa fuqarolarga taalluqli." },
+        { t: "Bir yilgacha ruxsatsiz yashash mumkin", ok: false, why: "Xato. Qonunda «ruxsatsiz yashash muddati» degan tushuncha yo'q." },
+      ],
+    },
+    game: {
+      type: "order",
+      prompt: "To'g'ri yo'lni tartiblang",
+      items: ["Shartnomadagi tegishli bandni o'qiyman", "Uy egasiga yozma so'rov yuboraman", "Rozilik va ijara haqi o'zgarishini kelishib olamiz", "Kelishuvni shartnomaga qo'shimcha sifatida yozamiz"],
+      why: "Yozma rozilik va shartnomaga qo'shimcha — keyinchalik «shartnomani buzding» degan da'voning oldini oladi.",
+    },
+    takeaway: "Ijarachi turar joyga yangi odamlarni faqat belgilangan tartibda va kerakli roziliklar bilan kiritadi.",
+    refs: [{ code: "UJK", article: "51" }, { code: "UJK", article: "50" }],
+  },
+  {
+    id: "eviction", icon: "House",
+    ask: "Fuqaroni turar joydan qaysi hollarda va qanday tartibda ko'chirish mumkin?",
+    title: "Uydan ko'chirish",
+    story: "Sizni yashab turgan uydan «boshqa joy berilmaydi, ertaga bo'shating» deb og'zaki talab qilishdi. Hech qanday sud qarori ko'rsatilmadi.",
+    choice: {
+      q: "Huquqiy jihatdan eng aniq javob qaysi?",
+      options: [
+        { t: "Mahalla yoki uy-joy tashkiloti qaror qilsa, ko'chirish mumkin", ok: false, why: "Xato. Mahalla yoki boshqaruv tashkilotining o'zi fuqaroni turar joydan ko'chirish vakolatiga ega emas." },
+        { t: "Ko'chirish faqat qonunda nazarda tutilgan asoslar bilan va, odatda, sud tartibida amalga oshiriladi", ok: true, why: "To'g'ri. Fuqarolar turar joydan faqat qonunda belgilangan asoslar bo'yicha ko'chiriladi; boshqa joy bermasdan ko'chirish hollari qonunda alohida sanalgan." },
+        { t: "Ogohlantirish xati berilsa, sudsiz ko'chirish mumkin", ok: false, why: "Xato. Ogohlantirish xati sud qarorining o'rnini bosmaydi." },
+        { t: "Politsiya ko'chirishga to'g'ridan-to'g'ri ruxsat beradi", ok: false, why: "Xato. Politsiya nizo bo'yicha qaror chiqarmaydi; majburiy ko'chirish qonuniy kuchga kirgan sud hujjati asosida ijro etiladi." },
+      ],
+    },
+    game: {
+      type: "spot",
+      prompt: "Ko'chirish uchun qaysi hujjat haqiqiy asos bo'la oladi?",
+      title: "TAQDIM ETILGAN HUJJATLAR",
+      lines: ["Uy egasining qo'lda yozilgan talabi", "Mahalla yig'ini bayonnomasi", "Qonuniy kuchga kirgan sud hal qiluv qarori", "Qo'shnilarning shikoyati"],
+      answer: 2,
+      why: "Majburiy ko'chirish — qonuniy kuchga kirgan sud qarori asosida. Qolganlari faqat da'vo uchun dalil bo'lishi mumkin.",
+    },
+    takeaway: "Hech kim sizni uydan o'zboshimchalik bilan chiqara olmaydi: qonuniy asos va sud qarori kerak.",
+    refs: [{ code: "UJK", article: "70" }, { code: "UJK", article: "74" }],
+  },
+];

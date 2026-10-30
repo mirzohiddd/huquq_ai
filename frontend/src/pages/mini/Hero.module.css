@@ -1,43 +1,30 @@
-/* Qahramon animatsiyalari: sokin tebranish, salom, bayram (sakrash + konfetti). */
-.wrap { position: relative; display: inline-block; }
-.svg { width: 100%; height: 100%; overflow: visible; }
-.shadow { fill: rgba(11, 19, 34, 0.12); transform-origin: 80px 150px; }
-.body { transform-origin: 80px 140px; animation: bob 3.2s ease-in-out infinite; }
-.eyes { transform-origin: 80px 66px; animation: blink 4.5s infinite; }
-.armR { transform-origin: 118px 96px; }
-.armL { transform-origin: 42px 96px; }
+/* Qalqon qahramon animatsiyalari. */
+.wrap { position: relative; display: inline-grid; place-items: center; flex: none; }
+.wrap svg { overflow: visible; }
+.body { transform-origin: 100px 180px; }
+.armL { transform-origin: 52px 98px; }
+.armR { transform-origin: 148px 98px; }
+.mouth { transform-origin: 100px 110px; transform-box: view-box; }
+.rays line { transform-box: fill-box; transform-origin: center; animation: ray 1.2s ease-in-out infinite; }
 
-.wave .armR { animation: wave 1.4s ease-in-out infinite; }
-.think .body { animation-duration: 4.5s; }
-.bubble { transform-origin: 128px 34px; animation: pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.cheer .body { animation: jump 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) infinite; }
+.cheer .armL, .cheer .armR { animation: pump 0.9s ease-in-out infinite; }
+.wave .armR { animation: wave 1.6s ease-in-out infinite; }
+.happy .body { animation: sway 2.6s ease-in-out infinite; }
+.think .body { animation: tilt 3s ease-in-out infinite; }
+.sad .body { transform: translateY(3px); }
+.talking .mouth { animation: talk 0.24s ease-in-out infinite alternate; }
+.talking .body { animation: bob 0.5s ease-in-out infinite alternate; }
 
-.cheer .body { animation: jump 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 3; }
-.cheer .shadow { animation: squash 0.9s ease-in-out 3; }
-.cheer .armR { animation: wave 0.45s ease-in-out 6; }
-.cheer .armL { animation: waveL 0.45s ease-in-out 6; }
-
-.confetti { position: absolute; inset: 0; pointer-events: none; }
-.confetti i {
-  position: absolute; left: 50%; top: 42%;
-  width: 8px; height: 12px; border-radius: 2px; background: var(--c);
-  transform: translate(-50%, -50%);
-  animation: burst 1.6s cubic-bezier(0.22, 1, 0.36, 1) both;
-  animation-delay: calc(var(--i) * 25ms);
-  --a: calc(var(--i) * 20deg);
-}
-
-@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
-@keyframes blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(0.1); } }
-@keyframes wave { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(-18deg); } }
-@keyframes waveL { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(18deg) translate(-2px, -14px); } }
-@keyframes jump { 0%, 100% { transform: translateY(0) scale(1); } 35% { transform: translateY(-22px) scale(1.03); } 70% { transform: translateY(0) scale(1.04, 0.96); } }
-@keyframes squash { 0%, 100% { transform: scaleX(1); opacity: 1; } 35% { transform: scaleX(0.7); opacity: 0.5; } }
-@keyframes pop { from { transform: scale(0); } to { transform: scale(1); } }
-@keyframes burst {
-  0% { opacity: 1; transform: translate(-50%, -50%) rotate(var(--a)) translateY(0) rotate(0); }
-  100% { opacity: 0; transform: translate(-50%, -50%) rotate(var(--a)) translateY(-95px) rotate(540deg); }
-}
+@keyframes jump { 0%, 100% { transform: translateY(0); } 40% { transform: translateY(-10px) scale(1.02, 0.98); } }
+@keyframes pump { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(-8deg); } }
+@keyframes wave { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(14deg); } 75% { transform: rotate(-10deg); } }
+@keyframes sway { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(2.5deg); } }
+@keyframes tilt { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
+@keyframes talk { from { transform: scaleY(0.55); } to { transform: scaleY(1.15); } }
+@keyframes bob { from { transform: translateY(0); } to { transform: translateY(-2px); } }
+@keyframes ray { 0%, 100% { opacity: 0.35; transform: scale(0.75); } 50% { opacity: 1; transform: scale(1.1); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .body, .eyes, .armR, .armL, .shadow, .bubble, .confetti i { animation: none !important; }
+  .body, .armL, .armR, .mouth, .rays line { animation: none !important; }
 }
