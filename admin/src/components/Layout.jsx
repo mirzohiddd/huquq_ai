@@ -8,12 +8,13 @@ import BrandMark from "./BrandMark";
 import {
   LayoutDashboard, MessagesSquare, Users, CreditCard, ShoppingBag, BookOpen,
   ClipboardCheck, Scale, LifeBuoy, Settings, ChevronLeft, ChevronRight,
-  LogOut, UserRound, MessageSquareQuote, BarChart3, Cpu, SlidersHorizontal,
+  LogOut, UserRound, MessageSquareQuote, BarChart3, Cpu, SlidersHorizontal, Smartphone,
 } from "lucide-react";
 
 const NAV = [
   { to: "/",         icon: LayoutDashboard, label: "Dashboard"        },
   { to: "/analytics", icon: BarChart3,      label: "Analitika"        },
+  { to: "/mini-app",  icon: Smartphone,     label: "Telegram ilova"   },
   { to: "/chats",    icon: MessagesSquare,  label: "Suhbatlar"        },
   { to: "/users",    icon: Users,           label: "Foydalanuvchilar" },
   { to: "/payments", icon: CreditCard,      label: "To'lovlar"        },
@@ -46,6 +47,7 @@ export default function Layout() {
   const nav = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
   const [pendingCount, setPendingCount] = useState(0);
+  const [newOrders, setNewOrders] = useState(0); // «new» holatidagi buyurtmalar — menyuda son
 
   const api = axios.create({ 
     baseURL: API_BASE,
@@ -64,6 +66,10 @@ export default function Layout() {
   }, []);
 
   async function loadPendingCount() {
+    // Yangi buyurtmalar soni (texnik yordamdagidek) — alohida, biri xato bersa ikkinchisi ishlasin
+    api.get("/admin/orders", { params: { limit: 1 } })
+      .then(({ data }) => setNewOrders(Number(data?.newCount) || 0))
+      .catch(() => {});
     try {
       const { data } = await api.get("/support");
       const messages = Array.isArray(data) ? data : [];
@@ -105,6 +111,9 @@ export default function Layout() {
               {!collapsed && <span className={s.linkLabel}>{item.label}</span>}
               {item.to === "/support" && pendingCount > 0 && (
                 <span className={s.badge}>{pendingCount}</span>
+              )}
+              {item.to === "/orders" && newOrders > 0 && (
+                <span className={s.badge}>{newOrders}</span>
               )}
             </NavLink>
           ))}

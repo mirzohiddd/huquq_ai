@@ -367,6 +367,12 @@ export default function Users() {
                 <tr key={u._id} className={u.isBlocked ? s.blockedRow : ""}>
                   <td>
                     <span className={s.username}>@{u.username}</span>
+                    {/* Telegram username — bosilsa Telegram'da shu odam bilan yozishma (lichka) ochiladi */}
+                    {u.telegramUsername && (
+                      <a href={`https://t.me/${u.telegramUsername.replace(/^@/, "")}`} target="_blank" rel="noreferrer" title="Telegram'da yozish" className={s.fullname} style={{ display: "inline-flex", alignItems: "center", gap: 4, color: "#06b6d4" }}>
+                        <Send size={12} /> @{u.telegramUsername.replace(/^@/, "")}
+                      </a>
+                    )}
                     <span className={s.fullname}>
                       {u.authProvider === "google" && (
                         <span title="Google" style={{ color: "#4285f4", marginRight: 4, display: "inline-flex", verticalAlign: "middle" }}>

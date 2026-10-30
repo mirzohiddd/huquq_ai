@@ -14,9 +14,19 @@ const { localizeJson } = require("../services/miniApp/i18n");
 const path = require("../services/miniApp/path");
 const runs = require("../services/miniApp/runs");
 const { accessOf, planLocked } = require("../services/miniApp/access");
+const devices = require("../services/miniApp/devices");
 
 const BOT = (process.env.TELEGRAM_BOT_USERNAME || "mening_huquqlarim_bot").replace(/^@/, "");
 router.use(localizeJson); // ?lang=ru — javob matnlari rus tilida (kesh)
+
+/* Admin analitikasi: muvaffaqiyatli javob/yakun (POST) — qurilma «o'ynagan»
+   deb bir marta belgilanadi. Ikkala mini router ham shu yerdan o'tadi. */
+router.use((req, res, next) => {
+  if (req.method === "POST" && req.path !== "/auth" && req.path !== "/explain" && req.path !== "/order") {
+    res.on("finish", () => res.statusCode < 300 && req.authUser && devices.markPlayed(req).catch(() => {}));
+  }
+  next();
+});
 
 const fail = (res, err, where) => {
   console.error(`mini ${where}:`, err.message);
@@ -29,8 +39,10 @@ router.post("/auth", async (req, res) => {
     const r = await loginWithInitData(String(req.body?.initData || ""));
     if (r.error === "blocked") return res.status(403).json({ error: "Hisobingiz bloklangan" });
     if (r.error) return res.status(401).json({ error: "Telegram ma'lumoti tasdiqlanmadi" });
-    if (r.needsRegister) return res.status(404).json({ needsRegister: true, bot: `https://t.me/${BOT}?start=miniapp`, firstName: r.tg.first_name || "" });
+    if (r.needsRegister) devices.touch(req, { userId: r.user?._id || null, tgId: r.tg.id }).catch(() => {}); // ro'yxatdan o'tmagan qurilma ham sanaladi
+    if (r.needsRegister) return res.status(404).json({ needsRegister: true, missing: r.missing || null, bot: `https://t.me/${BOT}?start=miniapp`, firstName: r.tg.first_name || "" });
     await store.touch(r.user._id, r.name);
+    devices.touch(req, { userId: r.user._id, tgId: r.tg.id }).catch((e) => console.error("mini device:", e.message));
     // Yo'l ham shu javobda — ilova ochilishida ikkinchi so'rov kutilmaydi
     const body = req.body?.course !== undefined ? await pathBody(String(r.user._id), req.body.course).catch(() => null) : null;
     res.json({ token: r.token, name: r.name, lang: r.lang, path: body });

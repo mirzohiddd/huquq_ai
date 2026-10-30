@@ -318,6 +318,8 @@ app.use("/api/reviews", require("./routes/reviews").router);
 app.use("/api/admin/reviews", require("./routes/reviews").adminRouter);
 // AI sozlamalari va xarajatlar — `/api/admin` dan OLDIN (aniq yo'l)
 app.use("/api/admin/ai", require("./routes/adminAi"));
+// Telegram mini ilova qurilmalari analitikasi — `/api/admin` dan OLDIN (aniq yo'l)
+app.use("/api/admin/mini", require("./routes/adminMini"));
 app.use("/api/admin", require("./routes/admin"));
 app.use("/api/visitor", require("./routes/visitor"));
 app.use("/api/analytics", require("./routes/analytics"));

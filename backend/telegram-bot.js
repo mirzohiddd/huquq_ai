@@ -29,6 +29,7 @@ const { createAccount } = require("./telegram/account");
 const { createAi } = require("./telegram/ai");
 const { registerPlans } = require("./telegram/plans");
 const { createFlows } = require("./telegram/flows");
+const { createEmailStep } = require("./telegram/email");
 
 // Oxiridagi "/" olib tashlanadi — avval havolalar "...//register" bo'lib qolardi
 const SITE_URL = (process.env.SITE_URL || "https://www.huquqtech.uz").replace(/\/+$/, "");
@@ -49,7 +50,9 @@ const plans = registerPlans({
   contactMenu: (tgId) => ui.contactMenu(tx(tgId)),
   SITE_URL,
 });
-const flows = createFlows({ safeSend, acc, ai, plans, SITE_URL });
+// Ro'yxatni yakunlash: telefon + tasdiqlangan email (telegram/email.js)
+const emailStep = createEmailStep({ safeSend, tx, mainMenu, getLang, contactMenu: (tgId) => ui.contactMenu(tx(tgId)), appMessage: ui.appMessage });
+const flows = createFlows({ safeSend, acc, ai, plans, emailStep, SITE_URL });
 const { sendNotRegistered, startScreen, onStart, onContact } = flows;
 const learning = registerLearning({
   bot,
@@ -101,9 +104,14 @@ async function onMessage(msg) {
   if (msg.contact) return onContact(msg);
   if (msg.text?.startsWith("/")) return onCommand(msg);
 
+  const action = ui.menuAction(msg.text);
+  if (action === "lang" || action === "help") return onMenu(msg, action);
+  // Hisob bor, lekin telefon/email yetishmaydi — avval ro'yxat yakunlanadi
+  const regId = await acc.findOrLinkUser(tgId, msg.from.username);
+  if (regId && (await emailStep.handle(msg, regId))) return;
+
   // Darslar/Testlar tugmalari — o'z moduli (AI'ga ketmaydi, limit sarflanmaydi)
   if (await learning.handleMessage(msg)) return;
-  const action = ui.menuAction(msg.text);
   if (action && (await onMenu(msg, action)) !== false) return;
 
   const userId = await acc.findOrLinkUser(tgId, msg.from.username);

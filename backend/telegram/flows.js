@@ -9,7 +9,7 @@ const { getPlanConfig } = require("../config/plans");
 const { T, fill } = require("./texts");
 const ui = require("./ui");
 
-function createFlows({ safeSend, acc, ai, plans, SITE_URL }) {
+function createFlows({ safeSend, acc, ai, plans, emailStep, SITE_URL }) {
   const { getLang } = acc;
   const tx = (tgId) => T[getLang(tgId)] || T.uz;
   const mainMenu = (lang) => ui.mainMenu(lang);
@@ -38,7 +38,9 @@ function createFlows({ safeSend, acc, ai, plans, SITE_URL }) {
   /** Hisob bormi? Bo'lsa — welcome, bo'lmasa — kirish ekrani */
   async function startScreen(chatId, from) {
     const userId = await acc.findOrLinkUser(from.id, from.username);
-    return userId ? sendWelcome(chatId, from.id, userId) : sendNotRegistered(chatId, from.id);
+    if (!userId) return sendNotRegistered(chatId, from.id);
+    const missing = await emailStep.missing(userId); // telefon yoki email yetishmasa — avval o'sha
+    return missing ? emailStep.ask(chatId, from.id, missing) : sendWelcome(chatId, from.id, userId);
   }
 
   async function onStart(msg, payload) {
@@ -79,7 +81,12 @@ function createFlows({ safeSend, acc, ai, plans, SITE_URL }) {
     } else {
       await safeSend(chatId, X.phone_saved, mainMenu(getLang(tgId)));
     }
-    if (userId) await plans.resumeAfterContact(chatId, tgId, userId);
+    if (userId) {
+      emailStep.forget(userId);
+      const missing = await emailStep.missing(userId);
+      if (missing) await emailStep.ask(chatId, tgId, missing); // telefondan keyin — email
+      await plans.resumeAfterContact(chatId, tgId, userId);
+    }
   }
 
   return { sendNotRegistered, sendWelcome, startScreen, onStart, onContact };

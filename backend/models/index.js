@@ -196,6 +196,12 @@ const UserSchema = new mongoose.Schema(
     telegramVerified: { type: Boolean, default: false },
     telegramUsername: { type: String, default: null },
     pendingTelegramUsername: { type: String, default: null },
+    /* Botda ro'yxatdan o'tishda email tasdiqlash (telegram/email.js):
+       kod emailga yuboriladi, bazada faqat HASH'i turadi (10 daqiqa, 5 urinish). */
+    pendingEmail: { type: String, default: null },
+    pendingEmailCode: { type: String, default: null },
+    pendingEmailExpires: { type: Date, default: null },
+    pendingEmailTries: { type: Number, default: 0 },
     /* Botda tanlangan til.
        ⚠️ NIMA UCHUN BAZADA: avval u faqat serverning XOTIRASIDA
        (`Map`) saqlanardi. Render har qayta ishga tushganda xotira

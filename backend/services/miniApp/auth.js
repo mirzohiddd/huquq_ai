@@ -38,6 +38,9 @@ function verifyInitData(initData, botToken = process.env.TELEGRAM_BOT_TOKEN) {
   }
 }
 
+/** Ro'yxatda nima yetishmaydi: "phone" | "email" | null (Google hisobi emaili tasdiqlangan hisoblanadi) */
+const missingOf = (u) => (!u.phone ? "phone" : !u.email || !(u.emailVerified || u.googleId) ? "email" : null);
+
 /** Reytingda ko'rinadigan qisqa ism: "Dilnoza R." */
 function displayName(user, tg) {
   const first = (user.firstName || tg?.first_name || "").trim();
@@ -53,12 +56,15 @@ function displayName(user, tg) {
 async function loginWithInitData(initData) {
   const tg = verifyInitData(initData);
   if (!tg) return { error: "invalid" };
-  const user = await User.findOne({ telegramId: tg.id }).select("username firstName lastName isBlocked telegramLang").lean();
+  const user = await User.findOne({ telegramId: tg.id }).select("username firstName lastName isBlocked telegramLang phone email emailVerified googleId").lean();
   if (!user) return { needsRegister: true, tg };
   if (user.isBlocked) return { error: "blocked" };
+  // Ro'yxat to'liq bo'lishi shart: telefon VA tasdiqlangan email (bot ikkalasini so'raydi)
+  const missing = missingOf(user);
+  if (missing) return { needsRegister: true, tg, user, missing };
   const token = jwt.sign({ id: user._id, username: user.username, type: "user" }, process.env.JWT_SECRET, { expiresIn: "7d" });
   const lang = user.telegramLang || (tg.language_code === "ru" ? "ru" : "uz");
   return { token, user, tg, lang, name: displayName(user, tg) };
 }
 
-module.exports = { verifyInitData, loginWithInitData, displayName };
+module.exports = { verifyInitData, loginWithInitData, displayName, missingOf };

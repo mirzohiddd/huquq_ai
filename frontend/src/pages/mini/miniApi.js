@@ -27,6 +27,22 @@ export function setToken(t) {
 }
 export const hasToken = () => !!token;
 
+/* Qurilma ID'si — admin analitikasi uchun (har qurilma BIR marta sanaladi).
+   Shu qurilmada bir marta yaratiladi va saqlanadi; shaxsiy ma'lumot emas. */
+const DEVICE_KEY = "miniDevice";
+const deviceId = (() => {
+  try {
+    let id = localStorage.getItem(DEVICE_KEY);
+    if (!id || !/^[A-Za-z0-9-]{16,64}$/.test(id)) {
+      id = crypto.randomUUID ? crypto.randomUUID() : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 14)}`;
+      localStorage.setItem(DEVICE_KEY, id);
+    }
+    return id;
+  } catch {
+    return "";
+  }
+})();
+
 /* Kirish javobi kelguncha boshqa so'rovlar KUTADI (keshdagi yo'l darhol
    chizilganda foydalanuvchi tokendan oldin darsni bosib qo'yishi mumkin). */
 let authWait = Promise.resolve();
@@ -44,6 +60,7 @@ function client(baseURL) {
   c.interceptors.request.use(async (cfg) => {
     if (cfg.url !== "/auth") await authWait;
     if (token) cfg.headers.Authorization = `Bearer ${token}`;
+    if (deviceId && baseURL.endsWith("/mini")) cfg.headers["X-Mini-Device"] = deviceId;
     cfg.params = { ...cfg.params, lang };
     return cfg;
   });
@@ -87,7 +104,8 @@ const takeLesson = (id) => {
 export const mini = {
   // course berilsa javobda yo'l ham keladi (ikkinchi so'rov kutilmaydi)
   auth: (initData, course) => {
-    const p = api.post("/auth", { initData, course: course ?? "" }).then((r) => {
+    const app = window.Telegram?.WebApp;
+    const p = api.post("/auth", { initData, course: course ?? "", platform: app?.platform || "", version: app?.version || "" }).then((r) => {
       if (r.data.token) setToken(r.data.token);
       return r.data;
     });

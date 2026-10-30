@@ -38,6 +38,15 @@ const T = {
       "⌛️ Ulash havolasining muddati tugagan.\n\nSaytga kirib, «Telegram'ni ulash» tugmasini qayta bosing:",
     link_conflict: "⚠️ Bu Telegram hisob boshqa akkauntga ulangan. Avval o'sha akkauntdan foydalaning yoki admin bilan bog'laning.",
     blocked: "⛔️ Hisobingiz bloklangan. Savollar bo'lsa, sayt orqali texnik yordamga yozing.",
+    // Ro'yxatni yakunlash: telefon + email (telegram/email.js)
+    need_phone: "📱 Ro'yxatdan o'tishni yakunlash uchun pastdagi tugma orqali <b>telefon raqamingizni</b> yuboring.",
+    email_ask: "✉️ Oxirgi qadam: <b>email manzilingizni</b> yozing (masalan: <i>ism@gmail.com</i>). Unga tasdiqlash kodi yuboramiz.",
+    email_code_sent: "📨 <b>{email}</b> manziliga 6 xonali kod yuborildi. Kodni shu yerga yozing.\n\nXat kelmasa «Spam» papkasini tekshiring yoki emailni qayta yozing.",
+    email_code_wrong: "❌ Kod noto'g'ri. Emailga kelgan 6 xonali kodni qayta yozing.",
+    email_code_expired: "⌛️ Kod muddati tugagan yoki urinishlar tugadi. Email manzilingizni qayta yozing — yangi kod yuboramiz.",
+    email_taken: "⚠️ Bu email boshqa hisobda ishlatilgan. Boshqa email yozing yoki saytdagi hisobingizni ulang.",
+    email_send_fail: "⚠️ Xat yuborib bo'lmadi. Bir ozdan keyin email manzilingizni qayta yozing.",
+    email_done: "✅ <b>Email tasdiqlandi!</b> Ro'yxatdan o'tish yakunlandi — endi barcha imkoniyatlar ochiq.",
     // ── Asosiy ──
     welcome:
       "👋 <b>Assalomu alaykum{name}!</b>\n\n" +
@@ -93,6 +102,14 @@ const T = {
     link_expired: "⌛️ Срок ссылки истёк.\n\nВойдите на сайт и снова нажмите «Подключить Telegram»:",
     link_conflict: "⚠️ Этот Telegram уже привязан к другому аккаунту. Используйте его или напишите администратору.",
     blocked: "⛔️ Ваш аккаунт заблокирован. По вопросам напишите в поддержку на сайте.",
+    need_phone: "📱 Чтобы завершить регистрацию, отправьте <b>номер телефона</b> кнопкой внизу.",
+    email_ask: "✉️ Последний шаг: напишите <b>ваш email</b> (например: <i>name@gmail.com</i>). Мы отправим на него код подтверждения.",
+    email_code_sent: "📨 На <b>{email}</b> отправлен 6-значный код. Напишите его сюда.\n\nЕсли письма нет — проверьте «Спам» или напишите email ещё раз.",
+    email_code_wrong: "❌ Неверный код. Введите 6-значный код из письма ещё раз.",
+    email_code_expired: "⌛️ Код истёк или попытки закончились. Напишите email ещё раз — отправим новый код.",
+    email_taken: "⚠️ Этот email уже используется в другом аккаунте. Укажите другой или подключите аккаунт сайта.",
+    email_send_fail: "⚠️ Не удалось отправить письмо. Через минуту напишите email ещё раз.",
+    email_done: "✅ <b>Email подтверждён!</b> Регистрация завершена — все возможности открыты.",
     welcome:
       "👋 <b>Здравствуйте{name}!</b>\n\n" +
       "Напишите юридический вопрос или отправьте 🎤 голосовое — отвечу со ссылками на статьи закона.\n\n" +
