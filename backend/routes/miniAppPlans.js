@@ -7,11 +7,13 @@
  * (`config/plans.js`). Bu yerda faqat bir bosishda buyurtma: ism, telefon va
  * Telegram ID foydalanuvchining bot orqali ochilgan hisobidan olinadi, admin
  * esa saytdagi buyurtmalar kabi xabar oladi (manba — «Telegram bot»).
+ * Shu yerda: `GET /hearts`, `POST /hearts/buy` — yurakchalar (services/miniApp/hearts.js).
  */
 const router = require("express").Router();
 const { userGuard } = require("../middleware/auth");
 const { User } = require("../models");
 const { createPurchaseRequest } = require("../services/purchaseRequests");
+const hearts = require("../services/miniApp/hearts");
 
 router.post("/order", userGuard, async (req, res) => {
   try {
@@ -33,6 +35,26 @@ router.post("/order", userGuard, async (req, res) => {
     res.status(result.duplicate ? 200 : 201).json({ ok: true, duplicate: !!result.duplicate, tier: result.request.tier });
   } catch (err) {
     console.error("mini order:", err.message);
+    res.status(500).json({ error: "Server xatosi" });
+  }
+});
+
+/* Yurakchalar: holat va XP evaziga to'ldirish (1 ta — 10 XP, hammasi — 40 XP) */
+router.get("/hearts", userGuard, async (req, res) => {
+  try {
+    res.json({ hearts: await hearts.current(req.authUser.id) });
+  } catch (err) {
+    console.error("mini hearts:", err.message);
+    res.status(500).json({ error: "Server xatosi" });
+  }
+});
+
+router.post("/hearts/buy", userGuard, async (req, res) => {
+  try {
+    const r = await hearts.buy(req.authUser.id, req.body?.kind === "all" ? "all" : "one");
+    res.status(r.ok ? 200 : 400).json(r);
+  } catch (err) {
+    console.error("mini hearts buy:", err.message);
     res.status(500).json({ error: "Server xatosi" });
   }
 });

@@ -30,6 +30,7 @@ const MiniProgressSchema = new mongoose.Schema(
     // { "2026-10-30": xp } — Toshkent sanasi; ketma-ket kunlar va haftalik natija
     days: { type: mongoose.Schema.Types.Mixed, default: {} },
     goal: { type: Number, default: 20 }, // kunlik XP maqsadi
+    heartsFullAt: { type: Date, default: null }, // yurakchalar to'ladigan payt (services/miniApp/hearts.js)
   },
   { timestamps: true },
 );

@@ -6,6 +6,7 @@
  * xotirada (va sahifa yangilansa — sessionStorage'da) turadi.
  */
 import axios from "axios";
+import { setHearts, openHearts } from "./heartsStore";
 import { API_BASE } from "../../utils/apiBase";
 
 const KEY = "miniToken";
@@ -67,6 +68,21 @@ function client(baseURL) {
   });
   /* Mobil internet bir lahza uzilsa — o'qish (GET) so'rovi 2 marta qayta yuboriladi.
      POST takrorlanmaydi: javob/XP ikki marta yozilib qolmasin. */
+  // Yurakchalar: har javobdagi holat; 403 «noHearts» — sotib olish oynasi
+  c.interceptors.response.use(
+    (r) => {
+      if (r.data?.hearts) setHearts(r.data.hearts);
+      return r;
+    },
+    (err) => {
+      const d = err.response?.data;
+      if (d?.noHearts) {
+        setHearts(d.hearts);
+        if (!err.config?.quiet) openHearts();
+      }
+      throw err;
+    },
+  );
   c.interceptors.response.use(undefined, async (err) => {
     const cfg = err.config;
     if (!cfg || err.response || cfg.method !== "get" || (cfg._retry || 0) >= 2) throw err;
@@ -92,7 +108,7 @@ export const siteApi = {
 const pre = new Map();
 const prefetchLesson = (id) => {
   if (!id || pre.has(id)) return;
-  const p = api.get(`/c/${id}`).then(data);
+  const p = api.get(`/c/${id}`, { quiet: true }).then(data); // oldindan olish — oyna ochmasin
   p.catch(() => pre.delete(id));
   pre.set(id, { p, at: Date.now() });
 };
@@ -137,6 +153,8 @@ export const mini = {
   examAnswer: (unit, key, option) => api.post(`/exam/${unit}/answer`, { key, option }).then((r) => r.data),
   examFinish: (unit, answers) => api.post(`/exam/${unit}/finish`, { answers }).then((r) => r.data),
   explain: (body) => api.post("/explain", body).then((r) => r.data),
+  hearts: () => api.get("/hearts").then(data),
+  buyHearts: (kind) => api.post("/hearts/buy", { kind }).then(data),
   // Qalqonning ovozi — saytning keshlangan TTS'i (o'zbekcha neyron ovoz)
   speak: (text) =>
     axios

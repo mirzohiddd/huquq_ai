@@ -18,6 +18,8 @@ import Gate, { Spinner } from "./Gate";
 import PathTab from "./PathTab";
 import Overlay from "./Overlay";
 import MiniHeader from "./MiniHeader";
+import HeartsSheet from "./HeartsSheet";
+import { setHearts } from "./heartsStore";
 import { LANG_KEY, COURSE_KEY, read, save, savedLang } from "./prefs";
 import s from "./Mini.module.css";
 
@@ -81,6 +83,7 @@ export default function MiniApp() {
         setApiLang(l);
         setName(r.name || "");
         if (l === tgLang) fresh = r.path;
+        setHearts(r.path?.hearts);
       }
       setPath(fresh || (await mini.path(want)));
       setPhase("ready");
@@ -166,6 +169,8 @@ export default function MiniApp() {
           </main>
         )}
       </Suspense>
+
+      <HeartsSheet t={t} xp={path?.xp || 0} onBought={() => loadPath()} />
 
       {!overlay && (
         <nav className={s.nav} aria-label="Menu">

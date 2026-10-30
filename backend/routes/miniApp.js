@@ -13,6 +13,7 @@ const { quotesOf } = require("../services/miniApp/explain");
 const { localizeJson } = require("../services/miniApp/i18n");
 const path = require("../services/miniApp/path");
 const runs = require("../services/miniApp/runs");
+const hearts = require("../services/miniApp/hearts");
 const { accessOf, planLocked } = require("../services/miniApp/access");
 const devices = require("../services/miniApp/devices");
 
@@ -61,6 +62,7 @@ async function pathBody(userId, want) {
     course, courses, units: path.pathOf(a.doc, { course, paid: a.paid, s: a.s }),
     plan: { tier: a.tier, label: a.planLabel, paid: a.paid },
     xp: s.xp, level: s.level, streak: s.streak, todayXp: s.todayXp, goal: s.goal, mistakes: s.mistakes,
+    hearts: hearts.stateOf(a.doc),
   };
 }
 

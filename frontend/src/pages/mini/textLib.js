@@ -39,6 +39,14 @@ export const LIB_UZ = {
     fixed: "Xato tuzatildi!", left: (n) => `Yana ${n} ta xato qoldi`, done: "Barcha xatolar tuzatildi!", toList: "Ro'yxatga qaytish",
   },
   sayXp: (x) => `Plyus ${x} XP!`, // qalqon ovozi uchun
+  hearts: {
+    title: "Yurakchalar", empty: "Yurakchalar tugadi!", label: (n) => `${n} ta yurakcha`,
+    rule: "Har bir xato javob — bitta yurakcha. Har 30 daqiqada bittadan tiklanadi.",
+    wait: "Yurakcha tiklanmaguncha darslar, imtihonlar va vaziyatlar yopiq. Kuting yoki XP evaziga to'ldiring.",
+    full: "Barcha yurakchalar to'la — ehtiyot bo'lib o'rganing!", next: "Keyingi yurakcha:",
+    one: "1 ta yurakcha", all: (n) => `Hammasi (${n} ta)`, sale: "Chegirma",
+    have: (x) => `Sizda ${x} XP bor`, go: "Davom etish", later: "Keyinroq",
+  },
   chest: { title: "Sandiq", ready: "Sandiqni ochish", tap: "Ochish uchun bosing!", locked: "3 ta darsdan keyin ochiladi", got: (x) => `Sandiqdan ${x} XP chiqdi!`, empty: "Sandiq ochilgan" },
   xp: {
     perfect: "Xatosiz! Maksimal XP", lost: (m, max) => `${m} ta xato — xatosiz bo'lsa ${max} XP olardingiz`,
@@ -98,6 +106,14 @@ export const LIB_RU = {
     fixed: "Ошибка исправлена!", left: (n) => `Осталось ошибок: ${n}`, done: "Все ошибки исправлены!", toList: "К списку",
   },
   sayXp: (x) => `Плюс ${x} очков опыта!`, // голос щита: «XP» латиницей звучит плохо
+  hearts: {
+    title: "Сердечки", empty: "Сердечки закончились!", label: (n) => `Сердечек: ${n}`,
+    rule: "Каждый неверный ответ — минус одно сердечко. Каждые 30 минут восстанавливается одно.",
+    wait: "Пока сердечко не восстановится, уроки, экзамены и ситуации закрыты. Подождите или пополните за XP.",
+    full: "Все сердечки на месте — учитесь внимательно!", next: "Следующее сердечко:",
+    one: "1 сердечко", all: (n) => `Все сразу (${n})`, sale: "Скидка",
+    have: (x) => `У вас ${x} XP`, go: "Продолжить", later: "Позже",
+  },
   chest: { title: "Сундук", ready: "Открыть сундук", tap: "Нажмите, чтобы открыть!", locked: "Откроется после 3 уроков", got: (x) => `В сундуке ${x} XP!`, empty: "Сундук открыт" },
   xp: {
     perfect: "Без ошибок! Максимум XP", lost: (m, max) => `Ошибок: ${m} — без ошибок вы получили бы ${max} XP`,

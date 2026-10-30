@@ -379,7 +379,8 @@ export default function Users() {
                           <Globe size={13} />
                         </span>
                       )}
-                      {u.telegramVerified && (
+                      {/* Username havolasi bo'lsa — belgisi o'sha yerda, ikkinchi samolyotcha kerak emas */}
+                      {u.telegramVerified && !u.telegramUsername && (
                         <span title="Telegram" style={{ color: "#06b6d4", marginRight: 4, display: "inline-flex", verticalAlign: "middle" }}>
                           <Send size={13} />
                         </span>

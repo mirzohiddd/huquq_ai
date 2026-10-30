@@ -18,6 +18,7 @@ const course = require("../services/miniApp/course");
 const path = require("../services/miniApp/path");
 const runs = require("../services/miniApp/runs");
 const { accessOf, planLocked } = require("../services/miniApp/access");
+const hearts = require("../services/miniApp/hearts");
 
 /** Imtihon savollari (to'liq, javoblari bilan — faqat serverda). */
 function itemsOf(at, s) {
@@ -53,7 +54,7 @@ async function openExam(req, res) {
 router.get("/exam/:unit", userGuard, async (req, res) => {
   try {
     const o = await openExam(req, res);
-    if (!o) return;
+    if (!o || !hearts.guard(o.doc, res)) return;
     const items = o.items.map((x) => ({ key: x.key, title: x.title, icon: x.icon, text: x.text, q: x.q, options: viewOf(o.at, x.key, x.options).texts }));
     const u = o.at.unit;
     res.json({ unit: { key: u.key, title: u.title, level: u.level }, items, pass: passFor(o.at, items.length), passed: o.doc.exams?.[u.key] || null });
@@ -67,12 +68,12 @@ router.get("/exam/:unit", userGuard, async (req, res) => {
 router.post("/exam/:unit/answer", userGuard, async (req, res) => {
   try {
     const o = await openExam(req, res);
-    if (!o) return;
+    if (!o || !hearts.guard(o.doc, res)) return;
     const q = o.items.find((x) => x.key === String(req.body?.key || ""));
     const view = q && viewOf(o.at, q.key, q.options);
     const opt = view?.pick(req.body?.option);
     if (!opt) return res.status(400).json({ error: "Noto'g'ri so'rov" });
-    if (!opt.ok) return res.json({ ok: false }); // imtihonda xato javob ochilmaydi
+    if (!opt.ok) return res.json({ ok: false, hearts: await hearts.lose(req.authUser.id) }); // imtihonda xato javob ochilmaydi
     const right = q.options.find((x) => x.ok);
     const review = view.texts.map((t) => q.options.find((x) => x.t === t)).map((x) => ({ t: x.t, ok: x.ok, why: x.why }));
     res.json({ ok: opt.ok, why: opt.why, rightText: right.t, rightWhy: right.why, review });

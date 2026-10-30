@@ -17,6 +17,7 @@ const path = require("../services/miniApp/path");
 const runs = require("../services/miniApp/runs");
 const { quotesOf } = require("../services/miniApp/explain");
 const { accessOf, planLocked } = require("../services/miniApp/access");
+const hearts = require("../services/miniApp/hearts");
 
 const fail = (res, err, where) => {
   console.error(`mini ${where}:`, err.message);
@@ -42,7 +43,7 @@ async function openCourseLesson(req, res) {
 router.get("/c/:id", userGuard, async (req, res) => {
   try {
     const o = await openCourseLesson(req, res);
-    if (!o) return;
+    if (!o || !hearts.guard(o.doc, res)) return; // yurakcha yo'q — dars ochilmaydi
     await runs.start(req.authUser.id, o.l.id);
     const lesson = course.publicLesson(o.l, o.at.unit);
     // Har bir mavzu kartasiga qonundan JONLI iqtibos (raqam matnga yozilmaydi)
@@ -57,7 +58,7 @@ router.get("/c/:id", userGuard, async (req, res) => {
 router.post("/c/:id/answer", userGuard, async (req, res) => {
   try {
     const o = await openCourseLesson(req, res);
-    if (!o) return;
+    if (!o || !hearts.guard(o.doc, res)) return;
     const i = Number(req.body?.i);
     const q = o.l.quiz[i];
     const key = course.qKey(o.l.id, i);
@@ -70,7 +71,7 @@ router.post("/c/:id/answer", userGuard, async (req, res) => {
     }
     // ⚠️ Xato javobda to'g'ri javob, izohlar va variantlar tahlili YUBORILMAYDI —
     // foydalanuvchi mavzuni qayta o'qib, javobni o'zi topishi kerak (`card` — qaytiladigan karta).
-    if (!opt.ok) return res.json({ ok: false, card: q.card ?? null });
+    if (!opt.ok) return res.json({ ok: false, card: q.card ?? null, hearts: await hearts.lose(req.authUser.id) });
     const right = q.options.find((x) => x.ok);
     const review = course.optionView(key, q.options).texts.map((t) => q.options.find((x) => x.t === t)).map((x) => ({ t: x.t, ok: x.ok, why: x.why }));
     res.json({ ok: opt.ok, why: opt.why, correct: course.optionView(key, q.options).correct, rightText: right.t, rightWhy: right.why, review, quotes: await quotesOf(q.refs) });

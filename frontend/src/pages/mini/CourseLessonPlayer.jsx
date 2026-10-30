@@ -4,7 +4,8 @@
  *   (saytdagi test savollari) → Hayotda qo'llash → Yakun.
  * Xato javobda to'g'ri javob KO'RSATILMAYDI: foydalanuvchi savolga tegishli
  * mavzu kartasiga qaytadi (o'qib bo'lgach — darhol o'sha savolga), test
- * savolida esa qayta urinadi. Har bir xato serverda sanaladi va XP kamayadi.
+ * savolida esa qayta urinadi (variantlar joyi o'zgaradi). Har xato — −1 yurakcha
+ * va kamroq XP; mavzu kartasini o'qimasdan qayta urinib bo'lmaydi.
  */
 import React, { useEffect, useMemo, useState } from "react";
 import { X, ChevronRight, Lock } from "lucide-react";
@@ -144,8 +145,6 @@ export default function CourseLessonPlayer({ id, ctx }) {
             setBack(at);
             setAt(steps.indexOf(`card:${cur.card}`));
           }}
-          altLabel={t.tryAgain}
-          onAlt={cur.card === null ? null : () => setRes(null)}
         />
       )}
       {cur && res?.ok && (

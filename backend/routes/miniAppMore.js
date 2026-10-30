@@ -14,6 +14,7 @@ const { warmAll } = require("../services/miniApp/i18n");
 const runs = require("../services/miniApp/runs");
 const path = require("../services/miniApp/path");
 const { accessOf } = require("../services/miniApp/access");
+const hearts = require("../services/miniApp/hearts");
 
 router.use(localizeJson); // ?lang=ru — javob matnlari rus tilida (kesh)
 
@@ -38,10 +39,15 @@ router.get("/situations", userGuard, async (req, res) => {
   }
 });
 
-router.get("/situation/:id", userGuard, (req, res) => {
-  const s = content.situationById.get(String(req.params.id));
-  if (!s) return res.status(404).json({ error: "Vaziyat topilmadi" });
-  res.json({ situation: content.publicSituation(s) });
+router.get("/situation/:id", userGuard, async (req, res) => {
+  try {
+    const s = content.situationById.get(String(req.params.id));
+    if (!s) return res.status(404).json({ error: "Vaziyat topilmadi" });
+    if (!hearts.guard(await store.getDoc(req.authUser.id), res)) return;
+    res.json({ situation: content.publicSituation(s) });
+  } catch (err) {
+    fail(res, err, "situation");
+  }
 });
 
 /* Javob ko'rinishi: to'g'ri/xato, izoh, to'g'ri variant va manba iqtibosi. */
@@ -62,8 +68,10 @@ router.post("/situation/:id/step", userGuard, async (req, res) => {
     const st = s?.steps[idx];
     const v = st && (await verdict(content.stepKey(s.id, idx), st.options, req.body?.option, s.refs));
     if (!v) return res.status(400).json({ error: "Noto'g'ri so'rov" });
-    if (!v.opt.ok) await store.addMistake(req.authUser.id, content.stepKey(s.id, idx));
-    res.json(v.opt.ok ? v.body : { ok: false }); // xato qarorda to'g'ri yo'l ochilmaydi — qayta o'ylaydi
+    if (!hearts.guard(await store.getDoc(req.authUser.id), res)) return;
+    if (v.opt.ok) return res.json(v.body);
+    await store.addMistake(req.authUser.id, content.stepKey(s.id, idx));
+    res.json({ ok: false, hearts: await hearts.lose(req.authUser.id) }); // xato qarorda to'g'ri yo'l ochilmaydi
   } catch (err) {
     fail(res, err, "step");
   }
@@ -110,12 +118,13 @@ router.post("/review/answer", userGuard, async (req, res) => {
     // Faqat O'Z xatolari takrorlanadi — aks holda yopiq dars savollarini shu yerdan "terib" bo'lardi
     const doc = await store.getDoc(req.authUser.id);
     if (!(doc.mistakes || []).includes(key)) return res.status(404).json({ error: "Bu savol takrorlash ro'yxatida yo'q", gone: true });
+    if (!hearts.guard(doc, res)) return;
     const q = content.questionByKey(key);
     const v = q && (await verdict(key, q.options, req.body?.option, q.refs));
     if (!v) return res.status(400).json({ error: "Noto'g'ri so'rov" });
     // Takrorlashda XP BERILMAYDI (faqat ro'yxatdan chiqadi); xato javob ochilmaydi
     if (v.opt.ok) await store.fixMistake(req.authUser.id, key);
-    res.json(v.opt.ok ? { ...v.body, xp: 0 } : { ok: false });
+    res.json(v.opt.ok ? { ...v.body, xp: 0 } : { ok: false, hearts: await hearts.lose(req.authUser.id) });
   } catch (err) {
     fail(res, err, "review answer");
   }
