@@ -31,24 +31,30 @@ router.post("/auth", async (req, res) => {
     if (r.error) return res.status(401).json({ error: "Telegram ma'lumoti tasdiqlanmadi" });
     if (r.needsRegister) return res.status(404).json({ needsRegister: true, bot: `https://t.me/${BOT}?start=miniapp`, firstName: r.tg.first_name || "" });
     await store.touch(r.user._id, r.name);
-    res.json({ token: r.token, name: r.name, lang: r.lang });
+    // Yo'l ham shu javobda — ilova ochilishida ikkinchi so'rov kutilmaydi
+    const body = req.body?.course !== undefined ? await pathBody(String(r.user._id), req.body.course).catch(() => null) : null;
+    res.json({ token: r.token, name: r.name, lang: r.lang, path: body });
   } catch (err) {
     fail(res, err, "auth");
   }
 });
 
 /* GET /api/mini/path?course= — kurs yo'li (bo'limlar, sandiq, imtihon) + kurslar ro'yxati + tarif */
+async function pathBody(userId, want) {
+  const a = await accessOf(userId);
+  const courses = path.coursesOf(a.doc, a.s);
+  const course = courses.some((c) => c.key === want) ? String(want) : courses[0]?.key || "";
+  const s = store.summaryOf(a.doc);
+  return {
+    course, courses, units: path.pathOf(a.doc, { course, paid: a.paid, s: a.s }),
+    plan: { tier: a.tier, label: a.planLabel, paid: a.paid },
+    xp: s.xp, level: s.level, streak: s.streak, todayXp: s.todayXp, goal: s.goal, mistakes: s.mistakes,
+  };
+}
+
 router.get("/path", userGuard, async (req, res) => {
   try {
-    const a = await accessOf(req.authUser.id);
-    const courses = path.coursesOf(a.doc, a.s);
-    const course = courses.some((c) => c.key === req.query.course) ? String(req.query.course) : "basics";
-    const s = store.summaryOf(a.doc);
-    res.json({
-      course, courses, units: path.pathOf(a.doc, { course, paid: a.paid, s: a.s }),
-      plan: { tier: a.tier, label: a.planLabel, paid: a.paid },
-      xp: s.xp, level: s.level, streak: s.streak, todayXp: s.todayXp, goal: s.goal, mistakes: s.mistakes,
-    });
+    res.json(await pathBody(req.authUser.id, req.query.course));
   } catch (err) {
     fail(res, err, "path");
   }

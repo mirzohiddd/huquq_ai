@@ -29,7 +29,7 @@
 .dotOn { background: #c9953a; }
 .dotNow { animation: stamp 0.5s 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
 
-.footer { position: fixed; left: 0; right: 0; bottom: 0; padding: 12px 16px calc(14px + env(safe-area-inset-bottom)); background: linear-gradient(180deg, rgba(248, 246, 241, 0), #f8f6f1 30%); }
+.footer { position: fixed; left: 0; right: 0; bottom: 0; padding: 12px 16px calc(18px + var(--safe-b, 0px)); background: linear-gradient(180deg, rgba(248, 246, 241, 0), #f8f6f1 30%); }
 .btn {
   display: block; width: 100%; max-width: 608px; margin: 0 auto; padding: 15px; border: 0; border-radius: 16px; font: inherit; font-weight: 800; font-size: 15px;
   letter-spacing: 0.04em; text-transform: uppercase; background: linear-gradient(160deg, #f0c46a, #c9953a); color: #14213d; box-shadow: 0 5px 0 #9c6f22; cursor: pointer;

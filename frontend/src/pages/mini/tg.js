@@ -13,12 +13,15 @@ export function loadTelegram() {
   if (window.Telegram?.WebApp) return Promise.resolve(window.Telegram.WebApp);
   if (!loading) {
     loading = new Promise((resolve) => {
-      const s = document.createElement("script");
-      s.src = SRC;
-      s.async = true;
-      s.onload = () => resolve(window.Telegram?.WebApp || null);
-      s.onerror = () => resolve(null);
-      document.head.appendChild(s);
+      // index.html /tg da tegni oldindan qo'shadi — bor bo'lsa o'shani kutamiz
+      const s = document.getElementById("tg-sdk") || document.createElement("script");
+      s.addEventListener("load", () => resolve(window.Telegram?.WebApp || null));
+      s.addEventListener("error", () => resolve(null));
+      if (!s.src) {
+        s.src = SRC;
+        s.async = true;
+        document.head.appendChild(s);
+      }
       setTimeout(() => resolve(window.Telegram?.WebApp || null), 4000); // tarmoq osilib qolmasin
     });
   }

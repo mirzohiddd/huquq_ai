@@ -1,6 +1,6 @@
 /**
  * KURSLAR — pastdan chiquvchi oyna: har bir kurs, bo'limlar soni va progress.
- * «Hayotiy asoslar» birinchi; qolganlari saytdagi barcha darslardan qurilgan.
+ * Barcha kurslar saytdagi darslardan qurilgan (har kursning 1-bo'limi bepul).
  */
 import React from "react";
 import { X, Check } from "lucide-react";

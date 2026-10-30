@@ -7,16 +7,17 @@
  * Dizayn saytnikidek: navy + oltin, Poppins.
  */
 import React, { useCallback, useEffect, useState, lazy, Suspense } from "react";
-import { Map as MapIcon, Scale, RotateCcw, Trophy, ChartColumn, Flame, Zap } from "lucide-react";
-import { BrandMark } from "../../components/brand/BrandLogo";
+import { Map as MapIcon, Scale, RotateCcw, Trophy, ChartColumn } from "lucide-react";
 import Seo from "../../components/Seo";
 import { loadTelegram, setupApp, backButton } from "./tg";
 import { mini, setToken, hasToken, setApiLang } from "./miniApi";
+import { setUid, cachedPath, storePath, warmChunks } from "./bootCache";
 import { textFor } from "./text";
 import { unlock, settings, sfx } from "./sound";
 import Gate, { Spinner } from "./Gate";
 import PathTab from "./PathTab";
 import Overlay from "./Overlay";
+import MiniHeader from "./MiniHeader";
 import { LANG_KEY, COURSE_KEY, read, save, savedLang } from "./prefs";
 import s from "./Mini.module.css";
 
@@ -41,7 +42,7 @@ export default function MiniApp() {
   const [name, setName] = useState("");
   const [tab, setTab] = useState("path");
   const [overlay, setOverlay] = useState(null); // { kind: "lesson"|"course"|"situation"|"exam"|"plans", id }
-  const [course, setCourseKey] = useState(read(COURSE_KEY) || "basics");
+  const [course, setCourseKey] = useState(read(COURSE_KEY) || "");
   const [toast, setToast] = useState("");
   const [path, setPath] = useState(null);
   const [anim, setAnim] = useState(settings.anim);
@@ -65,16 +66,24 @@ export default function MiniApp() {
     setLang(tgLang);
     setApiLang(tgLang);
     if (!initData && !hasToken()) return setPhase("outside");
+    setUid(app?.initDataUnsafe?.user?.id);
+    const want = read(COURSE_KEY) || "";
+    const cached = cachedPath();
+    if (cached) {
+      setPath(cached); // oxirgi yo'l darhol — yangisi fonda keladi
+      setPhase("ready");
+    }
     try {
+      let fresh = null;
       if (initData) {
-        const r = await mini.auth(initData);
-        setToken(r.token);
+        const r = await mini.auth(initData, want);
         const l = savedLang() || r.lang || tgLang;
         setLang(l);
         setApiLang(l);
         setName(r.name || "");
+        if (l === tgLang) fresh = r.path;
       }
-      await mini.path(read(COURSE_KEY) || "basics").then(setPath);
+      setPath(fresh || (await mini.path(want)));
       setPhase("ready");
     } catch (err) {
       const d = err?.response?.data;
@@ -110,6 +119,8 @@ export default function MiniApp() {
   }, [overlay, tab, close]);
 
   useEffect(() => void window.scrollTo(0, 0), [tab, overlay]);
+  useEffect(() => void (path && storePath(path)), [path]);
+  useEffect(() => void (phase === "ready" && warmChunks()), [phase]);
 
   if (phase !== "ready") return <Gate phase={phase} gate={gate} t={t} onRetry={boot} />;
 
@@ -150,21 +161,9 @@ export default function MiniApp() {
   const initial = (name || "H").trim()[0].toUpperCase();
 
   return (
-    <div className={`${s.app} ${anim ? "" : s.noAnim}`}>
+    <div className={`${s.app} ${anim ? "" : s.noAnim} ${overlay ? s.appFull : ""}`}>
       <Seo title="HuquqTech — Telegram ilova" noindex />
-      <header className={s.header}>
-        <div className={s.brand}>
-          <BrandMark size={28} className={s.brandMark} />
-          <span>Huquq<b>Tech</b></span>
-        </div>
-        <div className={s.headRight}>
-          <span className={s.pill} title={t.streak}><Flame aria-hidden="true" />{path?.streak || 0}</span>
-          <span className={s.pill}><Zap aria-hidden="true" />{path?.xp || 0} XP</span>
-          <button type="button" className={s.avatar} onClick={() => { setOverlay(null); setTab("profile"); }} aria-label={t.tabs.profile}>
-            {initial}
-          </button>
-        </div>
-      </header>
+      <MiniHeader path={path} initial={initial} t={t} onProfile={() => { setOverlay(null); setTab("profile"); }} />
 
       <Suspense fallback={<Spinner />}>
         {overlay && <Overlay overlay={overlay} ctx={ctx} />}

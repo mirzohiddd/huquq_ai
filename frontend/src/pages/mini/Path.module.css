@@ -25,7 +25,7 @@
 .planNote b { flex: none; color: #8b6419; font-size: 12.5px; }
 
 .jump {
-  position: fixed; right: 16px; bottom: calc(90px + env(safe-area-inset-bottom)); z-index: 25; width: 48px; height: 48px;
+  position: fixed; right: 16px; bottom: calc(90px + var(--safe-b, 0px)); z-index: 25; width: 48px; height: 48px;
   border-radius: 14px; border: 2px solid #e6e1d6; background: #fff; color: #1b2a4a; display: grid; place-items: center;
   box-shadow: 0 4px 0 #e0dacd; cursor: pointer; animation: jumpIn 0.25s ease-out both;
 }
@@ -35,7 +35,7 @@
 .sheetBack { position: fixed; inset: 0; z-index: 40; background: rgba(11, 19, 34, 0.45); display: flex; align-items: flex-end; animation: fade 0.2s ease-out both; }
 .sheet {
   width: 100%; max-width: 640px; margin: 0 auto; max-height: 82vh; overflow-y: auto; border-radius: 22px 22px 0 0; background: #f8f6f1;
-  padding: 14px 16px calc(18px + env(safe-area-inset-bottom)); animation: up 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+  padding: 14px 16px calc(18px + var(--safe-b, 0px)); animation: up 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 .sheetHead { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
 .sheetHead b { font-size: 18px; }

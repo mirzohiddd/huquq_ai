@@ -6,15 +6,17 @@
  * Qoidalar:
  *  - kurs ichida darslar ketma-ket ochiladi; keyingi bo'lim faqat imtihondan
  *    o'tilgach ochiladi (natijaga chiqish);
- *  - TARIF: faqat «Hayotiy asoslar»ning 1-bo'limi bepul (`FREE_UNIT`), qolgan
- *    hamma bo'lim — Basic/Pro/Premium bilan (`paywall`). Tarif tugasa
- *    tugatilgan darslar ham qayta ochilmaydi (kontent tarifga bog'liq);
+ *  - TARIF: har bir kursning 1-bo'limi bepul, qolgan hamma bo'lim —
+ *    Basic/Pro/Premium bilan (`paywall`). Tarif tugasa tugatilgan darslar
+ *    ham qayta ochilmaydi (kontent tarifga bog'liq);
+ *  - yo'lda FAQAT saytdagi darslardan qurilgan kurslar (2026-10-30):
+ *    qo'lda yozilgan «Hayotiy asoslar» (8 bo'lim) ro'yxatdan olib tashlandi.
+ *    Uning kodi qoldirildi — eski progress/takrorlash kalitlari buzilmasin;
  *  - sandiq — bo'limning 3-darsidan keyin, bir marta bonus XP.
  */
 const content = require("./content");
-const { BASICS } = require("./course/meta");
 
-const FREE_UNIT = content.UNITS[0].key;
+const FREE_UNIT = content.UNITS[0].key; // «Hayotiy asoslar» (yo'lda ko'rinmaydi)
 const CHEST_AT = 3; // sandiq shu darsdan keyin
 const BASIC_EXAM_PASS = 4; // «Hayotiy asoslar» imtihoni: 5 savoldan 4 tasi
 
@@ -22,7 +24,7 @@ const BASIC_EXAM_PASS = 4; // «Hayotiy asoslar» imtihoni: 5 savoldan 4 tasi
 function walk(units, doc, paid) {
   let open = true;
   return units.map((u) => {
-    const paywall = !paid && u.key !== FREE_UNIT;
+    const paywall = !paid && u.key !== FREE_UNIT && u.n !== 1; // har kursning 1-bo'limi bepul
     const lessons = u.lessons.map((l) => {
       const done = !!doc.lessons?.[l.id];
       const status = done ? "done" : open && !paywall ? "open" : "locked";
@@ -52,14 +54,10 @@ function pathOf(doc, { course = "basics", paid = false, s = null } = {}) {
 /** Kurslar ro'yxati: nomi, bo'lim/dars soni, nechtasi tugatilgan. */
 function coursesOf(doc, s) {
   const count = (ids) => ids.filter((id) => doc.lessons?.[id]).length;
-  const basicsIds = content.LESSONS.map((l) => l.id);
-  return [
-    { ...BASICS, units: content.UNITS.length, lessons: basicsIds.length, done: count(basicsIds) },
-    ...s.courses.map((c) => {
-      const ids = c.units.flatMap((u) => u.lessons);
-      return { key: c.key, title: c.title, icon: c.icon, units: c.units.length, lessons: ids.length, done: count(ids) };
-    }),
-  ];
+  return s.courses.map((c) => {
+    const ids = c.units.flatMap((u) => u.lessons);
+    return { key: c.key, title: c.title, icon: c.icon, units: c.units.length, lessons: ids.length, done: count(ids) };
+  });
 }
 
 /** Dars/imtihon qaysi kurs va bo'limda — yo'l holati bilan. */

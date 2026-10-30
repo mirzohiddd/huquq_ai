@@ -1,5 +1,5 @@
 /* Savol va natija ekranlari (Duolingo uslubi, sayt ranglarida). */
-.screen { max-width: 520px; margin: 0 auto; padding: 4px 0 8px; display: flex; flex-direction: column; animation: rise 0.35s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.screen { max-width: 520px; margin: 0 auto; padding: 4px 0 8px; display: flex; flex-direction: column; animation: rise 0.35s cubic-bezier(0.22, 1, 0.36, 1) backwards; flex: 1 0 auto; width: 100%; }
 .tag { align-self: center; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #8b6419; margin-bottom: 4px; }
 .title { text-align: center; font-size: clamp(22px, 6.4vw, 27px); font-weight: 800; letter-spacing: -0.02em; color: #14213d; margin: 2px 0 14px; }
 .resTitle { margin-bottom: 0; }
@@ -29,7 +29,7 @@
 .optOn .radio { border-color: #b8872a; background: radial-gradient(circle, #fff 0 3px, #c9953a 3.5px 100%); }
 .err { color: #a12a2a; text-align: center; font-size: 13.5px; margin-top: 10px; }
 
-.footer { position: sticky; bottom: 0; margin-top: auto; padding: 18px 0 calc(6px + env(safe-area-inset-bottom)); background: linear-gradient(180deg, rgba(248, 246, 241, 0), #f8f6f1 35%); }
+.footer { position: sticky; bottom: 0; margin-top: auto; padding: 18px 0 calc(18px + var(--safe-b, 0px)); z-index: 5; background: linear-gradient(180deg, rgba(248, 246, 241, 0), #f8f6f1 35%); }
 .main {
   display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 16px 18px;
   border: 0; border-radius: 14px; background: #1b2a4a; color: #fff; font: inherit; font-size: 17px; font-weight: 700;

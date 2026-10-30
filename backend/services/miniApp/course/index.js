@@ -17,12 +17,29 @@ const TTL = 10 * 60 * 1000; // admin darsni o'zgartirsa — 10 daqiqada yo'lda k
 let state = null;
 let loading = null;
 
+/* Bazadagi darslar/testlar «izi»: soni + oxirgi o'zgarish vaqti. Ikkita
+   yengil so'rov — qayta qurish (~1 s CPU, shu vaqt server boshqa so'rovlarga
+   javob bermaydi) faqat haqiqatan o'zgarish bo'lsa bajariladi. */
+async function fingerprint() {
+  const one = (M) =>
+    Promise.all([M.countDocuments({ published: true }), M.findOne({}).sort({ updatedAt: -1 }).select("updatedAt").lean()])
+      .then(([n, last]) => `${n}:${last?.updatedAt?.getTime?.() || 0}`);
+  const [a, b] = await Promise.all([one(Lesson), one(Quiz)]);
+  return `${a}|${b}`;
+}
+
 async function load() {
+  const fp = await fingerprint();
+  if (state && state.fp === fp) {
+    state.at = Date.now(); // o'zgarmagan — eski qurilgan holat ishlatiladi
+    return state;
+  }
   const [lessons, quizzes] = await Promise.all([
     Lesson.find({ published: true }).sort({ order: 1, createdAt: 1 }).select("title category level objectives practicalSteps sections").lean(),
     Quiz.find({ published: true }).sort({ order: 1, createdAt: 1 }).lean(),
   ]);
   state = build(lessons, quizzes);
+  state.fp = fp;
   return state;
 }
 
@@ -90,7 +107,7 @@ function questionByKey(key, s = state) {
 }
 
 // Server ishga tushgach fonda yuklab qo'yiladi — birinchi foydalanuvchi kutmasin
-setTimeout(() => ready().catch(() => {}), 20 * 1000).unref();
+setTimeout(() => ready().catch(() => {}), 8 * 1000).unref();
 
 /** Kurs darsi va savoli — «Tushuntirib ber» uchun (yuklanmagan bo'lsa null). */
 const lessonOf = (id) => state?.lessons.get(String(id)) || null;

@@ -132,6 +132,14 @@
       } catch (e) {
         document.documentElement.classList.add("ssr-off");
       }
+      /* Telegram mini ilova (/tg): telegram-web-app.js asosiy JS bilan PARALLEL
+         yuklansin — avval u ilova bo'lagidan keyin ketma-ket yuklanardi (tg.js
+         shu tegni topib, qayta yuklamaydi). */
+      if (location.pathname.indexOf("/tg") === 0) {
+        var tgs = document.createElement("script");
+        tgs.src = "https://telegram.org/js/telegram-web-app.js"; tgs.async = true; tgs.id = "tg-sdk";
+        document.head.appendChild(tgs);
+      }
       if (location.pathname === "/") {
         [["/hero-720.webp", "(max-width: 800px)"], ["/hero-1600.webp", "(min-width: 801px)"]].forEach(function (h) {
           var l = document.createElement("link");

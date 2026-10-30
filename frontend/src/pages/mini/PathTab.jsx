@@ -9,6 +9,7 @@ import { ListTree, ArrowUp, ArrowDown, Crown } from "lucide-react";
 import PathUnit from "./PathUnit";
 import CourseSheet from "./CourseSheet";
 import { iconOf } from "./icons";
+import { mini } from "./miniApi";
 import m from "./Mini.module.css";
 import s from "./Path.module.css";
 
@@ -47,6 +48,12 @@ export default function PathTab({ ctx }) {
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, [path]);
+
+  // Joriy dars ma'lumoti oldindan — bosilganda darhol ochiladi
+  useEffect(() => {
+    const cur = path?.units.flatMap((u) => (u.paywall ? [] : u.lessons)).find((l) => l.status === "open");
+    if (cur?.id?.startsWith("c-")) mini.prefetchLesson(cur.id);
   }, [path]);
 
   if (!path) return null;

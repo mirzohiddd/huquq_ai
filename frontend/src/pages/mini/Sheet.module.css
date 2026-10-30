@@ -7,7 +7,7 @@
 .sheet {
   width: 100%; max-width: 640px; max-height: 86vh; max-height: 86dvh; display: flex; flex-direction: column;
   background: #fff; border-radius: 22px 22px 0 0; box-shadow: 0 -12px 40px rgba(11, 19, 34, 0.25);
-  padding-bottom: env(safe-area-inset-bottom); animation: up 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+  padding-bottom: var(--safe-b, 0px); animation: up 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 .grip { width: 42px; height: 5px; border-radius: 99px; background: #e2ded4; margin: 8px auto 0; }
 .head { display: flex; align-items: center; gap: 10px; padding: 10px 16px 12px; border-bottom: 1px solid #f0ede6; }

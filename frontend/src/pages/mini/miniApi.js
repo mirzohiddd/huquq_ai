@@ -27,16 +27,22 @@ export function setToken(t) {
 }
 export const hasToken = () => !!token;
 
+/* Kirish javobi kelguncha boshqa so'rovlar KUTADI (keshdagi yo'l darhol
+   chizilganda foydalanuvchi tokendan oldin darsni bosib qo'yishi mumkin). */
+let authWait = Promise.resolve();
+
 /* Interfeys tili — har so'rovga `?lang=` qo'shiladi (server matnni shu tilda qaytaradi). */
 let lang = "uz";
 export const setApiLang = (l) => {
   lang = l === "ru" ? "ru" : "uz";
+  pre.clear(); // oldindan olingan dars eski tilda qolmasin
 };
 
 /** Mini app (`/api/mini`) va saytning o'z API'si (darslar, testlar) — bitta token bilan. */
 function client(baseURL) {
   const c = axios.create({ baseURL, timeout: 45000 });
-  c.interceptors.request.use((cfg) => {
+  c.interceptors.request.use(async (cfg) => {
+    if (cfg.url !== "/auth") await authWait;
     if (token) cfg.headers.Authorization = `Bearer ${token}`;
     cfg.params = { ...cfg.params, lang };
     return cfg;
@@ -64,10 +70,33 @@ export const siteApi = {
   testConfirm: (body) => site.post("/payment/test/confirm", body).then(data),
 };
 
+/* Joriy dars ma'lumoti yo'l ochilganda oldindan olinadi (bir marta ishlatiladi, 5 daqiqa) */
+const pre = new Map();
+const prefetchLesson = (id) => {
+  if (!id || pre.has(id)) return;
+  const p = api.get(`/c/${id}`).then(data);
+  p.catch(() => pre.delete(id));
+  pre.set(id, { p, at: Date.now() });
+};
+const takeLesson = (id) => {
+  const x = pre.get(id);
+  pre.delete(id);
+  return x && Date.now() - x.at < 5 * 60 * 1000 ? x.p.catch(() => api.get(`/c/${id}`).then(data)) : api.get(`/c/${id}`).then(data);
+};
+
 export const mini = {
-  auth: (initData) => api.post("/auth", { initData }).then((r) => r.data),
+  // course berilsa javobda yo'l ham keladi (ikkinchi so'rov kutilmaydi)
+  auth: (initData, course) => {
+    const p = api.post("/auth", { initData, course: course ?? "" }).then((r) => {
+      if (r.data.token) setToken(r.data.token);
+      return r.data;
+    });
+    authWait = p.catch(() => {});
+    return p;
+  },
+  prefetchLesson,
   path: (course) => api.get("/path", { params: { course } }).then((r) => r.data),
-  courseLesson: (id) => api.get(`/c/${id}`).then(data),
+  courseLesson: takeLesson,
   courseAnswer: (id, i, option) => api.post(`/c/${id}/answer`, { i, option }).then(data),
   courseComplete: (id) => api.post(`/c/${id}/complete`).then(data),
   chest: (unit) => api.post(`/chest/${unit}`).then(data),

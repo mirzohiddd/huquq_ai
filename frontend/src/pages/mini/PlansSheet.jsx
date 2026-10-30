@@ -99,7 +99,7 @@ export default function PlansSheet({ ctx }) {
               <li><Check aria-hidden="true" />{p.allUnits}</li>
               <li><Check aria-hidden="true" />{p.aiDay(pl.dailyLimit)}</li>
               {pl.voiceDailyLimit > 0 && <li><Check aria-hidden="true" />{p.voice(pl.voiceDailyLimit)}</li>}
-              {pl.useClaude && <li><Check aria-hidden="true" />{p.claude}</li>}
+              {pl.useClaude && <li><Check aria-hidden="true" />{p.premiumAi}</li>}
             </ul>
             {pick === pl.id ? (
               <div className={s.actions}>

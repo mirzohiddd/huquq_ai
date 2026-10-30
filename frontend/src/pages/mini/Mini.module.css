@@ -21,11 +21,15 @@
   background: var(--cream);
   color: var(--navy);
   font-family: var(--font-body, "Poppins", system-ui, sans-serif);
-  padding-bottom: calc(76px + env(safe-area-inset-bottom));
+  --safe-b: max(env(safe-area-inset-bottom, 0px), var(--tg-safe-area-inset-bottom, 0px), var(--tg-content-safe-area-inset-bottom, 0px));
+  padding-bottom: calc(76px + var(--safe-b));
   -webkit-tap-highlight-color: transparent;
 }
 
 /* ── Sarlavha ── */
+/* Dars/vaziyat ochiq — pastki menyu yo'q, uning joyi ham kerak emas */
+.appFull { padding-bottom: 0; }
+
 .header {
   position: sticky;
   top: 0;
@@ -63,7 +67,7 @@
 .nav {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
   display: grid; grid-template-columns: repeat(5, 1fr);
-  padding: 6px 6px calc(6px + env(safe-area-inset-bottom));
+  padding: 6px 6px calc(6px + var(--safe-b));
   background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
   border-top: 1px solid var(--line);
 }
@@ -106,7 +110,8 @@
 .centerBox p { color: var(--muted); line-height: 1.55; font-size: 14px; }
 .spin { width: 28px; height: 28px; color: var(--gold); animation: spin 0.9s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
-.fadeIn { animation: fadeIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both; }
+/* backwards: tugagach transform qolmaydi — aks holda ichidagi fixed oynalar (kurslar ro'yxati) ekran emas, konteynerga yopishadi */
+.fadeIn { animation: fadeIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) backwards; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .fadeIn, .spin { animation: none; } }
 .centerSmall { display: grid; justify-items: center; gap: 10px; padding: 28px 12px; text-align: center; }

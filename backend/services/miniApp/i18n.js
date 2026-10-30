@@ -33,14 +33,24 @@ function collect(node, out = []) {
   return out;
 }
 
+/* Topilgan tarjimalar xotirada ham turadi — har javobda bazaga yuzlab
+   matn so'ralmasin (ruscha dars avval o'zbekchadan 2-4 barobar sekin edi). */
+const MEM = new Map();
+const MEM_MAX = 40000;
+
 async function localize(body, lang) {
   if (lang !== "ru" || !body || typeof body !== "object") return body;
   const copy = JSON.parse(JSON.stringify(body));
   const slots = collect(copy);
   if (!slots.length) return copy;
-  const { result, missing } = await translateManyCached(slots.map((s) => s[0]), "ru");
-  slots.forEach(([, put], i) => put(result[i]));
-  if (missing.length) warmTranslate(missing, "ru");
+  const need = [...new Set(slots.map((x) => x[0]).filter((t) => !MEM.has(t)))];
+  if (need.length) {
+    const { result, missing } = await translateManyCached(need, "ru");
+    if (MEM.size > MEM_MAX) MEM.clear();
+    need.forEach((t, i) => result[i] !== t && MEM.set(t, result[i]));
+    if (missing.length) warmTranslate(missing, "ru");
+  }
+  slots.forEach(([t, put]) => put(MEM.get(t) ?? t));
   return copy;
 }
 
