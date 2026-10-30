@@ -13,6 +13,7 @@ const { searchWeb, formatSearchContext } = require("./webSearch");
 const { localLegalAnswer } = require("./localAI");
 const { tieredAnswer } = require("./llm/tiered"); // tarifga qarab AI (2026-10-19)
 const { siteHelp } = require("./localAI/siteHelp"); // "Testlar ber" kabi so'rovlar
+const { makeQuiz } = require("./localAI/quizMaker"); // "… haqida test tuzib ber" (2026-10-30)
 const {
   isFileRequest,
   fileRequestReply,
@@ -1352,6 +1353,9 @@ async function getLegalAdvice(
   // 2b. Sayt bo'limi so'ralgan ("Testlar ber", "dars ber") — bo'limga havola
   //     (localAI/siteHelp.js; avval "modda topilmadi" qaytardi)
   if (!imageBase64 && !opts.fromVoice) {
+    // "… haqida test tuzib ber" — sayt darslari va test bazasidan test (localAI/quizMaker.js)
+    const quiz = await makeQuiz(msg, detectedLang);
+    if (quiz) return quiz;
     const site = siteHelp(msg, detectedLang);
     if (site) return { ...site, provider: "local" };
   }

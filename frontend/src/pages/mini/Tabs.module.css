@@ -1,0 +1,81 @@
+/* Vaziyatlar, Takrorlash, Yutuqlar, Reyting, Profil bo'limlari. */
+.list { display: grid; gap: 10px; }
+.group { font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #8b6419; margin: 14px 2px 8px; }
+.item {
+  display: flex; align-items: center; gap: 12px; width: 100%; padding: 14px; text-align: left;
+  border-radius: 16px; border: 1px solid rgba(11, 19, 34, 0.05); background: #fff; color: #0b1322;
+  font: inherit; cursor: pointer; box-shadow: 0 1px 2px rgba(11, 19, 34, 0.05), 0 6px 18px rgba(11, 19, 34, 0.06);
+  transition: transform 0.12s;
+}
+.item:active { transform: scale(0.985); }
+.itemIcon { flex: none; width: 42px; height: 42px; border-radius: 13px; display: grid; place-items: center; background: #fdf5e6; color: #8b6419; }
+.itemIcon svg { width: 20px; height: 20px; }
+.itemDone { background: #edf7f2; color: #1a7a45; }
+.itemBody { flex: 1; min-width: 0; }
+.itemBody b { display: block; font-size: 14.5px; line-height: 1.35; }
+.itemBody small { color: #6a6760; font-size: 12.5px; }
+.chev { width: 18px; height: 18px; color: #b5b0a5; flex: none; }
+
+.empty { text-align: center; padding: 28px 16px; display: grid; justify-items: center; gap: 10px; }
+.empty p { color: #6a6760; font-size: 14px; line-height: 1.55; max-width: 320px; }
+.qCard { margin-bottom: 14px; }
+.qText { font-size: 14px; line-height: 1.55; color: #3b4558; margin: 4px 0 2px; }
+.qTitle { font-size: 12px; font-weight: 600; color: #8b6419; text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* Yutuqlar */
+.levelCard { display: flex; align-items: center; gap: 14px; padding: 16px; border-radius: 20px; background: radial-gradient(120% 140% at 100% 0%, #24365a 0%, #101a2e 55%, #0b1322 100%); color: #fff; margin-bottom: 14px; }
+.levelNum { flex: none; width: 58px; height: 58px; border-radius: 18px; display: grid; place-items: center; background: linear-gradient(145deg, #e0b060, #c9953a); color: #0b1322; font-size: 24px; font-weight: 800; }
+.levelCard > div:last-child { flex: 1; min-width: 0; }
+.levelCard b { font-size: 16px; }
+.levelCard small { display: block; color: #c8cfdc; font-size: 12.5px; margin-top: 6px; }
+.bar { height: 8px; border-radius: 99px; background: rgba(255, 255, 255, 0.12); overflow: hidden; margin-top: 8px; }
+.bar i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #e0b060, #c9953a); }
+.sectionHead { display: flex; align-items: baseline; justify-content: space-between; margin: 18px 2px 10px; }
+.sectionHead h3 { font-size: 16px; font-weight: 700; }
+.sectionHead small { color: #6a6760; font-size: 12.5px; }
+.week { display: grid; grid-template-columns: repeat(7, 1fr); align-items: end; gap: 8px; height: 150px; padding: 14px 12px 10px; }
+.day { display: grid; justify-items: center; gap: 6px; height: 100%; align-content: end; font-size: 11px; color: #6a6760; }
+.day i { width: 100%; max-width: 26px; border-radius: 8px 8px 4px 4px; background: #e9e6de; min-height: 6px; transition: height 0.5s; }
+.day b { font-size: 10.5px; color: #0b1322; }
+.dayOn i { background: linear-gradient(180deg, #e0b060, #c9953a); }
+.dayToday { color: #0b1322; font-weight: 700; }
+.badges { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.badge { padding: 14px 12px; border-radius: 16px; background: #fff; border: 1px solid #eceae3; text-align: center; }
+.badge svg { width: 30px; height: 30px; color: #c9953a; margin-bottom: 6px; }
+.badge b { display: block; font-size: 13.5px; }
+.badge small { display: block; color: #6a6760; font-size: 11.5px; line-height: 1.4; margin-top: 3px; }
+.badgeOff { opacity: 0.5; filter: grayscale(1); }
+
+/* Reyting */
+.rank { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 16px; background: #fff; border: 1px solid #eceae3; }
+.rankMe { border-color: #c9953a; background: #fffaf0; }
+.place { flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 14px; background: #f3f1eb; color: #6a6760; }
+.p1 { background: linear-gradient(145deg, #f3d48c, #c9953a); color: #0b1322; }
+.p2 { background: linear-gradient(145deg, #e7e9ee, #b8bdc8); color: #0b1322; }
+.p3 { background: linear-gradient(145deg, #e9c2a0, #b07a4f); color: #fff; }
+.rank .itemBody b { font-size: 14px; }
+.rankXp { font-weight: 700; font-size: 14px; color: #8b6419; }
+.hidden { text-align: center; color: #a29e94; font-size: 18px; letter-spacing: 6px; padding: 2px 0; }
+.myCard { margin-top: 14px; padding: 16px; border-radius: 20px; background: #0b1322; color: #fff; text-align: center; }
+.myCard small { color: #c8cfdc; font-size: 12.5px; }
+.myCard strong { display: block; font-size: 34px; font-weight: 800; color: #e0b060; margin: 4px 0; }
+.note { font-size: 12.5px; color: #6a6760; line-height: 1.5; margin-top: 12px; text-align: center; }
+
+/* Profil */
+.profileHead { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+.bigAvatar { width: 60px; height: 60px; border-radius: 50%; display: grid; place-items: center; background: #0b1322; color: #e0b060; font-size: 24px; font-weight: 700; border: 3px solid #c9953a; }
+.profileHead b { display: block; font-size: 18px; }
+.profileHead small { color: #6a6760; font-size: 13px; }
+.stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.stat { padding: 14px; border-radius: 16px; background: #fff; border: 1px solid #eceae3; }
+.stat small { display: flex; align-items: center; gap: 5px; color: #6a6760; font-size: 12px; }
+.stat small svg { width: 14px; height: 14px; color: #c9953a; }
+.stat b { display: block; font-size: 20px; font-weight: 800; margin-top: 4px; }
+.goals { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.goal { padding: 12px 6px; border-radius: 14px; border: 1.5px solid #e6e2d8; background: #fff; font: inherit; font-weight: 700; font-size: 15px; color: #0b1322; cursor: pointer; }
+.goal small { display: block; font-weight: 500; font-size: 11px; color: #6a6760; }
+.goalOn { border-color: #c9953a; background: #fdf5e6; }
+.topics { display: grid; gap: 10px; }
+.topics h4 { font-size: 13.5px; margin-bottom: 6px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chips span { padding: 5px 10px; border-radius: 99px; background: #edf7f2; color: #14532d; font-size: 12.5px; }

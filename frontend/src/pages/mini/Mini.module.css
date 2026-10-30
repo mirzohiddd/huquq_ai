@@ -1,0 +1,113 @@
+/* TELEGRAM MINI APP — qobiq va umumiy elementlar.
+   Palitra saytnikidek: navy (#0b1322 → #162035), oltin (#c9953a),
+   krem fon (#f8f6f1), Poppins shrifti (global.css). */
+.app {
+  --navy: #0b1322;
+  --navy-mid: #162035;
+  --gold: #c9953a;
+  --gold-light: #e0b060;
+  --gold-text: #8b6419;
+  --gold-pale: #fdf5e6;
+  --cream: #f8f6f1;
+  --line: #eceae3;
+  --muted: #6a6760;
+  --green: #1a7a45;
+  --green-bg: #edf7f2;
+  --red: #a12a2a;
+  --red-bg: #fdf0f0;
+  --shadow: 0 1px 2px rgba(11, 19, 34, 0.05), 0 8px 24px rgba(11, 19, 34, 0.07);
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--cream);
+  color: var(--navy);
+  font-family: var(--font-body, "Poppins", system-ui, sans-serif);
+  padding-bottom: calc(76px + env(safe-area-inset-bottom));
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ── Sarlavha ── */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: linear-gradient(180deg, #101a2e 0%, var(--navy) 100%);
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(11, 19, 34, 0.18);
+}
+.brand { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 16px; letter-spacing: -0.01em; }
+.brand b { color: var(--gold-light); font-weight: 700; }
+.brandMark { width: 28px; height: 28px; color: var(--gold-light); }
+.headRight { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 10px; border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 13px; font-weight: 600;
+}
+.pill svg { width: 15px; height: 15px; color: var(--gold-light); }
+.avatar {
+  width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--gold);
+  background: var(--navy-mid); color: var(--gold-light); font-weight: 700; font-size: 14px;
+  display: grid; place-items: center; cursor: pointer;
+}
+
+.main { padding: 16px; max-width: 640px; margin: 0 auto; }
+.screenTitle { font-size: 21px; font-weight: 700; letter-spacing: -0.02em; margin: 4px 0 4px; }
+.screenSub { color: var(--muted); font-size: 13.5px; line-height: 1.5; margin-bottom: 16px; }
+
+/* ── Pastki menyu ── */
+.nav {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  padding: 6px 6px calc(6px + env(safe-area-inset-bottom));
+  background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid var(--line);
+}
+.navBtn {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: 6px 2px; border: 0; background: none; border-radius: 12px;
+  color: #8d8a82; font: inherit; font-size: 10.5px; font-weight: 500; cursor: pointer;
+  transition: color 0.2s, background 0.2s;
+}
+.navBtn svg { width: 22px; height: 22px; }
+.navOn { color: var(--navy); background: var(--gold-pale); }
+.navOn svg { color: var(--gold-text); }
+.badgeDot {
+  position: absolute; transform: translate(12px, -4px);
+  min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px;
+  background: var(--red); color: #fff; font-size: 10px; font-weight: 700; line-height: 16px;
+}
+.navIcon { position: relative; display: grid; place-items: center; }
+
+/* ── Umumiy kartalar va tugmalar ── */
+.card { background: #fff; border-radius: 18px; padding: 16px; box-shadow: var(--shadow); border: 1px solid rgba(11, 19, 34, 0.04); }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; padding: 14px 18px; border: 0; border-radius: 14px;
+  background: linear-gradient(135deg, #1e2d4a, var(--navy)); color: #fff;
+  font: inherit; font-weight: 600; font-size: 15px; cursor: pointer;
+  box-shadow: 0 6px 16px rgba(11, 19, 34, 0.22); transition: transform 0.15s, opacity 0.2s;
+}
+.btn:active { transform: scale(0.98); }
+.btn:disabled { opacity: 0.45; cursor: default; box-shadow: none; }
+.btnGold { background: linear-gradient(135deg, var(--gold-light), var(--gold)); color: var(--navy); box-shadow: 0 6px 16px rgba(201, 149, 58, 0.35); }
+.btnGhost {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 10px 14px; border-radius: 12px; border: 1px solid var(--line); background: #fff;
+  color: var(--navy); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer;
+}
+.btnGhost svg { width: 17px; height: 17px; color: var(--gold-text); }
+.center { min-height: 70vh; display: grid; place-items: center; text-align: center; padding: 24px; }
+.centerBox { max-width: 340px; display: grid; gap: 14px; justify-items: center; }
+.centerBox p { color: var(--muted); line-height: 1.55; font-size: 14px; }
+.spin { width: 28px; height: 28px; color: var(--gold); animation: spin 0.9s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.fadeIn { animation: fadeIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .fadeIn, .spin { animation: none; } }
+.centerSmall { display: grid; justify-items: center; gap: 10px; padding: 28px 12px; text-align: center; }
+.spinLabel { color: var(--muted, #6a6760); font-size: 13.5px; }

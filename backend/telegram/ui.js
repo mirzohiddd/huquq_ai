@@ -29,6 +29,9 @@ const MENU = {
 };
 // Ikki tilda BIR XIL — tilni tushunmagan odam ham taniydi
 const LANG_BTN = "🌐 Til / Язык";
+// Telegram Mini App (sayt `/tg`). `web_app` tugmasi matn YUBORMAYDI — menuAction'ga ta'sir qilmaydi
+const APP_URL = `${(process.env.SITE_URL || "https://www.huquqtech.uz").replace(/\/+$/, "")}/tg`;
+const APP_BTN = { uz: "📱 HuquqTech ilovasi", ru: "📱 Приложение HuquqTech" };
 
 /** Bosilgan menyu tugmasi qaysi amal? (eski yorliqlar ham taniladi) */
 const LEGACY = {
@@ -54,6 +57,7 @@ function mainMenu(lang) {
   return {
     reply_markup: {
       keyboard: [
+        [{ text: APP_BTN[lang] || APP_BTN.uz, web_app: { url: APP_URL } }],
         [m.lessons, m.tests],
         [m.plans, m.account],
         [m.new, m.help],

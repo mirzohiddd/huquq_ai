@@ -333,6 +333,8 @@ app.use("/api/lessons", require("./routes/lessons"));
 app.use("/api/lesson-practice", require("./routes/lessonPractice"));
 app.use("/api/tests", require("./routes/tests"));
 app.use("/api/progress", require("./routes/progress"));
+app.use("/api/mini", require("./routes/miniApp")); // Telegram mini app (2026-10-30)
+app.use("/api/mini", require("./routes/miniAppMore"));
 app.use("/api/admin/content", require("./routes/adminContent"));
 
 /* ───── OCHIQ (INDEKSLANADIGAN) QONUN SAHIFALARI ─────

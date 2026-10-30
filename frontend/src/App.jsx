@@ -26,6 +26,7 @@ const Lessons = lazy(() => import("./pages/Lessons"));
 const Tests = lazy(() => import("./pages/Tests"));
 const Legal = lazy(() => import("./pages/Legal"));
 const AiTools = lazy(() => import("./pages/aiTools/AiToolsPage"));
+const MiniApp = lazy(() => import("./pages/mini/MiniApp")); // Telegram Mini App
 
 const Login = lazy(() =>
   import("./pages/AuthPages").then((m) => ({ default: m.Login })),
@@ -194,6 +195,7 @@ function AppRoutes() {
         }
       />
       <Route path="/voice" element={<VoiceAssistant />} />
+      <Route path="/tg" element={<MiniApp />} />
       {/* Eslatma: asosiy saytdagi eski admin panel olib tashlandi —
           haqiqiy admin paneli alohida `admin/` ilovasi. */}
       <Route path="*" element={<Navigate to="/" replace />} />
