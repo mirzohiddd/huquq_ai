@@ -81,7 +81,11 @@ router.post("/lesson/:id/choice", userGuard, async (req, res) => {
     if (!opt.ok && !o.doc.lessons?.[o.l.id]) await store.addMistake(req.authUser.id, content.lessonKey(o.l.id));
     const right = o.l.choice.options.find((x) => x.ok);
     // `quotes` — «Manbani ko'rish» uchun darhol (xotiradagi korpusdan, AI'siz)
-    res.json({ ok: opt.ok, why: opt.why, correct: view.correct, rightText: right.t, rightWhy: right.why, quotes: await quotesOf(o.l.refs) });
+    res.json({
+      ok: opt.ok, why: opt.why, correct: view.correct, rightText: right.t, rightWhy: right.why,
+      review: content.reviewOf(content.lessonKey(o.l.id), o.l.choice.options), // xatolar tahlili
+      quotes: await quotesOf(o.l.refs),
+    });
   } catch (err) {
     fail(res, err, "choice");
   }
@@ -124,7 +128,9 @@ router.post("/lesson/:id/complete", userGuard, async (req, res) => {
     const idx = content.LESSONS.findIndex((x) => x.id === l.id);
     const next = content.LESSONS[idx + 1];
     // Bo'lim to'liq tugadimi — mini app katta bayram (ovoz + animatsiya) ko'rsatadi
-    const unitDone = xp > 0 && content.LESSONS.filter((x) => x.unit === l.unit).every((x) => doc.lessons?.[x.id]);
+    const allDone = content.LESSONS.filter((x) => x.unit === l.unit).every((x) => doc.lessons?.[x.id]);
+    const unitDone = xp > 0 && allDone;
+    const exam = allDone && !doc.exams?.[l.unit] ? l.unit : null; // bo'lim imtihoni navbatda — keyingi dars hali yopiq
     res.json({
       unitDone,
       unitTitle: content.UNITS.find((u) => u.key === l.unit).title,
@@ -133,8 +139,10 @@ router.post("/lesson/:id/complete", userGuard, async (req, res) => {
       level: s.level,
       streak: s.streak,
       takeaway: l.takeaway,
+      goals: l.goals, // «Endi siz qila olasiz»
       quotes: await quotesOf(l.refs),
-      next: next?.id || null,
+      next: exam ? null : next?.id || null,
+      exam,
       newBadges: s.badges.filter((x) => x.earned).map((x) => x.id),
     });
   } catch (err) {

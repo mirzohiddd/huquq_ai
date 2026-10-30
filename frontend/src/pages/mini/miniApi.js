@@ -85,6 +85,9 @@ export const mini = {
   me: () => api.get("/me").then((r) => r.data),
   goal: (goal) => api.post("/goal", { goal }).then((r) => r.data),
   rating: () => api.get("/rating").then((r) => r.data),
+  exam: (unit) => api.get(`/exam/${unit}`).then((r) => r.data),
+  examAnswer: (unit, key, option) => api.post(`/exam/${unit}/answer`, { key, option }).then((r) => r.data),
+  examFinish: (unit, answers) => api.post(`/exam/${unit}/finish`, { answers }).then((r) => r.data),
   explain: (body) => api.post("/explain", body).then((r) => r.data),
   // Qalqonning ovozi — saytning keshlangan TTS'i (o'zbekcha neyron ovoz)
   speak: (text) =>

@@ -27,6 +27,7 @@ const LessonPlayer = lazy(() => import("./LessonPlayer"));
 const SituationPlayer = lazy(() => import("./SituationPlayer"));
 const SiteLessons = lazy(() => import("./SiteLessons"));
 const SiteTests = lazy(() => import("./SiteTests"));
+const ExamPlayer = lazy(() => import("./ExamPlayer"));
 
 /* Foydalanuvchi Profil → «Til» da tanlagan til (shu qurilmada saqlanadi) */
 const LANG_KEY = "miniLang";
@@ -133,12 +134,9 @@ export default function MiniApp() {
     setAnim,
     openLibrary: (id) => setOverlay({ kind: "library", id: id || null }),
     openTests: () => setOverlay({ kind: "tests", id: "all" }),
+    openExam: (unit) => setOverlay({ kind: "exam", id: unit }),
     setLang: (l) => {
-      try {
-        localStorage.setItem(LANG_KEY, l);
-      } catch {
-        /* yopiq saqlash — sessiya davomida ishlaydi */
-      }
+      try { localStorage.setItem(LANG_KEY, l); } catch { /* yopiq saqlash — sessiya davomida ishlaydi */ }
       setApiLang(l);
       setLang(l);
       loadPath();
@@ -167,6 +165,7 @@ export default function MiniApp() {
         {overlay?.kind === "lesson" && <LessonPlayer key={overlay.id} id={overlay.id} ctx={ctx} />}
         {overlay?.kind === "situation" && <SituationPlayer key={overlay.id} id={overlay.id} ctx={ctx} />}
         {overlay?.kind === "library" && <main className={s.main}><SiteLessons key={`${lang}-${overlay.id}`} startId={overlay.id} ctx={ctx} /></main>}
+        {overlay?.kind === "exam" && <ExamPlayer key={overlay.id} unit={overlay.id} ctx={ctx} />}
         {overlay?.kind === "tests" && <main className={s.main}><SiteTests key={lang} ctx={ctx} /></main>}
         {!overlay && (
           <main className={s.main} key={lang}>

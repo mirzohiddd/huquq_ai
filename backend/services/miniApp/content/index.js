@@ -9,7 +9,9 @@
  * bo'lib qolmasin. Yuklanishda tuzilma tekshiriladi — xato darhol chiqsin.
  */
 const { UNITS, SIT_CATS } = require("./units");
-const LESSONS = UNITS.flatMap((u) => require(`./lessons-${u.key}`).map((l) => ({ ...l, unit: u.key })));
+// Natijaga yo'naltirilgan metodika: maqsad, qoida va amaliy qadamlar (outcomes-*.js)
+const OUTCOMES = { ...require("./outcomes-a"), ...require("./outcomes-b") };
+const LESSONS = UNITS.flatMap((u) => require(`./lessons-${u.key}`).map((l) => ({ ...l, ...OUTCOMES[l.id], unit: u.key })));
 const SITUATIONS = SIT_CATS.flatMap((c) => require(`./sit-${c.key}`).map((s) => ({ ...s, cat: c.key })));
 
 (function validate() {
@@ -28,6 +30,7 @@ const SITUATIONS = SIT_CATS.flatMap((c) => require(`./sit-${c.key}`).map((s) => 
   }
   for (const l of LESSONS) {
     one(l.choice.options, l.id);
+    if (l.goals?.length < 2 || !l.rule || l.steps?.length < 3) throw new Error(`miniApp: ${l.id} — maqsad/qoida/qadamlar yo'q`);
     if (l.game.type === "order" && l.game.items.length < 3) throw new Error(`miniApp: ${l.id} — o'yin qisqa`);
     if (l.game.type === "spot" && !l.game.lines[l.game.answer]) throw new Error(`miniApp: ${l.id} — spot javobi yo'q`);
   }
@@ -71,7 +74,14 @@ function optionView(key, options) {
   };
 }
 
+/** Javobdan keyin: har bir variant nega to'g'ri yoki xato (ko'rinadigan tartibda). */
+const reviewOf = (key, options) => {
+  const v = optionView(key, options);
+  return v.texts.map((t, i) => ({ t, ok: v.pick(i).ok, why: v.pick(i).why }));
+};
+
 const lessonKey = (id) => `L:${id}`;
+const examKey = (id) => `X:${id}`; // bo'lim imtihoni — boshqa tartibda aralashadi
 const stepKey = (id, i) => `S:${id}:${i}`;
 
 function publicLesson(l) {
@@ -87,6 +97,9 @@ function publicLesson(l) {
     icon: l.icon || unit.icon,
     title: l.title,
     story: l.story,
+    goals: l.goals,
+    rule: l.rule,
+    steps: l.steps,
     choice: { q: l.choice.q, options: optionView(lessonKey(l.id), l.choice.options).texts },
     game,
   };
@@ -102,10 +115,10 @@ function publicSituation(s) {
   };
 }
 
-/* Takrorlash kaliti: "L:<dars>" (tanlov) yoki "S:<vaziyat>:<qadam>". */
+/* Takrorlash kaliti: "L:<dars>" (tanlov), "X:<dars>" (imtihon) yoki "S:<vaziyat>:<qadam>". */
 function questionByKey(key) {
   const [kind, id, idx] = String(key).split(":");
-  if (kind === "L") {
+  if (kind === "L" || kind === "X") {
     const l = lessonById.get(id);
     return l && { key, title: l.title, icon: l.icon, text: l.story, q: l.choice.q, options: l.choice.options, refs: l.refs };
   }
@@ -116,5 +129,5 @@ function questionByKey(key) {
 
 module.exports = {
   UNITS, SIT_CATS, LESSONS, SITUATIONS, lessonById, situationById,
-  publicLesson, publicSituation, questionByKey, optionView, lessonKey, stepKey,
+  publicLesson, publicSituation, questionByKey, optionView, reviewOf, lessonKey, examKey, stepKey,
 };

@@ -47,7 +47,8 @@ async function verdict(key, options, pub, refs) {
   const opt = view.pick(pub);
   if (!opt) return null;
   const right = options.find((x) => x.ok);
-  return { opt, body: { ok: opt.ok, why: opt.why, correct: view.correct, rightText: right.t, rightWhy: right.why, quotes: await quotesOf(refs) } };
+  const review = content.reviewOf(key, options); // har bir variant nega to'g'ri/xato
+  return { opt, body: { ok: opt.ok, why: opt.why, correct: view.correct, rightText: right.t, rightWhy: right.why, review, quotes: await quotesOf(refs) } };
 }
 
 /* Bitta qaror: oqibat (to'g'ri/xato + nima uchun). Xato — "Takrorlash"ga. */
@@ -147,6 +148,8 @@ router.post("/explain", userGuard, webLimitGuard, async (req, res) => {
     fail(res, err, "explain");
   }
 });
+
+router.use(require("./miniAppExam")); // bo'lim imtihonlari
 
 // Ruscha tarjimani oldindan tayyorlash — faqat keshda yo'qlari (keyingi ishga tushishlarda AI chaqirilmaydi)
 setTimeout(() => warmAll().then((r) => r.translated && console.log("Mini app ruscha tarjima:", r)).catch(() => {}), 90 * 1000).unref();

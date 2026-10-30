@@ -10,7 +10,8 @@ const { MiniProgress } = require("../../models/miniApp");
 const content = require("./content");
 const stats = require("./stats");
 
-const XP = { lesson: 20, situation: 10, review: 5 };
+const XP = { lesson: 20, situation: 10, review: 5, exam: 50 };
+const EXAM_PASS = 4; // 5 savoldan kamida 4 tasi — bo'lim o'zlashtirilgan
 
 async function getDoc(userId) {
   return (await MiniProgress.findOne({ userId }).lean()) || { xp: 0, lessons: {}, situations: {}, mistakes: [], days: {}, reviewed: 0, goal: 20 };
@@ -55,22 +56,25 @@ async function setGoal(userId, goal) {
   return g;
 }
 
-/** Dars yo'li: tugatilgan, ochiq (keyingisi) va yopiq. */
+/** Dars yo'li: tugatilgan, ochiq (keyingisi) va yopiq. Bo'lim oxirida — imtihon:
+    keyingi bo'lim faqat imtihondan o'tgandan keyin ochiladi (natijaga chiqish). */
 function pathOf(doc) {
   let open = true;
-  return content.UNITS.map((u) => ({
-    key: u.key,
-    title: u.title,
-    level: u.level,
-    icon: u.icon,
-    lessons: content.LESSONS.filter((l) => l.unit === u.key).map((l) => {
+  return content.UNITS.map((u) => {
+    const lessons = content.LESSONS.filter((l) => l.unit === u.key).map((l) => {
       const done = !!doc.lessons?.[l.id];
       const status = done ? "done" : open ? "open" : "locked";
       if (!done) open = false; // birinchi tugallanmagan dars ochiq, keyingilari yopiq
       return { id: l.id, title: l.title, status };
-    }),
-  }));
+    });
+    const passed = doc.exams?.[u.key];
+    const exam = { status: passed ? "done" : open ? "open" : "locked", score: passed?.score ?? null };
+    if (!passed) open = false;
+    return { key: u.key, title: u.title, level: u.level, icon: u.icon, lessons, exam };
+  });
 }
+
+const examOpen = (doc, unit) => pathOf(doc).find((u) => u.key === unit)?.exam.status !== "locked";
 
 /** Joriy hafta (dushanbadan): har kun faolmi. Takrorlash sahifasidagi nuqtalar. */
 function weekDots(doc) {
@@ -133,4 +137,4 @@ async function rating(userId) {
   };
 }
 
-module.exports = { XP, getDoc, touch, finishOnce, addMistake, fixMistake, setGoal, pathOf, weekDots, isUnlocked, summaryOf, rating };
+module.exports = { XP, EXAM_PASS, examOpen, getDoc, touch, finishOnce, addMistake, fixMistake, setGoal, pathOf, weekDots, isUnlocked, summaryOf, rating };

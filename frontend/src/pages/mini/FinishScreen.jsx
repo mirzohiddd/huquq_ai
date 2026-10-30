@@ -3,11 +3,12 @@
  * asosiy xulosa va qonundan jonli iqtibos.
  */
 import React, { useEffect, useState } from "react";
-import { Zap, Flame, BookOpen, ChevronRight } from "lucide-react";
+import { Zap, Flame, BookOpen, ChevronRight, CircleCheck, GraduationCap } from "lucide-react";
 import Hero from "./Hero";
 import { speak, stopVoice } from "./sound";
 import f from "./Finish.module.css";
 import m from "./Mini.module.css";
+import st from "./Steps.module.css";
 
 export default function FinishScreen({ result, ctx, title, sub }) {
   const { t } = ctx;
@@ -44,6 +45,13 @@ export default function FinishScreen({ result, ctx, title, sub }) {
         {result?.streak > 0 && <span><Flame aria-hidden="true" /> {result.streak}</span>}
       </div>
 
+      {result?.goals?.length > 0 && (
+        <div className={st.can}>
+          <h4>{t.met.canNow}</h4>
+          <ul>{result.goals.map((g) => <li key={g}><CircleCheck aria-hidden="true" />{g}</li>)}</ul>
+        </div>
+      )}
+
       {result?.takeaway && (
         <div className={f.takeaway}>
           <b>{t.takeaway}</b>
@@ -64,12 +72,17 @@ export default function FinishScreen({ result, ctx, title, sub }) {
       )}
 
       <div className={f.actions}>
+        {result?.exam && (
+          <button type="button" className={`${m.btn} ${m.btnGold}`} onClick={() => ctx.openExam(result.exam)}>
+            <GraduationCap aria-hidden="true" /> {t.met.goExam}
+          </button>
+        )}
         {result?.next && (
           <button type="button" className={`${m.btn} ${m.btnGold}`} onClick={() => ctx.openLessonNext(result.next)}>
             {t.nextLesson} <ChevronRight aria-hidden="true" />
           </button>
         )}
-        <button type="button" className={result?.next ? m.btnGhost : m.btn} onClick={ctx.close}>{t.toMap}</button>
+        <button type="button" className={result?.next || result?.exam ? m.btnGhost : m.btn} onClick={ctx.close}>{t.toMap}</button>
       </div>
     </div>
   );

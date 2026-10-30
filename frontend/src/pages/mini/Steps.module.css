@@ -1,0 +1,49 @@
+/* Dars bosqichlari: maqsad, qoida, tahlil, amaliy qadamlar, bo'lim imtihoni. */
+.stages { list-style: none; display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; margin: 0 0 12px; padding: 0; }
+.stages li { display: grid; justify-items: center; gap: 4px; min-width: 0; font-size: 10.5px; color: #9a968c; }
+.stages i { display: block; width: 100%; height: 4px; border-radius: 99px; background: #e6e2d8; }
+.stages span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+.past i { background: #c9953a; }
+.past { color: #6a6760; }
+.now i { background: #1b2a4a; }
+.now { color: #14213d; font-weight: 700; }
+
+.heroRow { display: flex; align-items: center; gap: 12px; margin: 6px 0 12px; }
+.h2 { font-size: clamp(20px, 5.8vw, 24px); font-weight: 800; color: #14213d; letter-spacing: -0.02em; line-height: 1.25; }
+.goals { list-style: none; padding: 0; margin: 0 0 14px; display: grid; gap: 10px; }
+.goals li { display: flex; gap: 12px; align-items: flex-start; padding: 14px; border-radius: 16px; background: #fff; border: 1px solid #eee9de; font-size: 15.5px; line-height: 1.45; color: #14213d; }
+.goals svg { flex: none; width: 22px; height: 22px; color: #b8872a; margin-top: 1px; }
+.rule { padding: 16px; border-radius: 18px; background: #fbf1dc; }
+.rule h4, .review h4 { display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #8b6419; margin-bottom: 8px; }
+.rule h4 svg { width: 16px; height: 16px; }
+.rule p { font-size: 15.5px; line-height: 1.6; color: #24324a; }
+
+.lead { text-align: center; font-size: 15px; line-height: 1.5; color: #4b5266; margin: -6px 6px 16px; }
+.steps { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.steps li { display: flex; gap: 12px; align-items: flex-start; padding: 14px; border-radius: 16px; background: #fff; border: 1px solid #eee9de; font-size: 15.5px; line-height: 1.45; color: #14213d; }
+.steps b { flex: none; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: #1b2a4a; color: #e0b060; font-size: 14px; }
+
+.review { margin-bottom: 14px; }
+.opt { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: 14px; background: #fff; border: 1px solid #eee9de; margin-bottom: 8px; }
+.opt b { display: block; font-size: 14.5px; line-height: 1.4; color: #14213d; }
+.opt p { font-size: 13.5px; line-height: 1.5; color: #4b5266; margin-top: 3px; }
+.mark { flex: none; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; background: #fdf0ee; color: #c0433b; margin-top: 1px; }
+.mark svg { width: 14px; height: 14px; stroke-width: 3; }
+.optOk { border-color: #e7cf98; background: #fdf8ee; }
+.optOk .mark { background: #b8872a; color: #fff; }
+
+/* Yakun: «Endi siz qila olasiz» */
+.can { text-align: left; padding: 14px 16px; border-radius: 16px; background: #fff; border: 1px solid #eee9de; margin-bottom: 12px; }
+.can h4 { font-size: 12.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #8b6419; margin-bottom: 8px; }
+.can li { display: flex; gap: 8px; align-items: flex-start; font-size: 14.5px; line-height: 1.45; margin-bottom: 6px; list-style: none; }
+.can ul { padding: 0; margin: 0; }
+.can svg { flex: none; width: 18px; height: 18px; color: #1a7a45; margin-top: 2px; }
+
+/* Yo'ldagi imtihon tuguni */
+.examNode { display: flex; align-items: center; gap: 12px; width: 100%; padding: 14px; margin-top: 6px; border-radius: 18px; border: 1.5px dashed #d9b45c; background: #fdf8ee; font: inherit; color: #14213d; text-align: left; cursor: pointer; }
+.examNode b { display: block; font-size: 15px; }
+.examNode small { font-size: 12.5px; color: #6a6760; }
+.examNode > svg { flex: none; width: 34px; height: 34px; padding: 7px; border-radius: 12px; background: #1b2a4a; color: #e0b060; }
+.examLocked { opacity: 0.6; border-color: #d9d5cc; background: #f6f5f1; }
+.examDone { border-style: solid; border-color: #b7dfc8; background: #edf7f2; }
+.examDone > svg { background: #1a7a45; color: #fff; }

@@ -1,10 +1,11 @@
 /**
  * NATIJA EKRANI — «To'g'ri javob!» / «Noto'g'ri javob»: qalqon (gapiradi),
- * to'g'ri javob kartasi, «Nega?», «Manbani ko'rish», «AI bilan tushunish».
+ * to'g'ri javob kartasi, «Nega?», variantlar tahlili, «Manbani ko'rish», «AI bilan tushunish».
  */
 import React, { useEffect, useState } from "react";
 import { Check, X, ChevronRight, Link2, Sparkles } from "lucide-react";
 import Hero from "./Hero";
+import { ReviewList } from "./LessonSteps";
 import { haptic } from "./tg";
 import { sfx, speak, stopVoice } from "./sound";
 import q from "./Quiz.module.css";
@@ -48,6 +49,7 @@ export default function ResultView({ res, t, onNext, nextLabel, onSource, onExpl
         </div>
         <p>{why}</p>
       </div>
+      <ReviewList items={res.review} t={t} />
       {onSource && (
         <button type="button" className={q.ghost} onClick={onSource}>
           <Link2 /> {t.source} <ChevronRight className={q.chev} />

@@ -19,6 +19,8 @@ const MiniProgressSchema = new mongoose.Schema(
     // { [vaziyatId]: { at: Date, score: Number } }
     situations: { type: mongoose.Schema.Types.Mixed, default: {} },
     // Xato qilingan savollar kalitlari ("L:headphones", "S:s-phone:1")
+    // { [bo'limKaliti]: { at: Date, score: Number } } — bo'lim imtihonidan o'tilgan
+    exams: { type: mongoose.Schema.Types.Mixed, default: {} },
     mistakes: { type: [String], default: [] },
     reviewed: { type: Number, default: 0 },
     // { "2026-10-30": xp } — Toshkent sanasi; ketma-ket kunlar va haftalik natija

@@ -1,8 +1,12 @@
 /**
- * BITTA DARS: savol («Siz nima qilardingiz?») → natija («To'g'ri javob!»,
- * qalqon gapiradi) → o'yin (ketma-ketlik yoki hujjatdan topish) → yakun.
+ * BITTA DARS — natijaga yo'naltirilgan metodika bo'yicha 6 bosqich:
+ *   1-2. Maqsad + qoida («Bu darsdan keyin siz…», vaziyatdan OLDIN)
+ *   3.   Vaziyat («Siz nima qilardingiz?»)
+ *   4.   Tahlil (to'g'ri javob, «Nega?», har bir variant nega to'g'ri/xato)
+ *   5.   Mashq (ketma-ketlik yoki hujjatdan topish o'yini)
+ *   6.   Amal («Hayotda qo'llash» — aniq qadamlar)
+ * → Yakun: «Endi siz qila olasiz» + XP. Bo'lim tugasa — bo'lim imtihoniga yo'l.
  * Javoblar serverda tekshiriladi; XP faqat birinchi yakunda beriladi.
- * Bo'lim to'liq tugasa — katta fanfara (`unitDone`).
  */
 import React, { useEffect, useState } from "react";
 import { X } from "lucide-react";
@@ -16,14 +20,17 @@ import OrderGame from "./OrderGame";
 import SpotGame from "./SpotGame";
 import ExplainSheet from "./ExplainSheet";
 import FinishScreen from "./FinishScreen";
+import { Stages, IntroView, ApplyView } from "./LessonSteps";
 import m from "./Mini.module.css";
 import s from "./Lesson.module.css";
+
+const STAGE = { intro: 1, question: 2, result: 3, game: 4, apply: 5 };
 
 export default function LessonPlayer({ id, ctx }) {
   const { t, lang } = ctx;
   const [lesson, setLesson] = useState(null);
   const [err, setErr] = useState("");
-  const [phase, setPhase] = useState("question"); // question | result | game | finish
+  const [phase, setPhase] = useState("intro"); // intro | question | result | game | apply | finish
   const [first, setFirst] = useState(null); // birinchi tanlangan variant
   const [res, setRes] = useState(null);
   const [solution, setSolution] = useState(null);
@@ -76,16 +83,15 @@ export default function LessonPlayer({ id, ctx }) {
   if (phase === "finish") return <FinishScreen result={result} ctx={ctx} />;
 
   const GameView = lesson.game.type === "order" ? OrderGame : SpotGame;
-  const prog = { question: 0.15, result: 1, game: solution !== null ? 3 : 1.6 }[phase];
 
   return (
     <div className={`${s.player} ${m.fadeIn}`} key={phase}>
       <div className={s.topbar}>
         <button type="button" className={s.close} onClick={ctx.close} aria-label={t.toMap}><X /></button>
-        <div className={s.progress} role="progressbar" aria-valuemin={0} aria-valuemax={3} aria-valuenow={Math.round(prog)}>
-          <i style={{ width: `${(prog / 3) * 100}%` }} />
-        </div>
+        <div style={{ flex: 1, minWidth: 0 }}><Stages t={t} at={STAGE[phase]} /></div>
       </div>
+
+      {phase === "intro" && <IntroView lesson={lesson} t={t} onNext={() => setPhase("question")} />}
 
       {phase === "question" && (
         <QuestionView
@@ -103,8 +109,8 @@ export default function LessonPlayer({ id, ctx }) {
         <ResultView
           res={res}
           t={t}
-          nextLabel={res.ok ? t.nextQuestion : t.tryAgain}
-          onNext={() => (res.ok ? setPhase("game") : setPhase("question"))}
+          nextLabel={res.ok ? t.continue : t.tryAgain}
+          onNext={() => setPhase(res.ok ? "game" : "question")}
           onSource={() => setSheet("source")}
           onExplain={() => setSheet("ai")}
         />
@@ -116,12 +122,14 @@ export default function LessonPlayer({ id, ctx }) {
           <h2 className={s.title}>{lesson.title}</h2>
           <GameView game={lesson.game} check={(body) => mini.game(id, body)} onSolved={setSolution} t={t} />
           <div className={s.footer}>
-            <button type="button" className={`${m.btn} ${solution !== null ? m.btnGold : ""}`} disabled={solution === null || busy} onClick={finish}>
+            <button type="button" className={`${m.btn} ${solution !== null ? m.btnGold : ""}`} disabled={solution === null} onClick={() => setPhase("apply")}>
               {t.continue}
             </button>
           </div>
         </>
       )}
+
+      {phase === "apply" && <ApplyView lesson={lesson} t={t} busy={busy} onNext={finish} />}
 
       {sheet && (
         <ExplainSheet req={{ kind: "lesson", id }} res={res} lang={lang} t={t} sourceOnly={sheet === "source"} onClose={() => setSheet(null)} />
