@@ -73,7 +73,7 @@ export default function ReviewTab({ ctx }) {
           <ol className={r.list}>
             {items.map((it, i) => (
               <li key={it.key}>
-                <button type="button" className={r.item} style={{ "--i": Math.min(i, 12) }} onClick={() => setRun([it])}>
+                <button type="button" className={r.item} style={{ "--i": Math.min(i, 12) }} onClick={ctx.gated(() => setRun([it]))}>
                   <span className={r.num}>{i + 1}</span>
                   <span className={r.body}>
                     <small>{it.title}</small>
@@ -87,7 +87,7 @@ export default function ReviewTab({ ctx }) {
           <p className={r.noXp}><Info aria-hidden="true" />{t.wrongs.noXp}</p>
           {items.length > 1 && (
             <div className={r.dock}>
-              <button type="button" className={s.cta} onClick={() => setRun(items)}>
+              <button type="button" className={s.cta} onClick={ctx.gated(() => setRun(items))}>
                 <ListChecks aria-hidden="true" /> {t.wrongs.all} <ChevronRight aria-hidden="true" />
               </button>
             </div>

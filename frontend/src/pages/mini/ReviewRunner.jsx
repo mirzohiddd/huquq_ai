@@ -9,6 +9,7 @@ import QuestionView from "./QuestionView";
 import ResultView from "./ResultView";
 import WrongView from "./WrongView";
 import ExplainSheet from "./ExplainSheet";
+import { openHearts } from "./heartsStore";
 
 /* Kalit → «Tushuntirib ber» so'rovi: "Q:<dars>:<i>" kurs savoli, "L:<dars>", "S:<vaziyat>:<qadam>" */
 const explainReq = (key) => {
@@ -32,6 +33,8 @@ export default function ReviewRunner({ items, ctx, onDone }) {
     try {
       const r = await mini.reviewAnswer(q.key, opt);
       if (r.xp) ctx.reloadPath(); // headerdagi XP yangilansin
+      // Oxirgi yurakcha ketdi — mashq to'xtaydi (davom ettirib bo'lmaydi)
+      if (!r.ok && r.hearts?.hearts === 0) setTimeout(() => (onDone(), openHearts()), 1600);
       setRes(r);
     } catch {
       next(); // allaqachon tuzatilgan (boshqa qurilmada) — keyingisiga

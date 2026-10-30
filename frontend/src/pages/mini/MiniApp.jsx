@@ -19,7 +19,8 @@ import PathTab from "./PathTab";
 import Overlay from "./Overlay";
 import MiniHeader from "./MiniHeader";
 import HeartsSheet from "./HeartsSheet";
-import { setHearts } from "./heartsStore";
+import { setHearts, openHearts } from "./heartsStore";
+import { useHeartsGate, gated, noHearts } from "./useHeartsGate";
 import { LANG_KEY, COURSE_KEY, read, save, savedLang } from "./prefs";
 import s from "./Mini.module.css";
 
@@ -106,6 +107,7 @@ export default function MiniApp() {
     setOverlay(null);
     loadPath();
   }, [loadPath]);
+  useHeartsGate(overlay, close); // yurakcha 0 — dars yopiladi, oyna ochiladi
 
   // Telegram "Orqaga": ustki qatlam → yopish; profil → xarita
   useEffect(() => {
@@ -127,10 +129,11 @@ export default function MiniApp() {
     path,
     course,
     reloadPath: () => loadPath(),
-    openLesson: (id) => setOverlay(lessonOverlay(id)),
-    openSituation: (id) => setOverlay({ kind: "situation", id }),
-    openLessonNext: (id) => setOverlay(id ? lessonOverlay(id) : null),
-    openExam: (unit) => setOverlay({ kind: "exam", id: unit }),
+    openLesson: gated((id) => setOverlay(lessonOverlay(id))),
+    openSituation: gated((id) => setOverlay({ kind: "situation", id })),
+    openLessonNext: (id) => (id && noHearts() ? (setOverlay(null), openHearts()) : setOverlay(id ? lessonOverlay(id) : null)),
+    openExam: gated((unit) => setOverlay({ kind: "exam", id: unit })),
+    gated,
     openPlans: () => setOverlay({ kind: "plans", id: "plans" }),
     close,
     setTab,

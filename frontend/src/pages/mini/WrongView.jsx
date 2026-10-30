@@ -5,7 +5,7 @@
  */
 import React, { useEffect, useState } from "react";
 import { X, ChevronRight, BookOpen, RotateCcw, Heart } from "lucide-react";
-import { useHearts, openHearts } from "./heartsStore";
+import { useHearts } from "./heartsStore";
 import Hero from "./Hero";
 import { haptic } from "./tg";
 import { sfx, speak, stopVoice } from "./sound";
@@ -14,14 +14,7 @@ import q from "./Quiz.module.css";
 export default function WrongView({ t, hint, mainLabel, onMain, altLabel, onAlt, mainIcon = "book" }) {
   const [talking, setTalking] = useState(false);
   const { live } = useHearts();
-  const none = live && live.hearts === 0;
-
-  // Oxirgi yurakcha ketdi — to'ldirish oynasi o'zi ochiladi
-  useEffect(() => {
-    if (!none) return undefined;
-    const id = setTimeout(openHearts, 1400);
-    return () => clearTimeout(id);
-  }, [none]);
+  // Oxirgi yurakcha ketsa — MiniApp darsni yopib, to'ldirish oynasini o'zi ochadi
 
   useEffect(() => {
     sfx("wrong");

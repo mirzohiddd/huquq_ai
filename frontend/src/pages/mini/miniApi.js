@@ -6,7 +6,7 @@
  * xotirada (va sahifa yangilansa — sessionStorage'da) turadi.
  */
 import axios from "axios";
-import { setHearts, openHearts } from "./heartsStore";
+import { setHearts, openHearts, liveOf } from "./heartsStore";
 import { API_BASE } from "../../utils/apiBase";
 
 const KEY = "miniToken";
@@ -107,7 +107,7 @@ export const siteApi = {
 /* Joriy dars ma'lumoti yo'l ochilganda oldindan olinadi (bir marta ishlatiladi, 5 daqiqa) */
 const pre = new Map();
 const prefetchLesson = (id) => {
-  if (!id || pre.has(id)) return;
+  if (!id || pre.has(id) || liveOf()?.hearts === 0) return;
   const p = api.get(`/c/${id}`, { quiet: true }).then(data); // oldindan olish — oyna ochmasin
   p.catch(() => pre.delete(id));
   pre.set(id, { p, at: Date.now() });
@@ -115,6 +115,8 @@ const prefetchLesson = (id) => {
 const takeLesson = (id) => {
   const x = pre.get(id);
   pre.delete(id);
+  // ⚠️ Yurakcha tugagan bo'lsa keshdagi dars ISHLATILMAYDI — server tekshirsin (403 noHearts)
+  if (liveOf()?.hearts === 0) return api.get(`/c/${id}`).then(data);
   return x && Date.now() - x.at < 5 * 60 * 1000 ? x.p.catch(() => api.get(`/c/${id}`).then(data)) : api.get(`/c/${id}`).then(data);
 };
 
