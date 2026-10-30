@@ -11,7 +11,7 @@ import { Map as MapIcon, Scale, RotateCcw, Trophy, ChartColumn, Flame, Zap } fro
 import { BrandMark } from "../../components/brand/BrandLogo";
 import Seo from "../../components/Seo";
 import { loadTelegram, setupApp, backButton } from "./tg";
-import { mini, setToken, hasToken } from "./miniApi";
+import { mini, setToken, hasToken, setApiLang } from "./miniApi";
 import { textFor } from "./text";
 import { unlock, settings } from "./sound";
 import Gate, { Spinner } from "./Gate";
@@ -25,6 +25,19 @@ const RatingTab = lazy(() => import("./RatingTab"));
 const ProfileTab = lazy(() => import("./ProfileTab"));
 const LessonPlayer = lazy(() => import("./LessonPlayer"));
 const SituationPlayer = lazy(() => import("./SituationPlayer"));
+const SiteLessons = lazy(() => import("./SiteLessons"));
+const SiteTests = lazy(() => import("./SiteTests"));
+
+/* Foydalanuvchi Profil → «Til» da tanlagan til (shu qurilmada saqlanadi) */
+const LANG_KEY = "miniLang";
+const savedLang = () => {
+  try {
+    const l = localStorage.getItem(LANG_KEY);
+    return l === "ru" || l === "uz" ? l : null;
+  } catch {
+    return null;
+  }
+};
 
 const TABS = [
   { key: "path", Icon: MapIcon },
@@ -59,14 +72,17 @@ export default function MiniApp() {
     const app = await loadTelegram();
     setupApp(app);
     const initData = app?.initData || "";
-    const tgLang = app?.initDataUnsafe?.user?.language_code === "ru" ? "ru" : "uz";
+    const tgLang = savedLang() || (app?.initDataUnsafe?.user?.language_code === "ru" ? "ru" : "uz");
     setLang(tgLang);
+    setApiLang(tgLang);
     if (!initData && !hasToken()) return setPhase("outside");
     try {
       if (initData) {
         const r = await mini.auth(initData);
         setToken(r.token);
-        setLang(r.lang || tgLang);
+        const l = savedLang() || r.lang || tgLang;
+        setLang(l);
+        setApiLang(l);
         setName(r.name || "");
       }
       await mini.path().then(setPath);
@@ -115,6 +131,18 @@ export default function MiniApp() {
     close,
     setTab,
     setAnim,
+    openLibrary: (id) => setOverlay({ kind: "library", id: id || null }),
+    openTests: () => setOverlay({ kind: "tests", id: "all" }),
+    setLang: (l) => {
+      try {
+        localStorage.setItem(LANG_KEY, l);
+      } catch {
+        /* yopiq saqlash — sessiya davomida ishlaydi */
+      }
+      setApiLang(l);
+      setLang(l);
+      loadPath();
+    },
   };
   const initial = (name || "H").trim()[0].toUpperCase();
 
@@ -138,8 +166,10 @@ export default function MiniApp() {
       <Suspense fallback={<Spinner />}>
         {overlay?.kind === "lesson" && <LessonPlayer key={overlay.id} id={overlay.id} ctx={ctx} />}
         {overlay?.kind === "situation" && <SituationPlayer key={overlay.id} id={overlay.id} ctx={ctx} />}
+        {overlay?.kind === "library" && <main className={s.main}><SiteLessons key={`${lang}-${overlay.id}`} startId={overlay.id} ctx={ctx} /></main>}
+        {overlay?.kind === "tests" && <main className={s.main}><SiteTests key={lang} ctx={ctx} /></main>}
         {!overlay && (
-          <main className={s.main}>
+          <main className={s.main} key={lang}>
             {tab === "path" && <PathTab ctx={ctx} />}
             {tab === "sit" && <SituationsTab ctx={ctx} />}
             {tab === "review" && <ReviewTab ctx={ctx} />}

@@ -27,21 +27,47 @@ export function setToken(t) {
 }
 export const hasToken = () => !!token;
 
-const api = axios.create({ baseURL: `${API_BASE}/mini`, timeout: 45000 });
-api.interceptors.request.use((cfg) => {
-  if (token) cfg.headers.Authorization = `Bearer ${token}`;
-  return cfg;
-});
+/* Interfeys tili — har so'rovga `?lang=` qo'shiladi (server matnni shu tilda qaytaradi). */
+let lang = "uz";
+export const setApiLang = (l) => {
+  lang = l === "ru" ? "ru" : "uz";
+};
 
-/* Mobil internet bir lahza uzilsa — o'qish (GET) so'rovi 2 marta qayta yuboriladi.
-   POST takrorlanmaydi: javob/XP ikki marta yozilib qolmasin. */
-api.interceptors.response.use(undefined, async (err) => {
-  const cfg = err.config;
-  if (!cfg || err.response || cfg.method !== "get" || (cfg._retry || 0) >= 2) throw err;
-  cfg._retry = (cfg._retry || 0) + 1;
-  await new Promise((r) => setTimeout(r, 1500 * cfg._retry));
-  return api(cfg);
-});
+/** Mini app (`/api/mini`) va saytning o'z API'si (darslar, testlar) — bitta token bilan. */
+function client(baseURL) {
+  const c = axios.create({ baseURL, timeout: 45000 });
+  c.interceptors.request.use((cfg) => {
+    if (token) cfg.headers.Authorization = `Bearer ${token}`;
+    cfg.params = { ...cfg.params, lang };
+    return cfg;
+  });
+  /* Mobil internet bir lahza uzilsa — o'qish (GET) so'rovi 2 marta qayta yuboriladi.
+     POST takrorlanmaydi: javob/XP ikki marta yozilib qolmasin. */
+  c.interceptors.response.use(undefined, async (err) => {
+    const cfg = err.config;
+    if (!cfg || err.response || cfg.method !== "get" || (cfg._retry || 0) >= 2) throw err;
+    cfg._retry = (cfg._retry || 0) + 1;
+    await new Promise((r) => setTimeout(r, 1500 * cfg._retry));
+    return c(cfg);
+  });
+  return c;
+}
+const api = client(`${API_BASE}/mini`);
+const site = client(API_BASE);
+const data = (r) => r.data;
+
+/* Saytdagi BARCHA darslar va testlar — saytning endpointlari (tarif cheklovi,
+   ruscha tarjima va progress sayt bilan umumiy). */
+export const siteApi = {
+  lessons: () => site.get("/lessons").then(data),
+  lesson: (id) => site.get(`/lessons/${id}`).then(data),
+  progress: () => site.get("/progress").then(data),
+  completeLesson: (id) => site.post(`/progress/lesson/${id}/complete`).then(data),
+  tests: () => site.get("/tests").then(data),
+  test: (id) => site.get(`/tests/${id}`).then(data),
+  answer: (id, i, choice) => site.post(`/tests/${id}/answer`, { i, choice }).then(data),
+  submit: (id, answers) => site.post(`/tests/${id}/submit`, { answers }).then(data),
+};
 
 export const mini = {
   auth: (initData) => api.post("/auth", { initData }).then((r) => r.data),
@@ -63,6 +89,6 @@ export const mini = {
   // Qalqonning ovozi — saytning keshlangan TTS'i (o'zbekcha neyron ovoz)
   speak: (text) =>
     axios
-      .post(`${API_BASE}/voice/speak`, { text, lang: "uz" }, { responseType: "arraybuffer", timeout: 20000, headers: token ? { Authorization: `Bearer ${token}` } : {} })
+      .post(`${API_BASE}/voice/speak`, { text, lang }, { responseType: "arraybuffer", timeout: 20000, headers: token ? { Authorization: `Bearer ${token}` } : {} })
       .then((r) => r.data),
 };

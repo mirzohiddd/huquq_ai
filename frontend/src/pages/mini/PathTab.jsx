@@ -2,7 +2,7 @@
  * O'RGANISH — yo'l shaklidagi darslar xaritasi: tugatilgan, ochiq va yopiq bosqichlar.
  */
 import React, { useEffect, useState } from "react";
-import { Check, Lock, Star, ShoppingBag, Briefcase, Heart, Shield, Target } from "lucide-react";
+import { Check, Lock, Star, ShoppingBag, Briefcase, Heart, Shield, Target, Library, ClipboardList } from "lucide-react";
 import Hero from "./Hero";
 import { haptic } from "./tg";
 import { iconOf } from "./icons";
@@ -53,6 +53,16 @@ export default function PathTab({ ctx }) {
         </div>
         <Hero mood={goalPct >= 100 ? "cheer" : "wave"} size={92} />
       </section>
+
+      {/* Saytdagi barcha darslar va testlar */}
+      <div className={s.more}>
+        <button type="button" onClick={() => ctx.openLibrary()}>
+          <Library aria-hidden="true" /><b>{t.lib.lessons}</b>
+        </button>
+        <button type="button" onClick={ctx.openTests}>
+          <ClipboardList aria-hidden="true" /><b>{t.lib.tests}</b>
+        </button>
+      </div>
 
       {path.units.map((u) => {
         const Icon = UNIT_ICON[u.key] || iconOf(u.icon, Star);

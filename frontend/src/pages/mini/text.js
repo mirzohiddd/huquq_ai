@@ -1,7 +1,9 @@
 /**
  * MINI APP INTERFEYS MATNLARI (uz/ru).
- * Dars va vaziyatlar mazmuni hozircha faqat o'zbekcha (serverdan keladi).
+ * Dars va vaziyatlar mazmuni serverdan keladi (ruschasi — `?lang=ru`, tarjima keshidan).
  */
+import { LIB_UZ, LIB_RU } from "./textLib";
+
 const UZ = {
   tabs: { path: "O'rganish", sit: "Vaziyatlar", review: "Takrorlash", wins: "Yutuqlar", rating: "Reyting", profile: "Profil" },
   loading: "Yuklanmoqda…",
@@ -168,4 +170,4 @@ const RU = {
   you: "Вы",
 };
 
-export const textFor = (lang) => (lang === "ru" ? RU : UZ);
+export const textFor = (lang) => (lang === "ru" ? { ...RU, ...LIB_RU } : { ...UZ, ...LIB_UZ });

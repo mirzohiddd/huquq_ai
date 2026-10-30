@@ -10,8 +10,11 @@ const { loginWithInitData } = require("../services/miniApp/auth");
 const store = require("../services/miniApp/store");
 const content = require("../services/miniApp/content");
 const { quotesOf } = require("../services/miniApp/explain");
+const { localizeJson } = require("../services/miniApp/i18n");
 
 const BOT = (process.env.TELEGRAM_BOT_USERNAME || "mening_huquqlarim_bot").replace(/^@/, "");
+router.use(localizeJson); // ?lang=ru — javob matnlari rus tilida (kesh)
+
 const fail = (res, err, where) => {
   console.error(`mini ${where}:`, err.message);
   res.status(500).json({ error: "Server xatosi" });

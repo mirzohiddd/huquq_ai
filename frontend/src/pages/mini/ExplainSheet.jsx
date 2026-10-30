@@ -70,7 +70,7 @@ export default function ExplainSheet({ req, res, lang, t, onClose, sourceOnly = 
               <h4><BookOpen aria-hidden="true" /> {t.lawSays}</h4>
               {quotes.map((q) => (
                 <blockquote key={`${q.code}-${q.article}`}>
-                  <cite>{q.article}-modda{q.title ? ` · ${q.title}` : ""}</cite>
+                  <cite>{t.lib.art(q.article)}{q.title ? ` · ${q.title}` : ""}</cite>
                   <p>{q.text}</p>
                 </blockquote>
               ))}

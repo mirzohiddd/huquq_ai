@@ -4,7 +4,7 @@
  * (Ovoz, Animatsiya, kunlik maqsad). Sozlamalar shu qurilmada saqlanadi.
  */
 import React, { useEffect, useRef, useState } from "react";
-import { Settings, BookOpen, Flame, ChevronRight, Footprints, Brain, Volume2, Sparkles, Target } from "lucide-react";
+import { Settings, BookOpen, Flame, ChevronRight, Footprints, Brain, Volume2, Sparkles, Target, Languages } from "lucide-react";
 import { mini } from "./miniApi";
 import { haptic } from "./tg";
 import { settings, setSetting, sfx } from "./sound";
@@ -125,6 +125,17 @@ export default function ProfileTab({ ctx, name }) {
           <Sparkles aria-hidden="true" />
           <span>{t.anim}</span>
           <Toggle on={opts.anim} label={t.anim} onChange={(v) => flip("anim", v)} />
+        </div>
+        <div className={s.row}>
+          <Languages aria-hidden="true" />
+          <span>{t.language}</span>
+          <div className={s.goals} role="radiogroup" aria-label={t.language}>
+            {[["uz", "O'zbekcha"], ["ru", "Русский"]].map(([k, label]) => (
+              <button key={k} type="button" role="radio" aria-checked={ctx.lang === k} className={`${s.goal} ${ctx.lang === k ? s.goalOn : ""}`} onClick={() => ctx.setLang(k)}>
+                {label}
+              </button>
+            ))}
+          </div>
         </div>
         <div className={s.row}>
           <Target aria-hidden="true" />

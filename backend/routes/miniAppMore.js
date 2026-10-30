@@ -9,6 +9,10 @@ const { webLimitGuard } = require("../middleware/usageLimit");
 const store = require("../services/miniApp/store");
 const content = require("../services/miniApp/content");
 const { explain, quotesOf } = require("../services/miniApp/explain");
+const { localizeJson } = require("../services/miniApp/i18n");
+const { warmAll } = require("../services/miniApp/i18n");
+
+router.use(localizeJson); // ?lang=ru — javob matnlari rus tilida (kesh)
 
 const fail = (res, err, where) => {
   console.error(`mini ${where}:`, err.message);
@@ -143,5 +147,8 @@ router.post("/explain", userGuard, webLimitGuard, async (req, res) => {
     fail(res, err, "explain");
   }
 });
+
+// Ruscha tarjimani oldindan tayyorlash — faqat keshda yo'qlari (keyingi ishga tushishlarda AI chaqirilmaydi)
+setTimeout(() => warmAll().then((r) => r.translated && console.log("Mini app ruscha tarjima:", r)).catch(() => {}), 90 * 1000).unref();
 
 module.exports = router;
