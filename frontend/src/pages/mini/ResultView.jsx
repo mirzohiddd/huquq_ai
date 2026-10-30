@@ -11,7 +11,7 @@ import { sfx, speak, stopVoice } from "./sound";
 import q from "./Quiz.module.css";
 
 // Izoh boshidagi «To'g'ri.» / «Xato.» — sarlavhada allaqachon bor
-const clean = (s = "") => s.replace(/^(To'g'ri|Xato|Верно|Неверно)[.!]\s*/i, "");
+const clean = (s = "") => s.replace(/^(To'g'ri|Xato|Верно|Неверно|Правильно|Неправильно)\s*[.!,—–-]\s*/i, "");
 
 export default function ResultView({ res, t, onNext, nextLabel, onSource, onExplain }) {
   const [talking, setTalking] = useState(false);

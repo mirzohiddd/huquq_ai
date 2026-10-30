@@ -49,6 +49,7 @@ let authWait = Promise.resolve();
 
 /* Interfeys tili — har so'rovga `?lang=` qo'shiladi (server matnni shu tilda qaytaradi). */
 let lang = "uz";
+export const apiLang = () => lang;
 export const setApiLang = (l) => {
   lang = l === "ru" ? "ru" : "uz";
   pre.clear(); // oldindan olingan dars eski tilda qolmasin

@@ -38,6 +38,7 @@ export const LIB_UZ = {
     all: "Hammasini ketma-ket", noXp: "Takrorlashda XP berilmaydi — maqsad xatoni tushunib olish.",
     fixed: "Xato tuzatildi!", left: (n) => `Yana ${n} ta xato qoldi`, done: "Barcha xatolar tuzatildi!", toList: "Ro'yxatga qaytish",
   },
+  sayXp: (x) => `Plyus ${x} XP!`, // qalqon ovozi uchun
   chest: { title: "Sandiq", ready: "Sandiqni ochish", tap: "Ochish uchun bosing!", locked: "3 ta darsdan keyin ochiladi", got: (x) => `Sandiqdan ${x} XP chiqdi!`, empty: "Sandiq ochilgan" },
   xp: {
     perfect: "Xatosiz! Maksimal XP", lost: (m, max) => `${m} ta xato — xatosiz bo'lsa ${max} XP olardingiz`,
@@ -96,6 +97,7 @@ export const LIB_RU = {
     all: "Все подряд", noXp: "За повторение XP не начисляется — цель в том, чтобы понять ошибку.",
     fixed: "Ошибка исправлена!", left: (n) => `Осталось ошибок: ${n}`, done: "Все ошибки исправлены!", toList: "К списку",
   },
+  sayXp: (x) => `Плюс ${x} очков опыта!`, // голос щита: «XP» латиницей звучит плохо
   chest: { title: "Сундук", ready: "Открыть сундук", tap: "Нажмите, чтобы открыть!", locked: "Откроется после 3 уроков", got: (x) => `В сундуке ${x} XP!`, empty: "Сундук открыт" },
   xp: {
     perfect: "Без ошибок! Максимум XP", lost: (m, max) => `Ошибок: ${m} — без ошибок вы получили бы ${max} XP`,

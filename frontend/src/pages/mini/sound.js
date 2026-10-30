@@ -8,7 +8,25 @@
  * ⚠️ Telegram WebView'da audio faqat foydalanuvchi bosgandan keyin ochiladi —
  * `unlock()` birinchi bosishda chaqiriladi (MiniApp.jsx).
  */
-import { mini } from "./miniApi";
+import { mini, apiLang } from "./miniApi";
+
+/* ⚠️ TIL ARALASHMASIN (2026-10-30): rus rejimida izohning tarjimasi hali
+   tayyor bo'lmasa, u o'zbekcha keladi va rus ovozi o'zbek matnini buzib
+   o'qirdi. Endi faqat interfeys TILIDAGI gaplar o'qiladi (kirill/lotin
+   ulushi bo'yicha), boshqa tildagi gap jim o'tkazib yuboriladi. */
+const CYR = /\p{Script=Cyrillic}/gu;
+const LET = /\p{L}/gu;
+function sameLang(sentence, lang) {
+  const all = (sentence.match(LET) || []).length;
+  if (!all) return true; // raqam / tinish belgisi
+  const cyr = (sentence.match(CYR) || []).length / all;
+  return lang === "ru" ? cyr >= 0.8 : cyr <= 0.2;
+}
+export const speakable = (text, lang) =>
+  String(text || "").split(/(?<=[.!?])\s+/).filter((x) => sameLang(x, lang)).join(" ").trim();
+/* Tezlashtirish qalqonni «bolacha» qiladi. O'zbek erkak ovozida yoqimli,
+   rus ayol ovozida esa chiyillab, xunuk eshitilardi — ruschada deyarli tabiiy. */
+const RATE = { uz: 1.16, ru: 1.04 };
 
 const KEY = { sound: "miniSound", anim: "miniAnim" };
 const read = (k) => {
@@ -109,6 +127,8 @@ export function stopVoice() {
 
 /** Matnni bolacha ovozda o'qiydi. `onState(true/false)` — gapirish animatsiyasi uchun. */
 export async function speak(text, onState) {
+  const lang = apiLang();
+  text = speakable(text, lang);
   if (!settings.sound || !ctx || !text) return;
   stopVoice();
   try {
@@ -120,7 +140,7 @@ export async function speak(text, onState) {
     }
     const src = ctx.createBufferSource();
     src.buffer = buf;
-    src.playbackRate.value = 1.16; // ovoz balandlashadi va yoshroq eshitiladi
+    src.playbackRate.value = RATE[lang] || 1.1; // ovoz balandlashadi va yoshroq eshitiladi
     src.connect(ctx.destination);
     current = src;
     onState?.(true);

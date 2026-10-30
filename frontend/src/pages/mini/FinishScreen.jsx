@@ -23,7 +23,7 @@ export default function FinishScreen({ result, ctx, title, sub }) {
   // Fanfara tugagach qalqon tabriklaydi
   useEffect(() => {
     if (streak) return undefined;
-    const line = `${heading} ${xp > 0 ? `Plyus ${xp} XP!` : ""} ${result?.takeaway || ""}`.trim();
+    const line = `${heading} ${xp > 0 ? t.sayXp(xp) : ""} ${result?.takeaway || ""}`.trim();
     const id = setTimeout(() => speak(line, setTalking), result?.unitDone ? 1700 : 900);
     return () => {
       clearTimeout(id);
