@@ -1,0 +1,57 @@
+/* Sandiqni ochish ekrani: oltin fon → qopqoq ochilishi → mukofot. */
+.screen {
+  position: fixed; inset: 0; z-index: 70; width: 100%; border: 0; margin: 0; padding: 24px 16px calc(24px + var(--safe-b, 0px));
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; font: inherit; cursor: pointer;
+  -webkit-tap-highlight-color: transparent; animation: fade 0.3s ease-out backwards;
+}
+.goldBg { background: radial-gradient(120% 80% at 50% 40%, #f7cf6a 0%, #e0a83e 55%, #c48a26 100%); color: #fff; }
+.prizeBg { background: radial-gradient(120% 80% at 50% 35%, #2c4170 0%, #14213d 60%, #0b1322 100%); color: #fff; cursor: default; }
+.tag { font-size: 30px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #fffaf0; text-shadow: 0 3px 0 rgba(122, 80, 12, 0.35); }
+.opening .tag, .opening .tapHint { opacity: 0; animation: none; transition: opacity 0.2s; }
+.tapHint { font-size: 18px; font-weight: 700; color: #fffaf0; animation: hint 1.4s ease-in-out infinite; }
+
+.chestBox { position: relative; width: min(260px, 70vw); aspect-ratio: 200 / 180; }
+.chest { width: 100%; height: 100%; overflow: visible; }
+.wiggle .chest { animation: wiggle 1.6s ease-in-out infinite; transform-origin: 50% 95%; }
+.burst .chest { animation: pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both; transform-origin: 50% 95%; }
+.lid { transform-box: view-box; transform-origin: 100px 86px; animation: peek 1.6s ease-in-out infinite; }
+.lidOpen { transform-box: view-box; transform-origin: 30px 86px; animation: lidUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.glow { animation: glow 0.9s ease-out both; }
+
+/* Uchqunlar: tayyor holatda atrofda miltillaydi, ochilganda tashqariga otiladi */
+.spark {
+  position: absolute; left: 50%; top: 48%; width: 12px; height: 12px; margin: -6px; background: #fffaf0;
+  clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+  transform: rotate(var(--a)) translateY(-120px); animation: twinkle 1.8s var(--d) ease-in-out infinite;
+}
+.burst .spark { animation: fly 0.8s ease-out both; }
+
+.center { display: grid; justify-items: center; gap: 10px; text-align: center; }
+.prize {
+  width: 132px; height: 132px; border-radius: 50%; display: grid; place-items: center; color: #14213d;
+  background: radial-gradient(circle at 35% 30%, #ffe9a8, #e0b060 55%, #b8862f); box-shadow: 0 0 0 10px rgba(240, 196, 106, 0.18), 0 0 60px rgba(240, 196, 106, 0.55);
+  animation: pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.prize svg { width: 64px; height: 64px; }
+.amount { font-size: 52px; font-weight: 800; color: #f0c46a; font-variant-numeric: tabular-nums; }
+.note { font-size: 15px; color: #c9cfdd; max-width: 300px; line-height: 1.5; }
+.footer { position: absolute; left: 0; right: 0; bottom: 0; padding: 12px 16px calc(18px + var(--safe-b, 0px)); }
+.btn {
+  display: block; width: 100%; max-width: 608px; margin: 0 auto; padding: 15px; border: 0; border-radius: 16px; font: inherit; font-weight: 800; font-size: 15px;
+  letter-spacing: 0.04em; text-transform: uppercase; background: linear-gradient(160deg, #f0c46a, #c9953a); color: #14213d; box-shadow: 0 5px 0 #9c6f22; cursor: pointer;
+}
+.btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #9c6f22; }
+
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes hint { 0%, 100% { opacity: 0.65; transform: scale(1); } 50% { opacity: 1; transform: scale(1.06); } }
+@keyframes wiggle { 0%, 60%, 100% { transform: rotate(0); } 68% { transform: rotate(-6deg) scale(1.03); } 76% { transform: rotate(6deg) scale(1.03); } 84% { transform: rotate(-4deg); } 92% { transform: rotate(3deg); } }
+@keyframes peek { 0%, 60%, 100% { transform: rotate(0); } 72% { transform: translateY(-6px) rotate(-3deg); } 84% { transform: translateY(-3px); } }
+@keyframes pop { 0% { transform: scale(0.8); } 60% { transform: scale(1.12); } 100% { transform: scale(1); } }
+@keyframes lidUp { from { transform: rotate(0); } to { transform: translate(-4px, -22px) rotate(-28deg); } }
+@keyframes glow { from { opacity: 0; transform: scale(0.4); transform-origin: 100px 84px; } to { opacity: 1; transform: scale(1); } }
+@keyframes twinkle { 0%, 100% { opacity: 0.2; transform: rotate(var(--a)) translateY(-120px) scale(0.5); } 50% { opacity: 1; transform: rotate(var(--a)) translateY(-128px) scale(1); } }
+@keyframes fly { from { opacity: 1; transform: rotate(var(--a)) translateY(-40px) scale(1.2); } to { opacity: 0; transform: rotate(var(--a)) translateY(-210px) scale(0.6); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .screen, .tapHint, .chest, .lid, .lidOpen, .glow, .spark, .prize { animation: none !important; }
+}

@@ -83,6 +83,11 @@ Shaharsozlik, Soliq, Budjet, Bojxona, Havo, Saylov kodekslari va
   https://www.huquqtech.uz/darslar (har darsning maqsadlari, to'liq mundarijasi
   va birinchi mavzulari) va testlar https://www.huquqtech.uz/testlar
   (namunaviy savollar to'g'ri javob va izohi bilan).
+- **Telegram o'quv ilovasi** (Telegram bot ichidagi mini ilova): saytdagi
+  barcha darslar o'yin uslubidagi yo'lga aylantirilgan — kurslar, bo'limlar,
+  har mavzudan keyin tekshiruv savoli, bo'lim imtihoni, XP va kunlik seriya.
+  Xato qilinsa kamroq XP beriladi. Birinchi bo'lim bepul, qolganlari tarif
+  bilan ochiladi. O'zbek va rus tillarida.
 
 --------------------------------------------------------------------------
 ## 5. Tariflar

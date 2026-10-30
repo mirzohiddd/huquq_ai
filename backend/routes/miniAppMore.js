@@ -12,6 +12,8 @@ const { explain, quotesOf } = require("../services/miniApp/explain");
 const { localizeJson } = require("../services/miniApp/i18n");
 const { warmAll } = require("../services/miniApp/i18n");
 const runs = require("../services/miniApp/runs");
+const path = require("../services/miniApp/path");
+const { accessOf } = require("../services/miniApp/access");
 
 router.use(localizeJson); // ?lang=ru — javob matnlari rus tilida (kesh)
 
@@ -144,7 +146,13 @@ router.get("/rating", userGuard, async (req, res) => {
 router.post("/explain", userGuard, webLimitGuard, async (req, res) => {
   try {
     const lang = req.body?.lang === "ru" ? "ru" : "uz";
-    if (req.body?.kind === "course") await require("../services/miniApp/course").ready(); // kurs savoli — kesh tayyor bo'lsin
+    const kind = req.body?.kind;
+    // ⚠️ Yopiq (tarifli yoki navbati kelmagan) dars savoliga tushuntirish BERILMAYDI —
+    // aks holda javoblar va AI kvotasi to'lovsiz olinardi. Ochiq/tugatilgan dars — mumkin.
+    if (kind === "course" || kind === "lesson") {
+      const a = await accessOf(req.authUser.id);
+      if (!path.lessonAccess(a.doc, String(req.body?.id), a.paid, a.s).ok) return res.status(403).json({ error: "Bu dars hali ochilmagan", locked: true });
+    }
     const r = await explain({ kind: req.body?.kind, id: req.body?.id, step: req.body?.step }, lang);
     if (!r) return res.status(404).json({ error: "Savol topilmadi" });
     res.json(r);

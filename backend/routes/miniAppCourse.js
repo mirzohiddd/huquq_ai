@@ -5,7 +5,7 @@
  *   GET  /c/:id            — o'yin-dars (mavzu kartalari + tekshiruv savollari)
  *   POST /c/:id/answer     — savol javobi (xato → «Takrorlash» va kamroq XP)
  *   POST /c/:id/complete   — yakun: barcha savollar to'g'ri yechilgan bo'lishi shart
- *   POST /chest/:unit      — bo'lim sandig'i (bonus XP, bir marta)
+ *   POST /chest/:unit      — bo'lim sandig'i (tasodifiy 1–20 XP, bir marta; ochilmaguncha keyingi dars yopiq)
  *   GET  /plans · POST /order — mini ilova ichidagi tariflar va buyurtma
  * `miniApp.js` ichida ulanadi (o'sha routerning `?lang=` tarjimasi ishlaydi).
  */
@@ -112,7 +112,9 @@ router.post("/chest/:unit", userGuard, async (req, res) => {
     if (!at?.unit.chest) return res.status(404).json({ error: "Sandiq topilmadi" });
     if (at.unit.paywall) return planLocked(res);
     if (at.unit.chest.status === "locked") return res.status(403).json({ error: "Avval darslarni tugating", locked: true });
-    const xp = await store.finishOnce(req.authUser.id, "chests", at.unit.key, store.XP.chest);
+    // XP serverda tasodifiy tanlanadi (mijoz miqdorni bera olmaydi); bir marta
+    const prize = path.chestXp();
+    const xp = await store.finishOnce(req.authUser.id, "chests", at.unit.key, prize, { xp: prize });
     const doc = await store.getDoc(req.authUser.id);
     res.json({ xp, totalXp: doc.xp || 0, ...store.streakChange(a.doc, doc) });
   } catch (err) {

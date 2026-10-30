@@ -27,7 +27,7 @@ export const LIB_UZ = {
     planTitle: "Tarif bilan ochiladi", planText: "Har kursning 1-bo'limi hamma uchun bepul. Qolgan bo'limlar — Basic, Pro yoki Premium tarifida.",
     toCurrent: "Joriy darsga",
   },
-  chest: { title: "Sandiq", ready: "Sandiqni ochish", locked: "3 ta darsdan keyin ochiladi", got: (x) => `+${x} XP bonus!`, empty: "Sandiq ochilgan" },
+  chest: { title: "Sandiq", ready: "Sandiqni ochish", tap: "Ochish uchun bosing!", locked: "3 ta darsdan keyin ochiladi", got: (x) => `Sandiqdan ${x} XP chiqdi!`, empty: "Sandiq ochilgan" },
   xp: {
     perfect: "Xatosiz! Maksimal XP", lost: (m, max) => `${m} ta xato — xatosiz bo'lsa ${max} XP olardingiz`,
     rule: "Xatosiz — 20 XP · 1 xato — 15 · 2 xato — 10 · 3+ xato — 5",
@@ -74,7 +74,7 @@ export const LIB_RU = {
     planTitle: "Открывается с тарифом", planText: "Раздел 1 каждого курса бесплатен для всех. Остальные разделы — на тарифах Basic, Pro или Premium.",
     toCurrent: "К текущему уроку",
   },
-  chest: { title: "Сундук", ready: "Открыть сундук", locked: "Откроется после 3 уроков", got: (x) => `+${x} XP бонус!`, empty: "Сундук открыт" },
+  chest: { title: "Сундук", ready: "Открыть сундук", tap: "Нажмите, чтобы открыть!", locked: "Откроется после 3 уроков", got: (x) => `В сундуке ${x} XP!`, empty: "Сундук открыт" },
   xp: {
     perfect: "Без ошибок! Максимум XP", lost: (m, max) => `Ошибок: ${m} — без ошибок вы получили бы ${max} XP`,
     rule: "Без ошибок — 20 XP · 1 ошибка — 15 · 2 — 10 · 3+ — 5",

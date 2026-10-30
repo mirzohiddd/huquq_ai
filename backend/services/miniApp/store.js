@@ -12,7 +12,7 @@ const stats = require("./stats");
 const path = require("./path");
 
 /* Asosiy XP — xatosiz bajarilganda; xato qilinsa kamayadi (`runs.xpFor`) */
-const XP = { lesson: 20, situation: 20, review: 5, exam: 40, chest: 10 };
+const XP = { lesson: 20, situation: 20, review: 5, exam: 40, chest: 20 };
 const EXAM_PASS = path.BASIC_EXAM_PASS;
 
 async function getDoc(userId) {

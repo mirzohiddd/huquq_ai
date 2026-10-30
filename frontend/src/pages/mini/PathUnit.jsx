@@ -59,8 +59,9 @@ export default function PathUnit({ unit, ui, t, ctx, pop, setPop }) {
           if (it.type === "chest") {
             const id = `chest:${unit.key}`;
             return (
-              <div key={id} className={s.item} style={style}>
-                <button type="button" className={s.chestBtn} onClick={tap(id, unit.chest.status === "open" ? () => ctx.claimChest(unit.key) : null)} aria-label={t.chest.title}>
+              <div key={id} className={s.item} style={style} data-current={unit.chest.status === "open" ? "1" : undefined}>
+                {unit.chest.status === "open" && <em className={s.bubble}>{t.chest.ready}</em>}
+                <button type="button" className={s.chestBtn} onClick={unit.chest.status === "open" ? () => (haptic("light"), ctx.claimChest(unit.key)) : tap(id)} aria-label={t.chest.title}>
                   <Chest status={unit.chest.status} />
                 </button>
                 {pop === id && unit.chest.status !== "open" && <NodePop title={t.chest.title} sub={unit.chest.status === "done" ? t.chest.empty : t.chest.locked} />}

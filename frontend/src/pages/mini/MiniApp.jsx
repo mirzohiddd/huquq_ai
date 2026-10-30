@@ -13,7 +13,7 @@ import { loadTelegram, setupApp, backButton } from "./tg";
 import { mini, setToken, hasToken, setApiLang } from "./miniApi";
 import { setUid, cachedPath, storePath, warmChunks } from "./bootCache";
 import { textFor } from "./text";
-import { unlock, settings, sfx } from "./sound";
+import { unlock, settings } from "./sound";
 import Gate, { Spinner } from "./Gate";
 import PathTab from "./PathTab";
 import Overlay from "./Overlay";
@@ -41,9 +41,8 @@ export default function MiniApp() {
   const [lang, setLang] = useState("uz");
   const [name, setName] = useState("");
   const [tab, setTab] = useState("path");
-  const [overlay, setOverlay] = useState(null); // { kind: "lesson"|"course"|"situation"|"exam"|"plans", id }
+  const [overlay, setOverlay] = useState(null); // { kind: "lesson"|"course"|"situation"|"exam"|"chest"|"plans", id }
   const [course, setCourseKey] = useState(read(COURSE_KEY) || "");
-  const [toast, setToast] = useState("");
   const [path, setPath] = useState(null);
   const [anim, setAnim] = useState(settings.anim);
   const t = textFor(lang);
@@ -105,12 +104,6 @@ export default function MiniApp() {
     loadPath();
   }, [loadPath]);
 
-  useEffect(() => {
-    if (!toast) return undefined;
-    const id = setTimeout(() => setToast(""), 2200);
-    return () => clearTimeout(id);
-  }, [toast]);
-
   // Telegram "Orqaga": ustki qatlam → yopish; profil → xarita
   useEffect(() => {
     if (overlay) return backButton(close);
@@ -145,12 +138,7 @@ export default function MiniApp() {
       loadPath(c);
       window.scrollTo(0, 0);
     },
-    claimChest: (unit) =>
-      mini
-        .chest(unit)
-        .then((r) => r.xp && (sfx("unit"), setToast(t.chest.got(r.xp))))
-        .catch((e) => e?.response?.data?.plan && setOverlay({ kind: "plans", id: "plans" }))
-        .finally(() => loadPath()),
+    claimChest: (unit) => setOverlay({ kind: "chest", id: unit }), // to'liq ekran ochilish (ChestOpen)
     setLang: (l) => {
       save(LANG_KEY, l);
       setApiLang(l);
@@ -179,7 +167,6 @@ export default function MiniApp() {
         )}
       </Suspense>
 
-      {toast && <div className={s.toast} role="status">{toast}</div>}
       {!overlay && (
         <nav className={s.nav} aria-label="Menu">
           {TABS.map(({ key, Icon }) => (

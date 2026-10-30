@@ -6,13 +6,18 @@
  * Qoidalar:
  *  - kurs ichida darslar ketma-ket ochiladi; keyingi bo'lim faqat imtihondan
  *    o'tilgach ochiladi (natijaga chiqish);
- *  - TARIF: har bir kursning 1-bo'limi bepul, qolgan hamma bo'lim —
- *    Basic/Pro/Premium bilan (`paywall`). Tarif tugasa tugatilgan darslar
- *    ham qayta ochilmaydi (kontent tarifga bog'liq);
+ *  - TARIF: BUTUN ilovada faqat BITTA bo'lim bepul — birinchi kursning
+ *    1-bo'limi. Qolgan hamma bo'lim (boshqa kurslarning 1-bo'limi ham) —
+ *    Basic/Pro/Premium bilan (`paywall`). ⚠️ Avval har kursning 1-bo'limi
+ *    bepul edi va kursdan kursga o'tib, to'lovsiz 13 bo'lim o'tish mumkin
+ *    edi. Boshqa kurslarni faqat KO'RISH mumkin. Tarif tugasa tugatilgan
+ *    darslar ham qayta ochilmaydi (kontent tarifga bog'liq);
  *  - yo'lda FAQAT saytdagi darslardan qurilgan kurslar (2026-10-30):
  *    qo'lda yozilgan «Hayotiy asoslar» (8 bo'lim) ro'yxatdan olib tashlandi.
  *    Uning kodi qoldirildi — eski progress/takrorlash kalitlari buzilmasin;
- *  - sandiq — bo'limning 3-darsidan keyin, bir marta bonus XP.
+ *  - sandiq — bo'limning 3-darsidan keyin. U OCHILMAGUNCHA keyingi dars
+ *    yopiq (yo'lning bir qadami, chetlab o'tilmaydi); ichida tasodifiy XP
+ *    (`chestXp`, kam XP ko'proq tushadi).
  */
 const content = require("./content");
 
@@ -21,18 +26,24 @@ const CHEST_AT = 3; // sandiq shu darsdan keyin
 const BASIC_EXAM_PASS = 4; // «Hayotiy asoslar» imtihoni: 5 savoldan 4 tasi
 
 /** Bo'limlar ro'yxati (bir kurs) → holatli yo'l. */
-function walk(units, doc, paid) {
+function walk(units, doc, paid, free) {
   let open = true;
   return units.map((u) => {
-    const paywall = !paid && u.key !== FREE_UNIT && u.n !== 1; // har kursning 1-bo'limi bepul
-    const lessons = u.lessons.map((l) => {
+    const paywall = !paid && u.key !== free;
+    const hasChest = u.lessons.length > CHEST_AT;
+    const chestDone = !!doc.chests?.[u.key];
+    let chest = null;
+    const lessons = u.lessons.map((l, i) => {
+      if (hasChest && i === CHEST_AT) {
+        // sandiq — yo'lning qadami: ochilmaguncha keyingi darslar yopiq
+        chest = { at: CHEST_AT, status: chestDone ? "done" : open && !paywall ? "open" : "locked" };
+        if (!chestDone) open = false;
+      }
       const done = !!doc.lessons?.[l.id];
       const status = done ? "done" : open && !paywall ? "open" : "locked";
       if (!done) open = false;
       return { id: l.id, title: l.title, status };
     });
-    const chestReady = lessons.slice(0, CHEST_AT).every((l) => l.status === "done");
-    const chest = lessons.length > CHEST_AT ? { at: CHEST_AT, status: doc.chests?.[u.key] ? "done" : chestReady && !paywall ? "open" : "locked" } : null;
     const passed = doc.exams?.[u.key];
     const exam = { status: passed ? "done" : open && !paywall ? "open" : "locked", score: passed?.score ?? null, total: passed?.total ?? null };
     if (!passed) open = false;
@@ -48,7 +59,22 @@ const courseUnits = (s, key) =>
 
 /** @param {string} course "basics" yoki kurs kaliti */
 function pathOf(doc, { course = "basics", paid = false, s = null } = {}) {
-  return walk(course === "basics" ? basicsUnits() : courseUnits(s, course), doc, paid);
+  return walk(course === "basics" ? basicsUnits() : courseUnits(s, course), doc, paid, freeUnit(s));
+}
+
+/** Yagona bepul bo'lim: birinchi kursning 1-bo'limi. */
+const freeUnit = (s) => s?.courses[0]?.units[0]?.key || FREE_UNIT;
+
+/* Sandiq XP: 1–20, kam XP ko'proq tushadi. Jami 100%:
+   1–4 → 50% · 5–9 → 30% · 10–14 → 15% · 15–20 → 5% */
+const CHEST_ODDS = [[50, 1, 4], [30, 5, 9], [15, 10, 14], [5, 15, 20]];
+function chestXp(rand = Math.random) {
+  let roll = rand() * 100;
+  for (const [p, lo, hi] of CHEST_ODDS) {
+    if (roll < p) return lo + Math.floor(rand() * (hi - lo + 1));
+    roll -= p;
+  }
+  return 1;
 }
 
 /** Kurslar ro'yxati: nomi, bo'lim/dars soni, nechtasi tugatilgan. */
@@ -86,4 +112,4 @@ function nextAfter(at, lessonId) {
   return flat[i + 1] || null;
 }
 
-module.exports = { FREE_UNIT, CHEST_AT, BASIC_EXAM_PASS, pathOf, coursesOf, locate, lessonAccess, nextAfter };
+module.exports = { FREE_UNIT, CHEST_AT, CHEST_ODDS, chestXp, freeUnit, BASIC_EXAM_PASS, pathOf, coursesOf, locate, lessonAccess, nextAfter };

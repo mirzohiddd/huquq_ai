@@ -42,6 +42,9 @@ Disallow: /constitution
 # Ilova ichidagi qonunchilik bo'limi (login bilan). Uning OCHIQ nusxalari:
 # /qonun/... (kodekslar) va /hujjat/... (Prezident hujjatlari).
 Disallow: /legislation
+# Telegram mini ilova (2026-10-30) — faqat Telegram ichida ishlaydi (login
+# initData orqali); brauzerda bot «Telegram'da oching» ekranini ko'radi.
+Disallow: /tg
 
 # ⚠️ /qonunlar va /qonun/... — ATAYLAB OCHIQ va indekslanadi.
 # Bu sahifalar server tomonda tayyor HTML sifatida beriladi (backend

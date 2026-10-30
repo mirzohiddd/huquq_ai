@@ -144,6 +144,13 @@ o'z Markdown nusxasiga ishora qiladi.
 - [To'liq ma'lumot fayli](https://www.huquqtech.uz/llms-full.txt) —
   tariflar, faktlar, savol-javoblar va cheklovlar.
 
+## Telegram o'quv ilovasi
+
+Telegram bot ichidagi mini ilova — saytdagi darslar o'yin uslubidagi yo'l
+ko'rinishida: kurslar, bo'limlar, tekshiruv savollari, bo'lim imtihoni, XP
+va kunlik seriya. Birinchi bo'lim bepul, qolganlari tarif bilan. O'zbek va
+rus tillarida.
+
 ## Muhim cheklovlar
 
 - HuquqTech **advokat emas**. U dastlabki yo'naltirish va umumiy huquqiy
