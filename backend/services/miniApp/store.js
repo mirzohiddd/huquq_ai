@@ -9,12 +9,21 @@
 const { MiniProgress } = require("../../models/miniApp");
 const content = require("./content");
 const stats = require("./stats");
+const path = require("./path");
 
-const XP = { lesson: 20, situation: 10, review: 5, exam: 50 };
-const EXAM_PASS = 4; // 5 savoldan kamida 4 tasi — bo'lim o'zlashtirilgan
+/* Asosiy XP — xatosiz bajarilganda; xato qilinsa kamayadi (`runs.xpFor`) */
+const XP = { lesson: 20, situation: 20, review: 5, exam: 40, chest: 10 };
+const EXAM_PASS = path.BASIC_EXAM_PASS;
 
 async function getDoc(userId) {
   return (await MiniProgress.findOne({ userId }).lean()) || { xp: 0, lessons: {}, situations: {}, mistakes: [], days: {}, reviewed: 0, goal: 20 };
+}
+
+/** Seriya animatsiyasi uchun: shu harakat bugungi BIRINCHI XP'mi (seriya oshdimi). */
+function streakChange(before, after) {
+  const today = stats.dayKey();
+  const up = !(before.days?.[today] > 0) && after.days?.[today] > 0;
+  return { streakUp: up, streakFrom: up ? stats.streakOf(before.days) : null, streak: stats.streakOf(after.days), week: up ? weekDots(after) : undefined };
 }
 
 async function touch(userId, name) {
@@ -56,26 +65,6 @@ async function setGoal(userId, goal) {
   return g;
 }
 
-/** Dars yo'li: tugatilgan, ochiq (keyingisi) va yopiq. Bo'lim oxirida — imtihon:
-    keyingi bo'lim faqat imtihondan o'tgandan keyin ochiladi (natijaga chiqish). */
-function pathOf(doc) {
-  let open = true;
-  return content.UNITS.map((u) => {
-    const lessons = content.LESSONS.filter((l) => l.unit === u.key).map((l) => {
-      const done = !!doc.lessons?.[l.id];
-      const status = done ? "done" : open ? "open" : "locked";
-      if (!done) open = false; // birinchi tugallanmagan dars ochiq, keyingilari yopiq
-      return { id: l.id, title: l.title, status };
-    });
-    const passed = doc.exams?.[u.key];
-    const exam = { status: passed ? "done" : open ? "open" : "locked", score: passed?.score ?? null };
-    if (!passed) open = false;
-    return { key: u.key, title: u.title, level: u.level, icon: u.icon, lessons, exam };
-  });
-}
-
-const examOpen = (doc, unit) => pathOf(doc).find((u) => u.key === unit)?.exam.status !== "locked";
-
 /** Joriy hafta (dushanbadan): har kun faolmi. Takrorlash sahifasidagi nuqtalar. */
 function weekDots(doc) {
   const today = (new Date(`${stats.dayKey()}T00:00:00Z`).getUTCDay() + 6) % 7; // 0 = dushanba
@@ -85,29 +74,22 @@ function weekDots(doc) {
   });
 }
 
-function isUnlocked(doc, lessonId) {
-  for (const u of pathOf(doc)) {
-    const l = u.lessons.find((x) => x.id === lessonId);
-    if (l) return l.status !== "locked";
-  }
-  return false;
-}
-
-/** Profil va yutuqlar uchun umumiy xulosa. */
-function summaryOf(doc) {
+/** Profil va yutuqlar uchun umumiy xulosa. `courseTotal` — saytdan qurilgan kurs darslari soni. */
+function summaryOf(doc, courseTotal = 0) {
   const lessonsDone = content.LESSONS.filter((l) => doc.lessons?.[l.id]);
+  const allDone = Object.keys(doc.lessons || {}).length; // «Hayotiy asoslar» + kurslar
   const fullUnits = content.UNITS.filter((u) => content.LESSONS.filter((l) => l.unit === u.key).every((l) => doc.lessons?.[l.id])).length;
   const s = {
     xp: doc.xp || 0,
-    lessons: lessonsDone.length,
-    totalLessons: content.LESSONS.length,
+    lessons: allDone,
+    totalLessons: content.LESSONS.length + courseTotal,
     situations: content.SITUATIONS.filter((x) => doc.situations?.[x.id]).length,
     totalSituations: content.SITUATIONS.length,
-    firstTry: lessonsDone.filter((l) => doc.lessons[l.id].firstTry).length,
+    firstTry: Object.values(doc.lessons || {}).filter((l) => l?.firstTry).length,
     reviewed: doc.reviewed || 0,
     mistakes: (doc.mistakes || []).length,
     streak: stats.streakOf(doc.days),
-    fullUnits,
+    fullUnits: Math.max(fullUnits, Object.keys(doc.exams || {}).length), // imtihondan o'tilgan bo'limlar ham
     goal: doc.goal || 20,
     todayXp: doc.days?.[stats.dayKey()] || 0,
   };
@@ -137,4 +119,4 @@ async function rating(userId) {
   };
 }
 
-module.exports = { XP, EXAM_PASS, examOpen, getDoc, touch, finishOnce, addMistake, fixMistake, setGoal, pathOf, weekDots, isUnlocked, summaryOf, rating };
+module.exports = { XP, EXAM_PASS, getDoc, touch, finishOnce, addMistake, fixMistake, setGoal, weekDots, streakChange, summaryOf, rating };

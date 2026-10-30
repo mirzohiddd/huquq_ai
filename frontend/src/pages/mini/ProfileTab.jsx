@@ -4,7 +4,7 @@
  * (Ovoz, Animatsiya, kunlik maqsad). Sozlamalar shu qurilmada saqlanadi.
  */
 import React, { useEffect, useRef, useState } from "react";
-import { Settings, BookOpen, Flame, ChevronRight, Footprints, Brain, Volume2, Sparkles, Target, Languages } from "lucide-react";
+import { Settings, BookOpen, Flame, ChevronRight, Footprints, Brain, Volume2, Sparkles, Target, Languages, Crown } from "lucide-react";
 import { mini } from "./miniApi";
 import { haptic } from "./tg";
 import { settings, setSetting, sfx } from "./sound";
@@ -116,6 +116,11 @@ export default function ProfileTab({ ctx, name }) {
         <h3>{t.settings}</h3>
       </div>
       <div className={s.settings}>
+        <button type="button" className={s.row} style={{ width: "100%", border: 0, background: "none", font: "inherit", textAlign: "left", cursor: "pointer" }} onClick={ctx.openPlans}>
+          <Crown aria-hidden="true" />
+          <span>{t.plans.title} · <b>{ctx.path?.plan?.label || ""}</b></span>
+          <ChevronRight aria-hidden="true" />
+        </button>
         <div className={s.row}>
           <Volume2 aria-hidden="true" />
           <span>{t.sound}</span>

@@ -1,7 +1,8 @@
 /**
  * BO'LIM IMTIHONI — bo'limning 5 ta darsi bo'yicha nazorat (savol → natija).
- * Kamida `pass` ta to'g'ri — bo'lim o'zlashtirildi, +XP va keyingi bo'lim
- * ochiladi; aks holda darslarni takrorlab qayta topshiriladi. Ball serverda.
+ * Kamida `pass` ta to'g'ri — bo'lim o'zlashtirildi, +XP (xatolarga qarab) va
+ * keyingi bo'lim ochiladi; aks holda darslarni takrorlab qayta topshiriladi.
+ * Ball serverda. Kunning birinchi XP'si bo'lsa — avval seriya animatsiyasi.
  */
 import React, { useEffect, useState } from "react";
 import { X, ChevronRight, GraduationCap } from "lucide-react";
@@ -11,10 +12,11 @@ import { Spinner } from "./Gate";
 import Hero from "./Hero";
 import QuestionView from "./QuestionView";
 import ResultView from "./ResultView";
+import StreakScreen from "./StreakScreen";
 import m from "./Mini.module.css";
 import l from "./Lesson.module.css";
 import q from "./Quiz.module.css";
-import lib from "./Library.module.css";
+import lib from "./Exam.module.css";
 
 export default function ExamPlayer({ unit, ctx }) {
   const { t } = ctx;
@@ -24,12 +26,13 @@ export default function ExamPlayer({ unit, ctx }) {
   const [res, setRes] = useState(null);
   const [answers, setAnswers] = useState([]);
   const [final, setFinal] = useState(null);
+  const [streak, setStreak] = useState(false);
 
   const load = () =>
     mini
       .exam(unit)
       .then(setExam)
-      .catch((e) => setErr(e?.response?.data?.error || t.error));
+      .catch((e) => setErr(e?.response?.data?.plan ? t.course.planText : e?.response?.data?.error || t.error));
   useEffect(() => {
     load();
   }, [unit]);
@@ -55,6 +58,7 @@ export default function ExamPlayer({ unit, ctx }) {
   if (!exam) return <Spinner />;
   const total = exam.items.length;
 
+  if (final && streak) return <StreakScreen from={final.streakFrom || 0} to={final.streak || 1} week={final.week || []} t={t} onDone={() => setStreak(false)} />;
   if (final) {
     return (
       <div className={`${lib.result} ${m.fadeIn}`}>
@@ -62,6 +66,7 @@ export default function ExamPlayer({ unit, ctx }) {
         <h2>{final.passed ? t.met.examPassed : t.met.examFailed}</h2>
         <div className={lib.ring} style={{ "--p": Math.round((final.score / final.total) * 100) }}><span>{final.score}/{final.total}</span></div>
         <p>{t.met.examScore(final.score, final.total)}{final.xp > 0 ? ` · +${final.xp} XP` : ""}</p>
+        {final.xp > 0 && <p>{final.mistakes ? t.xp.lost(final.mistakes, final.maxXp) : t.xp.perfect}</p>}
         <p style={{ marginTop: 8 }}>{final.passed ? t.met.nextUnit : t.met.examRetry}</p>
         <div className={q.footer} style={{ display: "grid", gap: 10 }}>
           {!final.passed && <button type="button" className={q.main} onClick={restart}>{t.met.retry}</button>}
@@ -103,6 +108,7 @@ export default function ExamPlayer({ unit, ctx }) {
     try {
       const r = await mini.examFinish(unit, answers);
       setFinal(r);
+      setStreak(!!r.streakUp);
       sfx(r.passed ? "unit" : "wrong");
       ctx.reloadPath();
     } catch (e) {

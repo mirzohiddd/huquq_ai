@@ -1,0 +1,46 @@
+/* Seriya ekrani: olov yonishi, son almashishi, hafta kunlari. */
+.wrap { min-height: calc(100dvh - 140px); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px 16px 110px; text-align: center; }
+.flame { position: relative; width: 120px; height: 140px; }
+.flame svg { width: 100%; height: 100%; overflow: visible; transform-origin: 50% 90%; }
+.shadow { fill: #0b1322; opacity: 0.08; }
+.outer { fill: #d6d2c8; transition: fill 0.35s; }
+.inner { fill: #c3beb2; transition: fill 0.35s; }
+.lit svg { animation: ignite 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both, flicker 1.6s 0.7s ease-in-out infinite; }
+.lit .outer { fill: #e9a93a; }
+.lit .inner { fill: #ffd76a; }
+
+.sparks i { position: absolute; left: 50%; top: 55%; width: 8px; height: 8px; margin: -4px; border-radius: 2px; background: #e9a93a; animation: spark 0.75s ease-out both; }
+.sparks i:nth-child(even) { background: #c9953a; width: 6px; height: 6px; }
+
+.num { margin-top: 6px; height: 74px; overflow: hidden; font-size: 64px; line-height: 74px; font-weight: 800; color: #cfcabd; transition: color 0.3s; }
+.numLit { color: #c9953a; }
+.flip { display: inline-block; animation: flip 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.label { font-size: 19px; font-weight: 800; color: #c9953a; opacity: 0; transform: translateY(8px); transition: opacity 0.35s, transform 0.35s; }
+
+.card { width: min(340px, 100%); margin-top: 22px; border-radius: 18px; border: 2px solid #ece6d8; background: #fff; overflow: hidden; opacity: 0; transform: translateY(14px); transition: opacity 0.4s 0.1s, transform 0.4s 0.1s; }
+.card p { padding: 12px 16px 14px; border-top: 2px solid #f1ece0; font-size: 13.5px; line-height: 1.5; color: #5d5a53; }
+.show { opacity: 1; transform: none; }
+.week { display: grid; grid-template-columns: repeat(7, 1fr); padding: 12px 8px; }
+.day { display: grid; justify-items: center; gap: 6px; }
+.day small { font-size: 12px; font-weight: 700; color: #a29e94; }
+.today small { color: #c9953a; }
+.dot { width: 28px; height: 28px; border-radius: 50%; background: #ece8df; display: grid; place-items: center; color: #fff; }
+.dot svg { width: 16px; height: 16px; stroke-width: 3.2; }
+.dotOn { background: #c9953a; }
+.dotNow { animation: stamp 0.5s 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+
+.footer { position: fixed; left: 0; right: 0; bottom: 0; padding: 12px 16px calc(14px + env(safe-area-inset-bottom)); background: linear-gradient(180deg, rgba(248, 246, 241, 0), #f8f6f1 30%); }
+.btn {
+  display: block; width: 100%; max-width: 608px; margin: 0 auto; padding: 15px; border: 0; border-radius: 16px; font: inherit; font-weight: 800; font-size: 15px;
+  letter-spacing: 0.04em; text-transform: uppercase; background: linear-gradient(160deg, #f0c46a, #c9953a); color: #14213d; box-shadow: 0 5px 0 #9c6f22; cursor: pointer;
+}
+.btn:disabled { opacity: 0.5; }
+.btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #9c6f22; }
+
+@keyframes ignite { 0% { transform: scale(0.85); } 60% { transform: scale(1.18) translateY(-6px); } 100% { transform: scale(1); } }
+@keyframes flicker { 0%, 100% { transform: scale(1) rotate(0); } 50% { transform: scale(1.03, 0.97) rotate(1.5deg); } }
+@keyframes spark { from { opacity: 1; transform: translate(0, 0) scale(1); } to { opacity: 0; transform: translate(var(--x), var(--y)) scale(0.4) rotate(120deg); } }
+@keyframes flip { from { transform: translateY(70%) scale(0.6); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes stamp { 0% { transform: scale(0.4); } 70% { transform: scale(1.25); } 100% { transform: scale(1); } }
+
+@media (prefers-reduced-motion: reduce) { .lit svg, .sparks i, .flip, .dotNow { animation: none; } }

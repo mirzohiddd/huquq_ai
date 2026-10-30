@@ -1,22 +1,11 @@
 /**
- * Mini app matnlari (davomi): saytdagi barcha darslar, testlar va mavzular nomi.
- * Mavzu nomlari saytning `lesson_mod_*` kalitlari bilan bir xil (i18n/uz.js, ru.js).
+ * Mini app matnlari (davomi): metodika, kurslar, sandiq, seriya, tariflar va XP.
  */
 export const LIB_UZ = {
   lib: {
-    lessons: "Barcha darslar", lessonsSub: "Saytdagi barcha darslar — mavzular bo'yicha",
-    tests: "Testlar", testsSub: "Saytdagi barcha testlar — bilimingizni sinang",
-    search: "Dars qidirish…", nothing: "Hech narsa topilmadi",
-    sections: (n) => `${n} ta bo'lim`, minutes: (n) => `~${n} daqiqa`, questions: (n) => `${n} ta savol`,
-    locked: "Tarifingizda yopiq", upgrade: "Tariflarni ko'rish",
-    objectives: "Darsdan keyin bilasiz", example: "Hayotiy misol", keyPoints: "Asosiy fikrlar",
-    warning: "Diqqat", steps: "Amaliy qadamlar", markDone: "Darsni tugatdim",
-    doneMsg: "Dars tugallandi!", alreadyDone: "Bu dars avval tugatilgan", done: "Tugatilgan",
-    passed: "Test topshirildi!", failed: "Yana bir urinib ko'ring",
-    score: (s, t, p) => `${t} tadan ${s} ta to'g'ri · ${p}%`, related: "Shu mavzudagi darslar",
-    retake: "Qayta topshirish", back: "Orqaga", art: (n) => `${n}-modda`,
+    example: "Hayotiy misol", keyPoints: "Asosiy fikrlar", warning: "Diqqat",
+    upgrade: "Tariflarni ko'rish", art: (n) => `${n}-modda`,
   },
-  mods: { constitution: "Konstitutsiya va davlat", civil: "Fuqarolik huquqi", contracts: "Shartnomalar", family: "Oila huquqi", inheritance: "Meros huquqi", labor: "Mehnat huquqi", housing: "Uy-joy va yer", consumer: "Iste'molchi huquqlari", tax: "Soliq va tadbirkorlik", administrative: "Ma'muriy huquq", criminal: "Jinoyat huquqi", process: "Sud va himoya", special: "Maxsus sohalar", other: "Boshqa mavzular" },
   met: {
     stages: ["Maqsad", "Qoida", "Vaziyat", "Tahlil", "Mashq", "Amal"],
     goalTitle: "Bu darsdan keyin siz:", ruleTitle: "Asosiy qoida", start: "Boshladik",
@@ -25,27 +14,45 @@ export const LIB_UZ = {
     exam: "Bo'lim imtihoni", examSub: (n, p) => `${n} ta savol · o'tish uchun kamida ${p} ta to'g'ri`,
     examStart: "Imtihonni boshlash", examPassed: "Bo'lim o'zlashtirildi!", examFailed: "Hali o'zlashtirilmadi",
     examScore: (s, t) => `${t} tadan ${s} ta to'g'ri`, examRetry: "Darslarni takrorlab, qayta topshiring — keyingi bo'lim imtihondan keyin ochiladi.",
-    retry: "Qayta topshirish", examLocked: "Avval bo'limdagi 5 ta darsni tugating", examDone: "Topshirilgan",
+    retry: "Qayta topshirish", examLocked: "Avval bo'limdagi barcha darslarni tugating", examDone: "Topshirilgan",
     nextUnit: "Keyingi bo'lim ochildi!", goExam: "Bo'lim imtihoniga o'tish",
+    examPass: "Bo'lim darslari bo'yicha nazorat · o'tish uchun 80% to'g'ri javob",
+  },
+  course: {
+    courses: "Kurslar", choose: "Kursni tanlang", unitN: (n) => `${n}-bo'lim`,
+    lessonsOf: (d, t) => `${d} / ${t} dars`, unitsN: (n) => `${n} ta bo'lim`,
+    learnTitle: "Bu darsda siz o'rganasiz:", card: (i, n) => `Mavzu ${i} / ${n}`,
+    checkTag: "Tekshiruv", checkTitle: "Bilimingizni tekshiring", fixTag: "Mustahkamlash", lawQuote: "Qonundan iqtibos",
+    lessonN: (i, n) => `Dars ${i} / ${n}`, review: "Takrorlash", startXp: (xp) => `Boshlash +${xp} XP`,
+    planTitle: "Tarif bilan ochiladi", planText: "1-bo'lim hamma uchun bepul. Qolgan bo'limlar va kurslar — Basic, Pro yoki Premium tarifida.",
+    toCurrent: "Joriy darsga",
+  },
+  chest: { title: "Sandiq", ready: "Sandiqni ochish", locked: "3 ta darsdan keyin ochiladi", got: (x) => `+${x} XP bonus!`, empty: "Sandiq ochilgan" },
+  xp: {
+    perfect: "Xatosiz! Maksimal XP", lost: (m, max) => `${m} ta xato — xatosiz bo'lsa ${max} XP olardingiz`,
+    rule: "Xatosiz — 20 XP · 1 xato — 15 · 2 xato — 10 · 3+ xato — 5",
+  },
+  streak: {
+    days: () => "kun ketma-ket", title: "Seriya boshlandi!", keep: "Ertaga dars o'tkazib yuborsangiz, seriya nolga tushadi. Ehtiyot bo'ling!",
+    week: ["Du", "Se", "Ch", "Pa", "Ju", "Sh", "Ya"], next: "Davom etish",
+  },
+  plans: {
+    title: "Tariflar", sub: "Barcha kurslar, bo'limlar va imtihonlar — sertifikat darajasidagi tayyorgarlik",
+    current: "Joriy tarif", perMonth: "so'm / oy", buy: "Sotib olish", active: "Faol",
+    allUnits: "Barcha kurs va bo'limlar ochiq", aiDay: (n) => `Kuniga ${n} ta AI savol`, voice: (n) => `Kuniga ${n} ta ovozli savol`,
+    claude: "Eng kuchli AI modeli (Claude)", payClick: "Click orqali to'lash", payPayme: "Payme orqali to'lash",
+    orderSent: "Buyurtma qabul qilindi! Administrator tez orada Telegram orqali bog'lanadi.",
+    phone: "Telefon raqamingiz", send: "Buyurtma berish", free: "Bepul: faqat 1-bo'lim",
+    activated: "Tarif faollashtirildi!",
   },
   language: "Til",
 };
 
 export const LIB_RU = {
   lib: {
-    lessons: "Все уроки", lessonsSub: "Все уроки сайта — по темам",
-    tests: "Тесты", testsSub: "Все тесты сайта — проверьте знания",
-    search: "Поиск урока…", nothing: "Ничего не найдено",
-    sections: (n) => `Разделов: ${n}`, minutes: (n) => `~${n} мин`, questions: (n) => `Вопросов: ${n}`,
-    locked: "Закрыто на вашем тарифе", upgrade: "Посмотреть тарифы",
-    objectives: "После урока вы узнаете", example: "Пример из жизни", keyPoints: "Главное",
-    warning: "Внимание", steps: "Практические шаги", markDone: "Я прошёл урок",
-    doneMsg: "Урок пройден!", alreadyDone: "Этот урок уже пройден", done: "Пройдено",
-    passed: "Тест сдан!", failed: "Попробуйте ещё раз",
-    score: (s, t, p) => `${s} из ${t} верно · ${p}%`, related: "Уроки по этой теме",
-    retake: "Пройти заново", back: "Назад", art: (n) => `Статья ${n}`,
+    example: "Пример из жизни", keyPoints: "Главное", warning: "Внимание",
+    upgrade: "Посмотреть тарифы", art: (n) => `Статья ${n}`,
   },
-  mods: { constitution: "Конституция и государство", civil: "Гражданское право", contracts: "Договоры", family: "Семейное право", inheritance: "Наследственное право", labor: "Трудовое право", housing: "Жильё и земля", consumer: "Права потребителей", tax: "Налоги и предпринимательство", administrative: "Административное право", criminal: "Уголовное право", process: "Суд и защита", special: "Специальные сферы", other: "Другие темы" },
   met: {
     stages: ["Цель", "Правило", "Ситуация", "Разбор", "Практика", "Действие"],
     goalTitle: "После урока вы:", ruleTitle: "Главное правило", start: "Начнём",
@@ -54,8 +61,36 @@ export const LIB_RU = {
     exam: "Экзамен раздела", examSub: (n, p) => `Вопросов: ${n} · для зачёта нужно не меньше ${p} верных`,
     examStart: "Начать экзамен", examPassed: "Раздел освоен!", examFailed: "Пока не освоено",
     examScore: (s, t) => `${s} из ${t} верно`, examRetry: "Повторите уроки и пересдайте — следующий раздел откроется после экзамена.",
-    retry: "Пересдать", examLocked: "Сначала пройдите 5 уроков раздела", examDone: "Сдан",
+    retry: "Пересдать", examLocked: "Сначала пройдите все уроки раздела", examDone: "Сдан",
     nextUnit: "Следующий раздел открыт!", goExam: "Перейти к экзамену раздела",
+    examPass: "Контроль по урокам раздела · для зачёта 80% верных ответов",
+  },
+  course: {
+    courses: "Курсы", choose: "Выберите курс", unitN: (n) => `Раздел ${n}`,
+    lessonsOf: (d, t) => `${d} / ${t} уроков`, unitsN: (n) => `Разделов: ${n}`,
+    learnTitle: "В этом уроке вы изучите:", card: (i, n) => `Тема ${i} / ${n}`,
+    checkTag: "Проверка", checkTitle: "Проверьте себя", fixTag: "Закрепление", lawQuote: "Цитата из закона",
+    lessonN: (i, n) => `Урок ${i} / ${n}`, review: "Повторить", startXp: (xp) => `Начать +${xp} XP`,
+    planTitle: "Открывается с тарифом", planText: "Раздел 1 бесплатен для всех. Остальные разделы и курсы — на тарифах Basic, Pro или Premium.",
+    toCurrent: "К текущему уроку",
+  },
+  chest: { title: "Сундук", ready: "Открыть сундук", locked: "Откроется после 3 уроков", got: (x) => `+${x} XP бонус!`, empty: "Сундук открыт" },
+  xp: {
+    perfect: "Без ошибок! Максимум XP", lost: (m, max) => `Ошибок: ${m} — без ошибок вы получили бы ${max} XP`,
+    rule: "Без ошибок — 20 XP · 1 ошибка — 15 · 2 — 10 · 3+ — 5",
+  },
+  streak: {
+    days: () => "дней подряд", title: "Серия началась!", keep: "Если завтра пропустите урок, серия обнулится. Берегите её!",
+    week: ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"], next: "Продолжить",
+  },
+  plans: {
+    title: "Тарифы", sub: "Все курсы, разделы и экзамены — подготовка уровня сертификата",
+    current: "Текущий тариф", perMonth: "сум / мес", buy: "Купить", active: "Активен",
+    allUnits: "Открыты все курсы и разделы", aiDay: (n) => `${n} вопросов ИИ в день`, voice: (n) => `${n} голосовых вопросов в день`,
+    claude: "Самая сильная модель ИИ (Claude)", payClick: "Оплатить через Click", payPayme: "Оплатить через Payme",
+    orderSent: "Заявка принята! Администратор скоро свяжется с вами в Telegram.",
+    phone: "Ваш номер телефона", send: "Оформить заявку", free: "Бесплатно: только раздел 1",
+    activated: "Тариф активирован!",
   },
   language: "Язык",
 };

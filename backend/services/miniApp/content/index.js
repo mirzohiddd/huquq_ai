@@ -118,6 +118,8 @@ function publicSituation(s) {
 /* Takrorlash kaliti: "L:<dars>" (tanlov), "X:<dars>" (imtihon) yoki "S:<vaziyat>:<qadam>". */
 function questionByKey(key) {
   const [kind, id, idx] = String(key).split(":");
+  // Saytdan qurilgan kurslar: "Q:<dars>:<savol>", "X:<dars>:<savol>"
+  if (kind === "Q" || (kind === "X" && idx !== undefined)) return require("../course").questionByKey(key);
   if (kind === "L" || kind === "X") {
     const l = lessonById.get(id);
     return l && { key, title: l.title, icon: l.icon, text: l.story, q: l.choice.q, options: l.choice.options, refs: l.refs };

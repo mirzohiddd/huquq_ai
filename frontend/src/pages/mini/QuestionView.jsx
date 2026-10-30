@@ -20,7 +20,7 @@ export function Illustration({ icon }) {
   );
 }
 
-export default function QuestionView({ icon, text, question, options, onCheck, t, tag }) {
+export default function QuestionView({ icon, text, question, options, onCheck, t, tag, title }) {
   const [sel, setSel] = useState(null);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState(false);
@@ -40,7 +40,7 @@ export default function QuestionView({ icon, text, question, options, onCheck, t
   return (
     <div className={q.screen}>
       {tag && <div className={q.tag}>{tag}</div>}
-      <h2 className={q.title}>{t.whatWould}</h2>
+      <h2 className={q.title}>{title || t.whatWould}</h2>
       <Illustration icon={icon} />
       <p className={q.text}>
         {text} <b>{question}</b>

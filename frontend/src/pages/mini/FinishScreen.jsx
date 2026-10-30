@@ -1,10 +1,13 @@
 /**
  * DARS YAKUNI: «Dars tugadi! +20 XP», qalqon bayrami (sakraydi va gapiradi),
- * asosiy xulosa va qonundan jonli iqtibos.
+ * asosiy xulosa va qonundan jonli iqtibos. XP xatolarga qarab — necha xato
+ * bo'lgani va xatosiz bo'lsa qancha XP bo'lishi ko'rsatiladi.
+ * Kunning birinchi darsi bo'lsa — avval seriya animatsiyasi (StreakScreen).
  */
 import React, { useEffect, useState } from "react";
 import { Zap, Flame, BookOpen, ChevronRight, CircleCheck, GraduationCap } from "lucide-react";
 import Hero from "./Hero";
+import StreakScreen from "./StreakScreen";
 import { speak, stopVoice } from "./sound";
 import f from "./Finish.module.css";
 import m from "./Mini.module.css";
@@ -14,17 +17,21 @@ export default function FinishScreen({ result, ctx, title, sub }) {
   const { t } = ctx;
   const xp = result?.xp || 0;
   const [talking, setTalking] = useState(false);
+  const [streak, setStreak] = useState(!!result?.streakUp);
   const heading = result?.unitDone ? t.unitDone(result.unitTitle) : title || t.finishTitle;
 
   // Fanfara tugagach qalqon tabriklaydi
   useEffect(() => {
+    if (streak) return undefined;
     const line = `${heading} ${xp > 0 ? `Plyus ${xp} XP!` : ""} ${result?.takeaway || ""}`.trim();
     const id = setTimeout(() => speak(line, setTalking), result?.unitDone ? 1700 : 900);
     return () => {
       clearTimeout(id);
       stopVoice();
     };
-  }, [heading, xp, result]);
+  }, [heading, xp, result, streak]);
+
+  if (streak) return <StreakScreen from={result.streakFrom || 0} to={result.streak || 1} week={result.week || []} t={t} onDone={() => setStreak(false)} />;
 
   return (
     <div className={`${f.wrap} ${m.fadeIn}`}>
@@ -36,6 +43,9 @@ export default function FinishScreen({ result, ctx, title, sub }) {
         <div className={f.xp}><Zap aria-hidden="true" /> +{xp} XP</div>
       ) : (
         <p className={f.again}>{sub || t.finishAgain}</p>
+      )}
+      {xp > 0 && result?.maxXp > 0 && (
+        <p className={`${f.again} ${result.mistakes ? "" : f.perfect}`}>{result.mistakes ? t.xp.lost(result.mistakes, result.maxXp) : t.xp.perfect}</p>
       )}
       {sub && xp > 0 && <p className={f.again}>{sub}</p>}
 

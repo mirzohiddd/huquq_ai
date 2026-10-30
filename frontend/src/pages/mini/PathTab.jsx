@@ -1,123 +1,102 @@
 /**
- * O'RGANISH — yo'l shaklidagi darslar xaritasi: tugatilgan, ochiq va yopiq bosqichlar.
+ * O'RGANISH — Duolingo uslubidagi yo'l. Tepada yopishqoq banner: joriy
+ * kurs, ko'rinib turgan bo'lim va kunlik maqsad; bosilsa kurslar ro'yxati.
+ * Barcha darslar, testlar va imtihonlar shu yo'lning ICHIDA (alohida
+ * «Barcha darslar» / «Testlar» bo'limlari yo'q). Pastda — joriy darsga tugma.
  */
-import React, { useEffect, useState } from "react";
-import { Check, Lock, Star, ShoppingBag, Briefcase, Heart, Shield, Target, Library, ClipboardList, GraduationCap } from "lucide-react";
-import Hero from "./Hero";
-import { haptic } from "./tg";
+import React, { useEffect, useRef, useState } from "react";
+import { ListTree, ArrowUp, ArrowDown, Crown } from "lucide-react";
+import PathUnit from "./PathUnit";
+import CourseSheet from "./CourseSheet";
 import { iconOf } from "./icons";
 import m from "./Mini.module.css";
 import s from "./Path.module.css";
-import st from "./Steps.module.css";
-
-const UNIT_ICON = { consumer: ShoppingBag, labor: Briefcase, family: Heart, online: Shield };
-const OFFSET = [0, 54, 74, 40, -20, -60, -40]; // ilon izi bo'ylab bosqichlar
-
-const STOP_H = 128; // .stop balandligi (Path.module.css) — chiziq doira markazidan o'tadi
-const NODE_Y = 49;
-
-/* Bosqichlarni bog'laydigan egri yo'l: o'tilgan qismi oltin, qolgani shtrix. */
-function RoadLine({ offsets, done }) {
-  const pts = offsets.map((x, i) => [x, NODE_Y + i * STOP_H]);
-  const d = (list) => list.map(([x, y], i) => (i ? `Q ${list[i - 1][0]} ${y - STOP_H / 2} ${x} ${y}` : `M ${x} ${y}`)).join(" ");
-  return (
-    <svg className={s.line} aria-hidden="true">
-      <path d={d(pts)} className={s.lineRest} />
-      {done > 0 && <path d={d(pts.slice(0, Math.min(done + 1, pts.length)))} className={s.lineDone} />}
-    </svg>
-  );
-}
 
 export default function PathTab({ ctx }) {
   const { t, path } = ctx;
-  const [hint, setHint] = useState(null);
-  useEffect(() => {
-    if (!hint) return undefined;
-    const id = setTimeout(() => setHint(null), 1800);
-    return () => clearTimeout(id);
-  }, [hint]);
-  if (!path) return null;
+  const [pop, setPop] = useState(null);
+  const [sheet, setSheet] = useState(false);
+  const [seen, setSeen] = useState(null); // ko'rinib turgan bo'lim
+  const [dir, setDir] = useState(null); // joriy dars ekrandan yuqori/pastda
+  const box = useRef(null);
 
+  // Bo'sh joy bosilsa oyna yopiladi
+  useEffect(() => {
+    if (!pop) return undefined;
+    const close = () => setPop(null);
+    const id = setTimeout(() => window.addEventListener("click", close), 0);
+    return () => {
+      clearTimeout(id);
+      window.removeEventListener("click", close);
+    };
+  }, [pop]);
+
+  // Banner: ekranda qaysi bo'lim turibdi; tugma: joriy dars qayerda
+  useEffect(() => {
+    const onScroll = () => {
+      const units = box.current?.querySelectorAll("[data-unit]") || [];
+      let cur = null;
+      units.forEach((el) => {
+        if (el.getBoundingClientRect().top < 160) cur = el;
+      });
+      setSeen(cur ? { n: cur.dataset.n, title: cur.dataset.title } : null);
+      const now = box.current?.querySelector("[data-current]");
+      const r = now?.getBoundingClientRect();
+      setDir(!r ? null : r.top < 60 ? "up" : r.top > window.innerHeight - 120 ? "down" : null);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [path]);
+
+  if (!path) return null;
+  const course = path.courses?.find((c) => c.key === path.course) || {};
+  const first = path.units[0];
+  const head = seen || (first && { n: first.n, title: first.title });
   const goalPct = Math.min(100, Math.round(((path.todayXp || 0) / (path.goal || 20)) * 100));
-  let n = 0;
+  const CourseIcon = iconOf(course.icon);
+  const toCurrent = () => box.current?.querySelector("[data-current]")?.scrollIntoView({ behavior: "smooth", block: "center" });
 
   return (
-    <div className={m.fadeIn}>
-      <section className={s.top}>
-        <div>
-          <div className={s.level}>{t.level} {path.level?.level} · {path.level?.name}</div>
-          <div className={s.goalRow}>
-            <Target aria-hidden="true" />
-            <span>{t.goal}: <b>{path.todayXp || 0}</b> / {path.goal} XP</span>
-          </div>
-          <div className={s.bar}><i style={{ width: `${goalPct}%` }} /></div>
-        </div>
-        <Hero mood={goalPct >= 100 ? "cheer" : "wave"} size={92} />
-      </section>
+    <div className={m.fadeIn} ref={box}>
+      <button type="button" className={s.banner} onClick={() => setSheet(true)}>
+        <span className={s.bannerIcon}><CourseIcon aria-hidden="true" /></span>
+        <span className={s.bannerText}>
+          <small>{course.title} · {head ? t.course.unitN(head.n) : ""}</small>
+          <b>{head?.title}</b>
+          <i className={s.goal}><i style={{ width: `${goalPct}%` }} /></i>
+        </span>
+        <span className={s.bannerBtn}><ListTree aria-hidden="true" /></span>
+      </button>
 
-      {/* Saytdagi barcha darslar va testlar */}
-      <div className={s.more}>
-        <button type="button" onClick={() => ctx.openLibrary()}>
-          <Library aria-hidden="true" /><b>{t.lib.lessons}</b>
+      {!path.plan?.paid && (
+        <button type="button" className={s.planNote} onClick={ctx.openPlans}>
+          <Crown aria-hidden="true" /> <span>{t.plans.free}</span> <b>{t.lib.upgrade}</b>
         </button>
-        <button type="button" onClick={ctx.openTests}>
-          <ClipboardList aria-hidden="true" /><b>{t.lib.tests}</b>
-        </button>
-      </div>
+      )}
 
-      {path.units.map((u) => {
-        const Icon = UNIT_ICON[u.key] || iconOf(u.icon, Star);
-        const doneCount = u.lessons.filter((l) => l.status === "done").length;
-        return (
-          <section key={u.key} className={s.unit}>
-            <div className={s.unitHead}>
-              <span className={s.unitIcon}><Icon aria-hidden="true" /></span>
-              <div>
-                <h2>{u.title}</h2>
-                <small>{doneCount} / {u.lessons.length}{u.level && <span className={s.level}>{u.level}</span>}</small>
-              </div>
-            </div>
-            <ol className={s.road}>
-              <RoadLine offsets={u.lessons.map((_, i) => OFFSET[(n + i) % OFFSET.length])} done={doneCount} />
-              {u.lessons.map((l) => {
-                const off = OFFSET[n++ % OFFSET.length];
-                const locked = l.status === "locked";
-                const onClick = () => {
-                  if (locked) {
-                    haptic("error");
-                    return setHint(l.id);
-                  }
-                  haptic("light");
-                  ctx.openLesson(l.id);
-                };
-                return (
-                  <li key={l.id} className={s.stop} style={{ "--x": `${off}px` }}>
-                    <button type="button" className={`${s.node} ${s[l.status]}`} onClick={onClick} aria-label={`${l.title} — ${t[l.status]}`}>
-                      {l.status === "done" ? <Check aria-hidden="true" /> : locked ? <Lock aria-hidden="true" /> : <Star aria-hidden="true" />}
-                    </button>
-                    <span className={s.label}>{l.title}</span>
-                    {l.status === "open" && <em className={s.startTag}>{t.start}</em>}
-                    {hint === l.id && <span className={s.tip}>{t.lockedHint}</span>}
-                  </li>
-                );
-              })}
-            </ol>
-            {u.exam && (
-              <button
-                type="button"
-                className={`${st.examNode} ${u.exam.status === "locked" ? st.examLocked : u.exam.status === "done" ? st.examDone : ""}`}
-                onClick={() => (u.exam.status === "locked" ? (haptic("error"), setHint(`exam:${u.key}`)) : ctx.openExam(u.key))}
-              >
-                <GraduationCap aria-hidden="true" />
-                <span>
-                  <b>{t.met.exam}</b>
-                  <small>{u.exam.status === "done" ? `${t.met.examDone} · ${u.exam.score}/${u.lessons.length}` : hint === `exam:${u.key}` || u.exam.status === "locked" ? t.met.examLocked : t.met.examStart}</small>
-                </span>
-              </button>
-            )}
-          </section>
-        );
-      })}
+      {path.units.map((u, i) => (
+        <PathUnit key={u.key} unit={u} ui={i} t={t} ctx={ctx} pop={pop} setPop={setPop} />
+      ))}
+
+      {dir && (
+        <button type="button" className={s.jump} onClick={toCurrent} aria-label={t.course.toCurrent}>
+          {dir === "up" ? <ArrowUp /> : <ArrowDown />}
+        </button>
+      )}
+
+      {sheet && (
+        <CourseSheet
+          t={t}
+          courses={path.courses}
+          current={path.course}
+          onPick={(key) => {
+            setSheet(false);
+            ctx.setCourse(key);
+          }}
+          onClose={() => setSheet(false)}
+        />
+      )}
     </div>
   );
 }

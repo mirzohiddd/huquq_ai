@@ -1,0 +1,29 @@
+/* Kurs darsi: mavzu kartasi (nazariya, misol, asosiy fikrlar, ogohlantirish, iqtibos). */
+.h2 { font-size: clamp(20px, 5.6vw, 24px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.25; color: #14213d; margin: 2px 0 12px; }
+.theory { display: grid; gap: 10px; padding: 16px; border-radius: 18px; background: #fff; border: 1px solid #eee9de; margin-bottom: 12px; }
+.theory p { font-size: 15.5px; line-height: 1.6; color: #24324a; }
+.theory b { color: #14213d; }
+.example, .points { padding: 14px 16px; border-radius: 18px; margin-bottom: 12px; }
+.example { background: #fbf1dc; }
+.points { background: #fff; border: 1px solid #eee9de; }
+.example h4, .points h4 { display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #8b6419; margin-bottom: 8px; }
+.example h4 svg { width: 16px; height: 16px; }
+.example p { font-size: 15px; line-height: 1.55; color: #3d3423; }
+.points ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.points li { display: flex; gap: 8px; align-items: flex-start; font-size: 14.5px; line-height: 1.45; color: #14213d; }
+.points svg { flex: none; width: 18px; height: 18px; color: #1a7a45; margin-top: 2px; }
+.warn { display: flex; gap: 10px; align-items: flex-start; padding: 14px 16px; border-radius: 18px; background: #fdf0ee; margin-bottom: 12px; }
+.warn svg { flex: none; width: 20px; height: 20px; color: #c0433b; margin-top: 1px; }
+.warn p { font-size: 14.5px; line-height: 1.5; color: #5c2320; }
+.quote { border-radius: 18px; background: #fff; border: 1px solid #eee9de; padding: 12px 16px; margin-bottom: 12px; }
+.quote summary { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14px; color: #14213d; cursor: pointer; list-style: none; }
+.quote summary::-webkit-details-marker { display: none; }
+.quote summary svg { width: 18px; height: 18px; color: #b8872a; }
+.quote blockquote { margin: 10px 0 0; padding: 10px 12px; border-left: 3px solid #e0b060; background: #fdf8ee; border-radius: 0 12px 12px 0; }
+.quote cite { display: block; font-style: normal; font-size: 12.5px; font-weight: 700; color: #8b6419; margin-bottom: 4px; }
+.quote p { font-size: 13.5px; line-height: 1.55; color: #3d4252; }
+.bar { flex: 1; display: flex; gap: 4px; }
+.bar i { flex: 1; height: 8px; border-radius: 99px; background: #e9e6de; transition: background 0.3s; }
+.bar .on { background: #c9953a; }
+.bar .now { background: #1b2a4a; }
+.mistakes { flex: none; font-size: 12.5px; font-weight: 700; color: #c0433b; }

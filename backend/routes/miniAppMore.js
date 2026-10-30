@@ -11,6 +11,7 @@ const content = require("../services/miniApp/content");
 const { explain, quotesOf } = require("../services/miniApp/explain");
 const { localizeJson } = require("../services/miniApp/i18n");
 const { warmAll } = require("../services/miniApp/i18n");
+const runs = require("../services/miniApp/runs");
 
 router.use(localizeJson); // ?lang=ru — javob matnlari rus tilida (kesh)
 
@@ -73,9 +74,11 @@ router.post("/situation/:id/finish", userGuard, async (req, res) => {
     const answers = Array.isArray(req.body?.answers) ? req.body.answers : [];
     if (!s || answers.length !== s.steps.length) return res.status(400).json({ error: "Noto'g'ri so'rov" });
     const score = s.steps.filter((st, i) => content.optionView(content.stepKey(s.id, i), st.options).pick(answers[i])?.ok).length;
-    const xp = await store.finishOnce(req.authUser.id, "situations", s.id, store.XP.situation, { score });
+    const before = await store.getDoc(req.authUser.id);
+    const mistakes = s.steps.length - score; // har bir noto'g'ri qaror XP'ni kamaytiradi
+    const xp = await store.finishOnce(req.authUser.id, "situations", s.id, runs.xpFor(store.XP.situation, mistakes), { score });
     const doc = await store.getDoc(req.authUser.id);
-    res.json({ score, total: s.steps.length, xp, totalXp: doc.xp || 0 });
+    res.json({ score, total: s.steps.length, xp, maxXp: store.XP.situation, mistakes, totalXp: doc.xp || 0, ...store.streakChange(before, doc) });
   } catch (err) {
     fail(res, err, "finish");
   }
@@ -141,6 +144,7 @@ router.get("/rating", userGuard, async (req, res) => {
 router.post("/explain", userGuard, webLimitGuard, async (req, res) => {
   try {
     const lang = req.body?.lang === "ru" ? "ru" : "uz";
+    if (req.body?.kind === "course") await require("../services/miniApp/course").ready(); // kurs savoli — kesh tayyor bo'lsin
     const r = await explain({ kind: req.body?.kind, id: req.body?.id, step: req.body?.step }, lang);
     if (!r) return res.status(404).json({ error: "Savol topilmadi" });
     res.json(r);

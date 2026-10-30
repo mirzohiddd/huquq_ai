@@ -56,22 +56,22 @@ const api = client(`${API_BASE}/mini`);
 const site = client(API_BASE);
 const data = (r) => r.data;
 
-/* Saytdagi BARCHA darslar va testlar — saytning endpointlari (tarif cheklovi,
-   ruscha tarjima va progress sayt bilan umumiy). */
+/* Tariflar va to'lov — saytning o'z endpointlari (narx/limit bitta joyda: config/plans.js) */
 export const siteApi = {
-  lessons: () => site.get("/lessons").then(data),
-  lesson: (id) => site.get(`/lessons/${id}`).then(data),
-  progress: () => site.get("/progress").then(data),
-  completeLesson: (id) => site.post(`/progress/lesson/${id}/complete`).then(data),
-  tests: () => site.get("/tests").then(data),
-  test: (id) => site.get(`/tests/${id}`).then(data),
-  answer: (id, i, choice) => site.post(`/tests/${id}/answer`, { i, choice }).then(data),
-  submit: (id, answers) => site.post(`/tests/${id}/submit`, { answers }).then(data),
+  plans: () => site.get("/payment/plans").then(data),
+  plan: () => site.get("/payment/plan").then(data),
+  checkout: (body) => site.post("/payment/checkout", body).then(data),
+  testConfirm: (body) => site.post("/payment/test/confirm", body).then(data),
 };
 
 export const mini = {
   auth: (initData) => api.post("/auth", { initData }).then((r) => r.data),
-  path: () => api.get("/path").then((r) => r.data),
+  path: (course) => api.get("/path", { params: { course } }).then((r) => r.data),
+  courseLesson: (id) => api.get(`/c/${id}`).then(data),
+  courseAnswer: (id, i, option) => api.post(`/c/${id}/answer`, { i, option }).then(data),
+  courseComplete: (id) => api.post(`/c/${id}/complete`).then(data),
+  chest: (unit) => api.post(`/chest/${unit}`).then(data),
+  order: (body) => api.post("/order", body).then(data),
   lesson: (id) => api.get(`/lesson/${id}`).then((r) => r.data),
   choice: (id, option) => api.post(`/lesson/${id}/choice`, { option }).then((r) => r.data),
   game: (id, body) => api.post(`/lesson/${id}/game`, body).then((r) => r.data),

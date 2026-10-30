@@ -1,0 +1,7 @@
+/* Bo'lim imtihoni yakuni: natija halqasi. */
+.result { text-align: center; padding: 8px 0 4px; }
+.result h2 { font-size: 25px; font-weight: 800; color: #14213d; margin: 8px 0 4px; }
+.result p { font-size: 15px; color: #4b5266; }
+.ring { width: 112px; height: 112px; margin: 14px auto; border-radius: 50%; display: grid; place-items: center; font-size: 28px; font-weight: 800; color: #14213d; background: conic-gradient(#c9953a calc(var(--p) * 1%), #ece8df 0); position: relative; }
+.ring::before { content: ""; position: absolute; inset: 10px; border-radius: 50%; background: #f8f6f1; }
+.ring span { position: relative; }

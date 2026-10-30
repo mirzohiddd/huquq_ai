@@ -1,0 +1,35 @@
+/* Tariflar sahifasi (mini ilova ichida). */
+.wrap { position: relative; max-width: 640px; margin: 0 auto; padding: 14px 16px 32px; }
+.close { position: absolute; top: 12px; left: 12px; width: 38px; height: 38px; border-radius: 50%; border: 0; background: #ece8df; display: grid; place-items: center; cursor: pointer; z-index: 2; }
+.close svg { width: 18px; height: 18px; }
+.head { display: grid; justify-items: center; text-align: center; gap: 6px; padding: 6px 0 14px; }
+.head h2 { font-size: 26px; font-weight: 800; color: #14213d; letter-spacing: -0.02em; }
+.head p { font-size: 14px; line-height: 1.5; color: #5d5a53; max-width: 340px; }
+.cur { margin-top: 4px; padding: 5px 12px; border-radius: 99px; background: #fdf5e6; color: #8b6419; font-size: 13px; }
+.msg { margin: 0 0 12px; padding: 12px 14px; border-radius: 14px; background: #edf7f2; color: #14532d; font-size: 14px; line-height: 1.45; }
+.card { padding: 16px; border-radius: 20px; background: #fff; border: 1.5px solid #ece8df; margin-bottom: 12px; box-shadow: 0 4px 0 #ece8df; }
+.best { border-color: #e0b060; box-shadow: 0 4px 0 #e8d2a0, 0 12px 28px rgba(201, 149, 58, 0.16); }
+.top { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.top > div { flex: 1; min-width: 0; }
+.top b { font-size: 17px; color: #14213d; }
+.icon { flex: none; width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; background: #1b2a4a; color: #f0c46a; }
+.icon svg { width: 22px; height: 22px; }
+.price { font-size: 22px; font-weight: 800; color: #14213d; }
+.price small { font-size: 12.5px; font-weight: 500; color: #6a6760; }
+.active { flex: none; padding: 4px 10px; border-radius: 99px; background: #edf7f2; color: #1a7a45; font-size: 12px; font-weight: 700; }
+.card ul { list-style: none; padding: 0; margin: 0 0 12px; display: grid; gap: 7px; }
+.card li { display: flex; gap: 8px; align-items: flex-start; font-size: 14px; line-height: 1.4; color: #24324a; }
+.card li svg { flex: none; width: 18px; height: 18px; color: #c9953a; margin-top: 1px; }
+.actions { display: grid; gap: 8px; }
+.main, .ghost {
+  display: flex; justify-content: center; align-items: center; width: 100%; padding: 13px; border-radius: 14px; font: inherit; font-weight: 800;
+  font-size: 14px; letter-spacing: 0.03em; text-transform: uppercase; cursor: pointer; border: 0;
+}
+.main { background: linear-gradient(160deg, #f0c46a, #c9953a); color: #14213d; box-shadow: 0 4px 0 #9c6f22; }
+.main:active { transform: translateY(3px); box-shadow: 0 1px 0 #9c6f22; }
+.ghost { background: #fff; color: #14213d; border: 1.5px solid #e6e1d6; }
+.main:disabled, .ghost:disabled { opacity: 0.6; }
+.input { width: 100%; padding: 13px 14px; border-radius: 14px; border: 1.5px solid #e6e1d6; font: inherit; font-size: 15px; background: #fff; }
+.spin { width: 20px; height: 20px; animation: spin 0.9s linear infinite; }
+.free { text-align: center; font-size: 13px; color: #6a6760; margin-top: 4px; }
+@keyframes spin { to { transform: rotate(360deg); } }

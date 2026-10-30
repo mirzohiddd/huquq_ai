@@ -10,6 +10,15 @@ const content = require("./content");
 const { attachLawQuotes } = require("../lessonQuotes");
 
 function targetOf({ kind, id, step }) {
+  if (kind === "course") {
+    // Saytdan qurilgan dars savoli: AI'ga to'g'ri javob mavzusi bo'yicha aniq so'rov
+    const l = require("./course").lessonOf(id);
+    const q = l?.quiz[Number(step) || 0];
+    if (!q) return null;
+    const right = q.options.find((o) => o.ok);
+    const topic = q.card !== null ? l.cards[q.card].heading : l.title;
+    return { ask: `${topic}: ${q.q} O'zbekiston qonunchiligi bo'yicha tushuntiring.`, title: l.title, right: right.t, why: right.why, refs: q.refs };
+  }
   if (kind === "lesson") {
     const l = content.lessonById.get(String(id));
     if (!l) return null;
@@ -63,7 +72,8 @@ async function generate(key, ask, lang) {
 async function explain(params, lang = "uz") {
   const t = targetOf(params);
   if (!t) return null;
-  const key = `${params.kind}:${params.id}:${lang}`; // `ask` dars/vaziyat bo'yicha bitta — qadamga bog'liq emas
+  // `ask` dars/vaziyat bo'yicha bitta — qadamga bog'liq emas; kurs darsida har savol alohida
+  const key = params.kind === "course" ? `course:${params.id}:${Number(params.step) || 0}:${lang}` : `${params.kind}:${params.id}:${lang}`;
   const quotes = await quotesOf(t.refs);
   const base = { right: t.right, why: t.why, quotes };
   const cached = await MiniExplain.findOne({ key }).lean().catch(() => null);

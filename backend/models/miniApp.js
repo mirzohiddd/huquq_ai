@@ -21,6 +21,10 @@ const MiniProgressSchema = new mongoose.Schema(
     // Xato qilingan savollar kalitlari ("L:headphones", "S:s-phone:1")
     // { [bo'limKaliti]: { at: Date, score: Number } } — bo'lim imtihonidan o'tilgan
     exams: { type: mongoose.Schema.Types.Mixed, default: {} },
+    // { [bo'limKaliti]: { at } } — ochilgan sandiqlar (bonus XP bir marta)
+    chests: { type: mongoose.Schema.Types.Mixed, default: {} },
+    // { [darsId]: { m: xatolar, ok: [yechilgan bosqichlar] } } — joriy urinish (services/miniApp/runs.js)
+    runs: { type: mongoose.Schema.Types.Mixed, default: {} },
     mistakes: { type: [String], default: [] },
     reviewed: { type: Number, default: 0 },
     // { "2026-10-30": xp } — Toshkent sanasi; ketma-ket kunlar va haftalik natija

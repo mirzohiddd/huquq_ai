@@ -13,9 +13,11 @@ import Seo from "../../components/Seo";
 import { loadTelegram, setupApp, backButton } from "./tg";
 import { mini, setToken, hasToken, setApiLang } from "./miniApi";
 import { textFor } from "./text";
-import { unlock, settings } from "./sound";
+import { unlock, settings, sfx } from "./sound";
 import Gate, { Spinner } from "./Gate";
 import PathTab from "./PathTab";
+import Overlay from "./Overlay";
+import { LANG_KEY, COURSE_KEY, read, save, savedLang } from "./prefs";
 import s from "./Mini.module.css";
 
 const SituationsTab = lazy(() => import("./SituationsTab"));
@@ -23,22 +25,6 @@ const ReviewTab = lazy(() => import("./ReviewTab"));
 const AchievementsTab = lazy(() => import("./AchievementsTab"));
 const RatingTab = lazy(() => import("./RatingTab"));
 const ProfileTab = lazy(() => import("./ProfileTab"));
-const LessonPlayer = lazy(() => import("./LessonPlayer"));
-const SituationPlayer = lazy(() => import("./SituationPlayer"));
-const SiteLessons = lazy(() => import("./SiteLessons"));
-const SiteTests = lazy(() => import("./SiteTests"));
-const ExamPlayer = lazy(() => import("./ExamPlayer"));
-
-/* Foydalanuvchi Profil → «Til» da tanlagan til (shu qurilmada saqlanadi) */
-const LANG_KEY = "miniLang";
-const savedLang = () => {
-  try {
-    const l = localStorage.getItem(LANG_KEY);
-    return l === "ru" || l === "uz" ? l : null;
-  } catch {
-    return null;
-  }
-};
 
 const TABS = [
   { key: "path", Icon: MapIcon },
@@ -54,7 +40,9 @@ export default function MiniApp() {
   const [lang, setLang] = useState("uz");
   const [name, setName] = useState("");
   const [tab, setTab] = useState("path");
-  const [overlay, setOverlay] = useState(null); // { kind: "lesson"|"situation", id }
+  const [overlay, setOverlay] = useState(null); // { kind: "lesson"|"course"|"situation"|"exam"|"plans", id }
+  const [course, setCourseKey] = useState(read(COURSE_KEY) || "basics");
+  const [toast, setToast] = useState("");
   const [path, setPath] = useState(null);
   const [anim, setAnim] = useState(settings.anim);
   const t = textFor(lang);
@@ -66,7 +54,7 @@ export default function MiniApp() {
     return () => window.removeEventListener("pointerdown", on);
   }, []);
 
-  const loadPath = useCallback(() => mini.path().then(setPath).catch(() => setPhase("error")), []);
+  const loadPath = useCallback((c = course) => mini.path(c).then(setPath).catch(() => setPhase("error")), [course]);
 
   const boot = useCallback(async () => {
     setPhase("boot");
@@ -86,7 +74,7 @@ export default function MiniApp() {
         setApiLang(l);
         setName(r.name || "");
       }
-      await mini.path().then(setPath);
+      await mini.path(read(COURSE_KEY) || "basics").then(setPath);
       setPhase("ready");
     } catch (err) {
       const d = err?.response?.data;
@@ -108,6 +96,12 @@ export default function MiniApp() {
     loadPath();
   }, [loadPath]);
 
+  useEffect(() => {
+    if (!toast) return undefined;
+    const id = setTimeout(() => setToast(""), 2200);
+    return () => clearTimeout(id);
+  }, [toast]);
+
   // Telegram "Orqaga": ustki qatlam → yopish; profil → xarita
   useEffect(() => {
     if (overlay) return backButton(close);
@@ -115,28 +109,39 @@ export default function MiniApp() {
     return backButton(null);
   }, [overlay, tab, close]);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [tab, overlay]);
+  useEffect(() => void window.scrollTo(0, 0), [tab, overlay]);
 
   if (phase !== "ready") return <Gate phase={phase} gate={gate} t={t} onRetry={boot} />;
 
+  const lessonOverlay = (id) => ({ kind: String(id).startsWith("c-") ? "course" : "lesson", id }); // "c-…" — saytdan qurilgan dars
   const ctx = {
     t,
     lang,
     path,
-    reloadPath: loadPath,
-    openLesson: (id) => setOverlay({ kind: "lesson", id }),
+    course,
+    reloadPath: () => loadPath(),
+    openLesson: (id) => setOverlay(lessonOverlay(id)),
     openSituation: (id) => setOverlay({ kind: "situation", id }),
-    openLessonNext: (id) => setOverlay(id ? { kind: "lesson", id } : null),
+    openLessonNext: (id) => setOverlay(id ? lessonOverlay(id) : null),
+    openExam: (unit) => setOverlay({ kind: "exam", id: unit }),
+    openPlans: () => setOverlay({ kind: "plans", id: "plans" }),
     close,
     setTab,
     setAnim,
-    openLibrary: (id) => setOverlay({ kind: "library", id: id || null }),
-    openTests: () => setOverlay({ kind: "tests", id: "all" }),
-    openExam: (unit) => setOverlay({ kind: "exam", id: unit }),
+    setCourse: (c) => {
+      save(COURSE_KEY, c);
+      setCourseKey(c);
+      loadPath(c);
+      window.scrollTo(0, 0);
+    },
+    claimChest: (unit) =>
+      mini
+        .chest(unit)
+        .then((r) => r.xp && (sfx("unit"), setToast(t.chest.got(r.xp))))
+        .catch((e) => e?.response?.data?.plan && setOverlay({ kind: "plans", id: "plans" }))
+        .finally(() => loadPath()),
     setLang: (l) => {
-      try { localStorage.setItem(LANG_KEY, l); } catch { /* yopiq saqlash — sessiya davomida ishlaydi */ }
+      save(LANG_KEY, l);
       setApiLang(l);
       setLang(l);
       loadPath();
@@ -162,11 +167,7 @@ export default function MiniApp() {
       </header>
 
       <Suspense fallback={<Spinner />}>
-        {overlay?.kind === "lesson" && <LessonPlayer key={overlay.id} id={overlay.id} ctx={ctx} />}
-        {overlay?.kind === "situation" && <SituationPlayer key={overlay.id} id={overlay.id} ctx={ctx} />}
-        {overlay?.kind === "library" && <main className={s.main}><SiteLessons key={`${lang}-${overlay.id}`} startId={overlay.id} ctx={ctx} /></main>}
-        {overlay?.kind === "exam" && <ExamPlayer key={overlay.id} unit={overlay.id} ctx={ctx} />}
-        {overlay?.kind === "tests" && <main className={s.main}><SiteTests key={lang} ctx={ctx} /></main>}
+        {overlay && <Overlay overlay={overlay} ctx={ctx} />}
         {!overlay && (
           <main className={s.main} key={lang}>
             {tab === "path" && <PathTab ctx={ctx} />}
@@ -179,6 +180,7 @@ export default function MiniApp() {
         )}
       </Suspense>
 
+      {toast && <div className={s.toast} role="status">{toast}</div>}
       {!overlay && (
         <nav className={s.nav} aria-label="Menu">
           {TABS.map(({ key, Icon }) => (

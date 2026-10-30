@@ -16,7 +16,7 @@ const { translateMany, translateManyCached, warmTranslate } = require("../transl
 
 /* Tarjima qilinmaydigan maydonlar: identifikatorlar, kalitlar, ism, token.
    ⚠️ `next` — keyingi darsning ID'si; `answer` — AI javobi allaqachon shu tilda. */
-const SKIP = new Set(["id", "key", "next", "unit", "cat", "icon", "type", "status", "day", "code", "article", "token", "bot", "answer", "lang", "name", "firstName", "newBadges"]);
+const SKIP = new Set(["id", "key", "next", "unit", "cat", "icon", "type", "status", "day", "code", "article", "token", "bot", "answer", "lang", "name", "firstName", "newBadges", "course", "kind", "tier", "exam", "source"]);
 const isText = (s) => typeof s === "string" && s.length > 1 && /\p{L}/u.test(s) && !/^https?:\/\//.test(s);
 
 /** Obyektdagi barcha tarjimaga yaroqli satrlar va ularni joyiga qo'yuvchi funksiyalar. */

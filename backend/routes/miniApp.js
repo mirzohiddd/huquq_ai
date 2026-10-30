@@ -11,6 +11,9 @@ const store = require("../services/miniApp/store");
 const content = require("../services/miniApp/content");
 const { quotesOf } = require("../services/miniApp/explain");
 const { localizeJson } = require("../services/miniApp/i18n");
+const path = require("../services/miniApp/path");
+const runs = require("../services/miniApp/runs");
+const { accessOf, planLocked } = require("../services/miniApp/access");
 
 const BOT = (process.env.TELEGRAM_BOT_USERNAME || "mening_huquqlarim_bot").replace(/^@/, "");
 router.use(localizeJson); // ?lang=ru — javob matnlari rus tilida (kesh)
@@ -34,29 +37,38 @@ router.post("/auth", async (req, res) => {
   }
 });
 
-/* GET /api/mini/path — darslar xaritasi + qisqa holat */
+/* GET /api/mini/path?course= — kurs yo'li (bo'limlar, sandiq, imtihon) + kurslar ro'yxati + tarif */
 router.get("/path", userGuard, async (req, res) => {
   try {
-    const doc = await store.getDoc(req.authUser.id);
-    const s = store.summaryOf(doc);
-    res.json({ units: store.pathOf(doc), xp: s.xp, level: s.level, streak: s.streak, todayXp: s.todayXp, goal: s.goal, mistakes: s.mistakes });
+    const a = await accessOf(req.authUser.id);
+    const courses = path.coursesOf(a.doc, a.s);
+    const course = courses.some((c) => c.key === req.query.course) ? String(req.query.course) : "basics";
+    const s = store.summaryOf(a.doc);
+    res.json({
+      course, courses, units: path.pathOf(a.doc, { course, paid: a.paid, s: a.s }),
+      plan: { tier: a.tier, label: a.planLabel, paid: a.paid },
+      xp: s.xp, level: s.level, streak: s.streak, todayXp: s.todayXp, goal: s.goal, mistakes: s.mistakes,
+    });
   } catch (err) {
     fail(res, err, "path");
   }
 });
 
+/* «Hayotiy asoslar» darsi: tartib va tarif bo'yicha ochiqmi */
 async function openLesson(req, res) {
   const l = content.lessonById.get(String(req.params.id));
   if (!l) {
     res.status(404).json({ error: "Dars topilmadi" });
     return null;
   }
-  const doc = await store.getDoc(req.authUser.id);
-  if (!store.isUnlocked(doc, l.id)) {
-    res.status(403).json({ error: "Avval oldingi darsni tugating", locked: true });
+  const a = await accessOf(req.authUser.id);
+  const acc = path.lessonAccess(a.doc, l.id, a.paid, a.s);
+  if (!acc.ok) {
+    if (acc.why === "plan") planLocked(res);
+    else res.status(403).json({ error: "Avval oldingi darsni tugating", locked: true });
     return null;
   }
-  return { l, doc };
+  return { l, doc: a.doc, at: acc.at };
 }
 
 const orderOk = (l, order) => Array.isArray(order) && order.length === l.game.items.length && order.every((v, i) => Number(v) === i);
@@ -64,7 +76,9 @@ const orderOk = (l, order) => Array.isArray(order) && order.length === l.game.it
 router.get("/lesson/:id", userGuard, async (req, res) => {
   try {
     const o = await openLesson(req, res);
-    if (o) res.json({ lesson: content.publicLesson(o.l), done: !!o.doc.lessons?.[o.l.id] });
+    if (!o) return;
+    await runs.start(req.authUser.id, o.l.id); // yangi urinish — xatolar noldan
+    res.json({ lesson: content.publicLesson(o.l), done: !!o.doc.lessons?.[o.l.id] });
   } catch (err) {
     fail(res, err, "lesson");
   }
@@ -79,6 +93,7 @@ router.post("/lesson/:id/choice", userGuard, async (req, res) => {
     const opt = view.pick(req.body?.option);
     if (!opt) return res.status(400).json({ error: "Variant noto'g'ri" });
     if (!opt.ok && !o.doc.lessons?.[o.l.id]) await store.addMistake(req.authUser.id, content.lessonKey(o.l.id));
+    await (opt.ok ? runs.solved(req.authUser.id, o.l.id, "c") : runs.miss(req.authUser.id, o.l.id));
     const right = o.l.choice.options.find((x) => x.ok);
     // `quotes` — «Manbani ko'rish» uchun darhol (xotiradagi korpusdan, AI'siz)
     res.json({
@@ -98,14 +113,17 @@ router.post("/lesson/:id/game", userGuard, async (req, res) => {
     if (!o) return;
     const { game } = o.l;
     const b = req.body || {};
+    const mark = (ok) => (ok ? runs.solved(req.authUser.id, o.l.id, "g") : runs.miss(req.authUser.id, o.l.id)); // javobni ko'rish ham xato
     if (game.type === "order") {
       const order = Array.isArray(b.order) ? b.order.map(Number) : [];
       const ok = orderOk(o.l, order);
       const right = order.filter((v, i) => v === i).length;
       const solution = ok || b.reveal ? game.items.map((t, id) => ({ id, t })) : undefined;
+      await mark(ok && !b.reveal);
       return res.json({ ok, right, total: game.items.length, why: ok || b.reveal ? game.why : undefined, solution });
     }
     const ok = Number(b.line) === game.answer;
+    await mark(ok && !b.reveal);
     res.json({ ok, why: ok || b.reveal ? game.why : undefined, answer: ok || b.reveal ? game.answer : undefined });
   } catch (err) {
     fail(res, err, "game");
@@ -122,11 +140,12 @@ router.post("/lesson/:id/complete", userGuard, async (req, res) => {
     const solved = l.game.type === "order" ? orderOk(l, b.order) : Number(b.line) === l.game.answer;
     const first = content.optionView(content.lessonKey(l.id), l.choice.options).pick(b.firstOption);
     if (!solved || !first) return res.status(400).json({ error: "Dars hali yakunlanmagan" });
-    const xp = await store.finishOnce(req.authUser.id, "lessons", l.id, store.XP.lesson, { firstTry: !!first.ok });
+    const mistakes = runs.of(o.doc, l.id).m;
+    const xp = await store.finishOnce(req.authUser.id, "lessons", l.id, runs.xpFor(store.XP.lesson, mistakes), { firstTry: !!first.ok, mistakes });
+    await runs.end(req.authUser.id, l.id);
     const doc = await store.getDoc(req.authUser.id);
     const s = store.summaryOf(doc);
-    const idx = content.LESSONS.findIndex((x) => x.id === l.id);
-    const next = content.LESSONS[idx + 1];
+    const next = path.nextAfter(o.at, l.id);
     // Bo'lim to'liq tugadimi — mini app katta bayram (ovoz + animatsiya) ko'rsatadi
     const allDone = content.LESSONS.filter((x) => x.unit === l.unit).every((x) => doc.lessons?.[x.id]);
     const unitDone = xp > 0 && allDone;
@@ -135,6 +154,9 @@ router.post("/lesson/:id/complete", userGuard, async (req, res) => {
       unitDone,
       unitTitle: content.UNITS.find((u) => u.key === l.unit).title,
       xp,
+      maxXp: store.XP.lesson,
+      mistakes,
+      ...store.streakChange(o.doc, doc), // seriya animatsiyasi
       totalXp: s.xp,
       level: s.level,
       streak: s.streak,
@@ -149,5 +171,7 @@ router.post("/lesson/:id/complete", userGuard, async (req, res) => {
     fail(res, err, "complete");
   }
 });
+
+router.use(require("./miniAppCourse")); // saytdagi darslardan qurilgan kurslar, sandiq, tariflar
 
 module.exports = router;
