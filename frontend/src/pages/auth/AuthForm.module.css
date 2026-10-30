@@ -157,3 +157,14 @@
 /* Emoji o'rnidagi ikonkalar */
 .notice > svg, .success > svg { vertical-align: -3px; margin-right: 4px; }
 .linkBtn { display: inline-flex; align-items: center; gap: 5px; }
+
+/* «Telegram orqali kirish» — Google tugmasi ostida (TelegramButton.jsx) */
+.tgWrap { margin-top: 10px; }
+.tgBtn, .tgBtn:hover { text-decoration: none; color: #fff; font-weight: 600; background: #2aabee; border-color: #2aabee; }
+.tgBtn:hover { background: #1d97d6; border-color: #1d97d6; }
+.tgOff { pointer-events: none; opacity: 0.5; }
+.tgWait { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 4px; margin-top: 8px; font-size: 13px; color: #4b5563; text-align: center; }
+.tgWait a, .tgWait button { color: #1d8acb; background: none; border: 0; padding: 0; font: inherit; cursor: pointer; text-decoration: underline; }
+.tgErr { margin-top: 8px; font-size: 13px; color: #c0392b; text-align: center; }
+.tgSpin { animation: tgSpin 0.9s linear infinite; }
+@keyframes tgSpin { to { transform: rotate(360deg); } }

@@ -10,6 +10,7 @@ import AuthShell from "./AuthShell";
 import { AuthSwitchLink } from "./AuthSwitch";
 import Field from "./Field";
 import GoogleButton from "./GoogleButton";
+import TelegramButton from "./TelegramButton";
 import OTPVerify from "./OTPVerify";
 import TelegramConnect from "./TelegramConnect";
 import useServerWarmup from "./useServerWarmup";
@@ -154,6 +155,7 @@ export default function RegisterPage() {
 
       <div className={s.divider}>{t.divider_or}</div>
       <GoogleButton labelKey="google_btn_register" onCredential={handleGoogle} disabled={busy} />
+      <TelegramButton register disabled={busy} onDone={() => nav("/chat")} />
 
       <p className={s.foot}>
         {t.auth_already}

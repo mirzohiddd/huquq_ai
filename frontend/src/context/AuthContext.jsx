@@ -101,6 +101,14 @@ export function AuthProvider({ children }) {
     return data;
   }, []);
 
+  // Telegram orqali kirish (TelegramButton): JWT bot tasdiqlagach keladi
+  const loginWithToken = useCallback((data) => {
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("user", JSON.stringify(data.user));
+    setUser(data.user);
+    return data.user;
+  }, []);
+
   const loginWithGoogle = useCallback(async (credential) => {
     const { data } = await api.post("/auth/google", { credential });
     localStorage.setItem("token", data.token);
@@ -125,6 +133,7 @@ export function AuthProvider({ children }) {
         verifyOtp,
         resendOtp,
         loginWithGoogle,
+        loginWithToken,
         logout,
       }}
     >

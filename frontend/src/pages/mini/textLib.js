@@ -35,7 +35,7 @@ export const LIB_UZ = {
     review: "Hali noto'g'ri. Darsni qayta o'qib chiqing yoki yana urinib ko'ring.",
     reread: "Mavzuni qayta o'qish", openLesson: "Darsni qayta o'qish", backQ: "Savolga qaytish",
     list: "Xatolaringiz", listSub: "Qilingan tartibda · birini tanlang yoki hammasini ketma-ket",
-    all: "Hammasini ketma-ket", noXp: "Takrorlashda XP berilmaydi — maqsad xatoni tushunib olish.",
+    all: "Hammasini ketma-ket", noXp: "Har bir tuzatilgan xato uchun +2 XP. Xato javob — bitta yurakcha.",
     fixed: "Xato tuzatildi!", left: (n) => `Yana ${n} ta xato qoldi`, done: "Barcha xatolar tuzatildi!", toList: "Ro'yxatga qaytish",
   },
   sayXp: (x) => `Plyus ${x} XP!`, // qalqon ovozi uchun
@@ -102,7 +102,7 @@ export const LIB_RU = {
     review: "Пока неверно. Перечитайте урок или попробуйте ещё раз.",
     reread: "Перечитать тему", openLesson: "Перечитать урок", backQ: "Вернуться к вопросу",
     list: "Ваши ошибки", listSub: "В порядке появления · выберите одну или все подряд",
-    all: "Все подряд", noXp: "За повторение XP не начисляется — цель в том, чтобы понять ошибку.",
+    all: "Все подряд", noXp: "За каждую исправленную ошибку +2 XP. Неверный ответ — минус сердечко.",
     fixed: "Ошибка исправлена!", left: (n) => `Осталось ошибок: ${n}`, done: "Все ошибки исправлены!", toList: "К списку",
   },
   sayXp: (x) => `Плюс ${x} очков опыта!`, // голос щита: «XP» латиницей звучит плохо

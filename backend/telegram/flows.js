@@ -8,11 +8,13 @@ const { User } = require("../models");
 const { getPlanConfig } = require("../config/plans");
 const { T, fill } = require("./texts");
 const ui = require("./ui");
+const { createSiteLogin } = require("./siteLogin");
 
 function createFlows({ safeSend, acc, ai, plans, emailStep, SITE_URL }) {
   const { getLang } = acc;
   const tx = (tgId) => T[getLang(tgId)] || T.uz;
   const mainMenu = (lang) => ui.mainMenu(lang);
+  const siteLogin = createSiteLogin({ safeSend, acc, tx, mainMenu, SITE_URL }); // saytga Telegram orqali kirish
 
   /** Hisob ulanmagan foydalanuvchiga kirish ekrani (yoki bloklangan xabari) */
   async function sendNotRegistered(chatId, tgId) {
@@ -47,6 +49,7 @@ function createFlows({ safeSend, acc, ai, plans, emailStep, SITE_URL }) {
     const chatId = msg.chat.id;
     const tgId = msg.from.id;
     ai.resetSession(tgId);
+    if (/^login_[a-f0-9]{32}$/.test(payload)) return siteLogin.onStart(msg, payload.slice(6), sendNotRegistered);
     if (/^link_[a-f0-9]+$/.test(payload)) {
       if (!acc.userLang.has(tgId)) acc.userLang.set(tgId, "uz");
       const res = await acc.linkByToken(msg.from, payload.slice(5));
@@ -82,6 +85,7 @@ function createFlows({ safeSend, acc, ai, plans, emailStep, SITE_URL }) {
       await safeSend(chatId, X.phone_saved, mainMenu(getLang(tgId)));
     }
     if (userId) {
+      await siteLogin.afterContact(chatId, tgId, userId); // saytdan «Telegram orqali kirish» bosgan bo'lsa — darhol kiradi
       emailStep.forget(userId);
       const missing = await emailStep.missing(userId);
       if (missing) await emailStep.ask(chatId, tgId, missing); // telefondan keyin — email

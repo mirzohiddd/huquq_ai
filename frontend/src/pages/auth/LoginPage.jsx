@@ -9,6 +9,7 @@ import AuthShell from "./AuthShell";
 import { AuthSwitchLink } from "./AuthSwitch";
 import Field from "./Field";
 import GoogleButton from "./GoogleButton";
+import TelegramButton from "./TelegramButton";
 import OTPVerify from "./OTPVerify";
 import ForgotPasswordModal from "./ForgotPasswordModal";
 import useServerWarmup from "./useServerWarmup";
@@ -121,6 +122,7 @@ export default function LoginPage() {
 
       <div className={s.divider}>{t.divider_or}</div>
       <GoogleButton labelKey="google_btn" onCredential={handleGoogle} disabled={busy} />
+      <TelegramButton disabled={busy} onDone={() => nav("/chat")} />
 
       <p className={s.legal}>
         {t.auth_legal_prefix} <Link to="/terms">{t.footer_legal_terms}</Link> {t.auth_legal_and}{" "}

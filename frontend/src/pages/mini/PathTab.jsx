@@ -10,6 +10,7 @@ import PathUnit from "./PathUnit";
 import CourseSheet from "./CourseSheet";
 import { iconOf } from "./icons";
 import { mini } from "./miniApi";
+import { smoothCenter } from "./scrollTo";
 import m from "./Mini.module.css";
 import s from "./Path.module.css";
 
@@ -48,8 +49,9 @@ export default function PathTab({ ctx }) {
       setDir(!r ? null : r.bottom < top ? "up" : r.top > window.innerHeight - 90 ? "down" : null);
     };
     onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    // capture: ichki konteyner scroll bo'lsa ham (Telegram Desktop) ushlanadi
+    window.addEventListener("scroll", onScroll, { passive: true, capture: true });
+    return () => window.removeEventListener("scroll", onScroll, { capture: true });
   }, [path]);
 
   // Joriy dars ma'lumoti oldindan — bosilganda darhol ochiladi
@@ -68,7 +70,7 @@ export default function PathTab({ ctx }) {
   const toCurrent = () => {
     const el = box.current?.querySelector("[data-current]");
     if (!el) return;
-    el.scrollIntoView({ behavior: "smooth", block: "center" });
+    smoothCenter(el);
     el.removeAttribute("data-flash");
     setTimeout(() => el.setAttribute("data-flash", ""), 350);
     setTimeout(() => el.removeAttribute("data-flash"), 2200);

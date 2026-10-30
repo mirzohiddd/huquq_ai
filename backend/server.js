@@ -304,6 +304,7 @@ app.use(
 
 /* ───── ROUTES ───── */
 app.use("/api/auth", require("./routes/auth"));
+app.use("/api/auth", require("./routes/authTelegram")); // saytga Telegram orqali kirish (bot tasdiqlaydi)
 // chatExtras (feedback, regenerate) chat.js dagi `/:sessionId` dan OLDIN turishi shart
 app.use("/api/chat", require("./routes/chatExtras"));
 app.use("/api/chat", require("./routes/chat"));

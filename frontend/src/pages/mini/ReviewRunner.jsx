@@ -1,6 +1,6 @@
 /**
  * TAKRORLASH MASHQI — tanlangan xatolar ketma-ket (savol → natija).
- * To'g'ri javob — xato ro'yxatdan chiqadi, XP BERILMAYDI. Xato javobda
+ * To'g'ri javob — xato ro'yxatdan chiqadi va +2 XP (serverda, bir marta). Xato javobda
  * to'g'ri javob ochilmaydi: qayta urinish yoki darsni qayta o'qish.
  */
 import React, { useState } from "react";
@@ -30,7 +30,9 @@ export default function ReviewRunner({ items, ctx, onDone }) {
 
   const check = async (opt) => {
     try {
-      setRes(await mini.reviewAnswer(q.key, opt));
+      const r = await mini.reviewAnswer(q.key, opt);
+      if (r.xp) ctx.reloadPath(); // headerdagi XP yangilansin
+      setRes(r);
     } catch {
       next(); // allaqachon tuzatilgan (boshqa qurilmada) — keyingisiga
     }
@@ -60,6 +62,7 @@ export default function ReviewRunner({ items, ctx, onDone }) {
       {res?.ok && (
         <ResultView
           res={{ ...res, rightWhy: res.rightWhy || "" }}
+          xp={res.xp}
           t={t}
           nextLabel={last ? t.wrongs.toList : t.nextQuestion}
           onNext={next}

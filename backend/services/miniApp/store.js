@@ -12,7 +12,7 @@ const stats = require("./stats");
 const path = require("./path");
 
 /* Asosiy XP — xatosiz bajarilganda; xato qilinsa kamayadi (`runs.xpFor`) */
-const XP = { lesson: 20, situation: 20, review: 5, exam: 40, chest: 20 };
+const XP = { lesson: 20, situation: 20, review: 2, exam: 40, chest: 20 }; // review — har tuzatilgan xato uchun
 const EXAM_PASS = path.BASIC_EXAM_PASS;
 
 async function getDoc(userId) {
@@ -50,13 +50,13 @@ async function addMistake(userId, key) {
   await MiniProgress.updateOne({ userId }, { $addToSet: { mistakes: key } }, { upsert: true });
 }
 
-/** Takrorlashda tuzatilgan xato — faqat ro'yxatdan chiqadi (XP berilmaydi). */
+/** Takrorlashda tuzatilgan xato — ro'yxatdan chiqadi va +2 XP (faqat bir marta: shart filtrda). */
 async function fixMistake(userId, key) {
   const res = await MiniProgress.updateOne(
     { userId, mistakes: key },
-    { $pull: { mistakes: key }, $inc: { reviewed: 1 } }, // takrorlash XP bermaydi (2026-10-30)
+    { $pull: { mistakes: key }, $inc: { xp: XP.review, reviewed: 1, [`days.${stats.dayKey()}`]: XP.review } },
   );
-  return 0;
+  return res.modifiedCount ? XP.review : 0;
 }
 
 async function setGoal(userId, goal) {

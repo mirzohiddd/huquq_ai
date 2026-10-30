@@ -13,7 +13,7 @@ import q from "./Quiz.module.css";
 // Izoh boshidagi «To'g'ri.» / «Xato.» — sarlavhada allaqachon bor
 const clean = (s = "") => s.replace(/^(To'g'ri|Xato|Верно|Неверно|Правильно|Неправильно)\s*[.!,—–-]\s*/i, "");
 
-export default function ResultView({ res, t, onNext, nextLabel, onSource, onExplain }) {
+export default function ResultView({ res, t, onNext, nextLabel, onSource, onExplain, xp }) {
   const [talking, setTalking] = useState(false);
 
   useEffect(() => {
@@ -32,6 +32,7 @@ export default function ResultView({ res, t, onNext, nextLabel, onSource, onExpl
   return (
     <div className={q.screen}>
       <h2 className={`${q.title} ${q.resTitle}`}>{res.ok ? t.rightTitle : t.wrongTitle}</h2>
+      {xp > 0 && <p style={{ textAlign: "center", margin: "-4px 0 6px", fontWeight: 800, color: "#b8872a" }}>+{xp} XP</p>}
       <div className={q.heroBox}>
         <Hero mood={res.ok ? "cheer" : "sad"} size={170} talking={talking} />
       </div>

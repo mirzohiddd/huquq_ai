@@ -1,7 +1,7 @@
 /**
  * TAKRORLASH — «Bilimingizni mustahkamlang»: xato qilingan savollar QILINGAN
  * TARTIBDA ro'yxat bo'lib turadi. Bittasini bosib yoki «Hammasini ketma-ket»
- * bilan qayta yechiladi. To'g'ri javob — xato ro'yxatdan chiqadi, XP berilmaydi
+ * bilan qayta yechiladi. To'g'ri javob — xato ro'yxatdan chiqadi, +2 XP
  * (maqsad — xatoni tushunish). Xato javobda to'g'ri javob ochilmaydi.
  */
 import React, { useCallback, useEffect, useState } from "react";

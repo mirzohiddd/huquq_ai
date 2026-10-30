@@ -122,9 +122,9 @@ router.post("/review/answer", userGuard, async (req, res) => {
     const q = content.questionByKey(key);
     const v = q && (await verdict(key, q.options, req.body?.option, q.refs));
     if (!v) return res.status(400).json({ error: "Noto'g'ri so'rov" });
-    // Takrorlashda XP BERILMAYDI (faqat ro'yxatdan chiqadi); xato javob ochilmaydi
-    if (v.opt.ok) await store.fixMistake(req.authUser.id, key);
-    res.json(v.opt.ok ? { ...v.body, xp: 0 } : { ok: false, hearts: await hearts.lose(req.authUser.id) });
+    // Tuzatilgan xato — +2 XP (bir marta); xato javob ochilmaydi
+    if (v.opt.ok) return res.json({ ...v.body, xp: await store.fixMistake(req.authUser.id, key) });
+    res.json({ ok: false, hearts: await hearts.lose(req.authUser.id) });
   } catch (err) {
     fail(res, err, "review answer");
   }
