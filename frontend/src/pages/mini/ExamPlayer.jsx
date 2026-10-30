@@ -12,6 +12,7 @@ import { Spinner } from "./Gate";
 import Hero from "./Hero";
 import QuestionView from "./QuestionView";
 import ResultView from "./ResultView";
+import WrongView from "./WrongView";
 import StreakScreen from "./StreakScreen";
 import m from "./Mini.module.css";
 import l from "./Lesson.module.css";
@@ -126,8 +127,11 @@ export default function ExamPlayer({ unit, ctx }) {
       </div>
       {!res ? (
         <QuestionView icon={cur.icon} tag={`${t.met.exam} · ${i + 1} / ${total}`} text={cur.text} question={cur.q} options={cur.options} onCheck={check} t={t} />
-      ) : (
+      ) : res.ok ? (
         <ResultView res={res} t={t} nextLabel={i + 1 < total ? t.nextQuestion : t.finishBtn} onNext={next} />
+      ) : (
+        // Imtihonda to'g'ri javob ochilmaydi — keyingi savolga o'tiladi
+        <WrongView t={t} hint={t.wrongs.exam} mainIcon="next" mainLabel={i + 1 < total ? t.nextQuestion : t.finishBtn} onMain={next} />
       )}
     </div>
   );

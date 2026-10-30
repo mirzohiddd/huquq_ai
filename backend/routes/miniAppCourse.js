@@ -68,6 +68,9 @@ router.post("/c/:id/answer", userGuard, async (req, res) => {
       await runs.miss(req.authUser.id, o.l.id);
       if (!o.doc.lessons?.[o.l.id]) await store.addMistake(req.authUser.id, key);
     }
+    // ⚠️ Xato javobda to'g'ri javob, izohlar va variantlar tahlili YUBORILMAYDI —
+    // foydalanuvchi mavzuni qayta o'qib, javobni o'zi topishi kerak (`card` — qaytiladigan karta).
+    if (!opt.ok) return res.json({ ok: false, card: q.card ?? null });
     const right = q.options.find((x) => x.ok);
     const review = course.optionView(key, q.options).texts.map((t) => q.options.find((x) => x.t === t)).map((x) => ({ t: x.t, ok: x.ok, why: x.why }));
     res.json({ ok: opt.ok, why: opt.why, correct: course.optionView(key, q.options).correct, rightText: right.t, rightWhy: right.why, review, quotes: await quotesOf(q.refs) });

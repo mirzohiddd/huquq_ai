@@ -43,7 +43,9 @@ export default function PathTab({ ctx }) {
       setSeen(cur ? { n: cur.dataset.n, title: cur.dataset.title } : null);
       const now = box.current?.querySelector("[data-current]");
       const r = now?.getBoundingClientRect();
-      setDir(!r ? null : r.top < 60 ? "up" : r.top > window.innerHeight - 120 ? "down" : null);
+      // Tepada yopishqoq sarlavha + banner (~170px), pastda menyu (~90px) — ular ostida qolgan dars ham «ko'rinmaydi»
+      const top = (box.current?.querySelector("[data-banner]")?.getBoundingClientRect().bottom || 66) + 8;
+      setDir(!r ? null : r.bottom < top ? "up" : r.top > window.innerHeight - 90 ? "down" : null);
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -62,11 +64,19 @@ export default function PathTab({ ctx }) {
   const head = seen || (first && { n: first.n, title: first.title });
   const goalPct = Math.min(100, Math.round(((path.todayXp || 0) / (path.goal || 20)) * 100));
   const CourseIcon = iconOf(course.icon);
-  const toCurrent = () => box.current?.querySelector("[data-current]")?.scrollIntoView({ behavior: "smooth", block: "center" });
+  // Joriy darsga silliq qaytish; yetib borgach dars bir-ikki marta yarqirab ko'rsatiladi
+  const toCurrent = () => {
+    const el = box.current?.querySelector("[data-current]");
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+    el.removeAttribute("data-flash");
+    setTimeout(() => el.setAttribute("data-flash", ""), 350);
+    setTimeout(() => el.removeAttribute("data-flash"), 2200);
+  };
 
   return (
-    <div className={m.fadeIn} ref={box}>
-      <button type="button" className={s.banner} onClick={() => setSheet(true)}>
+    <div className={`${m.fadeIn} ${s.road}`} ref={box}>
+      <button type="button" className={s.banner} data-banner onClick={() => setSheet(true)}>
         <span className={s.bannerIcon}><CourseIcon aria-hidden="true" /></span>
         <span className={s.bannerText}>
           <small>{course.title} · {head ? t.course.unitN(head.n) : ""}</small>
@@ -88,7 +98,7 @@ export default function PathTab({ ctx }) {
 
       {dir && (
         <button type="button" className={s.jump} onClick={toCurrent} aria-label={t.course.toCurrent}>
-          {dir === "up" ? <ArrowUp /> : <ArrowDown />}
+          {dir === "up" ? <ArrowUp style={{ "--bob": "-3px" }} /> : <ArrowDown />}
         </button>
       )}
 

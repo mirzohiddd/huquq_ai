@@ -2,8 +2,9 @@
  * KURS DARSI (saytdagi darsdan) — natijaga yo'naltirilgan metodika:
  *   Maqsad → [Mavzu kartasi → Tekshiruv savoli] × 3 → Mustahkamlash
  *   (saytdagi test savollari) → Hayotda qo'llash → Yakun.
- * Xato javobda o'sha savol qayta beriladi (to'g'ri topmaguncha) — har bir
- * xato serverda sanaladi va XP kamayadi (20 / 15 / 10 / 5).
+ * Xato javobda to'g'ri javob KO'RSATILMAYDI: foydalanuvchi savolga tegishli
+ * mavzu kartasiga qaytadi (o'qib bo'lgach — darhol o'sha savolga), test
+ * savolida esa qayta urinadi. Har bir xato serverda sanaladi va XP kamayadi.
  */
 import React, { useEffect, useMemo, useState } from "react";
 import { X, ChevronRight, Lock } from "lucide-react";
@@ -13,6 +14,7 @@ import { Spinner } from "./Gate";
 import Hero from "./Hero";
 import QuestionView from "./QuestionView";
 import ResultView from "./ResultView";
+import WrongView from "./WrongView";
 import ExplainSheet from "./ExplainSheet";
 import FinishScreen from "./FinishScreen";
 import CourseCard from "./CourseCard";
@@ -45,6 +47,7 @@ export default function CourseLessonPlayer({ id, ctx }) {
   const [result, setResult] = useState(null);
   const [busy, setBusy] = useState(false);
   const [sheet, setSheet] = useState(null);
+  const [back, setBack] = useState(null); // kartani qayta o'qigach qaytiladigan savol bosqichi
 
   useEffect(() => {
     mini
@@ -72,6 +75,10 @@ export default function CourseLessonPlayer({ id, ctx }) {
   const step = steps[at];
   const next = async () => {
     setRes(null);
+    if (back !== null) {
+      setAt(back);
+      return setBack(null);
+    }
     if (at + 1 < steps.length) return setAt(at + 1);
     setBusy(true);
     try {
@@ -125,12 +132,28 @@ export default function CourseLessonPlayer({ id, ctx }) {
       {cur && !res && (
         <QuestionView icon="Scale" title={cur.kind === "test" ? null : t.course.checkTitle} tag={cur.card === null ? t.course.fixTag : t.course.checkTag} text={cur.text} question={cur.q} options={cur.options} onCheck={check} t={t} />
       )}
-      {cur && res && (
+      {cur && res && !res.ok && (
+        <WrongView
+          t={t}
+          hint={cur.card === null ? t.wrongs.test : t.wrongs.lesson}
+          mainIcon={cur.card === null ? "retry" : "book"}
+          mainLabel={cur.card === null ? t.tryAgain : t.wrongs.reread}
+          onMain={() => {
+            setRes(null);
+            if (cur.card === null) return;
+            setBack(at);
+            setAt(steps.indexOf(`card:${cur.card}`));
+          }}
+          altLabel={t.tryAgain}
+          onAlt={cur.card === null ? null : () => setRes(null)}
+        />
+      )}
+      {cur && res?.ok && (
         <ResultView
           res={res}
           t={t}
-          nextLabel={res.ok ? t.continue : t.tryAgain}
-          onNext={res.ok ? next : () => setRes(null)}
+          nextLabel={t.continue}
+          onNext={next}
           onSource={() => setSheet("source")}
           onExplain={() => setSheet("ai")}
         />
@@ -138,7 +161,7 @@ export default function CourseLessonPlayer({ id, ctx }) {
 
       {step === "apply" && <ApplyView lesson={{ title: lesson.title, steps: lesson.steps }} t={t} busy={busy} onNext={next} />}
 
-      {sheet && cur && (
+      {sheet && cur && res?.ok && (
         <ExplainSheet req={{ kind: "course", id, step: cur.i }} res={res} lang={lang} t={t} sourceOnly={sheet === "source"} onClose={() => setSheet(null)} />
       )}
     </div>

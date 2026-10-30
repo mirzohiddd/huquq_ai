@@ -63,7 +63,7 @@ router.post("/situation/:id/step", userGuard, async (req, res) => {
     const v = st && (await verdict(content.stepKey(s.id, idx), st.options, req.body?.option, s.refs));
     if (!v) return res.status(400).json({ error: "Noto'g'ri so'rov" });
     if (!v.opt.ok) await store.addMistake(req.authUser.id, content.stepKey(s.id, idx));
-    res.json(v.body);
+    res.json(v.opt.ok ? v.body : { ok: false }); // xato qarorda to'g'ri yo'l ochilmaydi — qayta o'ylaydi
   } catch (err) {
     fail(res, err, "step");
   }
@@ -90,12 +90,15 @@ router.post("/situation/:id/finish", userGuard, async (req, res) => {
 router.get("/review", userGuard, async (req, res) => {
   try {
     const doc = await store.getDoc(req.authUser.id);
-    const done = content.LESSONS.filter((l) => doc.lessons?.[l.id]);
+    await require("../services/miniApp/course").ready(); // kurs savollari kalitdan topilishi uchun
+    // Xatolar QILINGAN TARTIBDA (eng eskisi birinchi); har biri qaysi darsdan
     const mistakes = (doc.mistakes || []).map(content.questionByKey).filter(Boolean);
-    const practice = !mistakes.length;
-    const list = practice ? done.slice(-10).map((l) => content.questionByKey(content.lessonKey(l.id))) : mistakes.slice(0, 20);
-    const items = list.map((q) => ({ key: q.key, title: q.title, icon: q.icon || null, text: q.text, q: q.q, options: content.optionView(q.key, q.options).texts }));
-    res.json({ items, practice, mistakes: mistakes.length, topics: done.length, reviewed: doc.reviewed || 0, week: store.weekDots(doc) });
+    const items = mistakes.slice(0, 50).map((q) => {
+      const [kind, id] = q.key.split(":");
+      return { key: q.key, lesson: kind === "Q" || kind === "X" ? id : null, title: q.title, icon: q.icon || null, text: q.text, q: q.q, options: content.optionView(q.key, q.options).texts };
+    });
+    const topics = Object.keys(doc.lessons || {}).length;
+    res.json({ items, practice: false, mistakes: mistakes.length, topics, reviewed: doc.reviewed || 0, week: store.weekDots(doc) });
   } catch (err) {
     fail(res, err, "review");
   }
@@ -104,12 +107,15 @@ router.get("/review", userGuard, async (req, res) => {
 router.post("/review/answer", userGuard, async (req, res) => {
   try {
     const key = String(req.body?.key || "");
+    // Faqat O'Z xatolari takrorlanadi — aks holda yopiq dars savollarini shu yerdan "terib" bo'lardi
+    const doc = await store.getDoc(req.authUser.id);
+    if (!(doc.mistakes || []).includes(key)) return res.status(404).json({ error: "Bu savol takrorlash ro'yxatida yo'q", gone: true });
     const q = content.questionByKey(key);
     const v = q && (await verdict(key, q.options, req.body?.option, q.refs));
     if (!v) return res.status(400).json({ error: "Noto'g'ri so'rov" });
-    const xp = v.opt.ok ? await store.fixMistake(req.authUser.id, key) : 0;
-    if (!v.opt.ok) await store.addMistake(req.authUser.id, key);
-    res.json({ ...v.body, xp });
+    // Takrorlashda XP BERILMAYDI (faqat ro'yxatdan chiqadi); xato javob ochilmaydi
+    if (v.opt.ok) await store.fixMistake(req.authUser.id, key);
+    res.json(v.opt.ok ? { ...v.body, xp: 0 } : { ok: false });
   } catch (err) {
     fail(res, err, "review answer");
   }

@@ -50,13 +50,13 @@ async function addMistake(userId, key) {
   await MiniProgress.updateOne({ userId }, { $addToSet: { mistakes: key } }, { upsert: true });
 }
 
-/** Takrorlashda tuzatilgan xato — ro'yxatdan chiqadi va XP beradi (faqat bir marta). */
+/** Takrorlashda tuzatilgan xato — faqat ro'yxatdan chiqadi (XP berilmaydi). */
 async function fixMistake(userId, key) {
   const res = await MiniProgress.updateOne(
     { userId, mistakes: key },
-    { $pull: { mistakes: key }, $inc: { xp: XP.review, reviewed: 1, [`days.${stats.dayKey()}`]: XP.review } },
+    { $pull: { mistakes: key }, $inc: { reviewed: 1 } }, // takrorlash XP bermaydi (2026-10-30)
   );
-  return res.modifiedCount ? XP.review : 0;
+  return 0;
 }
 
 async function setGoal(userId, goal) {

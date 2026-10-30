@@ -1,6 +1,7 @@
 /**
  * VAZIYAT: voqea bosqichma-bosqich rivojlanadi — har qadamda savol ekrani,
- * keyin natija (qalqon gapiradi). Oxirida natija va +10 XP (bir marta).
+ * keyin natija (qalqon gapiradi). Xato qarorda to'g'ri yo'l ochilmaydi —
+ * o'sha qadam qayta beriladi (ball birinchi tanlov bo'yicha). Oxirida +XP.
  */
 import React, { useEffect, useState } from "react";
 import { X } from "lucide-react";
@@ -10,6 +11,7 @@ import { Spinner } from "./Gate";
 import Hero from "./Hero";
 import QuestionView from "./QuestionView";
 import ResultView from "./ResultView";
+import WrongView from "./WrongView";
 import ExplainSheet from "./ExplainSheet";
 import FinishScreen from "./FinishScreen";
 import m from "./Mini.module.css";
@@ -94,6 +96,8 @@ export default function SituationPlayer({ id, ctx }) {
           onCheck={check}
           t={t}
         />
+      ) : !res.ok ? (
+        <WrongView t={t} hint={t.wrongs.sit} mainIcon="retry" mainLabel={t.tryAgain} onMain={() => setRes(null)} />
       ) : (
         <ResultView
           res={res}
@@ -105,7 +109,7 @@ export default function SituationPlayer({ id, ctx }) {
         />
       )}
 
-      {sheet && (
+      {sheet && res?.ok && (
         <ExplainSheet req={{ kind: "situation", id, step }} res={res} lang={lang} t={t} sourceOnly={sheet === "source"} onClose={() => setSheet(null)} />
       )}
     </div>

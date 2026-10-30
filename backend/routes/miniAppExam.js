@@ -72,6 +72,7 @@ router.post("/exam/:unit/answer", userGuard, async (req, res) => {
     const view = q && viewOf(o.at, q.key, q.options);
     const opt = view?.pick(req.body?.option);
     if (!opt) return res.status(400).json({ error: "Noto'g'ri so'rov" });
+    if (!opt.ok) return res.json({ ok: false }); // imtihonda xato javob ochilmaydi
     const right = q.options.find((x) => x.ok);
     const review = view.texts.map((t) => q.options.find((x) => x.t === t)).map((x) => ({ t: x.t, ok: x.ok, why: x.why }));
     res.json({ ok: opt.ok, why: opt.why, rightText: right.t, rightWhy: right.why, review });
