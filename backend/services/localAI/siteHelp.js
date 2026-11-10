@@ -55,7 +55,9 @@ const SECTIONS = [
 
 // So'rov fe'llari (so'z boshi bilan) yoki faqat bo'lim nomi ("testlar", "testlar kerak")
 const ASK = /(^|\s)(ber|bering|beri|kerak|korsat\S*|qayerda|bormi|och|ochib|ochish|ishla\S*|yech\S*|boshla\S*|oqi\S*|organ\S*|дай\S*|покаж\S*|где|нужн\S*|хочу|открой|начать)(\s|$)/;
-const QUESTION_WORDS = /(huquq|majburiyat|modda|jazo|javobgar|shartnoma|muddat|прав|обязан|стать|наказ)/;
+/* Mazmunli savol belgilari — "Konstitutsiyada so'z erkinligi bormi?" havola
+   emas, JAVOB kutadi (2026-11-09: faqat havola qaytardi). */
+const QUESTION_WORDS = /(huquq|majburiyat|modda|jazo|javobgar|shartnoma|muddat|erkin|ozod|nima|qanday|nega|haqida|deyilgan|yozilgan|mumkin|ruxsat|kafolat|прав|обязан|стать|наказ|свобод|что|как|почему|сказано|гарант)/;
 
 /** @returns {{ answer: string, category: string, found: true } | null} */
 function siteHelp(msg = "", lang = "uz") {

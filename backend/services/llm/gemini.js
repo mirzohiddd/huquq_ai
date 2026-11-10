@@ -20,8 +20,12 @@ const COOLDOWN_KEY = 30 * 60 * 1000;
 const THINKING = 512; // 1024 da javob 15–20 s kelardi
 const pausedUntil = new Map(); // model (yoki "*") → vaqt
 
+/* ⚠️ 2026-11-09: "gemini-2.5-flash-lite" yangi foydalanuvchilar uchun YOPILDI
+   (404 "no longer available") — asosiy model band/kvotada bo'lsa zaxira
+   ham ishlamay, chat jim lokal shablonga tushardi. Zaxiralar yangilandi. */
+const FALLBACKS = ["gemini-3.5-flash-lite", "gemini-3.5-flash", "gemini-flash-latest"];
 const models = () =>
-  [...new Set([process.env.GEMINI_CHAT_MODEL || process.env.GEMINI_MODEL || "gemini-2.5-flash", "gemini-2.5-flash-lite"])];
+  [...new Set([process.env.GEMINI_CHAT_MODEL || process.env.GEMINI_MODEL || "gemini-2.5-flash", ...FALLBACKS])];
 
 const paused = (k) => (pausedUntil.get(k) || 0) > Date.now();
 
@@ -96,6 +100,8 @@ async function geminiChat({ messages, maxOutputTokens = 1200, tier = "free" }) {
       return { text, model };
     } catch (err) {
       lastErr = err;
+      console.warn(`[Gemini] ${model}: ${String(err.message).slice(0, 120)}`);
+      if (err.status === 404) pausedUntil.set(model, Date.now() + COOLDOWN_KEY * 48); // model yopilgan
       if (err.status === 429) pausedUntil.set(model, Date.now() + COOLDOWN_429);
       else if (err.status === 400 || err.status === 401 || err.status === 403) {
         if (/api key|permission|API_KEY/i.test(err.message)) {

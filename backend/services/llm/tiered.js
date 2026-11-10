@@ -97,11 +97,11 @@ async function tieredAnswer(p) {
     }
 
     const localAnswer = local.found ? local.answer : "";
-    const { list, allowed } = await gatherSources({ query: p.query || p.msg, lang: p.lang, codes: p.codes, cfg, localAnswer });
+    const { list, allowed, extra } = await gatherSources({ query: p.query || p.msg, lang: p.lang, codes: p.codes, cfg, localAnswer });
     const messages = buildMessages({
       tier: access.tier,
       lang: p.lang,
-      sources: sourcesBlock(list, p.lang),
+      sources: sourcesBlock(list, p.lang, extra),
       localAnswer,
       history,
       msg: p.msg,

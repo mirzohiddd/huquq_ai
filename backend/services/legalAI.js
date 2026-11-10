@@ -12,6 +12,7 @@ const https = require("https");
 const { searchWeb, formatSearchContext } = require("./webSearch");
 const { localLegalAnswer } = require("./localAI");
 const { tieredAnswer } = require("./llm/tiered"); // tarifga qarab AI (2026-10-19)
+const { geminiReady } = require("./llm/gemini"); // mavzu filtri yumshatilishi uchun (2026-11-09)
 const { siteHelp } = require("./localAI/siteHelp"); // "Testlar ber" kabi so'rovlar
 const { makeQuiz } = require("./localAI/quizMaker"); // "… haqida test tuzib ber" (2026-10-30)
 const {
@@ -1381,6 +1382,24 @@ async function getLegalAdvice(
        QAT'IY mezon bilan qidiriladi — aniq mos modda bo'lsagina javob. */
     if (!/^(salom|assalom|привет|hello|hi|hey)\b/i.test(msg)) {
       const local = await localLegalAnswer({ msg, lang: detectedLang, strict: true });
+      /* 2026-11-09: kalit so'z filtri ko'p kundalik savolni ("qo'shnim itimni
+         zaharladi") rad etardi. AI (Gemini/OpenAI) tayyor bo'lsa savol rad
+         etilmaydi — AI uni o'qib, qonunlar, darslar va savol-javoblardan
+         javob izlaydi. AI javob bera olmasa — avvalgi xatti-harakat. */
+      if (geminiReady()) {
+        const ai = await tieredAnswer({
+          msg,
+          history: inDialog ? history : [],
+          lang: detectedLang,
+          local: { ...local, category: local.category || "boshqa" },
+          codes: null,
+          query: msg,
+          image: null,
+          voice: opts.fromVoice === true,
+          docText: opts.docText || null,
+        });
+        if (ai && (ai.provider === "gemini" || ai.provider === "openai")) return ai;
+      }
       // `scoped` — sayt bazasida yo'q huquqiy soha (pensiya, propiska…): rad emas, yo'naltirish
       if (local.found || local.scoped) return local;
     }

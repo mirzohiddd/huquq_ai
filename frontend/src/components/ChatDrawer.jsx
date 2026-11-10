@@ -15,6 +15,7 @@ import { useChatText } from "./chat/chatText";
 import s from "./ChatDrawer.module.css";
 import x from "./chat/ChatTools.module.css";
 import { BrandMark } from "./brand/BrandLogo";
+import AiBetaNotice from "./AiBetaNotice"; // ⚠️ vaqtinchalik (AI beta)
 
 /**
  * AI chat oynasi. Mantiq bo'laklarga ajratilgan (200 qator qoidasi):
@@ -148,6 +149,7 @@ export default function ChatDrawer() {
               <div ref={bottomRef} />
             </div>
 
+            <AiBetaNotice />
             {notice && <div className={x.notice} role="alert">{notice}</div>}
             {limitReached &&
               (isGuest ? (

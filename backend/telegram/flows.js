@@ -9,6 +9,7 @@ const { getPlanConfig } = require("../config/plans");
 const { T, fill } = require("./texts");
 const ui = require("./ui");
 const { createSiteLogin } = require("./siteLogin");
+const { betaNotice } = require("./betaNotice"); // ⚠️ vaqtinchalik (AI beta)
 
 function createFlows({ safeSend, acc, ai, plans, emailStep, SITE_URL }) {
   const { getLang } = acc;
@@ -34,7 +35,8 @@ function createFlows({ safeSend, acc, ai, plans, emailStep, SITE_URL }) {
   async function sendWelcome(chatId, tgId, userId) {
     const u = await User.findById(userId).select("firstName fullName").lean().catch(() => null);
     const name = u?.firstName || String(u?.fullName || "").split(" ")[0];
-    return safeSend(chatId, fill(tx(tgId).welcome, { name: name ? `, ${ui.esc(name)}` : "" }), mainMenu(getLang(tgId)));
+    const beta = betaNotice(getLang(tgId)); // ⚠️ vaqtinchalik (AI beta)
+    return safeSend(chatId, fill(tx(tgId).welcome, { name: name ? `, ${ui.esc(name)}` : "" }) + (beta ? `\n\n${beta}` : ""), mainMenu(getLang(tgId)));
   }
 
   /** Hisob bormi? Bo'lsa — welcome, bo'lmasa — kirish ekrani */

@@ -19,8 +19,9 @@ const { gatherSources, unverifiedCitations, sourcesBlock } = require("./grounded
 const { buildMessages, fixMessage } = require("./prompts");
 
 const SITE = `SAYT HAQIDA (foydalanuvchi sayt bo'limini so'rasa, havola bilan yo'naltiring):
-[Darslar](/lessons) — huquqni oddiy tilda o'rganish · [Testlar](/tests) — bilimni sinash · [Qonunlar kutubxonasi](/library) — kodekslar moddama-modda · [Konstitutsiya](/constitution) · [AI vositalar](/ai-tools) — ariza/shikoyat tayyorlash, hujjat tahlili · [Tariflar](/#pricing).
+[Darslar](/lessons) — huquqni oddiy tilda o'rganish · [Testlar](/tests) — bilimni sinash · [Qonunlar kutubxonasi](/library) — kodekslar moddama-modda · [Konstitutsiya](/constitution) · [AI vositalar](/ai-tools) — ariza/shikoyat tayyorlash, hujjat tahlili · [Tariflar](/#pricing) · [Telegram bot](https://t.me/mening_huquqlarim_bot) ichidagi Mini App — huquqni O'YIN tarzida o'rganish (bosqichma-bosqich darslar, XP ochkolari, yurakchalar, kunlik seriya, imtihonlar).
 Foydalanuvchi xabaridan keyingi MANBALAR va SAYTNING TEKSHIRILGAN JAVOBI — sizning ichki bilimingiz: sayt javobidagi moddalar ham ishonchli manba, ularga tayaning. Bularni foydalanuvchiga HECH QACHON tilga olmang ("manbalarda", "taqdim etilgan", "sayt javobi", "ma'lumot berilmagan" demang) — to'g'ridan-to'g'ri yurist kabi javob bering.
+Avval savolni diqqat bilan o'qing va foydalanuvchi aslida nimani so'rayotganini tushuning. Sayt javobi yoki modda savolga mos kelmasa — ularni e'tiborsiz qoldiring va savolning o'ziga javob bering. Savol mavzusiga oid dars bo'lsa, oxirida [Darslar](/lessons) bo'limida o'yin tarzida o'rganishni taklif qilishingiz mumkin.
 Foydalanuvchi qisqa yoki noaniq yozsa — taxminiy eng yaqin huquqiy mavzuda foydali javob bering va bitta aniqlashtiruvchi savol bering; "topilmadi" deb qo'ya qolmang.`;
 
 const LEAK = /MANBALAR|TEKSHIRILGAN JAVOB|taqdim etilgan (manba|ma['ʼ‘’]?lumot)|manbalarda|sayt(ning)? javob|ИСТОЧНИК|в (предоставленных|приведённых|приведенных) источник|ответ сайта/i;
@@ -55,7 +56,7 @@ async function freeAiAnswer(p, tier = "free") {
   const history = trimHistory(p.history, Math.max(base.historyTurns, 6));
   const key = history.length
     ? null
-    : crypto.createHash("sha256").update(["gemini", p.lang, norm(p.msg)].join("\u0001")).digest("hex");
+    : crypto.createHash("sha256").update(["gemini2", p.lang, norm(p.msg)].join("\u0001")).digest("hex");
 
   try {
     if (key) {
@@ -63,11 +64,11 @@ async function freeAiAnswer(p, tier = "free") {
       if (hit) return { ...local, answer: hit.answer, provider: "gemini", model: hit.model, found: true, cached: true };
     }
     const localAnswer = local.found ? local.answer : "";
-    const { list, allowed } = await gatherSources({ query: p.query || p.msg, lang: p.lang, codes: p.codes, cfg, localAnswer });
+    const { list, allowed, extra } = await gatherSources({ query: p.query || p.msg, lang: p.lang, codes: p.codes, cfg, localAnswer });
     const messages = buildMessages({
       tier: "basic", // bepul tarifda ham to'liq, tushunarli javob (qisqa "free" uslubi emas)
       lang: p.lang,
-      sources: sourcesBlock(list, p.lang),
+      sources: sourcesBlock(list, p.lang, extra),
       localAnswer,
       history,
       msg: p.msg,

@@ -133,8 +133,9 @@ app.use(express.urlencoded({ extended: true, limit: "100kb" }));
 app.use(require("./services/aiBilling/context").contextMiddleware);
 
 /* ───── HEALTH (CORS keyin — frontend ping uchun) ───── */
+// `ai` — Gemini kaliti sozlanganmi (maxfiy emas, faqat true/false; deploydan keyin tekshirish uchun)
 app.get("/health", (_, res) =>
-  res.json({ status: "ok", timestamp: new Date() }),
+  res.json({ status: "ok", timestamp: new Date(), ai: require("./services/llm/gemini").geminiReady() }),
 );
 
 /* ───── SECURITY MIDDLEWARE ───── */

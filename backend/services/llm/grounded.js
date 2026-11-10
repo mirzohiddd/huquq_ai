@@ -17,6 +17,7 @@
  */
 const { searchLaws } = require("../localAI/search");
 const { retrieveLegalContext } = require("../legalRetrieval");
+const { siteContext } = require("./siteContext");
 
 const VECTOR_TIMEOUT_MS = 4000;
 
@@ -71,7 +72,10 @@ async function gatherSources({ query, lang, codes, cfg, localAnswer }) {
   const list = [...out.values()];
   const allowed = new Set(list.map((s) => String(s.articleNumber)));
   for (const n of citedNumbers(localAnswer || "")) allowed.add(n);
-  return { list, allowed };
+  // Darslar va tayyor savol-javoblar ham (2026-11-09) — "butun saytdan" izlash
+  const site = siteContext(query, lang, codes);
+  for (const n of site.numbers) allowed.add(n);
+  return { list, allowed, extra: site.text };
 }
 
 /** Matndagi modda raqamlari: "44-modda", "155- moddasi", "статья 44", "44-статья". */
@@ -91,11 +95,14 @@ function unverifiedCitations(answer, allowed) {
   return [...citedNumbers(answer)].filter((n) => !allowed.has(n));
 }
 
-function sourcesBlock(list, lang) {
+function sourcesBlock(list, lang, extra = "") {
+  const tail = extra ? `\n\n${extra}` : "";
+  /* Modda topilmasa ham model RAD ETMASIN (2026-11-09): umumiy tamoyillar
+     bilan javob beradi, faqat modda raqamini yozmaydi. */
   if (!list.length) {
-    return lang === "ru"
-      ? "ИСТОЧНИКИ: по этому вопросу в базе статьи не найдены."
-      : "MANBALAR: bu savol bo'yicha bazadan modda topilmadi.";
+    return (lang === "ru"
+      ? "ИСТОЧНИКИ: точных статей по вопросу нет — ответьте по общим принципам права Узбекистана, без номеров статей."
+      : "MANBALAR: aniq modda matni yo'q — O'zbekiston huquqining umumiy tamoyillari asosida javob bering, modda raqamisiz.") + tail;
   }
   const head = lang === "ru" ? "ИСТОЧНИКИ (база Lex.uz):" : "MANBALAR (Lex.uz bazasi):";
   const art = lang === "ru" ? "статья" : "modda";
@@ -103,7 +110,7 @@ function sourcesBlock(list, lang) {
     const num = lang === "ru" ? `${art} ${s.articleNumber}` : `${s.articleNumber}-${art}`;
     return `[${i + 1}] ${s.lawName}, ${num}${s.title ? ` — ${s.title}` : ""}\n${s.text}`;
   });
-  return [head, ...body].join("\n\n");
+  return [head, ...body].join("\n\n") + tail;
 }
 
 module.exports = { gatherSources, citedNumbers, unverifiedCitations, sourcesBlock };

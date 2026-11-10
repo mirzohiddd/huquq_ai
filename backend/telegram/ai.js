@@ -18,6 +18,7 @@ const { recordStat } = require("../services/stats");
 const { checkAndIncrement } = require("../middleware/usageLimit");
 const { T, fill } = require("./texts");
 const { esc, mdToHtml, splitMessage } = require("./ui");
+const { betaNotice } = require("./betaNotice"); // ⚠️ vaqtinchalik (AI beta)
 
 const HISTORY_MAX = 20;
 
@@ -141,7 +142,11 @@ function createAi({ bot, safeSend, getLang, mainMenu, voiceReply }) {
       const parts = splitMessage(reply);
       for (let i = 0; i < parts.length; i++) {
         const last = i === parts.length - 1;
-        await safeSend(chatId, mdToHtml(parts[i]), last ? voiceReply.listenKeyboard(answerId, voiceLang) : {});
+        const html = mdToHtml(parts[i]);
+        const note = last && betaNotice(lang) ? `\n\n${betaNotice(lang)}` : "";
+        const fits = html.length + note.length < 4000; // Telegram chegarasi 4096
+        await safeSend(chatId, fits ? html + note : html, last ? voiceReply.listenKeyboard(answerId, voiceLang) : {});
+        if (note && !fits) await safeSend(chatId, note.trim());
       }
     } catch (err) {
       console.error("Telegram AI error:", err);
