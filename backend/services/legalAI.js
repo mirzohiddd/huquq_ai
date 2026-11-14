@@ -12,7 +12,7 @@ const https = require("https");
 const { searchWeb, formatSearchContext } = require("./webSearch");
 const { localLegalAnswer } = require("./localAI");
 const { tieredAnswer } = require("./llm/tiered"); // tarifga qarab AI (2026-10-19)
-const { geminiReady } = require("./llm/gemini"); // mavzu filtri yumshatilishi uchun (2026-11-09)
+const { freeAiReady } = require("./llm/freeChat"); // mavzu filtri yumshatilishi uchun (Gemini yoki Groq tayyor)
 const { siteHelp } = require("./localAI/siteHelp"); // "Testlar ber" kabi so'rovlar
 const { makeQuiz } = require("./localAI/quizMaker"); // "… haqida test tuzib ber" (2026-10-30)
 const {
@@ -1386,8 +1386,11 @@ async function getLegalAdvice(
          zaharladi") rad etardi. AI (Gemini/OpenAI) tayyor bo'lsa savol rad
          etilmaydi — AI uni o'qib, qonunlar, darslar va savol-javoblardan
          javob izlaydi. AI javob bera olmasa — avvalgi xatti-harakat. */
-      if (geminiReady()) {
+      if (freeAiReady()) {
         const ai = await tieredAnswer({
+          offTopic: true,
+          trace: opts.debug ? {} : undefined,
+          forceTier: opts.forceTier || null,
           msg,
           history: inDialog ? history : [],
           lang: detectedLang,
@@ -1398,7 +1401,7 @@ async function getLegalAdvice(
           voice: opts.fromVoice === true,
           docText: opts.docText || null,
         });
-        if (ai && (ai.provider === "gemini" || ai.provider === "openai")) return ai;
+        if (ai && (["gemini", "openai", "groq"].includes(ai.provider) || (ai.helpful && ai.found))) return ai;
       }
       // `scoped` — sayt bazasida yo'q huquqiy soha (pensiya, propiska…): rad emas, yo'naltirish
       if (local.found || local.scoped) return local;
@@ -1436,7 +1439,7 @@ async function getLegalAdvice(
   // tarif uchun yakuniy javob, pullik tarif uchun RAG asosi va zaxira).
   // Pullik tarifda tieredAnswer() uni OpenAI bilan, faqat Lex.uz bazasidagi
   // moddalarga tayangan holda yaxshilaydi (services/llm/tiered.js).
-  const local = await localLegalAnswer({
+  const localArgs = {
     msg,
     prevUserText,
     lang: detectedLang,
@@ -1454,10 +1457,16 @@ async function getLegalAdvice(
     prevAnswer: inDialog
       ? String([...history].reverse().find((m) => m.role === "assistant")?.content || "")
       : "",
-  });
+  };
+  const local = await localLegalAnswer(localArgs);
   // Qisqa davom savoli ("buning uchun qanday hujjatlar kerak?") — RAG qidiruvi oldingi savol bilan
   const shortFollowUp = prevUserText && msg.split(/\s+/).length < 7;
   return tieredAnswer({
+    /* 2026-11-14: savol imlo xatolari bilan yozilgan bo'lsa, lokal AI uni
+       NORMALLASHTIRILGAN ko'rinishda qayta ko'radi (llm/tiered.js). */
+    relocal: (q) => localLegalAnswer({ ...localArgs, msg: q, prevUserText: "", variant: 0 }),
+    trace: opts.debug ? {} : undefined, // debug rejimi: qidiruv, kontekst, tekshiruv izi
+    forceTier: opts.forceTier || null,
     msg,
     history: inDialog ? history : [],
     lang: detectedLang,

@@ -25,9 +25,12 @@ const { current } = require("../aiBilling/settings");
 const { ctx } = require("../aiBilling/context");
 const { recordUsage } = require("../aiBilling/usage");
 const { chat } = require("./openai");
-const { gatherSources, unverifiedCitations, sourcesBlock } = require("./grounded");
-const { buildMessages, fixMessage, noteFor } = require("./prompts");
+const { gatherSources, sourcesBlock } = require("./grounded");
+const { buildMessages, noteFor } = require("./prompts");
 const { freeAiAnswer, canUseFreeAi } = require("./freeAi");
+const { understand } = require("../rag/understand");
+const { groundedAnswer } = require("../rag/answer");
+const { helpfulFallback } = require("../rag/fallback");
 
 /* Pullik AI ishlatilmaganda (bepul tarif, budjet/kalit yo'q, OpenAI xatosi)
    YOZMA chat Gemini'dan javob oladi; u ham bo'lmasa — lokal javob. */
@@ -65,10 +68,13 @@ function trimHistory(history, turns) {
  *   local — localLegalAnswer natijasi ({ answer, found, category, provider })
  * @returns {Promise<object>} getLegalAdvice javobi shaklida
  */
-async function tieredAnswer(p) {
+async function route(p) {
   const c = ctx();
   const access = await checkAccess(c.userId, c.ip);
+  // Debug: tarifni taqlid qilish (scripts/aiDebug.js, admin) — bepul zanjirda
+  if (p.forceTier) Object.assign(access, { ok: false, tier: p.forceTier, reason: "local_mode" });
   if (c && typeof c === "object") c.tier = access.tier; // STT/TTS yozuvlari ham shu tarifga tushsin
+  if (p.trace) p.trace.access = { tier: access.tier, paidAi: access.ok, reason: access.reason || null };
   const local = p.local;
 
   if (!access.ok) {
@@ -88,7 +94,7 @@ async function tieredAnswer(p) {
   const key = cacheable ? cacheKey([access.tier, model, p.lang, p.voice ? "v" : "t", norm(p.msg)]) : null;
 
   try {
-    if (key) {
+    if (key && !p.trace) {
       const hit = await AiCache.findOneAndUpdate({ key, expiresAt: { $gt: new Date() } }, { $inc: { hits: 1 } }).lean();
       if (hit) {
         recordUsage({ provider: "openai", model, tier: access.tier, cacheHit: true }).catch(() => {});
@@ -97,33 +103,19 @@ async function tieredAnswer(p) {
     }
 
     const localAnswer = local.found ? local.answer : "";
-    const { list, allowed, extra } = await gatherSources({ query: p.query || p.msg, lang: p.lang, codes: p.codes, cfg, localAnswer });
-    const messages = buildMessages({
-      tier: access.tier,
-      lang: p.lang,
-      sources: sourcesBlock(list, p.lang, extra),
-      localAnswer,
-      history,
-      msg: p.msg,
-      voice: p.voice,
-      docText,
-      image: p.image,
+    const src = await gatherSources({ query: p.query || p.msg, msg: p.msg, history: p.history, u: p.u, lang: p.lang, codes: p.codes, cfg, localAnswer });
+    const context = sourcesBlock(src.list, p.lang, src.extra);
+    const messages = buildMessages({ tier: access.tier, lang: p.lang, sources: context, localAnswer, history, msg: p.msg, voice: p.voice, docText, image: p.image, understood: p.u });
+    if (p.trace) Object.assign(p.trace, { retrieval: src.trace, docs: src.list, context });
+    // Modda tekshiruvi, tuzatish va "Manbalar" — rag/answer.js (bepul zanjir bilan bir xil)
+    const out = await groundedAnswer({
+      call: (msgs) => chat({ model, messages: msgs, maxOutputTokens: cfg.maxOutputTokens, reasoningEffort: effort, tier: access.tier }),
+      messages, allowed: src.allowed, list: src.list, refs: src.refs, lang: p.lang, voice: p.voice,
     });
-    const call = (msgs) => chat({ model, messages: msgs, maxOutputTokens: cfg.maxOutputTokens, reasoningEffort: effort, tier: access.tier });
+    if (!out) return (await fallback(p, access.tier)) || local;
+    if (p.trace) p.trace.guard = out.guard;
 
-    let out = await call(messages);
-    let bad = unverifiedCitations(out.text, allowed);
-    if (bad.length) {
-      // Bir marta tuzatishni so'raymiz — model manbada yo'q moddani keltirdi
-      out = await call([...messages, { role: "assistant", content: out.text }, { role: "user", content: fixMessage(bad, p.lang) }]);
-      bad = unverifiedCitations(out.text, allowed);
-      if (bad.length) {
-        console.warn(`[AI] tekshirilmagan modda (${bad.join(", ")}) — lokal javob qaytarildi`);
-        return local;
-      }
-    }
-
-    if (key) {
+    if (key && !out.guard.stripped) {
       const ttl = current().cacheTtlHours;
       if (ttl > 0) {
         AiCache.updateOne(
@@ -133,11 +125,50 @@ async function tieredAnswer(p) {
         ).catch(() => {});
       }
     }
-    return { ...local, answer: out.text, provider: "openai", model: out.model, found: true };
+    return { ...local, answer: out.text, provider: "openai", model: out.model, found: true, sources: out.sources };
   } catch (err) {
     console.warn(`[AI] ${access.tier}/${model} xato — zaxira javob: ${err.message}`);
     return (await fallback(p, access.tier)) || local;
   }
+}
+
+/**
+ * KIRISH NUQTASI (2026-11-14): so'rovni tushunish → javob → zaxira.
+ *   1. savol tahlil qilinadi (imlo, qonun atamalari, davom savoli) — rag/understand.js;
+ *   2. lokal javob topilmagan bo'lsa, NORMALLASHTIRILGAN savol bilan qayta
+ *      uriniladi (`p.relocal`) — kuratorlik qilingan vaziyatlar xato yozilgan
+ *      savolda ham tanilsin;
+ *   3. tarifga qarab LLM javobi (`route`);
+ *   4. hech biri javob bermasa — "topilmadi" shabloni EMAS, foydali zaxira:
+ *      yaqin moddalar + aniqlashtiruvchi savol (rag/fallback.js).
+ */
+async function tieredAnswer(p) {
+  const structured = !p.image && !p.docText;
+  if (structured && !p.u) {
+    // Ovozli rejimda tahlil faqat qoidalar bilan (javob kechikmasin)
+    p.u = await understand({ msg: p.msg, history: p.history, lang: p.lang, codes: p.codes, useLlm: !p.voice }).catch(() => null);
+  }
+  if (p.trace) p.trace.understanding = p.u;
+  if (p.u && p.relocal && !p.local.found && !p.local.scoped && p.u.standalone && p.u.standalone !== p.msg) {
+    const again = await p.relocal(p.u.standalone).catch(() => null);
+    if (again && again.found) p.local = again;
+  }
+
+  let res = await route(p);
+  if (structured && !p.voice && p.u && !res.found && !res.scoped && (!res.provider || res.provider === "local")) {
+    try {
+      const cfg = { ragArticles: 5, articleChars: 1600 };
+      const src = await gatherSources({ query: p.query || p.msg, msg: p.msg, history: p.history, u: p.u, lang: p.lang, codes: p.codes, cfg, localAnswer: "" });
+      if (p.trace) Object.assign(p.trace, { retrieval: src.trace, docs: src.list, fallback: true });
+      // Huquqqa aloqasiz xabar (mavzu filtri hal qiladi) — bu yerda javob almashtirilmaydi
+      if (src.list.length || src.ambiguous || !p.offTopic) {
+        res = { ...res, answer: helpfulFallback({ lang: p.lang, u: p.u, docs: src.list, ambiguous: src.ambiguous }), helpful: true, found: src.list.some((d) => d.direct) };
+      }
+    } catch (err) {
+      console.warn("[AI] zaxira javob tuzilmadi:", err.message);
+    }
+  }
+  return p.trace ? { ...res, debug: p.trace } : res;
 }
 
 module.exports = { tieredAnswer, pickModel };

@@ -42,9 +42,9 @@ function convert(messages) {
   return { system, contents };
 }
 
-async function post(model, body) {
+async function post(model, body, timeoutMs = TIMEOUT_MS) {
   const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
+  const timer = setTimeout(() => ctrl.abort(), timeoutMs);
   try {
     const res = await fetch(`${BASE}/${model}:generateContent`, {
       method: "POST",
@@ -68,23 +68,37 @@ async function post(model, body) {
 }
 
 /**
- * @param {{ messages: object[], maxOutputTokens?: number, tier?: string }} p
+ * @param {{ messages: object[], maxOutputTokens?: number, tier?: string, thinking?: number,
+ *           json?: boolean, temperature?: number, timeoutMs?: number, kind?: string }} p
+ *   thinking — "o'ylash" byudjeti (tarifga qarab: freeAi.js); json — faqat JSON javob
+ *   (so'rov tahlili, rag/understand.js).
  * @returns {Promise<{ text: string, model: string }>}
  */
-async function geminiChat({ messages, maxOutputTokens = 1200, tier = "free" }) {
+async function geminiChat({ messages, maxOutputTokens = 1200, tier = "free", thinking = THINKING, json = false, temperature = 0.3, timeoutMs = TIMEOUT_MS, kind }) {
   const { system, contents } = convert(messages);
   const body = {
     systemInstruction: { parts: [{ text: system }] },
     contents,
     // Past temperatura — huquqiy javobda "ijodkorlik" kerak emas.
     // Kichik "o'ylash" byudjeti: mantiq yaxshilanadi, javob sekinlashmaydi.
-    generationConfig: { temperature: 0.3, maxOutputTokens: maxOutputTokens + THINKING, thinkingConfig: { thinkingBudget: THINKING } },
+    generationConfig: { temperature, maxOutputTokens: maxOutputTokens + thinking, thinkingConfig: { thinkingBudget: thinking } },
   };
+  if (json) body.generationConfig.responseMimeType = "application/json";
   let lastErr = new Error("Gemini mavjud emas");
   for (const model of models()) {
     if (paused(model)) continue;
     try {
-      const data = await post(model, body);
+      let data;
+      try {
+        data = await post(model, body, timeoutMs);
+      } catch (err) {
+        /* Ba'zi modellar bu "o'ylash" byudjetini qabul qilmaydi (400 "invalid
+           argument") — zaxira model shu sabab umuman ishlamasdi. Usiz qayta. */
+        if (err.status !== 400 || /api key|API_KEY/i.test(err.message)) throw err;
+        const cfg = { ...body.generationConfig, maxOutputTokens: maxOutputTokens + 1024 };
+        delete cfg.thinkingConfig;
+        data = await post(model, { ...body, generationConfig: cfg }, timeoutMs);
+      }
       const text = (data.candidates?.[0]?.content?.parts || []).map((p) => p.text || "").join("").trim();
       if (!text) throw Object.assign(new Error(`Gemini bo'sh javob (${data.candidates?.[0]?.finishReason || "?"})`), { status: 0 });
       const u = data.usageMetadata || {};
@@ -92,12 +106,14 @@ async function geminiChat({ messages, maxOutputTokens = 1200, tier = "free" }) {
         provider: "gemini",
         model,
         tier,
+        kind,
         inputTokens: u.promptTokenCount || 0,
         outputTokens: u.candidatesTokenCount || 0,
         reasoningTokens: u.thoughtsTokenCount || 0,
         costUsd: 0, // bepul kvota
       }).catch(() => {});
-      return { text, model };
+      // truncated — javob chiqish chegarasida uzilgan (rag/answer.js chala jumlani kesadi)
+      return { text, model, truncated: data.candidates?.[0]?.finishReason === "MAX_TOKENS" };
     } catch (err) {
       lastErr = err;
       console.warn(`[Gemini] ${model}: ${String(err.message).slice(0, 120)}`);

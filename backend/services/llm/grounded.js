@@ -15,67 +15,57 @@
  * begona raqam bo'lsa javob qabul qilinmaydi (tiered.js qayta so'raydi yoki
  * lokal javobga qaytadi).
  */
-const { searchLaws } = require("../localAI/search");
-const { retrieveLegalContext } = require("../legalRetrieval");
+const { hybridRetrieve } = require("../rag/retrieve");
+const { understand } = require("../rag/understand");
 const { siteContext } = require("./siteContext");
+const { getIndex } = require("../localAI/lawIndex");
+const { SITE_URL, path } = require("../seoPages/meta");
 
-const VECTOR_TIMEOUT_MS = 4000;
+/* 2026-11-14: qidiruv gibrid bo'ldi (rag/retrieve.js — modda raqami + xom
+   matn + normallashtirilgan savol + semantik). Bu funksiya uni LLM uchun
+   tayyorlaydi: manbalar ro'yxati, ruxsat etilgan modda raqamlari, qo'shimcha
+   kontekst. `u` — so'rov tahlili (rag/understand.js); berilmasa qoidalar bilan. */
+/** @returns {Promise<{ list: object[], allowed: Set<string>, extra: string, ambiguous: object|null, trace: object }>} */
+async function gatherSources({ query, lang, codes, cfg, localAnswer, msg, history, u }) {
+  const text = msg || query;
+  const und = u || (await understand({ msg: text, history, lang, codes, useLlm: false }));
+  const r = await hybridRetrieve({ msg: text, u: und, lang, codes, limit: cfg.ragArticles, articleChars: cfg.articleChars });
+  const list = r.docs;
 
-const withTimeout = (p, ms) =>
-  Promise.race([p, new Promise((_, rej) => setTimeout(() => rej(new Error("timeout")), ms))]);
-
-const keyOf = (code, num) => `${code}|${String(num).trim()}`;
-
-/** @returns {Promise<{ list: object[], allowed: Set<string> }>} */
-async function gatherSources({ query, lang, codes, cfg, localAnswer }) {
-  const ru = lang === "ru";
-  const out = new Map();
-  const add = (s) => {
-    if (!s.articleNumber || out.size >= cfg.ragArticles || out.has(keyOf(s.lawCode, s.articleNumber))) return;
-    const text = String(s.text || "").replace(/\s+/g, " ").trim();
-    if (text) out.set(keyOf(s.lawCode, s.articleNumber), { ...s, text: text.slice(0, cfg.articleChars) });
-  };
-
-  const [bm25, vector] = await Promise.all([
-    searchLaws(query, { lang, codes, limit: cfg.ragArticles }).catch(() => null),
-    withTimeout(retrieveLegalContext(query, cfg.ragArticles, codes || null), VECTOR_TIMEOUT_MS).catch(() => null),
-  ]);
-
-  // BM25 va vektor natijalari navbatma-navbat — ikkalasining eng yaxshisi kirsin
-  const a = (bm25?.hits || []).map((h) => {
-    const d = bm25.state.docs[h.docIdx];
-    return {
-      lawCode: d.lawCode,
-      lawName: ru && d.lawNameRu ? d.lawNameRu : d.lawName,
-      articleNumber: d.articleNumber,
-      title: (ru && d.titleRu) || d.title || "",
-      text: (ru && d.textRu) || d.text,
-    };
-  });
-  // Vektor natijasi faqat o'zbekcha — rus tilida RASMIY ruscha matn lokal indeksdan olinadi
-  const docs = bm25?.state?.docs || [];
-  const b = (vector?.chunks || []).map((c) => {
-    const d = ru ? docs.find((x) => x.lawCode === c.lawCode && x.articleNumber === String(c.articleNumber)) : null;
-    return {
-      lawCode: c.lawCode,
-      lawName: (d && d.lawNameRu) || c.lawName,
-      articleNumber: c.articleNumber,
-      title: (d && d.titleRu) || c.title || "",
-      text: (d && d.textRu) || c.text,
-    };
-  });
-  for (let i = 0; i < Math.max(a.length, b.length); i++) {
-    if (a[i]) add(a[i]);
-    if (b[i]) add(b[i]);
-  }
-
-  const list = [...out.values()];
   const allowed = new Set(list.map((s) => String(s.articleNumber)));
   for (const n of citedNumbers(localAnswer || "")) allowed.add(n);
+  /* Foydalanuvchi O'ZI yozgan raqam va yordamchining oldingi (o'sha paytda
+     tekshirilgan) javoblaridagi moddalar — to'qima emas. Avval model
+     "135-modda" ni shunchaki qayta tilga olgani uchun javob rad etilardi. */
+  for (const n of r.numbers) allowed.add(n);
+  for (const m of history || []) if (m.role === "assistant") for (const n of citedNumbers(m.content || "")) allowed.add(n);
   // Darslar va tayyor savol-javoblar ham (2026-11-09) — "butun saytdan" izlash
-  const site = siteContext(query, lang, codes);
+  const site = siteContext(und.standalone || query || text, lang, codes);
   for (const n of site.numbers) allowed.add(n);
-  return { list, allowed, extra: site.text };
+
+  const ru = lang === "ru";
+  const names = (c) => c.candidates.slice(0, 16).map((x) => `${x.lawName}${x.title ? ` («${x.title}»)` : ""}`).join("; ");
+  const notes = [];
+  if (r.ambiguous) {
+    notes.push(ru
+      ? `СТАТЬЯ ${r.ambiguous.number} есть в нескольких законах, и из разговора неясно, какой нужен: ${names(r.ambiguous)}. Не пересказывайте её содержание наугад — перечислите варианты и спросите, какой закон имеется в виду.`
+      : `${r.ambiguous.number}-MODDA bir nechta hujjatda bor va suhbatdan qaysi biri kerakligi aniq emas: ${names(r.ambiguous)}. Mazmunini taxmin qilib yozmang — variantlarni sanab, qaysi qonun ekanini so'rang.`);
+  }
+  for (const o of r.others) {
+    if (o.candidates.length) notes.push(ru ? `Статья ${o.number} есть и в других законах: ${names(o)}.` : `${o.number}-modda boshqa hujjatlarda ham bor: ${names(o)}.`);
+  }
+  const extra = [site.text, ...notes].filter(Boolean).join("\n\n");
+
+  /* Sayt bilimi/lokal javob orqali ruxsat etilgan, lekin qidiruvda chiqmagan
+     moddalar (masalan MK 560) ham "Manbalar"da havolasi bilan ko'rinsin —
+     faqat savol sohasidagi kodekslardan, matnsiz (LLM kontekstiga qo'shilmaydi). */
+  const have = new Set(list.map((d) => d.id));
+  const scope = new Set([...(und.codes || []), ...list.map((d) => d.lawCode)]);
+  const refs = (await getIndex()).docs
+    .filter((d) => allowed.has(String(d.articleNumber)) && scope.has(d.lawCode) && !have.has(`${d.lawCode}:${d.articleNumber}`))
+    .slice(0, 40)
+    .map((d) => ({ id: `${d.lawCode}:${d.articleNumber}`, lawCode: d.lawCode, lawName: ru && d.lawNameRu ? d.lawNameRu : d.lawName, articleNumber: d.articleNumber, title: (ru && d.titleRu) || d.title || "", score: null, sourceUrl: `${SITE_URL}${path.article(d.lawCode, d.articleNumber)}` }));
+  return { list, refs, allowed, extra, ambiguous: r.ambiguous, trace: r.trace };
 }
 
 /** Matndagi modda raqamlari: "44-modda", "155- moddasi", "статья 44", "44-статья". */
@@ -108,7 +98,9 @@ function sourcesBlock(list, lang, extra = "") {
   const art = lang === "ru" ? "статья" : "modda";
   const body = list.map((s, i) => {
     const num = lang === "ru" ? `${art} ${s.articleNumber}` : `${s.articleNumber}-${art}`;
-    return `[${i + 1}] ${s.lawName}, ${num}${s.title ? ` — ${s.title}` : ""}\n${s.text}`;
+    // Aniq so'ralgan modda ALOHIDA belgilanadi — boshqalar orasida yo'qolmasin
+    const mark = s.direct ? (lang === "ru" ? " ← ПОЛЬЗОВАТЕЛЬ СПРОСИЛ ИМЕННО ЭТУ СТАТЬЮ" : " ← FOYDALANUVCHI AYNAN SHU MODDANI SO'RADI") : "";
+    return `[${i + 1}] ${s.lawName}, ${num}${s.title ? ` — ${s.title}` : ""}${mark}\n${s.text}`;
   });
   return [head, ...body].join("\n\n") + tail;
 }
