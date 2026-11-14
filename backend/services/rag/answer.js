@@ -30,7 +30,9 @@ const LEAK_FIX = {
  *           allowed: Set<string>, list: object[], lang: string, voice?: boolean }} p
  * @returns {Promise<{ text, model, provider?, sources: object[], guard: object }|null>}
  */
-async function groundedAnswer({ call, messages, allowed, list, refs = [], lang, voice = false }) {
+async function groundedAnswer({ call, messages, allowed, list, refs = [], lang, voice = false, deadline = 0 }) {
+  // Vaqt oz qolgan bo'lsa qayta so'ralmaydi — tasdiqlanmagan jumla shunchaki olib tashlanadi
+  const tight = () => deadline && deadline - Date.now() < 14000;
   const guard = { unverified: [], retried: false, stripped: false, leakFixed: false };
   let out = await call(messages);
   let text = out.text;
@@ -38,10 +40,13 @@ async function groundedAnswer({ call, messages, allowed, list, refs = [], lang, 
   let bad = unverifiedCitations(text, allowed);
   if (bad.length) {
     guard.unverified = bad;
-    guard.retried = true;
-    out = await call([...messages, { role: "assistant", content: text }, { role: "user", content: fixMessage(bad, lang) }]);
-    text = out.text;
-    bad = unverifiedCitations(text, allowed);
+    const fixed = tight() ? null : await call([...messages, { role: "assistant", content: text }, { role: "user", content: fixMessage(bad, lang) }]).catch(() => null);
+    if (fixed) {
+      guard.retried = true;
+      out = fixed;
+      text = out.text;
+      bad = unverifiedCitations(text, allowed);
+    }
     if (bad.length) {
       const cleaned = stripUnverified(text, bad, lang);
       if (!cleaned) {
@@ -54,7 +59,7 @@ async function groundedAnswer({ call, messages, allowed, list, refs = [], lang, 
     }
   }
 
-  if (LEAK.test(text)) {
+  if (LEAK.test(text) && !tight()) {
     const again = await call([...messages, { role: "assistant", content: text }, { role: "user", content: LEAK_FIX[lang === "ru" ? "ru" : "uz"] }]);
     if (LEAK.test(again.text) || unverifiedCitations(again.text, allowed).length) return null;
     guard.leakFixed = true;

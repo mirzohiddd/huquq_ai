@@ -30,6 +30,7 @@ const { buildMessages, noteFor } = require("./prompts");
 const { freeAiAnswer, canUseFreeAi } = require("./freeAi");
 const { understand } = require("../rag/understand");
 const { groundedAnswer } = require("../rag/answer");
+const { BUDGET_MS, within, slice } = require("../rag/deadline");
 const { helpfulFallback } = require("../rag/fallback");
 
 /* Pullik AI ishlatilmaganda (bepul tarif, budjet/kalit yo'q, OpenAI xatosi)
@@ -109,7 +110,8 @@ async function route(p) {
     if (p.trace) Object.assign(p.trace, { retrieval: src.trace, docs: src.list, context });
     // Modda tekshiruvi, tuzatish va "Manbalar" — rag/answer.js (bepul zanjir bilan bir xil)
     const out = await groundedAnswer({
-      call: (msgs) => chat({ model, messages: msgs, maxOutputTokens: cfg.maxOutputTokens, reasoningEffort: effort, tier: access.tier }),
+      call: (msgs) => within(chat({ model, messages: msgs, maxOutputTokens: cfg.maxOutputTokens, reasoningEffort: effort, tier: access.tier }), slice(p.deadline, 0.6), "OpenAI"),
+      deadline: slice(p.deadline, 0.6),
       messages, allowed: src.allowed, list: src.list, refs: src.refs, lang: p.lang, voice: p.voice,
     });
     if (!out) return (await fallback(p, access.tier)) || local;
@@ -144,6 +146,7 @@ async function route(p) {
  */
 async function tieredAnswer(p) {
   const structured = !p.image && !p.docText;
+  p.deadline = Date.now() + BUDGET_MS; // butun AI bosqichi uchun (rag/deadline.js)
   if (structured && !p.u) {
     // Ovozli rejimda tahlil faqat qoidalar bilan (javob kechikmasin)
     p.u = await understand({ msg: p.msg, history: p.history, lang: p.lang, codes: p.codes, useLlm: !p.voice }).catch(() => null);

@@ -119,6 +119,7 @@ async function understand({ msg, history = [], lang = "uz", codes = null, useLlm
       temperature: 0,
       json: true,
       timeoutMs: TIMEOUT_MS,
+      deadline: Date.now() + TIMEOUT_MS + 1000,
     });
     const j = parseJson(out.text);
     if (!j || !clip(j.standalone, 10)) return base;

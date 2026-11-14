@@ -47,7 +47,7 @@ async function embed(query) {
  * @returns {Promise<{ hits: { lawCode, articleNumber, score }[], error?: string }>}
  *   Hech qachon xato tashlamaydi — yiqilsa `error` bilan bo'sh ro'yxat.
  */
-async function vectorSearch(query, { limit = 8, timeoutMs = 4500 } = {}) {
+async function vectorSearch(query, { limit = 8, timeoutMs = 3000 } = {}) {
   if (!isConfigured) return { hits: [], error: "MISTRAL_API_KEY yo'q" };
   const run = (async () => {
     const queryVector = await embed(query);

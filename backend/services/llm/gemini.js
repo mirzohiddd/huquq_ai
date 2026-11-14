@@ -14,7 +14,7 @@
 const { recordUsage } = require("../aiBilling/usage");
 
 const BASE = "https://generativelanguage.googleapis.com/v1beta/models";
-const TIMEOUT_MS = 30 * 1000;
+const TIMEOUT_MS = 25 * 1000;
 const COOLDOWN_429 = 10 * 60 * 1000;
 const COOLDOWN_KEY = 30 * 60 * 1000;
 const THINKING = 512; // 1024 da javob 15–20 s kelardi

@@ -20,6 +20,17 @@ const pausedUntil = new Map();
 
 const models = () => [...new Set([process.env.GROQ_CHAT_MODEL || "openai/gpt-oss-120b", "openai/gpt-oss-20b"])];
 const paused = (k) => (pausedUntil.get(k) || 0) > Date.now();
+const MAX_OUT = 1500;
+const MAX_PROMPT_CHARS = Number(process.env.GROQ_MAX_PROMPT_CHARS) || 13000;
+
+/** Eng uzun xabar (odatda manbalar bloki) chegaraga sig'adigan qilib qisqartiriladi. */
+function fit(messages) {
+  const total = messages.reduce((n, m) => n + String(m.content || "").length, 0);
+  if (total <= MAX_PROMPT_CHARS) return messages;
+  const big = messages.reduce((a, m, i) => (typeof m.content === "string" && m.content.length > messages[a].content.length ? i : a), 0);
+  const keep = Math.max(2000, messages[big].content.length - (total - MAX_PROMPT_CHARS));
+  return messages.map((m, i) => (i === big ? { ...m, content: m.content.slice(0, keep) } : m));
+}
 
 function groqReady() {
   return !!process.env.GROQ_API_KEY && process.env.FREE_AI !== "local" && !paused("*") && models().some((m) => !paused(m));
@@ -55,7 +66,8 @@ async function groqChat({ messages, maxOutputTokens = 1200, tier = "free", json 
   let lastErr = new Error("Groq mavjud emas");
   for (const model of models()) {
     if (paused(model)) continue;
-    const body = { model, messages, temperature, max_completion_tokens: maxOutputTokens + REASONING_RESERVE, reasoning_effort: "low" };
+    // Bepul Groq'da so'rov hajmi (kirish + chiqish) daqiqalik token chegarasidan oshmasligi kerak
+    const body = { model, messages: fit(messages), temperature, max_completion_tokens: Math.min(maxOutputTokens, MAX_OUT) + REASONING_RESERVE, reasoning_effort: "low" };
     if (json) body.response_format = { type: "json_object" };
     try {
       const data = await post(body, timeoutMs);

@@ -33,8 +33,8 @@ Foydalanuvchi qisqa yoki noaniq yozsa — taxminiy eng yaqin huquqiy mavzuda foy
 const PROFILE = {
   free: { rag: 5, chars: 1400, turns: 6, out: 1800, thinking: 512, style: "basic" },
   basic: { rag: 6, chars: 1400, turns: 6, out: 2200, thinking: 512, style: "basic" },
-  pro: { rag: 8, chars: 1600, turns: 8, out: 2800, thinking: 1024, style: "pro" },
-  premium: { rag: 10, chars: 2000, turns: 10, out: 3600, thinking: 2048, style: "premium" },
+  pro: { rag: 8, chars: 1600, turns: 8, out: 2800, thinking: 768, style: "pro" },
+  premium: { rag: 10, chars: 1800, turns: 10, out: 3200, thinking: 1024, style: "premium" },
 };
 
 function profileOf(tier) {
@@ -92,7 +92,8 @@ async function freeAiAnswer(p, tier = "free") {
     if (p.trace) Object.assign(p.trace, { retrieval: src.trace, docs: src.list, context, profile: { tier, ...prof } });
 
     const out = await groundedAnswer({
-      call: (msgs) => freeChat({ messages: msgs, maxOutputTokens: prof.out, thinking: prof.thinking, tier }),
+      call: (msgs) => freeChat({ messages: msgs, maxOutputTokens: prof.out, thinking: prof.thinking, tier, deadline: p.deadline }),
+      deadline: p.deadline,
       messages, allowed: src.allowed, list: src.list, refs: src.refs, lang: p.lang,
     });
     if (!out) return null;
